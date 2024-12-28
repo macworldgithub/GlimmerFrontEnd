@@ -1,8 +1,12 @@
 "use client";
 import { screenBreakpoints } from "@/hooks";
-import { cn } from "@/lib/utils";
-import React, { useEffect, useRef, useState } from "react";
-import { Scrollbar } from "swiper/modules";
+import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useEffect, useRef, useState } from "react";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/scrollbar";
+import { Navigation, Scrollbar } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 const keyframes = `
@@ -13,87 +17,118 @@ const keyframes = `
 `;
 
 type Props = {
-	cards: JSX.Element[];
-	shouldAnimate?: boolean;
-	className?: string;
+  cards: JSX.Element[];
+  shouldAnimate?: boolean;
+  className?: string;
 };
 
 const CardListWrapper = ({
-	cards,
-	shouldAnimate = false,
-	className,
+  cards,
+  shouldAnimate = false,
+  className,
 }: Props) => {
-	const containerRef = useRef<HTMLDivElement>(null);
-	const [hasAnimated, setHasAnimated] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [hasAnimated, setHasAnimated] = useState(false);
+  const prevButtonRef = useRef<HTMLDivElement>(null);
+  const nextButtonRef = useRef<HTMLDivElement>(null);
 
-	useEffect(() => {
-		if (!shouldAnimate) return;
-		const observer = new IntersectionObserver(
-			([entry]) => {
-				if (entry.isIntersecting && !hasAnimated) {
-					setHasAnimated(true);
-					observer.disconnect();
-				}
-			},
-			{ threshold: 0.8 },
-		);
+  useEffect(() => {
+    if (!shouldAnimate) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasAnimated) {
+          setHasAnimated(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.8 }
+    );
 
-		if (containerRef.current) {
-			observer.observe(containerRef.current);
-		}
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
 
-		return () => {
-			if (containerRef.current) {
-				observer.unobserve(containerRef.current);
-			}
-		};
-	}, [hasAnimated, shouldAnimate]);
+    return () => {
+      if (containerRef.current) {
+        observer.unobserve(containerRef.current);
+      }
+    };
+  }, [hasAnimated, shouldAnimate]);
 
-	return (
-		<>
-			<style>{keyframes}</style>
-			<div className="relative hidden lg:block">
-				<Swiper
-					modules={[Scrollbar]}
-					spaceBetween={30}
-					breakpoints={{
-						[screenBreakpoints.sm]: { slidesPerView: 1 },
-						[screenBreakpoints.md]: { slidesPerView: 2 },
-						[screenBreakpoints.lg]: { slidesPerView: 3 },
-						[screenBreakpoints.xl]: { slidesPerView: 4 },
-						[screenBreakpoints["2xl"]]: { slidesPerView: 5 },
-					}}
-					onSlideChange={() => console.log("slide change")}
-					onSwiper={(swiper) => console.log(swiper)}
-					className="my-2 w-full md:my-8 "
-				>
-					{cards.map((c, i) => (
-						<SwiperSlide key={i} className="">
-							{c}
-						</SwiperSlide>
-					))}
-				</Swiper>
-			</div>
-			<div
-				className={cn(
-					"no-scrollbar flex select-none overflow-x-scroll lg:hidden",
-					className,
-				)}
-				ref={containerRef}
-			>
-				<div
-					style={{
-						animation: hasAnimated
-							? "moveLeftAndBack 0.7s ease-in-out"
-							: "none",
-					}}
-					className="flex"
-				>
-					{...cards}
-				</div>
-			</div>
-		</>
-	);
+  return (
+    <>
+      <style>{keyframes}</style>
+
+      {/* Swiper Slider for small screens */}
+      <div className="relative md:hidden mx-auto">
+        <Swiper
+          modules={[Navigation, Scrollbar]}
+          spaceBetween={10}
+          slidesPerView={1}
+          centeredSlides={true}
+          loop={true}
+          navigation={{
+            nextEl: nextButtonRef.current,
+            prevEl: prevButtonRef.current,
+          }}
+          onBeforeInit={(swiper) => {
+            // Attach refs to swiper navigation
+            if (swiper.params.navigation) {
+              const navigation = swiper.params.navigation as {
+                nextEl: HTMLElement | null;
+                prevEl: HTMLElement | null;
+              };
+              navigation.nextEl = nextButtonRef.current;
+              navigation.prevEl = prevButtonRef.current;
+            }
+          }}
+          scrollbar={{ draggable: true }}
+          className="my-4 absolute w-full flex items-center justify-center"
+        >
+          {cards.map((c, i) => (
+            <SwiperSlide key={i} className="mx-auto max-sm:w-[80%] sm:w-full">
+              {c}
+            </SwiperSlide> 
+          ))}
+        </Swiper>
+        {/* Navigation Arrows */}
+        <div
+          ref={prevButtonRef}
+          className="absolute top-1/2 left-0 transform -translate-y-1/2 bg-gray-300 p-2 rounded-full text-black cursor-pointer z-10"
+        >
+          <FontAwesomeIcon icon={faArrowLeft} />
+        </div>
+        <div
+          ref={nextButtonRef}
+          className="absolute top-1/2 right-0 transform -translate-y-1/2 bg-gray-300 p-2 rounded-full text-black cursor-pointer z-10"
+        >
+          <FontAwesomeIcon icon={faArrowRight} />
+        </div>
+      </div>
+
+      {/* Original Content for larger screens */}
+      <div className="relative hidden md:block">
+        <Swiper
+          modules={[Scrollbar]}
+          spaceBetween={30}
+          breakpoints={{
+            [screenBreakpoints.sm]: { slidesPerView: 1 },
+            [screenBreakpoints.md]: { slidesPerView: 2 },
+            [screenBreakpoints.lg]: { slidesPerView: 3 },
+            [screenBreakpoints.xl]: { slidesPerView: 4 },
+            [screenBreakpoints["2xl"]]: { slidesPerView: 5 },
+          }}
+          className="my-2 w-full md:my-8"
+        >
+          {cards.map((c, i) => (
+            <SwiperSlide key={i} className="">
+              {c}
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </div>
+    </>
+  );
 };
 
 export default CardListWrapper;

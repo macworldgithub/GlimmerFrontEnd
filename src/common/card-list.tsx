@@ -1,6 +1,6 @@
 "use client";
 
-import { cn, mapAreas, mapReviews } from "@/lib/utils";
+import { cn, mapAreas, mapProducts, mapReviews, mapSalons } from "@/lib/utils";
 import {
 	AreaType,
 	CardType,
@@ -9,7 +9,6 @@ import {
 	SalonType,
 } from "@/types";
 import CardListWrapper from "./card-list-wrapper";
-import { mapSalons, mapProducts } from "@/lib/utils";
 
 type CardVariants = ProductType[] | SalonType[] | AreaType[] | ReviewType[];
 type TypeOfCardData = "product" | "salon" | "area" | "review";
@@ -64,7 +63,7 @@ const Card = ({ card }: { card: CardType }) => {
 	return (
 		<div
 			className={cn(
-				"flex-none rounded-sm max-lg:mr-4 max-lg:w-[275px]",
+				"flex-none rounded-sm max-md:mr-4 max-md:w-[350px] max-sm:w-[275px] max-md:mx-auto  ",
 				bgColor ? `bg-${bgColor}` : "bg-secondary",
 			)}
 		>
