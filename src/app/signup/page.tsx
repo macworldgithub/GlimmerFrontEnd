@@ -1,13 +1,13 @@
 "use client";
 
 import React from "react";
-import { createUser } from "./actions";
+
 import { useActionState } from "react";
 import Link from "next/link";
 import Logo from "@/assets/images/logo.png";
 
 export default function SignUpForm() {
-  const [data, action, isPending] = useActionState(createUser, undefined);
+
 
   return (
     <div className="flex items-center justify-center p-5 min-h-screen bg-gradient-to-r from-[#ffc759] to-[#ebe9f7]">
@@ -19,7 +19,7 @@ export default function SignUpForm() {
           <img src={Logo.src} alt="logo" className="h-10 hidden md:block " />
         </div>
 
-        <form action={action} method="POST">
+        <form  method="POST">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {/* Name Field */}
             <div className="mb-4">
@@ -34,9 +34,7 @@ export default function SignUpForm() {
                 placeholder="Enter your full name"
                 required
               />
-              {data?.errors?.name && (
-                <p className="text-red-500 text-sm">{data?.errors?.name}</p>
-              )}{" "}
+          
             </div>
 
             {/* Email Field */}
@@ -52,9 +50,7 @@ export default function SignUpForm() {
                 placeholder="Enter your email"
                 required
               />
-              {data?.errors?.email && (
-                <p className="text-red-500 text-sm">{data?.errors?.email}</p>
-              )}
+             
             </div>
 
             {/* Password Field */}
@@ -73,9 +69,7 @@ export default function SignUpForm() {
                 placeholder="Enter your password"
                 required
               />
-              {data?.errors?.password && (
-                <p className="text-red-500 text-sm">{data?.errors?.password}</p>
-              )}
+           
             </div>
 
             {/* Gender Field */}
@@ -97,9 +91,7 @@ export default function SignUpForm() {
                 <option value="Female">Female</option>
                 <option value="Other">Other</option>
               </select>
-              {data?.errors?.gender && (
-                <p className="text-red-500 text-sm">{data?.errors?.gender}</p>
-              )}
+          
             </div>
 
             {/* Age Field */}
@@ -115,9 +107,7 @@ export default function SignUpForm() {
                 placeholder="Enter your age"
                 required
               />
-              {data?.errors?.age && (
-                <p className="text-red-500 text-sm">{data?.errors?.age}</p>
-              )}
+             
             </div>
 
             {/* Location Fields */}
@@ -133,9 +123,7 @@ export default function SignUpForm() {
                 placeholder="Enter your city"
                 required
               />
-              {data?.errors?.city && (
-                <p className="text-red-500 text-sm">{data?.errors?.city}</p>
-              )}
+          
             </div>
 
             <div className="mb-6">
@@ -150,24 +138,20 @@ export default function SignUpForm() {
                 placeholder="Enter your area"
                 required
               />
-              {data?.errors?.area && (
-                <p className="text-red-500 text-sm">{data?.errors?.area}</p>
-              )}
+        
             </div>
           </div>
 
           {/* Error Message */}
-          {data?.message && (
-            <p className="text-green-500 text-sm mb-4">{data?.message}</p>
-          )}
+  
 
           {/* Submit Button */}
           <button
             type="submit"
-            disabled={isPending}
+           
             className="w-full p-3 bg-[#ffc759] text-white text-lg rounded-lg hover:bg-[#f8b03c] transition duration-300"
           >
-            {isPending ? "Signing Up..." : "Sign Up"}
+          
           </button>
         </form>
 

@@ -21,10 +21,14 @@ interface CompleteOrder {
 
 interface Cart {
   ProductList: CompleteOrder[];
+  total: number;
+  discountedTotal: number;
 }
 
 const initialState: Cart = {
   ProductList: [],
+  total: 0,
+  discountedTotal: 0,
 };
 
 const CartSlice = createSlice({
@@ -32,10 +36,21 @@ const CartSlice = createSlice({
   initialState,
   reducers: {
     addItem: (state, action) => {
-      const { product, quantity } = action.payload;
-      const ready = { product, quantity };
+      const { product } = action.payload;
+      const ready = { product, quantity: 1 };
 
       state.ProductList = [...state.ProductList, ready];
+    },
+
+    totalCartAmount: (state) => {
+      let sum = 0;
+      let discountSum = 0;
+      for (let item of state.ProductList) {
+        discountSum += item.product.discounted_price * item.quantity;
+        sum += item.product.base_price * item.quantity;
+      }
+      state.total = sum;
+      state.discountedTotal = discountSum;
     },
 
     increaseQty: (state, action) => {
