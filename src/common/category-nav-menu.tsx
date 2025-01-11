@@ -1,15 +1,24 @@
 "use client";
+
 import { cn } from "@/lib/utils";
-// Navbar.tsx
-import React, { useState } from "react";
-import ReactDOM from "react-dom";
+import { Menu } from "antd";
+import { useState } from "react";
 import { FaSortDown } from "react-icons/fa";
-import Link from "next/link";
+
+// import Router, { useRouter } from "next/router";
 import { useRouter } from "next/navigation";
-import { useRef, useEffect } from "react";
-// import { categories } from './categoriesData';
-// categoriesData.ts
-export const categories = [
+
+interface Category {
+  name: string;
+  subcategories: Subcategory[];
+}
+
+interface Subcategory {
+  name: string;
+  items: string[];
+}
+
+export const categories: Category[] = [
   {
     name: "MAKE UP",
     subcategories: [
@@ -98,15 +107,15 @@ export const categories = [
       },
       {
         name: "Sunscreens (SPF)",
-        items: [],
+        items: ["All"],
       },
       {
         name: "Eye Care",
-        items: [],
+        items: ["All"],
       },
       {
         name: "Lip Care",
-        items: [],
+        items: ["All"],
       },
       {
         name: "Bath & Body",
@@ -127,11 +136,11 @@ export const categories = [
   {
     name: "FRAGRANCE",
     subcategories: [
-      { name: "Men", items: [] },
-      { name: "Women", items: [] },
-      { name: "Unisex", items: [] },
-      { name: "Deodorant", items: [] },
-      { name: "Body Spray & Mists", items: [] },
+      { name: "Men", items: ["All"] },
+      { name: "Women", items: ["All"] },
+      { name: "Unisex", items: ["All"] },
+      { name: "Deodorant", items: ["All"] },
+      { name: "Body Spray & Mists", items: ["All"] },
     ],
   },
   {
@@ -210,102 +219,72 @@ export const categories = [
     ],
   },
 ];
+
 const CategoryNavMenu = ({ className }: { className?: string }) => {
-  const router = useRouter();
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
+  const [openKeys, setOpenKeys] = useState<string[]>([]);
+  const router = useRouter();
 
-  const handleMouseEnter = (categoryName: string) => {
-    setHoveredCategory(categoryName);
+  const handleCategoryClick = (categoryName: string) => {
+    setHoveredCategory((prev) => (prev === categoryName ? null : categoryName));
   };
 
-  const clickAgain = (categoryName: string) => {
-    if (categoryName === hoveredCategory) {
-      setHoveredCategory(null);
-    } else {
-      handleMouseEnter(categoryName);
-    }
+  const onOpenChange = (keys: string[]) => {
+    setOpenKeys(keys);
   };
 
-  const renderCard = () => {
-    if (!hoveredCategory) return null;
-
-    const category = categories.find((cat) => cat.name === hoveredCategory);
-
-    if (!category) return null;
-
-    return ReactDOM.createPortal(
-      <div
-        className={cn(
-          "fixed container top-[105px] left-1/2 transform -translate-x-1/2 bg-base-300 shadow-lg rounded-lg w-full md:w-11/12 max-h-60 md:max-h-full overflow-y-auto p-4 mt-2 z-50 absolute"
-        )}
-        // onMouseEnter={() => setHoveredCategory(hoveredCategory)}
-        // onTouchStart={() => setHoveredCategory(hoveredCategory)} // Mobile touch event
-        // onTouchEnd={handleMouseLeave} // Mobile touch event
-        // onMouseLeave={handleMouseLeave}
-
-        onClick={() => setHoveredCategory(hoveredCategory)}
-        onMouseLeave={() => setHoveredCategory(null)}
-      >
-        <div className="container mx-auto flex flex-wrap">
-          {categories.map((category, subIndex) => (
-            <div key={subIndex} className="w-full md:w-1/4 lg:w-1/6 p-2">
-              <h3 className="text-lg font-semibold mb-2">{category.name}</h3>
-              {category.subcategories.map((subcat, index) => (
-                <div
-                  key={index}
-                  onClick={() =>
-                    //@ts-ignore
-                    // router.push({
-                    //   pathname: "/",
-                    //   query: {
-                    //     category: category.name,
-                    //     subcategory: subcat.name,
-                    //     page_no: 1,
-                    //   },
-                    // })
-
-                    router.push(
-                      `/category=${category.name}?subcategory=${subcat.name}?page_no=1`
-                    )
-                  }
-                  className="bg-gray-100 p-4 rounded-lg mb-2 bg-red-600 cursor-pointer"
-                >
-                  <p className="text-black font-medium">{subcat.name}</p>
-                </div>
-              ))}
-            </div>
-          ))}
-        </div>
-      </div>,
-      document.body
-    );
+  const HandlePath = (e: any) => {
+    let path = e.key;
+    path = path.split("-");
+    console.log(path, "hehe");
+    router.push(`/${path[0]}?subcategory=${path[1]}?item=${path[2]}`);
   };
 
   return (
-    <div className={cn("bg-primary", className)}>
-      <div className="flex lg:justify-center overflow-x-auto whitespace-nowrap ">
+    <div className={cn("bg-primary relative h-[50px]", className)}>
+      <div className="flex lg:justify-center overflow-x-auto whitespace-nowrap">
         {categories.map((category, i) => (
-          <div
-            key={category.name}
-            className="relative "
-            // onMouseEnter={() => handleMouseEnter(category.name)}
-            // onMouseLeave={handleMouseLeave}
-            onClick={() => clickAgain(category.name)}
-          >
+          <div key={category.name} className="relative">
             <button
               className={cn(
-                "btn btn-primary min-w-[150px] flex-none rounded-none text-neutral text-nowrap flex flex-row",
+                "btn btn-primary min-w-[150px] w-[250px] flex-none rounded-none text-neutral text-nowrap flex flex-row items-center",
                 i === 0 && "rounded-l-md",
                 i === categories.length - 1 && "rounded-r-md"
               )}
+              onClick={() => handleCategoryClick(category.name)} // Toggle menu on click
             >
               <span>{category.name}</span>
-              <FaSortDown className="size-3 mb-1 -ml-1" />
+              <FaSortDown className="ml-2" />
             </button>
+            {hoveredCategory === category.name && (
+              <Menu
+                style={{
+                  width: "250px",
+                  position: "sticky",
+                  top: "100%",
+                  left: 0,
+                  zIndex: 999999,
+                  marginTop: "2px",
+                }}
+                mode="inline"
+                openKeys={openKeys}
+                onOpenChange={onOpenChange}
+                onClick={(e) => HandlePath(e)}
+                items={categories
+                  .find((cat) => cat.name === category.name)
+                  ?.subcategories.map((sub) => ({
+                    key: sub.name,
+                    label: sub.name,
+                    children: sub.items.map((item) => ({
+                      key: `${category.name}-${sub.name}-${item}`,
+                      label: item,
+                    })),
+                  }))}
+              />
+            )}
           </div>
         ))}
       </div>
-      {renderCard()}
     </div>
   );
 };
