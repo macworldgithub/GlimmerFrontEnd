@@ -4,7 +4,9 @@ import Hero from "./components/hero";
 import SalonCardList from "./components/salon-card-list";
 import SeftcareCardList from "./components/selfcare-card-list";
 import FakeReviewList from "./components/fake-review-list";
- 
+import { Provider } from "react-redux";
+import store from "@/store/reduxStore";
+
 export default async function Home() {
   return (
     <>

@@ -237,7 +237,7 @@ const CategoryNavMenu = ({ className }: { className?: string }) => {
     let path = e.key;
     path = path.split("-");
     console.log(path, "hehe");
-    router.push(`/${path[0]}?subcategory=${path[1]}?item=${path[2]}`);
+    router.push(`/${path[0]}/${path[1]}/${path[2]}`);
   };
 
   return (

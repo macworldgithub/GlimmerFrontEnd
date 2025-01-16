@@ -373,3 +373,149 @@ export const reviewsData: ReviewType[] = [
     image: review4.src,
   },
 ];
+
+export interface CardItem {
+  id: number;
+  name: string;
+  description: string;
+  image1: string;
+  image2: string;
+  image3: string;
+  base_price: number;
+  discounted_price: number;
+}
+
+export const sampleProducts: CardItem[] = [
+  {
+    id: 1,
+    name: "Forest Adventure",
+    description:
+      "Explore the lush greenery and serene landscapes of the forest.",
+    image1:
+      "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDF8fGZvcmVzdHxlbnwwfHx8fDE2ODkxOTcyMTc&ixlib=rb-1.2.1&q=80&w=400",
+    image2:
+      "https://images.unsplash.com/photo-1519681393784-d120267933ba?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDJ8fGZvcmVzdHxlbnwwfHx8fDE2ODkxOTcyNTg&ixlib=rb-1.2.1&q=80&w=400",
+    image3:
+      "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDR8fGZvcmVzdHxlbnwwfHx8fDE2ODkxOTcyODU&ixlib=rb-1.2.1&q=80&w=400",
+    base_price: 150,
+    discounted_price: 120,
+  },
+  {
+    id: 2,
+    name: "City Skyline",
+    description: "Experience the bustling city life and iconic skyline views.",
+    image1:
+      "https://images.unsplash.com/photo-1495106245170-21eae1e611b4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDF8fGNpdHl8ZW58MHx8fHwxNjg5MTk3MzIx&ixlib=rb-1.2.1&q=80&w=400",
+    image2:
+      "https://images.unsplash.com/photo-1545156515-5f114d6685f3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDJ8fGNpdHl8ZW58MHx8fHwxNjg5MTk3MzU3&ixlib=rb-1.2.1&q=80&w=400",
+    image3:
+      "https://images.unsplash.com/photo-1506377215391-5d4a33e271b4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDR8fGNpdHl8ZW58MHx8fHwxNjg5MTk3Mzg1&ixlib=rb-1.2.1&q=80&w=400",
+    base_price: 200,
+    discounted_price: 180,
+  },
+  {
+    id: 3,
+    name: "Beach Paradise",
+    description: "Relax by the tranquil waves and golden sands of the beach.",
+    image1:
+      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDF8fGJlYWNofGVufDB8fHx8MTY4OTE5NzQyNQ&ixlib=rb-1.2.1&q=80&w=400",
+    image2:
+      "https://images.unsplash.com/photo-1493558103817-58b2924bce98?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDJ8fGJlYWNofGVufDB8fHx8MTY4OTE5NzQ0Mw&ixlib=rb-1.2.1&q=80&w=400",
+    image3:
+      "https://images.unsplash.com/photo-1533050487298-09f6c5a2c05e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDR8fGJlYWNofGVufDB8fHx8MTY4OTE5NzQ2Mg&ixlib=rb-1.2.1&q=80&w=400",
+    base_price: 250,
+    discounted_price: 220,
+  },
+  {
+    id: 4,
+    name: "Mountain Expedition",
+    description: "Conquer the heights and enjoy breathtaking views.",
+    image1:
+      "https://images.unsplash.com/photo-1519817650390-64a93db511aa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDF8fG1vdW50YWluc3xlbnwwfHx8fDE2ODkxOTY1ODk&ixlib=rb-1.2.1&q=80&w=400",
+    image2:
+      "https://images.unsplash.com/photo-1496533451468-9872bd0161d2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDJ8fG1vdW50YWluc3xlbnwwfHx8fDE2ODkxOTY1OTk&ixlib=rb-1.2.1&q=80&w=400",
+    image3:
+      "https://images.unsplash.com/photo-1513151233558-d860c5398176?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDR8fG1vdW50YWluc3xlbnwwfHx8fDE2ODkxOTY2MDk&ixlib=rb-1.2.1&q=80&w=400",
+    base_price: 300,
+    discounted_price: 270,
+  },
+  {
+    id: 5,
+    name: "Desert Adventure",
+    description: "Discover the beauty and tranquility of the desert.",
+    image1:
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDF8fGRlc2VydHxlbnwwfHx8fDE2ODkxOTY2MjU&ixlib=rb-1.2.1&q=80&w=400",
+    image2:
+      "https://images.unsplash.com/photo-1527799820374-5e674cc215fd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDJ8fGRlc2VydHxlbnwwfHx8fDE2ODkxOTY2MzU&ixlib=rb-1.2.1&q=80&w=400",
+    image3:
+      "https://images.unsplash.com/photo-1474490357822-de5a871e3747?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDR8fGRlc2VydHxlbnwwfHx8fDE2ODkxOTY2NDU&ixlib=rb-1.2.1&q=80&w=400",
+    base_price: 180,
+    discounted_price: 150,
+  },
+  {
+    id: 6,
+    name: "Ocean Cruise",
+    description: "Sail the high seas and enjoy luxury accommodations.",
+    image1:
+      "https://images.unsplash.com/photo-1493558103817-58b2924bce98?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDF8fG9jZWFufGVufDB8fHx8MTY4OTE5NjY1Ng&ixlib=rb-1.2.1&q=80&w=400",
+    image2:
+      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDJ8fG9jZWFufGVufDB8fHx8MTY4OTE5NjY3Ng&ixlib=rb-1.2.1&q=80&w=400",
+    image3:
+      "https://images.unsplash.com/photo-1533050487298-09f6c5a2c05e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDR8fG9jZWFufGVufDB8fHx8MTY4OTE5NjY5Ng&ixlib=rb-1.2.1&q=80&w=400",
+    base_price: 400,
+    discounted_price: 350,
+  },
+  {
+    id: 7,
+    name: "Jungle Safari",
+    description: "Embark on a thrilling journey through the jungle.",
+    image1:
+      "https://images.unsplash.com/photo-1465218550585-6d069382d2a9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDF8fGp1bmdsZXxlbnwwfHx8fDE2ODkxOTY3MjQ&ixlib=rb-1.2.1&q=80&w=400",
+    image2:
+      "https://images.unsplash.com/photo-1473992243365-58b2924bce98?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDJ8fGp1bmdsZXxlbnwwfHx8fDE2ODkxOTY3MzQ&ixlib=rb-1.2.1&q=80&w=400",
+    image3:
+      "https://images.unsplash.com/photo-1506377215391-5d4a33e271b4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDR8fGp1bmdsZXxlbnwwfHx8fDE2ODkxOTY3NDQ&ixlib=rb-1.2.1&q=80&w=400",
+    base_price: 220,
+    discounted_price: 200,
+  },
+  {
+    id: 8,
+    name: "Countryside Retreat",
+    description: "Escape to the peaceful countryside for a rejuvenating stay.",
+    image1:
+      "https://images.unsplash.com/photo-1513151233558-d860c5398176?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDF8fGNvdW50cnl8ZW58MHx8fHwxNjg5MTk2NzQ1&ixlib=rb-1.2.1&q=80&w=400",
+    image2:
+      "https://images.unsplash.com/photo-1519817650390-64a93db511aa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDJ8fGNvdW50cnl8ZW58MHx8fHwxNjg5MTk2NzY1&ixlib=rb-1.2.1&q=80&w=400",
+    image3:
+      "https://images.unsplash.com/photo-1473992243365-58b2924bce98?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDR8fGNvdW50cnl8ZW58MHx8fHwxNjg5MTk2Nzc1&ixlib=rb-1.2.1&q=80&w=400",
+    base_price: 180,
+    discounted_price: 160,
+  },
+  {
+    id: 9,
+    name: "Cultural Tour",
+    description: "Dive into the rich heritage and traditions of the locals.",
+    image1:
+      "https://images.unsplash.com/photo-1465218550585-6d069382d2a9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDF8fGN1bHR1cmV8ZW58MHx8fHwxNjg5MTk2Nzg4&ixlib=rb-1.2.1&q=80&w=400",
+    image2:
+      "https://images.unsplash.com/photo-1496533451468-9872bd0161d2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDJ8fGN1bHR1cmV8ZW58MHx8fHwxNjg5MTk2Nzk4&ixlib=rb-1.2.1&q=80&w=400",
+    image3:
+      "https://images.unsplash.com/photo-1513151233558-d860c5398176?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDR8fGN1bHR1cmV8ZW58MHx8fHwxNjg5MTk2ODA4&ixlib=rb-1.2.1&q=80&w=400",
+    base_price: 150,
+    discounted_price: 140,
+  },
+  {
+    id: 10,
+    name: "Historic Landmarks",
+    description:
+      "Visit iconic landmarks and explore their fascinating stories.",
+    image1:
+      "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDF8fGhpc3RvcmljfGVufDB8fHx8MTY4OTE5NjgzMQ&ixlib=rb-1.2.1&q=80&w=400",
+    image2:
+      "https://images.unsplash.com/photo-1506377215391-5d4a33e271b4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDJ8fGhpc3RvcmljfGVufDB8fHx8MTY4OTE5Njg1MQ&ixlib=rb-1.2.1&q=80&w=400",
+    image3:
+      "https://images.unsplash.com/photo-1474490357822-de5a871e3747?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDR8fGhpc3RvcmljfGVufDB8fHx8MTY4OTE5Njg3MQ&ixlib=rb-1.2.1&q=80&w=400",
+    base_price: 200,
+    discounted_price: 180,
+  },
+];
