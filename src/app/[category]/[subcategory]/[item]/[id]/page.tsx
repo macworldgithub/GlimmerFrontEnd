@@ -9,6 +9,7 @@ import { useDispatch } from "react-redux";
 import { addItem, updateQty } from "@/reduxSlices/cartSlice";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/reduxStore";
+import { getProductById } from "@/api/product";
 
 const forestAdventure = {
   name: "Forest Adventure",
@@ -32,11 +33,26 @@ const ProductDisplay = ({}) => {
   const [quantity, setQuantityState] = React.useState(1);
   const [product, setProduct] = useState<any>();
   const path = useParams();
+
+  const fetchData = async (id: string) => {
+    try {
+      const res = await getProductById(id);
+
+      // return res;
+      setProduct(res);
+    } catch (error) {
+      console.error("Error Fetching Product by Id");
+    }
+  };
   useEffect(() => {
     let result = sampleProducts.find(
       (item) => item?.id.toString() === path?.id
     );
-    setProduct(result);
+
+    //@ts-ignore
+    fetchData(path?.id);
+
+    // setProduct(result);
   }, []);
 
   //@ts-ignore

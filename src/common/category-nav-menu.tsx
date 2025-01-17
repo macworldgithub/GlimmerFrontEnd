@@ -136,11 +136,11 @@ export const categories: Category[] = [
   {
     name: "FRAGRANCE",
     subcategories: [
-      { name: "Men", items: ["All"] },
-      { name: "Women", items: ["All"] },
-      { name: "Unisex", items: ["All"] },
-      { name: "Deodorant", items: ["All"] },
-      { name: "Body Spray & Mists", items: ["All"] },
+      { name: "Men", items: ["all"] },
+      { name: "Women", items: ["all"] },
+      { name: "Unisex", items: ["all"] },
+      { name: "Deodorant", items: ["all"] },
+      { name: "Body Spray & Mists", items: ["all"] },
     ],
   },
   {

@@ -8,9 +8,9 @@ import { FaStar } from "react-icons/fa6";
 import { useSearchParams, usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 
-import { CardItem } from "@/data";
+import { CardItem ,RealCardItem} from "@/data";
 
-const Card: React.FC<{ item: CardItem }> = ({ item }) => {
+const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
   const router = useRouter();
   const path = usePathname();
   const discountPercentage = Math.round(
@@ -45,7 +45,7 @@ const Card: React.FC<{ item: CardItem }> = ({ item }) => {
           </p>
         </div>
         <button
-          onClick={() => router.push(`${path}/${item.id}`)}
+          onClick={() => router.push(`${path}/${item._id}`)}
           className="btn btn-secondary btn-block capitalize"
         >
           <RiShoppingCart2Line className="mb-0.5 size-4" />
