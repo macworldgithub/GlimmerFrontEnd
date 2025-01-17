@@ -55,7 +55,7 @@ const sampleProducts: CardItem[] = [
     discounted_price: 220,
   },
   {
-    name: "Forest Adventure",
+    name: "Forest ",
     description:
       "Explore the lush greenery and serene landscapes of the forest.",
     image1:
@@ -68,7 +68,7 @@ const sampleProducts: CardItem[] = [
     discounted_price: 120,
   },
   {
-    name: "Forest Adventure",
+    name: "city",
     description:
       "Explore the lush greenery and serene landscapes of the forest.",
     image1:
@@ -81,7 +81,7 @@ const sampleProducts: CardItem[] = [
     discounted_price: 120,
   },
   {
-    name: "Forest Adventure",
+    name: "Adventure",
     description:
       "Explore the lush greenery and serene landscapes of the forest.",
     image1:
