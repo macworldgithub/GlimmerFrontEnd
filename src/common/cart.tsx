@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/reduxStore";
 import { removeItem, updateQty } from "@/reduxSlices/cartSlice";
+import CategoryNavMenu from "./category-nav-menu";
 const Cart = () => {
   const dispatch = useDispatch();
 
@@ -22,19 +23,22 @@ const Cart = () => {
   if (!Cart.ProductList) return null;
   if (Cart.ProductList.length === 0)
     return (
-      <div className="hero min-h-[70vh] bg-base-200">
-        <div className="hero-content text-center">
-          <div className="max-w-md">
-            <h1 className="font-bold text-5xl">Cart Empty</h1>
-            <p className="py-6">
-              Your cart is empty. Please add items to your cart.
-            </p>
-            <Link href={"/selfcare-products"}>
-              <button className="btn btn-secondary">Continue Shopping</button>
-            </Link>
+      <>
+        <CategoryNavMenu />
+        <div className="hero min-h-[70vh] bg-base-200">
+          <div className="hero-content text-center">
+            <div className="max-w-md">
+              <h1 className="font-bold text-5xl">Cart Empty</h1>
+              <p className="py-6">
+                Your cart is empty. Please add items to your cart.
+              </p>
+              <Link href={"/selfcare-products"}>
+                <button className="btn btn-secondary">Continue Shopping</button>
+              </Link>
+            </div>
           </div>
         </div>
-      </div>
+      </>
     );
   return (
     <div className="flex min-h-[70vh] justify-center bg-gray-50 p-2 lg:p-8">

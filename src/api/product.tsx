@@ -1,38 +1,28 @@
 import { development } from "./config";
 import axios from "axios";
 
-export const getProducts = async (
-  token: string,
+export const getAllProducts = async (
   category: string,
   subcategory: string,
   item: string,
   page: number
 ) => {
   try {
-    const res = await axios.post(
-      `${development}/${category}/${subcategory}/${item}`, // Ensure `development` is defined properly
-      { page_no: page }, // Body content
-      {
-        headers: {
-          Authorization: `Bearer ${token}`, // Correct the header key for bearer tokens
-        },
-      }
+    const res = await axios.get(
+      `${development}/product/get_all_products?page_no=${page}&category=${category.toLocaleLowerCase()}&subcategory=${subcategory.toLocaleLowerCase()}&item=${item}` // Ensure `development` is defined properly
     );
 
     return res.data; // Return the response data
   } catch (error) {
-    console.error(
-      "Error fetching products:",
-      error?.response?.data || error.message
-    );
+    console.error("Error fetching products:", error);
     throw error; // Throw error to handle it in calling function
   }
 };
 
-export const getProductById = async (token: string, id: string) => {
+export const getProductById = async (id: string) => {
   try {
     const res = await axios.get(
-      `${development}/product/get_store_product_by_id?id=${id}`
+      `${development}/product/get_product_by_id?id=${id}`
     );
 
     return res.data;

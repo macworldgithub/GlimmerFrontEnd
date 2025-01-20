@@ -20,6 +20,7 @@ interface Subcategory {
     items: string[];
 }
 
+
 export const categories: Category[] = [
     {
         name: "MAKE UP",

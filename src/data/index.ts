@@ -385,6 +385,17 @@ export interface CardItem {
   discounted_price: number;
 }
 
+export interface RealCardItem {
+  _id: number;
+  name: string;
+  description: string;
+  image1: string;
+  image2: string;
+  image3: string;
+  base_price: number;
+  discounted_price: number;
+}
+
 export const sampleProducts: CardItem[] = [
   {
     id: 1,
