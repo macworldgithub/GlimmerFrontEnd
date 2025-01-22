@@ -1,6 +1,6 @@
 import { development, production } from "./config";
 
-const server = 1;
+const server = null;
 import axios from "axios";
 
 export const getAllProducts = async (
