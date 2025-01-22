@@ -1,4 +1,6 @@
-import { development } from "./config";
+import { development, production } from "./config";
+
+const server = 1;
 import axios from "axios";
 
 export const getAllProducts = async (
@@ -9,7 +11,7 @@ export const getAllProducts = async (
 ) => {
     try {
         const res = await axios.get(
-            `${development}/product/get_all_products?page_no=${page}&category=${category}&sub_category=${subcategory}&item=${item}` // Ensure `development` is defined properly
+            `${  server ? production : development}/product/get_all_products?page_no=${page}&category=${category}&sub_category=${subcategory}&item=${item}` // Ensure `development` is defined properly
         );
 
         return res.data; // Return the response data
@@ -20,10 +22,10 @@ export const getAllProducts = async (
 };
 
 export const getProductById = async (id: string) => {
-    try {
-        const res = await axios.get(
-            `${development}/product/get_product_by_id?id=${id}`
-        );
+  try {
+    const res = await axios.get(
+      `${server ? production : development}/product/get_product_by_id?id=${id}`
+    );
 
         return res.data;
     } catch (error) {
