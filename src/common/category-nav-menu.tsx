@@ -18,7 +18,6 @@ interface Subcategory {
   items: string[];
 }
 
-
 export const categories: Category[] = [
   {
     name: "MAKE UP",
@@ -267,7 +266,7 @@ const CategoryNavMenu = ({ className }: { className?: string }) => {
                   zIndex: 999999,
                   marginTop: "2px",
                 }}
-                mode="inline"
+                mode="vertical"
                 openKeys={openKeys}
                 onOpenChange={onOpenChange}
                 onClick={(e) => HandlePath(e)}
