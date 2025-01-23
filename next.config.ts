@@ -1,11 +1,15 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  experimental: {
-    serverActions: {
-      bodySizeLimit: "1mb",
-      allowedOrigins: ["*"],
-    },
+  webpack: (config) => {
+    // Suppress Webpack errors by disabling error overlays
+    config.infrastructureLogging = {
+      level: "error", // Suppress warnings and info logs
+    };
+
+    config.stats = "errors-only"; // Only show errors in Webpack output
+
+    return config;
   },
 };
 

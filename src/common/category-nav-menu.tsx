@@ -18,6 +18,7 @@ interface Subcategory {
   items: string[];
 }
 
+
 export const categories: Category[] = [
   {
     name: "MAKE UP",
@@ -136,11 +137,11 @@ export const categories: Category[] = [
   {
     name: "FRAGRANCE",
     subcategories: [
-      { name: "Men", items: ["All"] },
-      { name: "Women", items: ["All"] },
-      { name: "Unisex", items: ["All"] },
-      { name: "Deodorant", items: ["All"] },
-      { name: "Body Spray & Mists", items: ["All"] },
+      { name: "Men", items: ["all"] },
+      { name: "Women", items: ["all"] },
+      { name: "Unisex", items: ["all"] },
+      { name: "Deodorant", items: ["all"] },
+      { name: "Body Spray & Mists", items: ["all"] },
     ],
   },
   {
@@ -237,7 +238,7 @@ const CategoryNavMenu = ({ className }: { className?: string }) => {
     let path = e.key;
     path = path.split("-");
     console.log(path, "hehe");
-    router.push(`/${path[0]}?subcategory=${path[1]}?item=${path[2]}`);
+    router.push(`/${path[0]}/${path[1]}/${path[2]}`);
   };
 
   return (

@@ -31,15 +31,51 @@ const initialState: Cart = {
   discountedTotal: 0,
 };
 
+const CalculateTotal = (list: CompleteOrder[]) => {
+  let sum = 0;
+  let discountSum = 0;
+  for (let item of list) {
+    discountSum += item.product.discounted_price * item.quantity;
+    sum += item.product.base_price * item.quantity;
+  }
+  return { sum: sum, discountSum: discountSum };
+};
+
 const CartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
     addItem: (state, action) => {
       const { product } = action.payload;
-      const ready = { product, quantity: 1 };
+      const exists = state.ProductList.some(
+        (item) => item.product.id === product.id
+      );
 
-      state.ProductList = [...state.ProductList, ready];
+      if (!exists) {
+        const ready = { product, quantity: 1 };
+        state.ProductList = [...state.ProductList, ready];
+      }
+
+      const { sum, discountSum } = CalculateTotal(state.ProductList);
+      state.total = sum;
+      state.discountedTotal = discountSum;
+    },
+
+    removeItem: (state, action) => {
+      const { p_id } = action.payload;
+
+      if (p_id === undefined || p_id === null) {
+        console.error("Error: p_id is required to remove an item.");
+        return;
+      }
+
+      state.ProductList = state.ProductList.filter(
+        (item) => item.product.id !== p_id
+      );
+
+      const { sum, discountSum } = CalculateTotal(state.ProductList);
+      state.total = sum;
+      state.discountedTotal = discountSum;
     },
 
     totalCartAmount: (state) => {
@@ -53,29 +89,24 @@ const CartSlice = createSlice({
       state.discountedTotal = discountSum;
     },
 
-    increaseQty: (state, action) => {
-      const { _id } = action.payload;
+    updateQty: (state, action) => {
+      const { _id, qty } = action.payload;
 
       for (let item of state.ProductList) {
         const product = item.product;
         if (product.id === _id) {
-          if (item.quantity < 5) {
-            item.quantity += 1;
-          }
+          item.quantity = qty;
         }
       }
-    },
-    decreaseQty: (state, action) => {
-      const { _id } = action.payload;
 
-      for (let item of state.ProductList) {
-        const product = item.product;
-        if (product.id === _id) {
-          if (item.quantity > 0) {
-            item.quantity -= 1;
-          }
-        }
-      }
+      const { sum, discountSum } = CalculateTotal(state.ProductList);
+      state.total = sum;
+      state.discountedTotal = discountSum;
     },
   },
 });
+
+export const { updateQty, totalCartAmount, removeItem, addItem } =
+  CartSlice.actions;
+
+export default CartSlice;

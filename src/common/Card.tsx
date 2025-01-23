@@ -1,27 +1,16 @@
+"use client";
 import React from "react";
 import "tailwindcss/tailwind.css";
 import { RiShoppingCart2Line } from "react-icons/ri";
 import { FaStar } from "react-icons/fa6";
-import { useCartStoreContext } from "@/store/cartStoreContext";
-import { MappingCardItem } from "../app/[temp]/[id]/MappingCardItem";
+import { useSearchParams, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 
-interface CardItem {
-  name: string;
-  description: string;
-  image1: string;
-  image2: string;
-  image3: string;
-  base_price: number;
-  discounted_price: number;
-}
+import { CardItem ,RealCardItem} from "@/data";
 
-const Card: React.FC<{ item: CardItem }> = ({ item }) => {
-  const { cartItems, addItem } = useCartStoreContext();
-
-  const handleAddToCart = () => {
-    MappingCardItem(item, cartItems, addItem);
-  };
-
+const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
+  const router = useRouter();
+  const path = usePathname();
   const discountPercentage = Math.round(
     ((item.base_price - item.discounted_price) / item.base_price) * 100
   );
@@ -54,8 +43,8 @@ const Card: React.FC<{ item: CardItem }> = ({ item }) => {
           </p>
         </div>
         <button
+          onClick={() => router.push(`${path}/${item._id}`)}
           className="btn btn-secondary btn-block capitalize"
-          onClick={handleAddToCart}
         >
           <RiShoppingCart2Line className="mb-0.5 size-4" />
           Add to cart
