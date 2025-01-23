@@ -1,5 +1,5 @@
 import axios from "axios";
-import { development ,production} from "./config";
+import { development ,production ,BACKEND_URL} from "./config";
 
 interface PropsLogin {
   email: string;
@@ -10,7 +10,7 @@ const server = null;
 
 export const logInApi = async ({ email, password }: PropsLogin) => {
   try {
-    const res = await axios.post(`${  server ? production : development}/auth/signin/customer`, {
+    const res = await axios.post(`${BACKEND_URL}/auth/signin/customer`, {
       email: email,
       password: password,
     });
