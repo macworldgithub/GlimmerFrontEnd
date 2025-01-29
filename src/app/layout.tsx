@@ -35,17 +35,15 @@ export default function RootLayout({
   return (
     <html lang="en" data-theme="light">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} container mx-auto bg-base-100 antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} container  bg-base-100 antialiased`}
       >
-
-          <CartStoreProvider>
-            <Navbar />
-            <ToastComponent />
-            {children}
-            <Footer />
-            <CookieBanner />
-          </CartStoreProvider>
-      
+        <CartStoreProvider>
+          <Navbar />
+          <ToastComponent />
+          {children}
+          <Footer />
+          <CookieBanner />
+        </CartStoreProvider>
       </body>
     </html>
   );

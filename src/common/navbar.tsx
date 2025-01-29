@@ -9,25 +9,38 @@ import { cookies } from "next/headers";
 import { IoMdCall } from "react-icons/io";
 import PhoneBtn from "./phone-btn";
 import SideMenu from "./side-menu";
+import ProductSearchBar from "./PrductSearchBar";
+import { FaCircleUser } from "react-icons/fa6";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Navbar = async () => {
-	const cookie = (await cookies()).get("session")?.value;
-	const session = await decrypt(cookie);
+  const cookie = (await cookies()).get("session")?.value;
+  const session = await decrypt(cookie);
 
-	return (
-		<div className="navbar bg-base-100">
-			<div className="flex-1">
-				<Link className="btn btn-ghost text-xl" href="/">
-					<img src={Logo.src} alt="logo" className="h-10" />
-				</Link>
-			</div>
-			<div className="flex-none">
-				{/* <IoMdCall className="size-4" /> */}
-				<PhoneBtn />
+  return (
+    <div className="navbar bg-base-100 w-[99vw]">
+      <div className="flex-1">
+        <Link className="btn btn-ghost text-xl" href="/">
+          <img src={Logo.src} alt="logo" className="h-10" />
+        </Link>
 
-				<CartNavbar />
-				<SideMenu isLoggedIn={!!session?.userId} handleLogout={handleLogout} />
-				{/* <div className="dropdown dropdown-end hidden md:block">
+        <ProductSearchBar />
+      </div>
+
+      <div className="flex-none">
+        {/* <IoMdCall className="size-4" /> */}
+        {/* <PhoneBtn /> */}
+
+        <div className="flex justify-center items-center gap-1">
+          <FaCircleUser size={"25px"} />
+          <p>Login</p>
+          <p>/</p>
+          <p>SignUp</p>
+        </div>
+
+        <CartNavbar />
+        <SideMenu isLoggedIn={!!session?.userId} handleLogout={handleLogout} />
+        {/* <div className="dropdown dropdown-end hidden md:block">
 					<div
 						tabIndex={0}
 						role="button"
@@ -58,9 +71,9 @@ const Navbar = async () => {
 						</li>
 					</ul>
 				</div> */}
-			</div>
-		</div>
-	);
+      </div>
+    </div>
+  );
 };
 
 export default Navbar;

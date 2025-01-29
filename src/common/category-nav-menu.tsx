@@ -10,6 +10,8 @@ import { useRouter } from "next/navigation";
 import { development, BACKEND_URL } from "@/api/config";
 import axios from "axios";
 
+import type { MenuProps } from "antd";
+
 type Item = {
   _id: string;
   name: string;
@@ -46,6 +48,9 @@ const CategoryNavMenu = ({ className }: { className?: string }) => {
   const [openKeys, setOpenKeys] = useState<string[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
   const router = useRouter();
+  const [current, setCurrent] = useState("mail");
+
+  type MenuItem = Required<MenuProps>["items"][number];
 
   const get_all_categories = async (): Promise<void> => {
     try {
@@ -74,8 +79,7 @@ const CategoryNavMenu = ({ className }: { className?: string }) => {
   };
 
   const HandlePath = (e: any) => {
-    console.log(e.key, e, "holaaaaaa");
-    let path = e.key;
+    let path = e;
     path = path.split("-");
     console.log(path, "hehe");
     let str = "/products?";
@@ -92,10 +96,66 @@ const CategoryNavMenu = ({ className }: { className?: string }) => {
   };
 
   console.log(hoveredCategory, "lol");
+
+  const onClick: MenuProps["onClick"] = (e) => {
+    console.log("click ", e);
+    setCurrent(e.key);
+  };
+
+  const items: MenuItem[] = [
+    {
+      label: "All Categories",
+      key: "allcategories",
+    },
+    {
+      label: "Brand",
+      key: "brand",
+    },
+    {
+      label: "Product",
+      key: "product",
+      children: categories.map((category) => ({
+        key: category._id,
+        label: category?.product_category?.name,
+        children: category?.sub_categories?.map((sub: any) => ({
+          key: `${category._id}-${sub._id}`,
+          label: sub?.name,
+          children: sub?.items?.length
+            ? sub.items.map((item: any) => ({
+                key: `${category._id}-${sub._id}-${item._id}`,
+                label: item.name,
+                onClick: () =>
+                  HandlePath(`${category._id}-${sub._id}-${item._id}`),
+              }))
+            : undefined, // Avoid empty `children` property
+        })),
+      })),
+    },
+    {
+      label: "New Arrival",
+      key: "newarrival",
+    },
+    {
+      label: "Best Seller",
+      key: "bestseller",
+    },
+    {
+      label: "Discount",
+      key: "discount",
+    },
+    {
+      label: "Blogs",
+      key: "blog",
+    },
+    {
+      label: "Contact",
+      key: "contact",
+    },
+  ];
   return (
-    <div className={cn("bg-primary relative h-[50px]", className)}>
-      <div className="flex lg:justify-center  whitespace-nowrap">
-        {categories.map((category, i) => (
+    <div className={cn("bg-primary relative h-[50px] w-[99vw]", className)}>
+      <div className="flex lg:justify-center  whitespace-nowrap justify-center items-center">
+        {/* {categories.map((category, i) => (
           <div key={category._id} className="relative">
             <button
               className={cn(
@@ -118,7 +178,7 @@ const CategoryNavMenu = ({ className }: { className?: string }) => {
                   zIndex: 999999,
                   marginTop: "2px",
                 }}
-                mode="inline"
+                mode="vertical"
                 openKeys={openKeys}
                 onOpenChange={onOpenChange}
                 onClick={(e) => HandlePath(e)}
@@ -138,7 +198,14 @@ const CategoryNavMenu = ({ className }: { className?: string }) => {
               />
             )}
           </div>
-        ))}
+        ))} */}
+        <Menu
+          onClick={onClick}
+          selectedKeys={[current]}
+          mode="horizontal"
+          items={items}
+          style={{ backgroundColor: "transparent" }}
+        />
       </div>
     </div>
   );
