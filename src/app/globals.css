@@ -41,3 +41,22 @@ body {
 .ant-select-selection-item {
   color: grey;
 }
+
+:where(.css-dev-only-do-not-override-7ny38l).ant-menu-light.ant-menu-horizontal
+  > .ant-menu-item-selected,
+:where(.css-dev-only-do-not-override-7ny38l).ant-menu-light
+  > .ant-menu.ant-menu-horizontal
+  > .ant-menu-item-selected,
+:where(.css-dev-only-do-not-override-7ny38l).ant-menu-light.ant-menu-horizontal
+  > .ant-menu-submenu-selected,
+:where(.css-dev-only-do-not-override-7ny38l).ant-menu-light
+  > .ant-menu.ant-menu-horizontal
+  > .ant-menu-submenu-selected {
+  color: #784ca0;
+  background-color: transparent;
+}
+
+.rating-container {
+  display: flex !important;
+  flex-direction: row !important;
+}

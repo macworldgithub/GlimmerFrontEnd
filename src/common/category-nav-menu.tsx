@@ -154,7 +154,7 @@ const CategoryNavMenu = ({ className }: { className?: string }) => {
   ];
   return (
     <div className={cn("bg-primary relative h-[50px] w-[99vw]", className)}>
-      <div className="flex lg:justify-center  whitespace-nowrap justify-center items-center">
+      <div className="flex lg:justify-center  whitespace-nowrap justify-center items-center font-sans  font-semibold">
         {/* {categories.map((category, i) => (
           <div key={category._id} className="relative">
             <button
