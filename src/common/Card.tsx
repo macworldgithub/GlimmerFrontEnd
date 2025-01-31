@@ -20,11 +20,11 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
   const category = searchParams.get("category") ?? "";
   const subCategory = searchParams.get("sub_category") ?? "";
   const i = searchParams.get("item") ?? "";
-  console.log(category, subCategory, item, " me agya ");
+
   const path = `/${category}/${subCategory}/${i}`;
 
   return (
-    <div className="  w-[280px] shadow-lg max-sm:w-[100%]">
+    <div className="  w-[280px] shadow-lg max-md:w-full ">
       <img
         src={item.image1}
         alt="Image 1"

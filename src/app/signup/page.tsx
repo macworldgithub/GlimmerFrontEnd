@@ -7,10 +7,8 @@ import Link from "next/link";
 import Logo from "@/assets/images/logo.png";
 
 export default function SignUpForm() {
-
-
   return (
-    <div className="flex items-center justify-center p-5 min-h-screen bg-gradient-to-r from-[#ffc759] to-[#ebe9f7]">
+    <div className="flex items-center justify-center p-5 min-h-screen bg-gradient-to-r from-[#ffc759] to-[#ebe9f7] w-[99vw]">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-2xl">
         <div className="flex justify-evenly">
           <h2 className="text-3xl font-bold text-center text-[#333] mb-6">
@@ -19,7 +17,7 @@ export default function SignUpForm() {
           <img src={Logo.src} alt="logo" className="h-10 hidden md:block " />
         </div>
 
-        <form  method="POST">
+        <form method="POST">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {/* Name Field */}
             <div className="mb-4">
@@ -34,7 +32,6 @@ export default function SignUpForm() {
                 placeholder="Enter your full name"
                 required
               />
-          
             </div>
 
             {/* Email Field */}
@@ -50,7 +47,6 @@ export default function SignUpForm() {
                 placeholder="Enter your email"
                 required
               />
-             
             </div>
 
             {/* Password Field */}
@@ -69,7 +65,6 @@ export default function SignUpForm() {
                 placeholder="Enter your password"
                 required
               />
-           
             </div>
 
             {/* Gender Field */}
@@ -91,7 +86,6 @@ export default function SignUpForm() {
                 <option value="Female">Female</option>
                 <option value="Other">Other</option>
               </select>
-          
             </div>
 
             {/* Age Field */}
@@ -107,7 +101,6 @@ export default function SignUpForm() {
                 placeholder="Enter your age"
                 required
               />
-             
             </div>
 
             {/* Location Fields */}
@@ -123,7 +116,6 @@ export default function SignUpForm() {
                 placeholder="Enter your city"
                 required
               />
-          
             </div>
 
             <div className="mb-6">
@@ -138,21 +130,16 @@ export default function SignUpForm() {
                 placeholder="Enter your area"
                 required
               />
-        
             </div>
           </div>
 
           {/* Error Message */}
-  
 
           {/* Submit Button */}
           <button
             type="submit"
-           
             className="w-full p-3 bg-[#ffc759] text-white text-lg rounded-lg hover:bg-[#f8b03c] transition duration-300"
-          >
-          
-          </button>
+          ></button>
         </form>
 
         <div className="mt-4 text-center">

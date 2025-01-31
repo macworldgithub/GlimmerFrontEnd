@@ -6,19 +6,25 @@ import { useState, useEffect } from "react";
 
 const PrductSearchBar = () => {
   const [products, setProducts] = useState([]);
+  const { Option } = Select;
 
   useEffect(() => {
     setProducts([
       //@ts-ignore
       { id: 1, name: "Skin Care" },
+      //@ts-ignore
+
       { id: 2, name: "Hair Care" },
+      //@ts-ignore
       { id: 3, name: "Fragrance" },
+      //@ts-ignore
+
       { id: 4, name: "Makeup" },
     ]);
   }, []);
 
   return (
-    <div className=" w-max h-[50px]  border flex justify-between items-center rounded-md">
+    <div className=" w-max h-[50px]  border flex justify-between items-center rounded-md max-md:hidden">
       <Input
         placeholder="Search here"
         className="w-[80%] border-none focus:border-none"
@@ -28,9 +34,10 @@ const PrductSearchBar = () => {
         <span className="w-[1px] h-[95%] bg-red-300 border"></span>
         <Select defaultValue="all" style={{ width: 200, color: "GrayText" }}>
           <Option value="all">All Products</Option>
-          {products.map((product) => (
+          {products.map((product: any) => (
+            //@ts-ignore
             <Option key={product.id} value={product.name}>
-              {product.name}
+              {product?.name}
             </Option>
           ))}
         </Select>

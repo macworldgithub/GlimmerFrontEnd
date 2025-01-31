@@ -12,6 +12,7 @@ import SideMenu from "./side-menu";
 import ProductSearchBar from "./PrductSearchBar";
 import { FaCircleUser } from "react-icons/fa6";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Image from "next/image";
 
 const Navbar = async () => {
   const cookie = (await cookies()).get("session")?.value;
@@ -31,14 +32,19 @@ const Navbar = async () => {
         {/* <IoMdCall className="size-4" /> */}
         {/* <PhoneBtn /> */}
 
-        <div className="flex justify-center items-center gap-1">
-          <FaCircleUser size={"25px"} />
-          <p>Login</p>
+        <div className="flex justify-center items-center gap-1 font-sans text-[16px] max-md:hidden">
+          <Image src={"/user.svg"} width={25} height={25} alt="user" />
+          <Link href={"/login"}>
+            <p className=" hover:font-semibold">Login</p>
+          </Link>
           <p>/</p>
-          <p>SignUp</p>
+          <Link href={"/signup"}>
+            <p className=" hover:font-semibold">SignUp</p>
+          </Link>
         </div>
 
         <CartNavbar />
+
         <SideMenu isLoggedIn={!!session?.userId} handleLogout={handleLogout} />
         {/* <div className="dropdown dropdown-end hidden md:block">
 					<div

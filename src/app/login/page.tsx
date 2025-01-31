@@ -8,7 +8,7 @@ import Logo from "@/assets/images/logo.png";
 
 export default function LoginForm() {
   return (
-    <div className="flex items-center justify-center p-5 min-h-screen bg-gradient-to-r from-[#ffc759] to-[#ebe9f7]">
+    <div className="flex items-center justify-center p-5 min-h-screen bg-gradient-to-r from-[#ffc759] to-[#ebe9f7] w-[99vw]">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-2xl">
         <div className="flex justify-evenly">
           <h2 className="text-3xl font-bold text-center text-[#333] mb-6">

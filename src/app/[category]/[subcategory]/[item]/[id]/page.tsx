@@ -63,7 +63,6 @@ const ProductDisplay = ({}) => {
   //@ts-ignore
 
   useEffect(() => {
-    console.log("loopp", Product, Cart);
     //@ts-ignore
     setQuantityState(Product?.quantity);
   }, [Product]);
@@ -74,7 +73,7 @@ const ProductDisplay = ({}) => {
 
   const updateQuantity = (newQuantity: any) => {
     setQuantityState(newQuantity);
-    console.log(`Quantity updated to: ${newQuantity}`);
+
     dispatch(updateQty({ _id: product?.id, qty: newQuantity }));
   };
 

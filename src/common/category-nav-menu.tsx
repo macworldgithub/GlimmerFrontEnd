@@ -5,6 +5,8 @@ import { Menu } from "antd";
 import { useEffect, useState } from "react";
 import { FaSortDown } from "react-icons/fa";
 
+import { FaBars, FaTimes } from "react-icons/fa";
+
 // import Router, { useRouter } from "next/router";
 import { useRouter } from "next/navigation";
 import { development, BACKEND_URL } from "@/api/config";
@@ -49,6 +51,8 @@ const CategoryNavMenu = ({ className }: { className?: string }) => {
   const [categories, setCategories] = useState<any[]>([]);
   const router = useRouter();
   const [current, setCurrent] = useState("mail");
+
+  const [isOpen, setIsOpen] = useState(false);
 
   type MenuItem = Required<MenuProps>["items"][number];
 
@@ -153,58 +157,52 @@ const CategoryNavMenu = ({ className }: { className?: string }) => {
     },
   ];
   return (
-    <div className={cn("bg-primary relative h-[50px] w-[99vw]", className)}>
-      <div className="flex lg:justify-center  whitespace-nowrap justify-center items-center font-sans  font-semibold">
-        {/* {categories.map((category, i) => (
-          <div key={category._id} className="relative">
-            <button
-              className={cn(
-                "btn btn-primary min-w-[150px] w-[250px] flex-none rounded-none text-neutral text-nowrap flex flex-row items-center",
-                i === 0 && "rounded-l-md",
-                i === categories.length - 1 && "rounded-r-md"
-              )}
-              onClick={() => handleCategoryClick(category._id)} // Toggle menu on click
-            >
-              <span>{category?.product_category?.name}</span>
-              <FaSortDown className="ml-2" />
-            </button>
-            {hoveredCategory === category._id && (
-              <Menu
-                style={{
-                  width: "250px",
-                  position: "sticky",
-                  top: "100%",
-                  left: 0,
-                  zIndex: 999999,
-                  marginTop: "2px",
-                }}
-                mode="vertical"
-                openKeys={openKeys}
-                onOpenChange={onOpenChange}
-                onClick={(e) => HandlePath(e)}
-                items={category?.sub_categories.map((sub: any) => {
-                  console.log("SUBBBB1", sub);
-                  return {
-                    key: `${category._id}-${sub._id}`,
-                    label: sub?.name,
-                    children: sub?.items?.length
-                      ? sub?.items?.map((item: any) => ({
-                          key: `${category._id}-${sub._id}-${item?._id}`,
-                          label: item?.name,
-                        }))
-                      : null,
-                  };
-                })}
-              />
-            )}
-          </div>
-        ))} */}
+    <div className={`bg-primary relative h-[50px] w-[99vw] ${className}`}>
+      {/* Desktop Menu */}
+      <div className="hidden lg:flex justify-center items-center font-sans font-semibold">
         <Menu
           onClick={onClick}
           selectedKeys={[current]}
           mode="horizontal"
           items={items}
           style={{ backgroundColor: "transparent" }}
+        />
+      </div>
+
+      {/* Mobile Menu Button */}
+      <div className="lg:hidden flex justify-between items-center px-4 h-full">
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="text-white text-2xl"
+        >
+          {isOpen ? <FaTimes /> : <FaBars />}
+        </button>
+      </div>
+
+      {/* Mobile Sidebar */}
+      <div
+        className={`fixed top-0 left-0 h-full w-[250px] bg-gray-800 text-white transform ${
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        } transition-transform duration-300 lg:hidden z-50`}
+      >
+        <button
+          onClick={() => setIsOpen(false)}
+          className="absolute top-4 right-4 text-2xl"
+        >
+          <FaTimes color="black" />
+        </button>
+
+        <Menu
+          onClick={onClick}
+          selectedKeys={[current]}
+          mode="inline"
+          items={items}
+          style={{
+            backgroundColor: "white",
+            height: "100vh",
+            padding: "20px",
+   
+          }}
         />
       </div>
     </div>
