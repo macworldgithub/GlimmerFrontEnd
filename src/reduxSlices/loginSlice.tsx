@@ -1,39 +1,66 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-interface Customer {
-  name: string;
-  email: string;
-}
+import { LoginApi } from "@/api/auth";
 
 interface Login {
-  customer: Customer;
+  email: string;
+  name: string;
   token: string;
+  role: string;
+  password: string;
+
+  loading: boolean;
+  success: boolean;
+  failed: boolean;
 }
 
 const initialState: Login = {
-  customer: {
-    name: "",
-    email: "",
-  },
+  email: "",
+  name: "",
   token: "",
+  role: "",
+  password: "",
+
+  loading: true,
+  success: false,
+  failed: false,
 };
 
 const LoginSlice = createSlice({
   name: "login",
   initialState,
   reducers: {
-    updateCustomer: (state, action) => {
-      const { name, email } = action.payload;
-      state.customer.email = email;
-      state.customer.name = name;
+    updateEmail: (state, action) => {
+      state.email = action.payload;
     },
+    updatePassword: (state, action) => {
+      state.password = action.payload;
+    },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(LoginApi.pending, (state) => {
+      state.loading = true;
+      state.success = false;
+      state.failed = false;
+    }),
+      builder.addCase(LoginApi.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.failed = false;
 
-    updateToken: (state, action) => {
-      state.token = state.token;
-    },
+        const { customer, token, role } = action.payload;
+        state.email = customer.email;
+        state.name = customer.name;
+        state.role = role;
+        state.token = token;
+      }),
+      builder.addCase(LoginApi.rejected, (state) => {
+        state.loading = false;
+        state.success = false;
+        state.failed = true;
+      });
   },
 });
 
-export const { updateCustomer } = LoginSlice.actions;
+export const { updateEmail, updatePassword } = LoginSlice.actions;
 
 export default LoginSlice;

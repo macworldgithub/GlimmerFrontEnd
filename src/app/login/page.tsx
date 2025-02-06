@@ -1,12 +1,30 @@
 "use client";
 
-import React, { useActionState } from "react";
-
+import React, { useState } from "react";
 import Link from "next/link";
-
 import Logo from "@/assets/images/logo.png";
+import { ThreeDots } from "react-loader-spinner"; // Import the spinner
+
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store/reduxStore";
+import { updateEmail, updatePassword } from "@/reduxSlices/loginSlice";
 
 export default function LoginForm() {
+  const dispatch = useDispatch();
+  const { loading, success, failed, email, password } = useSelector(
+    (state: RootState) => state.login
+  );
+
+  // Handle form submit
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log("Email:", email);
+    console.log("Password:", password);
+    // Perform further actions (e.g., sending data to backend)
+
+    
+  };
+
   return (
     <div className="flex items-center justify-center p-5 min-h-screen bg-gradient-to-r from-[#ffc759] to-[#ebe9f7] w-[99vw]">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-2xl">
@@ -17,7 +35,7 @@ export default function LoginForm() {
           <img src={Logo.src} alt="logo" className="h-10 hidden md:block " />
         </div>
 
-        <form className="p-5">
+        <form className="p-5" onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 ">
             {/* Email Field */}
             <div className="mb-4 md:col-span-2">
@@ -28,8 +46,10 @@ export default function LoginForm() {
                 type="email"
                 id="email"
                 name="email"
-                className="w-full p-3 border-2 border-[#ccc] rounded-lg  focus:outline-none focus:ring-2 focus:ring-[#ffc759] "
+                className="w-full p-3 border-2 border-[#ccc] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ffc759]"
                 placeholder="Enter your email"
+                value={email}
+                onChange={(e) => dispatch(updateEmail(e.target.value))}
                 required
               />
             </div>
@@ -48,6 +68,8 @@ export default function LoginForm() {
                 name="password"
                 className="w-full p-3 border-2 border-[#ccc] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ffc759]"
                 placeholder="Enter your password"
+                value={password}
+                onChange={(e) => dispatch(updatePassword(e.target.value))}
                 required
               />
             </div>
@@ -57,7 +79,24 @@ export default function LoginForm() {
           <button
             type="submit"
             className="w-full p-3 bg-[#ffc759] text-white text-lg rounded-lg hover:bg-[#f8b03c] transition duration-300"
-          ></button>
+            disabled={loading} // Disable button when loading
+          >
+            {loading ? (
+              <div className="flex justify-center items-center">
+                {/* Spinner Component */}
+                <ThreeDots
+                  height="30"
+                  width="30"
+                  radius="9"
+                  color="#ffffff"
+                  ariaLabel="three-dots-loading"
+                  visible={true}
+                />
+              </div>
+            ) : (
+              "Sign In"
+            )}
+          </button>
         </form>
 
         <div className="mt-4 text-center">
