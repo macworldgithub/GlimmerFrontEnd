@@ -13,6 +13,7 @@ import VideoTutorial from "./components/VideoTutorial";
 import MustItems from "./components/MustItems";
 import SaloonPictures from "@/common/SaloonPictures";
 import { Suspense } from "react";
+import { AdditionalSaloonPicture } from "@/common/AdditionalSaloonPicture";
 
 export default async function Home() {
   return (
@@ -26,6 +27,7 @@ export default async function Home() {
       <VideoTutorial />
       <MustItems />
       <SaloonPictures />
+      <AdditionalSaloonPicture />
     </Suspense>
     </>
   );

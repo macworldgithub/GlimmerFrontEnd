@@ -10,6 +10,9 @@ import { addItem, updateQty } from "@/reduxSlices/cartSlice";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/reduxStore";
 import { getProductById } from "@/api/product";
+import Image from "next/image";
+import Card from "@/common/Card";
+import BoxContainer from "@/common/box-container";
 
 const forestAdventure = {
   name: "Forest Adventure",
@@ -26,18 +29,22 @@ const forestAdventure = {
 
 // Example Handlers
 
-const ProductDisplay = ({}) => {
+const ProductDisplay = ({ }) => {
   const Cart = useSelector((state: RootState) => state.cart);
 
   const dispatch = useDispatch();
   const [quantity, setQuantityState] = React.useState(1);
   const [product, setProduct] = useState<any>();
+  const [copied, setCopied] = useState("");
+  const [isWishlisted, setIsWishlisted] = useState(false);
+  const [activeTab, setActiveTab] = useState("Description");
   const path = useParams();
 
   const fetchData = async (id: string) => {
     try {
       const res = await getProductById(id);
-
+      console.log("hello")
+      console.log(res);
       // return res;
       setProduct(res);
     } catch (error) {
@@ -77,6 +84,17 @@ const ProductDisplay = ({}) => {
     dispatch(updateQty({ _id: product?.id, qty: newQuantity }));
   };
 
+  const handleCopy = (text: string, type: string) => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopied(type);
+      setTimeout(() => setCopied(""), 2000);
+    });
+  };
+
+  const tabs = [
+    { title: "Description", content: product?.description || "No description available." },
+  ];
+
   return (
     <>
       <CategoryNavMenu />
@@ -86,24 +104,85 @@ const ProductDisplay = ({}) => {
           <img
             src={product?.image1}
             alt={product?.name}
-            className="h-80 w-80 rounded-md object-cover shadow"
+            width={650}
+            height={650}
+            className="rounded-md object-cover shadow"
           />
           <div className="mt-6 flex gap-4">
             <img
               src={product?.image1}
               alt="Thumbnail 1"
-              className="h-20 w-20 rounded-md object-cover shadow"
+              width={120}
+              height={120}
+              className="rounded-md object-cover shadow"
             />
-            <img
-              src={product?.image2}
-              alt="Thumbnail 2"
-              className="h-20 w-20 rounded-md object-cover shadow"
-            />
-            <img
-              src={product?.image3}
-              alt="Thumbnail 3"
-              className="h-20 w-20 rounded-md object-cover shadow"
-            />
+            {product?.image2 &&
+              <img
+                src={product?.image2}
+                alt="Thumbnail 2"
+                width={120}
+                height={120}
+                className="rounded-md object-cover shadow"
+              />
+            }
+            {product?.image3 &&
+              <img
+                src={product?.image3}
+                alt="Thumbnail 3"
+                width={120}
+                height={120}
+                className="rounded-md object-cover shadow"
+              />
+            }
+          </div>
+
+          <div className="mt-8 w-full hidden lg:block"> {/* Hide for mobile devices */}
+            {/* Reviews Heading */}
+            <h2 className="text-4xl font-semibold text-gray-800">Ratings</h2>
+
+            {/* Rating Display */}
+            <p className="text-gray-700 mt-1 text-xl">
+              {product?.ratings ? `${product.ratings}/5` : "No ratings yet"}
+            </p>
+
+            {/* Star Rating */}
+            <div className="flex items-center mt-2">
+              {[...Array(5)].map((_, index) => (
+                <svg
+                  key={index}
+                  className={`w-5 h-5 ms-1 ${product?.ratings && index < Math.round(product.ratings)
+                    ? "text-purple-800"
+                    : "text-gray-300"
+                    }`}
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 22 20"
+                >
+                  <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                </svg>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-[1rem] w-full hidden lg:block"> {/* Hide for mobile devices */}
+            <div>
+              {[5, 4, 3, 2, 1].map((star, index) => {
+                const percentage = star * 20;
+                return (
+                  <div key={star} className={`flex items-center gap-3 ${index < 4 ? 'mb-4' : ''}`}>
+                    {/* Star rating */}
+                    <span className="text-purple-800">{star} ★</span>
+                    {/* Percentage bar */}
+                    <div className="w-full bg-gray-200 rounded-md h-3 flex-1">
+                      <div className="h-3 bg-purple-800 rounded-md" style={{ width: `${percentage}%` }}></div>
+                    </div>
+                    {/* Percentage text */}
+                    <span className="text-gray-600">{percentage}%</span>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
 
@@ -118,55 +197,208 @@ const ProductDisplay = ({}) => {
             <span className="text-gray-500 text-sm">
               {product?.base_price > product?.discounted_price
                 ? ` -${Math.round(
-                    ((product?.base_price - product.discounted_price) /
-                      product?.base_price) *
-                      100
-                  )}%`
+                  ((product?.base_price - product.discounted_price) /
+                    product?.base_price) *
+                  100
+                )}%`
                 : ""}
             </span>
           </div>
 
-          {/* Quantity Selector */}
-          <div className="flex items-center gap-2">
-            <span>Quantity</span>
-            <button
-              onClick={() => updateQuantity(Math.max(1, quantity - 1))}
-              className="btn btn-xs btn-outline"
+          <div className="flex items-center mt-2">
+            {[...Array(4)].map((_, index) => (
+              <svg
+                key={index}
+                className="w-4 h-4 text-purple-800 ms-1"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
+                viewBox="0 0 22 20"
+              >
+                <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+              </svg>
+            ))}
+            {/* Last Star (Gray) */}
+            <svg
+              className="w-4 h-4 ms-1 text-gray-300 dark:text-gray-400"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 22 20"
             >
-              -
+              <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+            </svg>
+            <h3 className="h-4 ms-1 text-gray-300 dark:text-gray-500">
+              (4/5) <span className="mx-2">|</span> 201 reviews
+            </h3>
+          </div>
+          <hr className="my-2.5 border-t border-gray-400 dark:text-gray-500 w-full" />
+
+          <p className="text-gray-700 dark:text-gray-500 mt-1">
+            {product?.description ? product.description : "This product has no description."}
+          </p>
+          <div className="grid grid-cols-2 gap-3 mt-3">
+            {/* Size */}
+            <div className="flex items-center font-semibold text-gray-700 dark:text-gray-700">
+              <span>Size:</span>
+            </div>
+            <div className="text-gray-600 dark:text-gray-400">
+              {product?.size || "10gm"}
+            </div>
+
+            {/* Stock */}
+            <div className="flex items-center font-semibold text-gray-700 dark:text-gray-700">
+              <span>Stock:</span>
+            </div>
+            <div className="text-gray-600 dark:text-gray-400">
+              {product?.stock || 215}
+            </div>
+
+            {/* Type */}
+            <div className="flex items-center font-semibold text-gray-700 dark:text-gray-700">
+              <span>Type:</span>
+            </div>
+            <div className="space-x-2">
+              {/* Buttons for Type */}
+              {["Dramatic", "Volume", "Natural", "Long"].map((type, index) => (
+                <button
+                  key={index}
+                  className="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-md text-sm text-gray-700 dark:text-gray-500 hover:border-purple-700"
+                >
+                  {type}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="mt-4 bg-white border border-gray-200 shadow-sm dark:text-white p-4 rounded-lg">
+            {/* Voucher Promo */}
+            <div className="mb-4">
+              <h4 className="font-semibold text-xl text-gray-800">Voucher Promo</h4>
+              <p className="text-gray-700 dark:text-gray-700">
+                {product?.promoCode ? `There are ${product.promoCode} promo codes for you` : "There are 3 promo codes for you"}
+              </p>
+            </div>
+
+            <div>
+              {[
+                { title: "GLOW15", value: product?.percentOff ? `${product.percentOff}% off for your entire purchase` : "No discount" },
+                { title: "Skincare", value: product?.skinCare ? `${product.skinCare}% off skincare essentials` : "No skincare" },
+              ].map((item, index) => (
+                <div key={index} className="mb-4 flex items-center">
+                  <div>
+                    <h4 className="font-semibold text-xl text-gray-800 dark:text-purple-700">{item.title}</h4>
+                    <p className="text-gray-700 dark:text-gray-700">{item.value}</p>
+                  </div>
+                  <div className="ml-auto flex items-center">
+                    <button onClick={() => handleCopy(item.value, item.title)}>
+                      <Image src={"/assets/assurity/copy.png"} alt="copy" width={20} height={20} />
+                    </button>
+                    {copied === item.title && <span className="text-green-500 ml-2">Copied!</span>}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          {/* Buttons Section */}
+          <div className="flex items-center gap-4 mt-4">
+            {/* Add to Bag & Buy Now Buttons */}
+            <button className="flex-1 flex items-center justify-center gap-2 py-2 px-4 border border-purple-800 text-purple-800 font-semibold rounded-md hover:border-purple-800 hover:text-purple-800" onClick={handleAddToCart}>
+              <Image alt="cart-icon" width={15} height={15} src={"/assets/addtoBag/cart-icon.png"} />
+              ADD TO BAG
             </button>
-            <span className=" text-black ">{Product?.quantity}</span>
-            <button
-              onClick={() => updateQuantity(quantity + 1)}
-              className="btn btn-xs btn-outline"
-            >
-              +
+
+            <button className="flex-1 py-2 px-4 bg-purple-800 text-white font-semibold rounded-md hover:bg-purple-900">
+              BULK BUYING
+            </button>
+            {/* Wishlist Toggle Button */}
+            <button onClick={() => setIsWishlisted(!isWishlisted)} className="p-2">
+              <Image
+                src={isWishlisted ? "/assets/addtoBag/heart-filled.png" : "/assets/addtoBag/heart.png"}
+                alt="wishlist"
+                width={20}
+                height={20}
+              />
             </button>
           </div>
 
-          {/* Add to Cart Button */}
-          <button
-            className="btn btn-secondary btn-wide"
-            onClick={handleAddToCart}
-          >
-            Add to Cart
-          </button>
+          <div className="mt-6">
+            <div className="flex border-b border-gray-300">
+              {tabs.map((tab) => (
+                <button
+                  key={tab.title}
+                  onClick={() => setActiveTab(tab.title)}
+                  className={`flex-1 py-2 px-4 font-semibold ${activeTab === tab.title ? "text-purple-800 border-b-2 border-purple-800" : "text-gray-600"}`}
+                >
+                  {tab.title}
+                </button>
+              ))}
+            </div>
 
-          {/* Product Details */}
-          <div className="mt-4">
-            <div
-              tabIndex={0}
-              className="collapse-arrow collapse rounded-box border border-base-300 bg-base-100"
-            >
-              <div className="collapse-title font-medium text-lg">
-                Product Details
-              </div>
-              <div className="collapse-content">
-                <p>{product?.description}</p>
-              </div>
+            {/* Description Content */}
+            <div className="p-4 text-gray-700 dark:text-gray-500">
+              {tabs.find((tab) => tab.title === activeTab)?.content}
+            </div>
+          </div>
+          <div className="mt-12 w-full lg:hidden"> {/* Hide for mobile devices */}
+            {/* Reviews Heading */}
+            <h2 className="text-4xl font-semibold text-gray-800">Ratings</h2>
+
+            {/* Rating Display */}
+            <p className="text-gray-700 mt-1 text-xl">
+              {product?.ratings ? `${product.ratings}/5` : "No ratings yet"}
+            </p>
+
+            {/* Star Rating */}
+            <div className="flex items-center mt-2">
+              {[...Array(5)].map((_, index) => (
+                <svg
+                  key={index}
+                  className={`w-5 h-5 ms-1 ${product?.ratings && index < Math.round(product.ratings)
+                    ? "text-purple-800"
+                    : "text-gray-300"
+                    }`}
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 22 20"
+                >
+                  <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                </svg>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-[1rem] w-full lg:hidden"> {/* Hide for mobile devices */}
+            <div>
+              {[5, 4, 3, 2, 1].map((star, index) => {
+                const percentage = star * 20;
+                return (
+                  <div key={star} className={`flex items-center gap-3 ${index < 4 ? 'mb-4' : ''}`}>
+                    {/* Star rating */}
+                    <span className="text-purple-800">{star} ★</span>
+                    {/* Percentage bar */}
+                    <div className="w-full bg-gray-200 rounded-md h-3 flex-1">
+                      <div className="h-3 bg-purple-800 rounded-md" style={{ width: `${percentage}%` }}></div>
+                    </div>
+                    {/* Percentage text */}
+                    <span className="text-gray-600">{percentage}%</span>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
+      </div>
+      <div className="mb-6 gap-8 ml-20 md:mb-5 md:flex-row md:gap-16 lg:mb-10">
+        <h2 className="text-4xl font-semibold">Related Products</h2>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-8 mt-5">
+          {sampleProducts.map((item: any) => (
+            <Card key={item.id} item={item} />
+          ))}
+        </div>
+      </div>
+      <div>
+        <BoxContainer/>
       </div>
     </>
   );

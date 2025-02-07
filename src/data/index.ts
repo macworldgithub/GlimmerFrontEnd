@@ -416,7 +416,7 @@ export const sampleProducts: CardItem[] = [
     name: "City Skyline",
     description: "Experience the bustling city life and iconic skyline views.",
     image1:
-      "https://images.unsplash.com/photo-1495106245170-21eae1e611b4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDF8fGNpdHl8ZW58MHx8fHwxNjg5MTk3MzIx&ixlib=rb-1.2.1&q=80&w=400",
+      "https://plus.unsplash.com/premium_photo-1714051660720-888e8454a021?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8c2t5bGluZXxlbnwwfHwwfHx8MA%3D%3D",
     image2:
       "https://images.unsplash.com/photo-1545156515-5f114d6685f3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDJ8fGNpdHl8ZW58MHx8fHwxNjg5MTk3MzU3&ixlib=rb-1.2.1&q=80&w=400",
     image3:
@@ -442,7 +442,7 @@ export const sampleProducts: CardItem[] = [
     name: "Mountain Expedition",
     description: "Conquer the heights and enjoy breathtaking views.",
     image1:
-      "https://images.unsplash.com/photo-1519817650390-64a93db511aa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDF8fG1vdW50YWluc3xlbnwwfHx8fDE2ODkxOTY1ODk&ixlib=rb-1.2.1&q=80&w=400",
+      "https://plus.unsplash.com/premium_photo-1661928975475-57502a6e34a5?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8bW91bnRhaW4lMjBjbGltYmluZ3xlbnwwfHwwfHx8MA%3D%3D",
     image2:
       "https://images.unsplash.com/photo-1496533451468-9872bd0161d2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDJ8fG1vdW50YWluc3xlbnwwfHx8fDE2ODkxOTY1OTk&ixlib=rb-1.2.1&q=80&w=400",
     image3:
@@ -481,7 +481,7 @@ export const sampleProducts: CardItem[] = [
     name: "Jungle Safari",
     description: "Embark on a thrilling journey through the jungle.",
     image1:
-      "https://images.unsplash.com/photo-1465218550585-6d069382d2a9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDF8fGp1bmdsZXxlbnwwfHx8fDE2ODkxOTY3MjQ&ixlib=rb-1.2.1&q=80&w=400",
+      "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8anVuZ2xlJTIwc2FmYXJpfGVufDB8fDB8fHww",
     image2:
       "https://images.unsplash.com/photo-1473992243365-58b2924bce98?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDJ8fGp1bmdsZXxlbnwwfHx8fDE2ODkxOTY3MzQ&ixlib=rb-1.2.1&q=80&w=400",
     image3:

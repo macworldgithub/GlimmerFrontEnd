@@ -1,6 +1,5 @@
-// src/app/cart/components/cart.tsx
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import Link from "next/link";
@@ -8,13 +7,13 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/store/reduxStore";
 import { removeItem, updateQty } from "@/reduxSlices/cartSlice";
 import CategoryNavMenu from "./category-nav-menu";
+
 const Cart = () => {
   const dispatch = useDispatch();
-
   const Cart = useSelector((state: RootState) => state.cart);
   const deliveryCharges = 250;
 
-  const updateQuantity = (id: string, newQuantity: any) => {
+  const updateQuantity = (id: string, newQuantity: number) => {
     console.log(`Quantity updated to: ${newQuantity}`);
     dispatch(updateQty({ _id: id, qty: newQuantity }));
   };
@@ -40,6 +39,7 @@ const Cart = () => {
         </div>
       </>
     );
+
   return (
     <div className="flex min-h-[70vh] justify-center bg-gray-50 p-2 lg:p-8">
       <div className="flex w-full flex-col gap-10 rounded-lg bg-white p-2 shadow-lg lg:flex-row lg:p-8 xl:gap-32 xl:px-16">
@@ -60,65 +60,88 @@ const Cart = () => {
                 </tr>
               </thead>
               <tbody>
-                {Cart.ProductList.map((item) => (
-                  <tr key={item.product.id} className=" ">
-                    <td className="flex items-center gap-4 flex-none max-lg:min-w-80">
-                      <img
-                        src={item.product.image1}
-                        alt={item.product.name}
-                        className="h-16 w-16 rounded-md object-cover"
-                      />
-                      <div>
-                        <p className="font-semibold flex-none">
-                          {item.product.name}
-                        </p>
-                        {/* {item.selectedVariations?.map((v, i) => (
-													<p key={i} className="text-gray-500 text-sm">
-														{v?.title}
-														{v?.title && <span> : </span>}
-														{v?.variationListItem}
-													</p>
-												))} */}
-                      </div>
-                    </td>
-                    <td className="text-nowrap">
-                      {item.product.discounted_price.toFixed(2)} PKR
-                    </td>
-                    <td>
-                      <div className="flex items-center">
+                {Cart.ProductList.map((item) => {
+                  const [isBulk, setIsBulk] = useState(false);
+                  const disableMinus = item.quantity === 1;
+                  const disablePlus = item.quantity === 5 && !isBulk;
+
+                  const handleBulkCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
+                    setIsBulk(e.target.checked);
+
+                    if (!e.target.checked) {
+                      // Reset to 5 when unchecked
+                      updateQuantity(item.product.id, 5);
+                    }
+                  };
+
+                  return (
+                    <tr key={item.product.id} className="">
+                      <td className="flex items-center gap-4 flex-none max-lg:min-w-80">
+                        <img
+                          src={item.product.image1}
+                          alt={item.product.name}
+                          className="h-16 w-16 rounded-md object-cover"
+                        />
+                        <div>
+                          <p className="font-semibold flex-none">
+                            {item.product.name}
+                          </p>
+                        </div>
+                      </td>
+                      <td className="text-nowrap">
+                        {item.product.discounted_price.toFixed(2)} PKR
+                      </td>
+                      <td>
+                        <div className="flex items-center">
+                          <button
+                            className="btn btn-sm"
+                            onClick={() =>
+                              updateQuantity(item.product.id, item.quantity - 1)
+                            }
+                            disabled={disableMinus}
+                          >
+                            -
+                          </button>
+                          <span className="mx-2">{item.quantity}</span>
+                          <button
+                            className="btn btn-sm"
+                            onClick={() =>
+                              updateQuantity(item.product.id, item.quantity + 1)
+                            }
+                            disabled={disablePlus}
+                          >
+                            +
+                          </button>
+                        </div>
+                        {/* Show Bulk checkbox when quantity is 5 */}
+                        {item.quantity === 5 && (
+                          <div className="mt-2 flex items-center">
+                            <input
+                              type="checkbox"
+                              checked={isBulk}
+                              onChange={handleBulkCheckbox}
+                              id={`bulk-${item.product.id}`}
+                              className="mr-2"
+                            />
+                            <label htmlFor={`bulk-${item.product.id}`}>Bulk of Bag</label>
+                          </div>
+                        )}
+                      </td>
+                      <td>
                         <button
-                          className="btn btn-sm"
+                          className="btn btn-sm btn-error"
                           onClick={() =>
-                            updateQuantity(item.product.id, item.quantity - 1)
+                            dispatch(removeItem({ p_id: item.product.id }))
                           }
                         >
-                          -
+                          <span role="img" aria-label="remove">
+                            <RiDeleteBin5Line className="size-4" />
+                          </span>
                         </button>
-                        <span className="mx-2">{item.quantity}</span>
-                        <button
-                          className="btn btn-sm"
-                          onClick={() =>
-                            updateQuantity(item.product.id, item.quantity + 1)
-                          }
-                        >
-                          +
-                        </button>
-                      </div>
-                    </td>
-                    <td>
-                      <button
-                        className="btn btn-sm btn-error"
-                        onClick={() =>
-                          dispatch(removeItem({ p_id: item.product.id }))
-                        }
-                      >
-                        <span role="img" aria-label="remove">
-                          <RiDeleteBin5Line className="size-4" />
-                        </span>
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
@@ -148,10 +171,6 @@ const Cart = () => {
               <span>Delivery</span>
               <span> {deliveryCharges} PKR</span>
             </div>
-            {/* <div className="flex justify-between">
-							<span>Discount</span>
-							<span>-0.00 PKR</span>
-						</div> */}
             <hr className="my-2" />
             <div className="flex justify-between font-semibold">
               <span>Subtotal</span>
