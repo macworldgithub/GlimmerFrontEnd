@@ -29,7 +29,7 @@ const forestAdventure = {
 
 // Example Handlers
 
-const ProductDisplay = ({ }) => {
+const ProductDisplay = ({}) => {
   const Cart = useSelector((state: RootState) => state.cart);
 
   const dispatch = useDispatch();
@@ -43,7 +43,7 @@ const ProductDisplay = ({ }) => {
   const fetchData = async (id: string) => {
     try {
       const res = await getProductById(id);
-      console.log("hello")
+      console.log("hello");
       console.log(res);
       // return res;
       setProduct(res);
@@ -92,7 +92,10 @@ const ProductDisplay = ({ }) => {
   };
 
   const tabs = [
-    { title: "Description", content: product?.description || "No description available." },
+    {
+      title: "Description",
+      content: product?.description || "No description available.",
+    },
   ];
 
   return (
@@ -116,7 +119,7 @@ const ProductDisplay = ({ }) => {
               height={120}
               className="rounded-md object-cover shadow"
             />
-            {product?.image2 &&
+            {product?.image2 && (
               <img
                 src={product?.image2}
                 alt="Thumbnail 2"
@@ -124,8 +127,8 @@ const ProductDisplay = ({ }) => {
                 height={120}
                 className="rounded-md object-cover shadow"
               />
-            }
-            {product?.image3 &&
+            )}
+            {product?.image3 && (
               <img
                 src={product?.image3}
                 alt="Thumbnail 3"
@@ -133,27 +136,28 @@ const ProductDisplay = ({ }) => {
                 height={120}
                 className="rounded-md object-cover shadow"
               />
-            }
+            )}
           </div>
 
-          <div className="mt-8 w-full hidden lg:block"> {/* Hide for mobile devices */}
+          <div className="mt-8 w-full hidden lg:block">
+            {" "}
+            {/* Hide for mobile devices */}
             {/* Reviews Heading */}
             <h2 className="text-4xl font-semibold text-gray-800">Ratings</h2>
-
             {/* Rating Display */}
             <p className="text-gray-700 mt-1 text-xl">
               {product?.ratings ? `${product.ratings}/5` : "No ratings yet"}
             </p>
-
             {/* Star Rating */}
             <div className="flex items-center mt-2">
               {[...Array(5)].map((_, index) => (
                 <svg
                   key={index}
-                  className={`w-5 h-5 ms-1 ${product?.ratings && index < Math.round(product.ratings)
-                    ? "text-purple-800"
-                    : "text-gray-300"
-                    }`}
+                  className={`w-5 h-5 ms-1 ${
+                    product?.ratings && index < Math.round(product.ratings)
+                      ? "text-purple-800"
+                      : "text-gray-300"
+                  }`}
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
@@ -165,17 +169,27 @@ const ProductDisplay = ({ }) => {
             </div>
           </div>
 
-          <div className="mt-[1rem] w-full hidden lg:block"> {/* Hide for mobile devices */}
+          <div className="mt-[1rem] w-full hidden lg:block">
+            {" "}
+            {/* Hide for mobile devices */}
             <div>
               {[5, 4, 3, 2, 1].map((star, index) => {
                 const percentage = star * 20;
                 return (
-                  <div key={star} className={`flex items-center gap-3 ${index < 4 ? 'mb-4' : ''}`}>
+                  <div
+                    key={star}
+                    className={`flex items-center gap-3 ${
+                      index < 4 ? "mb-4" : ""
+                    }`}
+                  >
                     {/* Star rating */}
                     <span className="text-purple-800">{star} ★</span>
                     {/* Percentage bar */}
                     <div className="w-full bg-gray-200 rounded-md h-3 flex-1">
-                      <div className="h-3 bg-purple-800 rounded-md" style={{ width: `${percentage}%` }}></div>
+                      <div
+                        className="h-3 bg-purple-800 rounded-md"
+                        style={{ width: `${percentage}%` }}
+                      ></div>
                     </div>
                     {/* Percentage text */}
                     <span className="text-gray-600">{percentage}%</span>
@@ -192,15 +206,17 @@ const ProductDisplay = ({ }) => {
 
           {/* Price */}
           <div className="font-semibold text-2xl">
-            {product?.discounted_price.toFixed(2)}{" "}
-            <span className="text-lg">USD</span>
+            {product?.discounted_price === 0
+              ? product?.base_price
+              : product?.discounted_price}{" "}
+            <span className="text-lg">PKR</span>
             <span className="text-gray-500 text-sm">
               {product?.base_price > product?.discounted_price
                 ? ` -${Math.round(
-                  ((product?.base_price - product.discounted_price) /
-                    product?.base_price) *
-                  100
-                )}%`
+                    ((product?.base_price - product.discounted_price) /
+                      product?.base_price) *
+                      100
+                  )}%`
                 : ""}
             </span>
           </div>
@@ -235,7 +251,9 @@ const ProductDisplay = ({ }) => {
           <hr className="my-2.5 border-t border-gray-400 dark:text-gray-500 w-full" />
 
           <p className="text-gray-700 dark:text-gray-500 mt-1">
-            {product?.description ? product.description : "This product has no description."}
+            {product?.description
+              ? product.description
+              : "This product has no description."}
           </p>
           <div className="grid grid-cols-2 gap-3 mt-3">
             {/* Size */}
@@ -273,27 +291,52 @@ const ProductDisplay = ({ }) => {
           <div className="mt-4 bg-white border border-gray-200 shadow-sm dark:text-white p-4 rounded-lg">
             {/* Voucher Promo */}
             <div className="mb-4">
-              <h4 className="font-semibold text-xl text-gray-800">Voucher Promo</h4>
+              <h4 className="font-semibold text-xl text-gray-800">
+                Voucher Promo
+              </h4>
               <p className="text-gray-700 dark:text-gray-700">
-                {product?.promoCode ? `There are ${product.promoCode} promo codes for you` : "There are 3 promo codes for you"}
+                {product?.promoCode
+                  ? `There are ${product.promoCode} promo codes for you`
+                  : "There are 3 promo codes for you"}
               </p>
             </div>
 
             <div>
               {[
-                { title: "GLOW15", value: product?.percentOff ? `${product.percentOff}% off for your entire purchase` : "No discount" },
-                { title: "Skincare", value: product?.skinCare ? `${product.skinCare}% off skincare essentials` : "No skincare" },
+                {
+                  title: "GLOW15",
+                  value: product?.percentOff
+                    ? `${product.percentOff}% off for your entire purchase`
+                    : "No discount",
+                },
+                {
+                  title: "Skincare",
+                  value: product?.skinCare
+                    ? `${product.skinCare}% off skincare essentials`
+                    : "No skincare",
+                },
               ].map((item, index) => (
                 <div key={index} className="mb-4 flex items-center">
                   <div>
-                    <h4 className="font-semibold text-xl text-gray-800 dark:text-purple-700">{item.title}</h4>
-                    <p className="text-gray-700 dark:text-gray-700">{item.value}</p>
+                    <h4 className="font-semibold text-xl text-gray-800 dark:text-purple-700">
+                      {item.title}
+                    </h4>
+                    <p className="text-gray-700 dark:text-gray-700">
+                      {item.value}
+                    </p>
                   </div>
                   <div className="ml-auto flex items-center">
                     <button onClick={() => handleCopy(item.value, item.title)}>
-                      <Image src={"/assets/assurity/copy.png"} alt="copy" width={20} height={20} />
+                      <Image
+                        src={"/assets/assurity/copy.png"}
+                        alt="copy"
+                        width={20}
+                        height={20}
+                      />
                     </button>
-                    {copied === item.title && <span className="text-green-500 ml-2">Copied!</span>}
+                    {copied === item.title && (
+                      <span className="text-green-500 ml-2">Copied!</span>
+                    )}
                   </div>
                 </div>
               ))}
@@ -302,8 +345,16 @@ const ProductDisplay = ({ }) => {
           {/* Buttons Section */}
           <div className="flex items-center gap-4 mt-4">
             {/* Add to Bag & Buy Now Buttons */}
-            <button className="flex-1 flex items-center justify-center gap-2 py-2 px-4 border border-purple-800 text-purple-800 font-semibold rounded-md hover:border-purple-800 hover:text-purple-800" onClick={handleAddToCart}>
-              <Image alt="cart-icon" width={15} height={15} src={"/assets/addtoBag/cart-icon.png"} />
+            <button
+              className="flex-1 flex items-center justify-center gap-2 py-2 px-4 border border-purple-800 text-purple-800 font-semibold rounded-md hover:border-purple-800 hover:text-purple-800"
+              onClick={handleAddToCart}
+            >
+              <Image
+                alt="cart-icon"
+                width={15}
+                height={15}
+                src={"/assets/addtoBag/cart-icon.png"}
+              />
               ADD TO BAG
             </button>
 
@@ -311,9 +362,16 @@ const ProductDisplay = ({ }) => {
               BULK BUYING
             </button>
             {/* Wishlist Toggle Button */}
-            <button onClick={() => setIsWishlisted(!isWishlisted)} className="p-2">
+            <button
+              onClick={() => setIsWishlisted(!isWishlisted)}
+              className="p-2"
+            >
               <Image
-                src={isWishlisted ? "/assets/addtoBag/heart-filled.png" : "/assets/addtoBag/heart.png"}
+                src={
+                  isWishlisted
+                    ? "/assets/addtoBag/heart-filled.png"
+                    : "/assets/addtoBag/heart.png"
+                }
                 alt="wishlist"
                 width={20}
                 height={20}
@@ -327,7 +385,11 @@ const ProductDisplay = ({ }) => {
                 <button
                   key={tab.title}
                   onClick={() => setActiveTab(tab.title)}
-                  className={`flex-1 py-2 px-4 font-semibold ${activeTab === tab.title ? "text-purple-800 border-b-2 border-purple-800" : "text-gray-600"}`}
+                  className={`flex-1 py-2 px-4 font-semibold ${
+                    activeTab === tab.title
+                      ? "text-purple-800 border-b-2 border-purple-800"
+                      : "text-gray-600"
+                  }`}
                 >
                   {tab.title}
                 </button>
@@ -339,24 +401,25 @@ const ProductDisplay = ({ }) => {
               {tabs.find((tab) => tab.title === activeTab)?.content}
             </div>
           </div>
-          <div className="mt-12 w-full lg:hidden"> {/* Hide for mobile devices */}
+          <div className="mt-12 w-full lg:hidden">
+            {" "}
+            {/* Hide for mobile devices */}
             {/* Reviews Heading */}
             <h2 className="text-4xl font-semibold text-gray-800">Ratings</h2>
-
             {/* Rating Display */}
             <p className="text-gray-700 mt-1 text-xl">
               {product?.ratings ? `${product.ratings}/5` : "No ratings yet"}
             </p>
-
             {/* Star Rating */}
             <div className="flex items-center mt-2">
               {[...Array(5)].map((_, index) => (
                 <svg
                   key={index}
-                  className={`w-5 h-5 ms-1 ${product?.ratings && index < Math.round(product.ratings)
-                    ? "text-purple-800"
-                    : "text-gray-300"
-                    }`}
+                  className={`w-5 h-5 ms-1 ${
+                    product?.ratings && index < Math.round(product.ratings)
+                      ? "text-purple-800"
+                      : "text-gray-300"
+                  }`}
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
@@ -368,17 +431,27 @@ const ProductDisplay = ({ }) => {
             </div>
           </div>
 
-          <div className="mt-[1rem] w-full lg:hidden"> {/* Hide for mobile devices */}
+          <div className="mt-[1rem] w-full lg:hidden">
+            {" "}
+            {/* Hide for mobile devices */}
             <div>
               {[5, 4, 3, 2, 1].map((star, index) => {
                 const percentage = star * 20;
                 return (
-                  <div key={star} className={`flex items-center gap-3 ${index < 4 ? 'mb-4' : ''}`}>
+                  <div
+                    key={star}
+                    className={`flex items-center gap-3 ${
+                      index < 4 ? "mb-4" : ""
+                    }`}
+                  >
                     {/* Star rating */}
                     <span className="text-purple-800">{star} ★</span>
                     {/* Percentage bar */}
                     <div className="w-full bg-gray-200 rounded-md h-3 flex-1">
-                      <div className="h-3 bg-purple-800 rounded-md" style={{ width: `${percentage}%` }}></div>
+                      <div
+                        className="h-3 bg-purple-800 rounded-md"
+                        style={{ width: `${percentage}%` }}
+                      ></div>
                     </div>
                     {/* Percentage text */}
                     <span className="text-gray-600">{percentage}%</span>
@@ -398,7 +471,7 @@ const ProductDisplay = ({ }) => {
         </div>
       </div>
       <div>
-        <BoxContainer/>
+        <BoxContainer />
       </div>
     </>
   );

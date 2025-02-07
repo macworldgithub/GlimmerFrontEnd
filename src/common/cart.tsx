@@ -65,7 +65,9 @@ const Cart = () => {
                   const disableMinus = item.quantity === 1;
                   const disablePlus = item.quantity === 5 && !isBulk;
 
-                  const handleBulkCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
+                  const handleBulkCheckbox = (
+                    e: React.ChangeEvent<HTMLInputElement>
+                  ) => {
                     setIsBulk(e.target.checked);
 
                     if (!e.target.checked) {
@@ -89,7 +91,10 @@ const Cart = () => {
                         </div>
                       </td>
                       <td className="text-nowrap">
-                        {item.product.discounted_price.toFixed(2)} PKR
+                        {item.product.discounted_price === 0
+                          ? item.product.base_price * item.quantity
+                          : item.product.discounted_price * item.quantity}{" "}
+                        PKR
                       </td>
                       <td>
                         <div className="flex items-center">
@@ -123,7 +128,9 @@ const Cart = () => {
                               id={`bulk-${item.product.id}`}
                               className="mr-2"
                             />
-                            <label htmlFor={`bulk-${item.product.id}`}>Bulk of Bag</label>
+                            <label htmlFor={`bulk-${item.product.id}`}>
+                              Bulk of Bag
+                            </label>
                           </div>
                         )}
                       </td>

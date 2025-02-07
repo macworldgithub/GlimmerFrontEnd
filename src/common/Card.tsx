@@ -51,7 +51,10 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
     </span> */}
 
             <span className="text-[18px] font-sans font-medium">
-              ${item.discounted_price}
+              $
+              {item.discounted_price === 0
+                ? item.base_price
+                : item.discounted_price}
             </span>
           </p>
 

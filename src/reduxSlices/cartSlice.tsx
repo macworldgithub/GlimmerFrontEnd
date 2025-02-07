@@ -32,12 +32,19 @@ const initialState: Cart = {
 };
 
 const CalculateTotal = (list: CompleteOrder[]) => {
+  list = JSON.parse(JSON.stringify(list));
   let sum = 0;
   let discountSum = 0;
   for (let item of list) {
-    discountSum += item.product.discounted_price * item.quantity;
+    discountSum +=
+      item.product.discounted_price === 0
+        ? item.product.base_price * item.quantity
+        : item.product.discounted_price * item.quantity;
     sum += item.product.base_price * item.quantity;
   }
+
+  console.log("lopo", discountSum, sum);
+
   return { sum: sum, discountSum: discountSum };
 };
 
