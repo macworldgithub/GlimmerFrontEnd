@@ -1,18 +1,14 @@
 "use client";
 
-import { cn } from "@/lib/utils";
-import { Menu } from "antd";
 import { useEffect, useState } from "react";
-import { FaSortDown } from "react-icons/fa";
-
-import { FaBars, FaTimes } from "react-icons/fa";
 
 // import Router, { useRouter } from "next/router";
 import { useRouter } from "next/navigation";
 import { development, BACKEND_URL } from "@/api/config";
 import axios from "axios";
 
-import type { MenuProps } from "antd";
+import { Menu, Drawer, Button } from "antd";
+import { MenuOutlined } from "@ant-design/icons";
 
 type Item = {
   _id: string;
@@ -49,8 +45,51 @@ const CategoryNavMenu = ({ className }: { className?: string }) => {
   const [categories, setCategories] = useState<any[]>([]);
   const router = useRouter();
   const [selectedSubCategory, setSelectedSubCategory] = useState([]);
+  const [menuItems, setMenuItems] = useState([]);
 
-  type MenuItem = Required<MenuProps>["items"][number];
+  const [open, setOpen] = useState(false);
+
+  const transformToMenuItems = (data, handleClick) => {
+    return data.map((category) => ({
+      key: category._id,
+      label: (
+        <span
+          onClick={(e) => {
+            e.stopPropagation(); // Prevents submenu from opening
+            handleClick(`${category._id}`);
+          }}
+        >
+          {category.product_category.name}
+        </span>
+      ),
+      children: category.sub_categories.map((subCategory) => ({
+        key: `${category._id}-${subCategory._id}`,
+        label: (
+          <span
+            onClick={(e) => {
+              e.stopPropagation(); // Prevents submenu from opening
+              handleClick(`${category._id}-${subCategory._id}`);
+            }}
+          >
+            {subCategory.name}
+          </span>
+        ),
+        children: subCategory.items.map((item) => ({
+          key: `${category._id}-${subCategory._id}-${item._id}`,
+          label: (
+            <span
+              onClick={(e) => {
+                e.stopPropagation(); // Prevents submenu from opening
+                handleClick(`${category._id}-${subCategory._id}-${item._id}`);
+              }}
+            >
+              {item.name}
+            </span>
+          ),
+        })),
+      })),
+    }));
+  };
 
   const get_all_categories = async (): Promise<void> => {
     try {
@@ -58,6 +97,7 @@ const CategoryNavMenu = ({ className }: { className?: string }) => {
         `${BACKEND_URL}/product_item/get_all_product_item`
       );
       console.log(response.data, "lellllll");
+      setMenuItems(transformToMenuItems(response.data, HandlePath));
       setCategories(response.data);
     } catch (error) {
       console.error("Error fetching subcategories:", error);
@@ -69,7 +109,11 @@ const CategoryNavMenu = ({ className }: { className?: string }) => {
     get_all_categories();
   }, []);
 
-  const HandlePath = (e: any) => {
+  useEffect(() => {
+    console.log("oooo", menuItems);
+  }, [menuItems]);
+
+  function HandlePath(e: any) {
     let path = e;
     path = path.split("-");
     console.log(path, "hehe");
@@ -84,83 +128,108 @@ const CategoryNavMenu = ({ className }: { className?: string }) => {
       str = str + `&item=${path[2]}`;
     }
     router.push(str);
+
+    setSelectedSubCategory([]);
+
+    setOpen(false);
+  }
+
+  const HandleSelectCategory = (SubCategory: any) => {
+    if (selectedSubCategory?.length === 0) {
+      setSelectedSubCategory(SubCategory);
+    } else {
+      if (SubCategory?.length > 0) {
+        //@ts-ignore
+        if (
+          SubCategory[0]?.product_category ===
+          selectedSubCategory[0]?.product_category
+        ) {
+          setSelectedSubCategory([]);
+        } else {
+          setSelectedSubCategory(SubCategory);
+        }
+      }
+    }
   };
 
-  const items: MenuItem[] = [
-    {
-      label: "All Categories",
-      key: "allcategories",
-    },
-    {
-      label: "Brand",
-      key: "brand",
-    },
-    {
-      label: "Product",
-      key: "product",
-      children: categories.map((category) => ({
-        key: category._id,
-        label: category?.product_category?.name,
-        children: category?.sub_categories?.map((sub: any) => ({
-          key: `${category._id}-${sub._id}`,
-          label: sub?.name,
-          children: sub?.items?.length
-            ? sub.items.map((item: any) => ({
-                key: `${category._id}-${sub._id}-${item._id}`,
-                label: item.name,
-                onClick: () =>
-                  HandlePath(`${category._id}-${sub._id}-${item._id}`),
-              }))
-            : undefined, // Avoid empty `children` property
-        })),
-      })),
-    },
-    {
-      label: "New Arrival",
-      key: "newarrival",
-    },
-    {
-      label: "Best Seller",
-      key: "bestseller",
-    },
-    {
-      label: "Discount",
-      key: "discount",
-    },
-    {
-      label: "Blogs",
-      key: "blog",
-    },
-    {
-      label: "Contact",
-      key: "contact",
-    },
-  ];
+  const onMenuClick = ({ key }: any) => {
+    // HandlePath(key);
+
+    console.log("opopop", key);
+  };
   return (
-    <div
-      className={`bg-primary relative h-[max] w-[99vw] flex justify-center py-2  ${className}`}
-    >
-      <div className="flex gap-5 ">
-        {categories.map((item: any) => (
-          <div onClick={() => setSelectedSubCategory(item?.sub_categories)}>
-            {item?.product_category?.name}
-          </div>
-        ))}
+    <>
+      <div
+        className={`max-md:hidden bg-primary relative h-[max] w-[99vw] flex justify-center py-2  ${className}`}
+      >
+        <div className="flex gap-5 font-sans font-semibold ">
+          {categories.map((item: any) => (
+            <div
+              className=" cursor-pointer hover:font-extrabold transition-all duration-500 "
+              onClick={() => HandleSelectCategory(item?.sub_categories)}
+            >
+              {item?.product_category?.name}
+            </div>
+          ))}
+        </div>
+
+        {/* Menu is below which need to appear smoothly */}
+        <div
+          className={`w-full justify-between px-8 py-1 flex h-max bg-white absolute top-[40px] z-50 transition-all duration-500 ${
+            selectedSubCategory.length > 0
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 -translate-y-5 pointer-events-none"
+          }`}
+        >
+          {selectedSubCategory?.map((item: any, index: number) => (
+            <div className="flex flex-col" key={index}>
+              <p
+                onClick={() =>
+                  HandlePath(`${item?.product_category}-${item?._id}`)
+                }
+                className="font-semibold text-[20px] font-sans cursor-pointer"
+              >
+                {item?.name}
+              </p>
+              <div className="flex flex-col gap-2">
+                {item?.items?.map((product: any, i: number) => (
+                  <p
+                    onClick={() =>
+                      HandlePath(
+                        `${item?.product_category}-${item?._id}-${product?._id}`
+                      )
+                    }
+                    className="w-[160px] cursor-pointer"
+                    key={i}
+                  >
+                    {product?.name}
+                  </p>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
-      <div className="w-[100%] justify-between px-8 py-1 flex h-max bg-white absolute top-[50px] z-50">
-        {selectedSubCategory?.map((item: any) => (
-          <div className="flex flex-col">
-            <p className=" font-semibold text-[20px] font-sans">{item?.name}</p>
-            <div className="flex flex-col gap-2">
-              {item?.items?.map((product: any) => (
-                <p className="w-[160px] ">{product?.name}</p>
-              ))}
-            </div>
-          </div>
-        ))}
+      <div className="md:hidden">
+        <MenuOutlined
+          onClick={() => setOpen(true)}
+          className="pl-2 w-[50px] "
+        />
+
+        {/* Ant Design Drawer */}
+        <Drawer
+          title="Product Categories"
+          placement="left"
+          onClose={() => setOpen(false)}
+          open={open}
+          width={"60%"}
+        >
+          {/* Ant Design Menu inside Drawer */}
+          <Menu mode="inline" items={menuItems} onClick={onMenuClick} />
+        </Drawer>
       </div>
-    </div>
+    </>
   );
 };
 
