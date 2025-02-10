@@ -32,7 +32,7 @@ const SaloonPictures = () => {
     },
   ];
   return (
-    <div className="flex flex-col gap-3 w-[99vw] p-5 h-[800px] max-md:h-max rounded">
+    <div className="flex flex-col gap-3 w-[99vw] p-5 h-[800px] max-md:h-max pb-[20rem] rounded">
       <div className="flex h-[50%] w-[100%] gap-3 max-md:flex-col">
         {picture.slice(0, 2).map((item) => (
           <div

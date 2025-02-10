@@ -1,9 +1,7 @@
 "use client";
-import React from "react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { sampleProducts } from "@/data";
 import { useParams } from "next/navigation";
-
 import CategoryNavMenu from "@/common/category-nav-menu";
 import { useDispatch } from "react-redux";
 import { addItem, updateQty } from "@/reduxSlices/cartSlice";
@@ -12,62 +10,45 @@ import { RootState } from "@/store/reduxStore";
 import { getProductById } from "@/api/product";
 import Image from "next/image";
 import Card from "@/common/Card";
-import BoxContainer from "@/common/box-container";
 
-const forestAdventure = {
-  name: "Forest Adventure",
-  description: "Explore the lush greenery and serene landscapes of the forest.",
-  image1:
-    "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDF8fGZvcmVzdHxlbnwwfHx8fDE2ODkxOTcyMTc&ixlib=rb-1.2.1&q=80&w=400",
-  image2:
-    "https://images.unsplash.com/photo-1519681393784-d120267933ba?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDJ8fGZvcmVzdHxlbnwwfHx8fDE2ODkxOTcyNTg&ixlib=rb-1.2.1&q=80&w=400",
-  image3:
-    "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDR8fGZvcmVzdHxlbnwwfHx8fDE2ODkxOTcyODU&ixlib=rb-1.2.1&q=80&w=400",
-  base_price: 150,
-  discounted_price: 120,
-};
+// Import Swiper.js
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
 
-// Example Handlers
-
-const ProductDisplay = ({}) => {
+const ProductDisplay = () => {
   const Cart = useSelector((state: RootState) => state.cart);
-
   const dispatch = useDispatch();
   const [quantity, setQuantityState] = React.useState(1);
   const [product, setProduct] = useState<any>();
   const [copied, setCopied] = useState("");
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [activeTab, setActiveTab] = useState("Description");
+
   const path = useParams();
 
   const fetchData = async (id: string) => {
     try {
       const res = await getProductById(id);
-      console.log("hello");
-      console.log(res);
-      // return res;
       setProduct(res);
     } catch (error) {
       console.error("Error Fetching Product by Id");
     }
   };
+
   useEffect(() => {
     let result = sampleProducts.find(
       (item) => item?.id.toString() === path?.id
     );
-
     //@ts-ignore
     fetchData(path?.id);
-
-    // setProduct(result);
   }, []);
 
   //@ts-ignore
   const Product = Cart.ProductList.find(
     (item) => item?.product?.id === product?.id
   );
-
-  //@ts-ignore
 
   useEffect(() => {
     //@ts-ignore
@@ -80,7 +61,6 @@ const ProductDisplay = ({}) => {
 
   const updateQuantity = (newQuantity: any) => {
     setQuantityState(newQuantity);
-
     dispatch(updateQty({ _id: product?.id, qty: newQuantity }));
   };
 
@@ -101,7 +81,7 @@ const ProductDisplay = ({}) => {
   return (
     <>
       <CategoryNavMenu />
-      <div className="mb-8 flex flex-col justify-center gap-8 p-8 md:mb-5 md:flex-row md:gap-16 lg:mb-10">
+      <div className="mb-8 lg:ml-[14rem] flex flex-col justify-center gap-8 p-8 md:mb-5 md:flex-row md:gap-16 lg:mb-10">
         {/* Left Side: Product Image Gallery */}
         <div className="flex flex-col items-center">
           <img
@@ -139,25 +119,20 @@ const ProductDisplay = ({}) => {
             )}
           </div>
 
+          {/* Ratings Section */}
           <div className="mt-8 w-full hidden lg:block">
-            {" "}
-            {/* Hide for mobile devices */}
-            {/* Reviews Heading */}
             <h2 className="text-4xl font-semibold text-gray-800">Ratings</h2>
-            {/* Rating Display */}
             <p className="text-gray-700 mt-1 text-xl">
               {product?.ratings ? `${product.ratings}/5` : "No ratings yet"}
             </p>
-            {/* Star Rating */}
             <div className="flex items-center mt-2">
               {[...Array(5)].map((_, index) => (
                 <svg
                   key={index}
-                  className={`w-5 h-5 ms-1 ${
-                    product?.ratings && index < Math.round(product.ratings)
-                      ? "text-purple-800"
-                      : "text-gray-300"
-                  }`}
+                  className={`w-5 h-5 ms-1 ${product?.ratings && index < Math.round(product.ratings)
+                    ? "text-purple-800"
+                    : "text-gray-300"
+                    }`}
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
@@ -169,41 +144,32 @@ const ProductDisplay = ({}) => {
             </div>
           </div>
 
+          {/* Percentage Bar Section */}
           <div className="mt-[1rem] w-full hidden lg:block">
-            {" "}
-            {/* Hide for mobile devices */}
-            <div>
-              {[5, 4, 3, 2, 1].map((star, index) => {
-                const percentage = star * 20;
-                return (
-                  <div
-                    key={star}
-                    className={`flex items-center gap-3 ${
-                      index < 4 ? "mb-4" : ""
-                    }`}
-                  >
-                    {/* Star rating */}
-                    <span className="text-purple-800">{star} ★</span>
-                    {/* Percentage bar */}
-                    <div className="w-full bg-gray-200 rounded-md h-3 flex-1">
-                      <div
-                        className="h-3 bg-purple-800 rounded-md"
-                        style={{ width: `${percentage}%` }}
-                      ></div>
-                    </div>
-                    {/* Percentage text */}
-                    <span className="text-gray-600">{percentage}%</span>
+            {[5, 4, 3, 2, 1].map((star, index) => {
+              const percentage = star * 20;
+              return (
+                <div
+                  key={star}
+                  className={`flex items-center gap-3 ${index < 4 ? "mb-4" : ""}`}
+                >
+                  <span className="text-purple-800">{star} ★</span>
+                  <div className="w-full bg-gray-200 rounded-md h-3 flex-1">
+                    <div
+                      className="h-3 bg-purple-800 rounded-md"
+                      style={{ width: `${percentage}%` }}
+                    ></div>
                   </div>
-                );
-              })}
-            </div>
+                  <span className="text-gray-600">{percentage}%</span>
+                </div>
+              );
+            })}
           </div>
         </div>
 
         {/* Right Side: Product Info */}
         <div className="flex flex-col gap-4">
           <h1 className="font-semibold text-2xl">{product?.name}</h1>
-
           {/* Price */}
           <div className="font-semibold text-2xl">
             {product?.discounted_price === 0
@@ -213,14 +179,15 @@ const ProductDisplay = ({}) => {
             <span className="text-gray-500 text-sm">
               {product?.base_price > product?.discounted_price
                 ? ` -${Math.round(
-                    ((product?.base_price - product.discounted_price) /
-                      product?.base_price) *
-                      100
-                  )}%`
+                  ((product?.base_price - product.discounted_price) /
+                    product?.base_price) *
+                  100
+                )}%`
                 : ""}
             </span>
           </div>
 
+          {/* Star Rating */}
           <div className="flex items-center mt-2">
             {[...Array(4)].map((_, index) => (
               <svg
@@ -234,7 +201,6 @@ const ProductDisplay = ({}) => {
                 <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
               </svg>
             ))}
-            {/* Last Star (Gray) */}
             <svg
               className="w-4 h-4 ms-1 text-gray-300 dark:text-gray-400"
               aria-hidden="true"
@@ -250,13 +216,15 @@ const ProductDisplay = ({}) => {
           </div>
           <hr className="my-2.5 border-t border-gray-400 dark:text-gray-500 w-full" />
 
+          {/* Product Description */}
           <p className="text-gray-700 dark:text-gray-500 mt-1">
             {product?.description
               ? product.description
               : "This product has no description."}
           </p>
+
+          {/* Size, Stock, Type */}
           <div className="grid grid-cols-2 gap-3 mt-3">
-            {/* Size */}
             <div className="flex items-center font-semibold text-gray-700 dark:text-gray-700">
               <span>Size:</span>
             </div>
@@ -264,7 +232,6 @@ const ProductDisplay = ({}) => {
               {product?.size || "10gm"}
             </div>
 
-            {/* Stock */}
             <div className="flex items-center font-semibold text-gray-700 dark:text-gray-700">
               <span>Stock:</span>
             </div>
@@ -272,12 +239,10 @@ const ProductDisplay = ({}) => {
               {product?.stock || 215}
             </div>
 
-            {/* Type */}
             <div className="flex items-center font-semibold text-gray-700 dark:text-gray-700">
               <span>Type:</span>
             </div>
             <div className="space-x-2">
-              {/* Buttons for Type */}
               {["Dramatic", "Volume", "Natural", "Long"].map((type, index) => (
                 <button
                   key={index}
@@ -288,8 +253,9 @@ const ProductDisplay = ({}) => {
               ))}
             </div>
           </div>
+
+          {/* Voucher Promo */}
           <div className="mt-4 bg-white border border-gray-200 shadow-sm dark:text-white p-4 rounded-lg">
-            {/* Voucher Promo */}
             <div className="mb-4">
               <h4 className="font-semibold text-xl text-gray-800">
                 Voucher Promo
@@ -342,9 +308,9 @@ const ProductDisplay = ({}) => {
               ))}
             </div>
           </div>
+
           {/* Buttons Section */}
           <div className="flex items-center gap-4 mt-4">
-            {/* Add to Bag & Buy Now Buttons */}
             <button
               className="flex-1 flex items-center justify-center gap-2 py-2 px-4 border border-purple-800 text-purple-800 font-semibold rounded-md hover:border-purple-800 hover:text-purple-800"
               onClick={handleAddToCart}
@@ -361,7 +327,6 @@ const ProductDisplay = ({}) => {
             <button className="flex-1 py-2 px-4 bg-purple-800 text-white font-semibold rounded-md hover:bg-purple-900">
               BULK BUYING
             </button>
-            {/* Wishlist Toggle Button */}
             <button
               onClick={() => setIsWishlisted(!isWishlisted)}
               className="p-2"
@@ -379,17 +344,17 @@ const ProductDisplay = ({}) => {
             </button>
           </div>
 
+          {/* Tabs Section */}
           <div className="mt-6">
             <div className="flex border-b border-gray-300">
               {tabs.map((tab) => (
                 <button
                   key={tab.title}
                   onClick={() => setActiveTab(tab.title)}
-                  className={`flex-1 py-2 px-4 font-semibold ${
-                    activeTab === tab.title
-                      ? "text-purple-800 border-b-2 border-purple-800"
-                      : "text-gray-600"
-                  }`}
+                  className={`flex-1 py-2 px-4 font-semibold ${activeTab === tab.title
+                    ? "text-purple-800 border-b-2 border-purple-800"
+                    : "text-gray-600"
+                    }`}
                 >
                   {tab.title}
                 </button>
@@ -401,25 +366,21 @@ const ProductDisplay = ({}) => {
               {tabs.find((tab) => tab.title === activeTab)?.content}
             </div>
           </div>
+
+          {/* Ratings Section for Mobile */}
           <div className="mt-12 w-full lg:hidden">
-            {" "}
-            {/* Hide for mobile devices */}
-            {/* Reviews Heading */}
             <h2 className="text-4xl font-semibold text-gray-800">Ratings</h2>
-            {/* Rating Display */}
             <p className="text-gray-700 mt-1 text-xl">
               {product?.ratings ? `${product.ratings}/5` : "No ratings yet"}
             </p>
-            {/* Star Rating */}
             <div className="flex items-center mt-2">
               {[...Array(5)].map((_, index) => (
                 <svg
                   key={index}
-                  className={`w-5 h-5 ms-1 ${
-                    product?.ratings && index < Math.round(product.ratings)
-                      ? "text-purple-800"
-                      : "text-gray-300"
-                  }`}
+                  className={`w-5 h-5 ms-1 ${product?.ratings && index < Math.round(product.ratings)
+                    ? "text-purple-800"
+                    : "text-gray-300"
+                    }`}
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
@@ -431,47 +392,67 @@ const ProductDisplay = ({}) => {
             </div>
           </div>
 
+          {/* Percentage Bar Section for Mobile */}
           <div className="mt-[1rem] w-full lg:hidden">
-            {" "}
-            {/* Hide for mobile devices */}
-            <div>
-              {[5, 4, 3, 2, 1].map((star, index) => {
-                const percentage = star * 20;
-                return (
-                  <div
-                    key={star}
-                    className={`flex items-center gap-3 ${
-                      index < 4 ? "mb-4" : ""
-                    }`}
-                  >
-                    {/* Star rating */}
-                    <span className="text-purple-800">{star} ★</span>
-                    {/* Percentage bar */}
-                    <div className="w-full bg-gray-200 rounded-md h-3 flex-1">
-                      <div
-                        className="h-3 bg-purple-800 rounded-md"
-                        style={{ width: `${percentage}%` }}
-                      ></div>
-                    </div>
-                    {/* Percentage text */}
-                    <span className="text-gray-600">{percentage}%</span>
+            {[5, 4, 3, 2, 1].map((star, index) => {
+              const percentage = star * 20;
+              return (
+                <div
+                  key={star}
+                  className={`flex items-center gap-3 ${index < 4 ? "mb-4" : ""}`}
+                >
+                  <span className="text-purple-800">{star} ★</span>
+                  <div className="w-full bg-gray-200 rounded-md h-3 flex-1">
+                    <div
+                      className="h-3 bg-purple-800 rounded-md"
+                      style={{ width: `${percentage}%` }}
+                    ></div>
                   </div>
-                );
-              })}
-            </div>
+                  <span className="text-gray-600">{percentage}%</span>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
-      <div className="mb-6 gap-8 ml-20 md:mb-5 md:flex-row md:gap-16 lg:mb-10">
+
+      <div className="lg:pb-[30rem] lg:ml-[14rem] flex flex-col justify-center px-5 gap-12 mx-auto w-full max-w-7xl">
         <h2 className="text-4xl font-semibold">Related Products</h2>
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-8 mt-5">
+        <div className="hidden sm:grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-[12rem] mt-5">
           {sampleProducts.map((item: any) => (
             <Card key={item.id} item={item} />
           ))}
         </div>
-      </div>
-      <div>
-        <BoxContainer />
+
+        <div className="sm:hidden relative">
+          <Swiper
+            modules={[Navigation]}
+            navigation={{
+              nextEl: ".swiper-button-next",
+              prevEl: ".swiper-button-prev",
+            }}
+            spaceBetween={20}
+            slidesPerView={1}
+          >
+            {sampleProducts.map((item: any) => (
+              <SwiperSlide key={item.id}>
+                <Card item={item} />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+
+          <div className="-mt-2 absolute top-1/2 right-4 transform -translate-y-1/2 z-10 text-white">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="white" className="w-6 h-6">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+          </div>
+          <div className="-mt-2 absolute top-1/2 left-4 transform -translate-y-1/2 z-10 text-white">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="white" className="w-6 h-6">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+          </div>
+        </div>
+
       </div>
     </>
   );

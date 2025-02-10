@@ -9,6 +9,7 @@ import CookieBanner from "@/common/cookie-banner";
 import ToastComponent from "./components/toast-component";
 import { Provider } from "react-redux";
 import store from "@/store/reduxStore";
+import BoxContainer from "@/common/box-container";
 // import 'daisyui/dist/full.css';
 
 const geistSans = localFont({
@@ -42,7 +43,12 @@ export default function RootLayout({
           <Navbar />
           <ToastComponent />
           {children}
-          <Footer />
+          <div className="relative mt-10">
+            <Footer />
+            <div className="absolute bottom-[20rem] left-[12rem] z-10 w-full max-sm:w-[80%] max-sm:top-[-40rem] hidden md:block">
+              <BoxContainer />
+            </div>
+          </div>
           <CookieBanner />
         </CartStoreProvider>
       </body>
