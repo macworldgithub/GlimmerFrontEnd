@@ -24,7 +24,7 @@ const Cart = () => {
     return (
       <>
         <CategoryNavMenu />
-        <div className="hero min-h-[70vh] bg-base-200">
+        <div className="hero min-h-screen w-[99vw] bg-base-200">
           <div className="hero-content text-center">
             <div className="max-w-md">
               <h1 className="font-bold text-5xl">Cart Empty</h1>
@@ -41,7 +41,7 @@ const Cart = () => {
     );
 
   return (
-    <div className="flex min-h-[70vh] justify-center bg-gray-50 p-2 lg:p-8">
+    <div className="flex min-h-screen w-[99vw] justify-center p-2 lg:p-8">
       <div className="flex w-full flex-col gap-10 rounded-lg bg-white p-2 shadow-lg lg:flex-row lg:p-8 xl:gap-32 xl:px-16">
         {/* Cart Items */}
         <div className="flex-1 max-lg:min-w-80">

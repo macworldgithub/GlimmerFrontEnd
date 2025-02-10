@@ -19,7 +19,7 @@ import img4 from "@/assets/partners/partner 4.png";
 const Footer = () => {
   return (
     <footer className="w-[99vw] bg-neutral md:p-10 text-neutral-content">
-      <div className="container mx-auto flex flex-col md:flex-row justify-between gap-10">
+      <div className="mt-[9rem] container mx-auto flex flex-col md:flex-row justify-between gap-10">
         {/* Logo and Description */}
         <aside className="w-full md:w-1/3 text-center md:text-left">
           <img src={Logo.src} alt="logo" className="h-[50px] mx-auto md:mx-0" />

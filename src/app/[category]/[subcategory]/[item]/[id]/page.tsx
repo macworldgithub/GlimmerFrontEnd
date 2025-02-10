@@ -415,7 +415,7 @@ const ProductDisplay = () => {
         </div>
       </div>
 
-      <div className="lg:pb-[30rem] lg:ml-[14rem] flex flex-col justify-center px-5 gap-12 mx-auto w-full max-w-7xl">
+      <div className="lg:pb-[20rem] lg:ml-[14rem] flex flex-col justify-center px-5 gap-12 mx-auto w-full max-w-7xl">
         <h2 className="text-4xl font-semibold">Related Products</h2>
         <div className="hidden sm:grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-[12rem] mt-5">
           {sampleProducts.map((item: any) => (
