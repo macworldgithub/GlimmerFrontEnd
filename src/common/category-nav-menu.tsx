@@ -49,8 +49,8 @@ const CategoryNavMenu = ({ className }: { className?: string }) => {
 
   const [open, setOpen] = useState(false);
 
-  const transformToMenuItems = (data, handleClick) => {
-    return data.map((category) => ({
+  const transformToMenuItems = (data: any, handleClick: any) => {
+    return data.map((category: any) => ({
       key: category._id,
       label: (
         <span
@@ -62,7 +62,7 @@ const CategoryNavMenu = ({ className }: { className?: string }) => {
           {category.product_category.name}
         </span>
       ),
-      children: category.sub_categories.map((subCategory) => ({
+      children: category.sub_categories.map((subCategory: any) => ({
         key: `${category._id}-${subCategory._id}`,
         label: (
           <span
@@ -74,7 +74,7 @@ const CategoryNavMenu = ({ className }: { className?: string }) => {
             {subCategory.name}
           </span>
         ),
-        children: subCategory.items.map((item) => ({
+        children: subCategory.items.map((item: any) => ({
           key: `${category._id}-${subCategory._id}-${item._id}`,
           label: (
             <span
@@ -142,6 +142,7 @@ const CategoryNavMenu = ({ className }: { className?: string }) => {
         //@ts-ignore
         if (
           SubCategory[0]?.product_category ===
+          //@ts-ignore
           selectedSubCategory[0]?.product_category
         ) {
           setSelectedSubCategory([]);
