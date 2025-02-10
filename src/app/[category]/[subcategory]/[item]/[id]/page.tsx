@@ -11,7 +11,6 @@ import { getProductById } from "@/api/product";
 import Image from "next/image";
 import Card from "@/common/Card";
 
-// Import Swiper.js
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";

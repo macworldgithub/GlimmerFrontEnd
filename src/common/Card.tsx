@@ -24,7 +24,9 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
   const path = `/${category}/${subCategory}/${i}`;
 
   return (
-    <div className="  w-[280px] shadow-lg max-md:w-full ">
+    <div className="w-[280px] shadow-lg max-md:w-full cursor-pointer" onClick={() => {
+      router.push(`${path}/${item._id}`);
+    }}>
       <img
         src={item.image1}
         alt="Image 1"
@@ -51,7 +53,7 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
     </span> */}
 
             <span className="text-[18px] font-sans font-medium">
-              $
+              PKR.
               {item.discounted_price === 0
                 ? item.base_price
                 : item.discounted_price}
