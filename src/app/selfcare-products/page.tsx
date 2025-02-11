@@ -14,21 +14,23 @@ import MustItems from "./components/MustItems";
 import SaloonPictures from "@/common/SaloonPictures";
 import { Suspense } from "react";
 import { AdditionalSaloonPicture } from "@/common/AdditionalSaloonPicture";
+import BoxContainer from "@/common/box-container";
 
 export default async function Home() {
   return (
     <>
       <Suspense fallback={<div>Loading...</div>}>
-      <CategoryNavMenu className="mb-4" />
-      <Hero />
-      <Assurity />
-      <OfferPictures />
-      <TrendingProducts />
-      <VideoTutorial />
-      <MustItems />
-      <SaloonPictures />
-      <AdditionalSaloonPicture />
-    </Suspense>
+        <CategoryNavMenu className="mb-4" />
+        <Hero />
+        <Assurity />
+        <OfferPictures />
+        <TrendingProducts />
+        <VideoTutorial />
+        <MustItems />
+        <SaloonPictures />
+        <BoxContainer className="pb-[10rem] justify-center w-[99vw]" text="Shop Now and Unleash Your Inner Glow!" showInput={false} textAligned={true} animateGlow={true} />
+        <AdditionalSaloonPicture />
+      </Suspense>
     </>
   );
 }

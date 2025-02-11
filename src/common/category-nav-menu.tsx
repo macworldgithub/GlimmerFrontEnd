@@ -114,8 +114,7 @@ const CategoryNavMenu = ({ className }: { className?: string }) => {
   }, [menuItems]);
 
   function HandlePath(e: any) {
-    let path = e;
-    path = path.split("-");
+    let path = e.split("-");
     console.log(path, "hehe");
     let str = "/products?";
     if (path[0]) {
@@ -176,11 +175,10 @@ const CategoryNavMenu = ({ className }: { className?: string }) => {
 
         {/* Menu is below which need to appear smoothly */}
         <div
-          className={`w-full justify-between px-8 py-1 flex h-max bg-white absolute top-[40px] z-50 transition-all duration-500 ${
-            selectedSubCategory.length > 0
-              ? "opacity-100 translate-y-0"
-              : "opacity-0 -translate-y-5 pointer-events-none"
-          }`}
+          className={`w-full justify-between px-8 py-1 flex h-max bg-white absolute top-[40px] z-50 transition-all duration-500 ${selectedSubCategory.length > 0
+            ? "opacity-100 translate-y-0"
+            : "opacity-0 -translate-y-5 pointer-events-none"
+            }`}
         >
           {selectedSubCategory?.map((item: any, index: number) => (
             <div className="flex flex-col" key={index}>
