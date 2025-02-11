@@ -14,19 +14,18 @@ import { Rating } from "react-simple-star-rating";
 import { FaHeart } from "react-icons/fa";
 
 const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
+  console.log("check ooo", item);
   const router = useRouter();
-  const searchParams = useSearchParams();
 
-  const category = searchParams.get("category") ?? "";
-  const subCategory = searchParams.get("sub_category") ?? "";
-  const i = searchParams.get("item") ?? "";
-
-  const path = `/${category}/${subCategory}/${i}`;
+  const path = `/${item.category}/${item.sub_category}/${item.item}`;
 
   return (
-    <div className="w-[280px] shadow-lg max-md:w-full cursor-pointer" onClick={() => {
-      router.push(`${path}/${item._id}`);
-    }}>
+    <div
+      className="w-[280px] shadow-lg max-md:w-full cursor-pointer"
+      onClick={() => {
+        router.push(`${path}/${item._id}`);
+      }}
+    >
       <img
         src={item.image1}
         alt="Image 1"

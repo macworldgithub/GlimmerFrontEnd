@@ -394,6 +394,9 @@ export interface RealCardItem {
   image3: string;
   base_price: number;
   discounted_price: number;
+  category:string;
+  sub_category:string;
+  item:string;
 }
 
 export const sampleProducts: CardItem[] = [
