@@ -2,11 +2,32 @@
 
 import React from "react";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import Link from "next/link";
 import Logo from "@/assets/images/logo.png";
 
 export default function SignUpForm() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    gender: "",
+    age: "",
+    city: "",
+    area: "",
+  });
+
+  const handleChange = (e: any) => {
+    setFormData((form) => ({
+      ...form,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    console.log("check Form", formData);
+  };
   return (
     <div className="flex items-center justify-center p-5 min-h-screen bg-gradient-to-r from-[#ffc759] to-[#ebe9f7] w-[99vw]">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-2xl">
@@ -25,6 +46,8 @@ export default function SignUpForm() {
                 Full Name
               </label>
               <input
+                onChange={handleChange}
+                value={formData.name}
                 type="text"
                 id="name"
                 name="name"
@@ -40,6 +63,8 @@ export default function SignUpForm() {
                 Email
               </label>
               <input
+                onChange={handleChange}
+                value={formData.email}
                 type="email"
                 id="email"
                 name="email"
@@ -58,6 +83,8 @@ export default function SignUpForm() {
                 Password
               </label>
               <input
+                onChange={handleChange}
+                value={formData.password}
                 type="password"
                 id="password"
                 name="password"
@@ -76,6 +103,8 @@ export default function SignUpForm() {
                 Gender
               </label>
               <select
+                onChange={handleChange}
+                value={formData.gender}
                 id="gender"
                 name="gender"
                 className="w-full p-3 border-2 border-[#ccc] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ffc759]"
@@ -94,6 +123,8 @@ export default function SignUpForm() {
                 Age
               </label>
               <input
+                onChange={handleChange}
+                value={formData.age}
                 type="number"
                 id="age"
                 name="age"
@@ -109,6 +140,8 @@ export default function SignUpForm() {
                 City
               </label>
               <input
+                onChange={handleChange}
+                value={formData.city}
                 type="text"
                 id="city"
                 name="city"
@@ -123,6 +156,8 @@ export default function SignUpForm() {
                 Area
               </label>
               <input
+                onChange={handleChange}
+                value={formData.area}
                 type="text"
                 id="area"
                 name="area"
@@ -138,8 +173,11 @@ export default function SignUpForm() {
           {/* Submit Button */}
           <button
             type="submit"
+            onClick={handleSubmit}
             className="w-full p-3 bg-[#ffc759] text-white text-lg rounded-lg hover:bg-[#f8b03c] transition duration-300"
-          ></button>
+          >
+            SIGN UP
+          </button>
         </form>
 
         <div className="mt-4 text-center">
