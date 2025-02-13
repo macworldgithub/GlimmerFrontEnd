@@ -14,7 +14,6 @@ import { Rating } from "react-simple-star-rating";
 import { FaHeart } from "react-icons/fa";
 
 const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
-  console.log("check ooo", item);
   const router = useRouter();
 
   const path = `/${item.category}/${item.sub_category}/${item.item}`;

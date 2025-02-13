@@ -128,11 +128,10 @@ const ProductDisplay = () => {
               {[...Array(5)].map((_, index) => (
                 <svg
                   key={index}
-                  className={`w-5 h-5 ms-1 ${
-                    product?.ratings && index < Math.round(product.ratings)
-                      ? "text-purple-800"
-                      : "text-gray-300"
-                  }`}
+                  className={`w-5 h-5 ms-1 ${product?.ratings && index < Math.round(product.ratings)
+                    ? "text-purple-800"
+                    : "text-gray-300"
+                    }`}
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
@@ -151,9 +150,8 @@ const ProductDisplay = () => {
               return (
                 <div
                   key={star}
-                  className={`flex items-center gap-3 ${
-                    index < 4 ? "mb-4" : ""
-                  }`}
+                  className={`flex items-center gap-3 ${index < 4 ? "mb-4" : ""
+                    }`}
                 >
                   <span className="text-purple-800">{star} ★</span>
                   <div className="w-full bg-gray-200 rounded-md h-3 flex-1">
@@ -181,10 +179,10 @@ const ProductDisplay = () => {
             <span className="text-gray-500 text-sm">
               {product?.base_price > product?.discounted_price
                 ? ` -${Math.round(
-                    ((product?.base_price - product.discounted_price) /
-                      product?.base_price) *
-                      100
-                  )}%`
+                  ((product?.base_price - product.discounted_price) /
+                    product?.base_price) *
+                  100
+                )}%`
                 : ""}
             </span>
           </div>
@@ -230,29 +228,37 @@ const ProductDisplay = () => {
             <div className="flex items-center font-semibold text-gray-700 dark:text-gray-700">
               <span>Size:</span>
             </div>
-            <div className="text-gray-600 dark:text-gray-400">
-              {product?.size || "10gm"}
+            <div className="text-gray-600 dark:text-gray-400 flex gap-2 flex-wrap">
+              {product?.size?.length > 0
+                ? product.size.map((s: any) => (
+                  <span key={s.id} className="px-2 py-1 border border-gray-300 dark:border-gray-600 rounded-md text-sm">
+                    {s.value} {s.unit}
+                  </span>
+                ))
+                : "No size found"}
             </div>
 
             <div className="flex items-center font-semibold text-gray-700 dark:text-gray-700">
               <span>Stock:</span>
             </div>
             <div className="text-gray-600 dark:text-gray-400">
-              {product?.stock || 215}
+              {product?.quantity}
             </div>
 
             <div className="flex items-center font-semibold text-gray-700 dark:text-gray-700">
               <span>Type:</span>
             </div>
-            <div className="space-x-2">
-              {["Dramatic", "Volume", "Natural", "Long"].map((type, index) => (
-                <button
-                  key={index}
-                  className="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-md text-sm text-gray-700 dark:text-gray-500 hover:border-purple-700"
-                >
-                  {type}
-                </button>
-              ))}
+            <div className="space-x-2 flex gap-2 flex-wrap">
+              {product?.type?.length > 0
+                ? product.type.map((t: any) => (
+                  <button
+                    key={t.id}
+                    className="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-md text-sm text-gray-700 dark:text-gray-500 hover:border-purple-700"
+                  >
+                    {t.value}
+                  </button>
+                ))
+                : "No type found"}
             </div>
           </div>
 
@@ -353,11 +359,10 @@ const ProductDisplay = () => {
                 <button
                   key={tab.title}
                   onClick={() => setActiveTab(tab.title)}
-                  className={`flex-1 py-2 px-4 font-semibold ${
-                    activeTab === tab.title
-                      ? "text-purple-800 border-b-2 border-purple-800"
-                      : "text-gray-600"
-                  }`}
+                  className={`flex-1 py-2 px-4 font-semibold ${activeTab === tab.title
+                    ? "text-purple-800 border-b-2 border-purple-800"
+                    : "text-gray-600"
+                    }`}
                 >
                   {tab.title}
                 </button>
@@ -380,11 +385,10 @@ const ProductDisplay = () => {
               {[...Array(5)].map((_, index) => (
                 <svg
                   key={index}
-                  className={`w-5 h-5 ms-1 ${
-                    product?.ratings && index < Math.round(product.ratings)
-                      ? "text-purple-800"
-                      : "text-gray-300"
-                  }`}
+                  className={`w-5 h-5 ms-1 ${product?.ratings && index < Math.round(product.ratings)
+                    ? "text-purple-800"
+                    : "text-gray-300"
+                    }`}
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
@@ -403,9 +407,8 @@ const ProductDisplay = () => {
               return (
                 <div
                   key={star}
-                  className={`flex items-center gap-3 ${
-                    index < 4 ? "mb-4" : ""
-                  }`}
+                  className={`flex items-center gap-3 ${index < 4 ? "mb-4" : ""
+                    }`}
                 >
                   <span className="text-purple-800">{star} ★</span>
                   <div className="w-full bg-gray-200 rounded-md h-3 flex-1">
