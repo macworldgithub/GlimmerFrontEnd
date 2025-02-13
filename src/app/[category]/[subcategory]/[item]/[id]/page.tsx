@@ -128,10 +128,11 @@ const ProductDisplay = () => {
               {[...Array(5)].map((_, index) => (
                 <svg
                   key={index}
-                  className={`w-5 h-5 ms-1 ${product?.ratings && index < Math.round(product.ratings)
-                    ? "text-purple-800"
-                    : "text-gray-300"
-                    }`}
+                  className={`w-5 h-5 ms-1 ${
+                    product?.ratings && index < Math.round(product.ratings)
+                      ? "text-purple-800"
+                      : "text-gray-300"
+                  }`}
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
@@ -150,7 +151,9 @@ const ProductDisplay = () => {
               return (
                 <div
                   key={star}
-                  className={`flex items-center gap-3 ${index < 4 ? "mb-4" : ""}`}
+                  className={`flex items-center gap-3 ${
+                    index < 4 ? "mb-4" : ""
+                  }`}
                 >
                   <span className="text-purple-800">{star} ★</span>
                   <div className="w-full bg-gray-200 rounded-md h-3 flex-1">
@@ -178,10 +181,10 @@ const ProductDisplay = () => {
             <span className="text-gray-500 text-sm">
               {product?.base_price > product?.discounted_price
                 ? ` -${Math.round(
-                  ((product?.base_price - product.discounted_price) /
-                    product?.base_price) *
-                  100
-                )}%`
+                    ((product?.base_price - product.discounted_price) /
+                      product?.base_price) *
+                      100
+                  )}%`
                 : ""}
             </span>
           </div>
@@ -350,10 +353,11 @@ const ProductDisplay = () => {
                 <button
                   key={tab.title}
                   onClick={() => setActiveTab(tab.title)}
-                  className={`flex-1 py-2 px-4 font-semibold ${activeTab === tab.title
-                    ? "text-purple-800 border-b-2 border-purple-800"
-                    : "text-gray-600"
-                    }`}
+                  className={`flex-1 py-2 px-4 font-semibold ${
+                    activeTab === tab.title
+                      ? "text-purple-800 border-b-2 border-purple-800"
+                      : "text-gray-600"
+                  }`}
                 >
                   {tab.title}
                 </button>
@@ -376,10 +380,11 @@ const ProductDisplay = () => {
               {[...Array(5)].map((_, index) => (
                 <svg
                   key={index}
-                  className={`w-5 h-5 ms-1 ${product?.ratings && index < Math.round(product.ratings)
-                    ? "text-purple-800"
-                    : "text-gray-300"
-                    }`}
+                  className={`w-5 h-5 ms-1 ${
+                    product?.ratings && index < Math.round(product.ratings)
+                      ? "text-purple-800"
+                      : "text-gray-300"
+                  }`}
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
@@ -398,7 +403,9 @@ const ProductDisplay = () => {
               return (
                 <div
                   key={star}
-                  className={`flex items-center gap-3 ${index < 4 ? "mb-4" : ""}`}
+                  className={`flex items-center gap-3 ${
+                    index < 4 ? "mb-4" : ""
+                  }`}
                 >
                   <span className="text-purple-800">{star} ★</span>
                   <div className="w-full bg-gray-200 rounded-md h-3 flex-1">
@@ -415,43 +422,72 @@ const ProductDisplay = () => {
         </div>
       </div>
 
-      <div className="lg:pb-[20rem] lg:ml-[14rem] flex flex-col justify-center px-5 gap-12 mx-auto w-full max-w-7xl">
+      <div className="p-10 w-[99vw] justify-center md:mb-5 md:flex-row md:gap-12 ">
         <h2 className="text-4xl font-semibold">Related Products</h2>
-        <div className="hidden sm:grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-[12rem] mt-5">
+
+        {/* Grid Layout for larger screens */}
+        <div className="mb-[20rem] hidden sm:grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 lg:gap-6 mt-5 justify-center">
           {sampleProducts.map((item: any) => (
-            <Card key={item.id} item={item} />
+            <div className="flex justify-center">
+              <Card key={item.id} item={item} />
+            </div>
           ))}
         </div>
 
-        <div className="sm:hidden relative">
+        {/* Swiper for mobile */}
+        <div className="sm:hidden w-full max-w-[90%] mx-auto relative mt-5">
           <Swiper
             modules={[Navigation]}
             navigation={{
               nextEl: ".swiper-button-next",
               prevEl: ".swiper-button-prev",
             }}
-            spaceBetween={20}
+            spaceBetween={15}
             slidesPerView={1}
           >
             {sampleProducts.map((item: any) => (
               <SwiperSlide key={item.id}>
-                <Card item={item} />
+                <div className="flex justify-center">
+                  <Card item={item} />
+                </div>
               </SwiperSlide>
             ))}
           </Swiper>
 
-          <div className="-mt-2 absolute top-1/2 right-4 transform -translate-y-1/2 z-10 text-white">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="white" className="w-6 h-6">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+          {/* Navigation Arrows */}
+          <div className="swiper-button-next absolute top-1/2 right-4 transform -translate-y-1/2 z-10 text-white">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="white"
+              className="w-6 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M9 5l7 7-7 7"
+              ></path>
             </svg>
           </div>
-          <div className="-mt-2 absolute top-1/2 left-4 transform -translate-y-1/2 z-10 text-white">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="white" className="w-6 h-6">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
+          <div className="swiper-button-prev absolute top-1/2 left-4 transform -translate-y-1/2 z-10 text-white">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="white"
+              className="w-6 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M15 19l-7-7 7-7"
+              ></path>
             </svg>
           </div>
         </div>
-
       </div>
     </>
   );
