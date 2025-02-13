@@ -14,6 +14,8 @@ import { FaCircleUser } from "react-icons/fa6";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 
+import ShowUser from "./ShowUser";
+
 const Navbar = async () => {
   const cookie = (await cookies()).get("session")?.value;
   const session = await decrypt(cookie);
@@ -32,16 +34,7 @@ const Navbar = async () => {
         {/* <IoMdCall className="size-4" /> */}
         {/* <PhoneBtn /> */}
 
-        <div className="flex justify-center items-center gap-1 font-sans text-[16px] max-md:hidden">
-          <Image src={"/user.svg"} width={25} height={25} alt="user" />
-          <Link href={"/login"}>
-            <p className=" hover:font-semibold">Login</p>
-          </Link>
-          <p>/</p>
-          <Link href={"/signup"}>
-            <p className=" hover:font-semibold">SignUp</p>
-          </Link>
-        </div>
+       <ShowUser/>
 
         <CartNavbar />
 

@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { LoginApi } from "@/api/auth";
+import Cookies from "js-cookie";
 
 interface Login {
   email: string;
@@ -20,7 +21,7 @@ const initialState: Login = {
   role: "",
   password: "",
 
-  loading: true,
+  loading: false,
   success: false,
   failed: false,
 };
@@ -34,6 +35,18 @@ const LoginSlice = createSlice({
     },
     updatePassword: (state, action) => {
       state.password = action.payload;
+    },
+
+    resetStatus: (state) => {
+      state.failed = false;
+      state.success = false;
+      state.loading = false;
+    },
+
+    logout: (state) => {
+      Cookies.remove("token");
+      // Clears user data
+      return { ...initialState };
     },
   },
   extraReducers: (builder) => {
@@ -52,6 +65,8 @@ const LoginSlice = createSlice({
         state.name = customer.name;
         state.role = role;
         state.token = token;
+
+        Cookies.set("token", action.payload.token, { expires: 7 }); // Expires in 7 days
       }),
       builder.addCase(LoginApi.rejected, (state) => {
         state.loading = false;
@@ -61,6 +76,7 @@ const LoginSlice = createSlice({
   },
 });
 
-export const { updateEmail, updatePassword } = LoginSlice.actions;
+export const { updateEmail, updatePassword, resetStatus, logout } =
+  LoginSlice.actions;
 
 export default LoginSlice;

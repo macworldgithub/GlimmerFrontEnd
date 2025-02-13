@@ -4,7 +4,12 @@ import { sampleProducts } from "@/data";
 import { useParams } from "next/navigation";
 import CategoryNavMenu from "@/common/category-nav-menu";
 import { useDispatch } from "react-redux";
-import { addItem, updateQty } from "@/reduxSlices/cartSlice";
+import {
+  addItem,
+  updateProductSize,
+  updateProductType,
+  updateQty,
+} from "@/reduxSlices/cartSlice";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/reduxStore";
 import { getProductById } from "@/api/product";
@@ -25,6 +30,21 @@ const ProductDisplay = () => {
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [activeTab, setActiveTab] = useState("Description");
 
+  const size = useSelector(
+    (state: RootState) =>
+      state.cart.ProductList.find((item) => item.product?.id === product?.id)
+        ?.product?.size
+  );
+
+  const type = useSelector(
+    (state: RootState) =>
+      state.cart.ProductList.find((item) => item.product?.id === product?.id)
+        ?.product?.type
+  );
+
+  const [selectedSize, setSelectedSize] = useState();
+  const [selectedType, setSelectedType] = useState();
+
   const path = useParams();
 
   const fetchData = async (id: string) => {
@@ -43,6 +63,13 @@ const ProductDisplay = () => {
     //@ts-ignore
     fetchData(path?.id);
   }, []);
+
+  useEffect(() => {
+    //@ts-ignore
+    setSelectedSize(size);
+    //@ts-ignore
+    setSelectedType(type);
+  }, [product]);
 
   //@ts-ignore
   const Product = Cart.ProductList.find(
@@ -76,6 +103,15 @@ const ProductDisplay = () => {
       content: product?.description || "No description available.",
     },
   ];
+
+  const handleSize = (productId: string, size: any) => {
+    setSelectedSize(size);
+    dispatch(updateProductSize({ id: productId, size: size }));
+  };
+  const handleType = (productId: string, type: any) => {
+    setSelectedType(type);
+    dispatch(updateProductType({ id: productId, type: type }));
+  };
 
   return (
     <>
@@ -128,10 +164,11 @@ const ProductDisplay = () => {
               {[...Array(5)].map((_, index) => (
                 <svg
                   key={index}
-                  className={`w-5 h-5 ms-1 ${product?.ratings && index < Math.round(product.ratings)
-                    ? "text-purple-800"
-                    : "text-gray-300"
-                    }`}
+                  className={`w-5 h-5 ms-1 ${
+                    product?.ratings && index < Math.round(product.ratings)
+                      ? "text-purple-800"
+                      : "text-gray-300"
+                  }`}
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
@@ -150,8 +187,9 @@ const ProductDisplay = () => {
               return (
                 <div
                   key={star}
-                  className={`flex items-center gap-3 ${index < 4 ? "mb-4" : ""
-                    }`}
+                  className={`flex items-center gap-3 ${
+                    index < 4 ? "mb-4" : ""
+                  }`}
                 >
                   <span className="text-purple-800">{star} ★</span>
                   <div className="w-full bg-gray-200 rounded-md h-3 flex-1">
@@ -179,10 +217,10 @@ const ProductDisplay = () => {
             <span className="text-gray-500 text-sm">
               {product?.base_price > product?.discounted_price
                 ? ` -${Math.round(
-                  ((product?.base_price - product.discounted_price) /
-                    product?.base_price) *
-                  100
-                )}%`
+                    ((product?.base_price - product.discounted_price) /
+                      product?.base_price) *
+                      100
+                  )}%`
                 : ""}
             </span>
           </div>
@@ -228,13 +266,22 @@ const ProductDisplay = () => {
             <div className="flex items-center font-semibold text-gray-700 dark:text-gray-700">
               <span>Size:</span>
             </div>
-            <div className="text-gray-600 dark:text-gray-400 flex gap-2 flex-wrap">
+            <div className="text-gray-600 dark:text-gray-400 flex gap-2 flex-wrap ">
               {product?.size?.length > 0
                 ? product.size.map((s: any) => (
-                  <span key={s.id} className="px-2 py-1 border border-gray-300 dark:border-gray-600 rounded-md text-sm">
-                    {s.value} {s.unit}
-                  </span>
-                ))
+                    <span
+                      key={s.id}
+                      onClick={() => handleSize(product?.id, s)}
+                      className={`${
+                        //@ts-ignore
+                        selectedSize?.id === s?.id
+                          ? "bg-[#6B21A8] text-white"
+                          : "bg-white"
+                      } px-2 py-1 border hover:bg-[#6B21A8] hover:text-white cursor-pointer border-gray-300 dark:border-gray-600 rounded-md text-sm `}
+                    >
+                      {s.value} {s.unit}
+                    </span>
+                  ))
                 : "No size found"}
             </div>
 
@@ -251,13 +298,19 @@ const ProductDisplay = () => {
             <div className="space-x-2 flex gap-2 flex-wrap">
               {product?.type?.length > 0
                 ? product.type.map((t: any) => (
-                  <button
-                    key={t.id}
-                    className="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-md text-sm text-gray-700 dark:text-gray-500 hover:border-purple-700"
-                  >
-                    {t.value}
-                  </button>
-                ))
+                    <button
+                      key={t.id}
+                      onClick={() => handleType(product?.id, t)}
+                      className={`${
+                        //@ts-ignore
+                        selectedType?.id === t?.id
+                          ? "bg-[#6B21A8] text-white"
+                          : "bg-white"
+                      } px-3 py-1 border hover:bg-[#6B21A8] hover:text-white cursor-pointer border-gray-300 dark:border-gray-600 rounded-md text-sm text-gray-700 dark:text-gray-500 hover:border-purple-700`}
+                    >
+                      {t.value}
+                    </button>
+                  ))
                 : "No type found"}
             </div>
           </div>
@@ -359,10 +412,11 @@ const ProductDisplay = () => {
                 <button
                   key={tab.title}
                   onClick={() => setActiveTab(tab.title)}
-                  className={`flex-1 py-2 px-4 font-semibold ${activeTab === tab.title
-                    ? "text-purple-800 border-b-2 border-purple-800"
-                    : "text-gray-600"
-                    }`}
+                  className={`flex-1 py-2 px-4 font-semibold ${
+                    activeTab === tab.title
+                      ? "text-purple-800 border-b-2 border-purple-800"
+                      : "text-gray-600"
+                  }`}
                 >
                   {tab.title}
                 </button>
@@ -385,10 +439,11 @@ const ProductDisplay = () => {
               {[...Array(5)].map((_, index) => (
                 <svg
                   key={index}
-                  className={`w-5 h-5 ms-1 ${product?.ratings && index < Math.round(product.ratings)
-                    ? "text-purple-800"
-                    : "text-gray-300"
-                    }`}
+                  className={`w-5 h-5 ms-1 ${
+                    product?.ratings && index < Math.round(product.ratings)
+                      ? "text-purple-800"
+                      : "text-gray-300"
+                  }`}
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
@@ -407,8 +462,9 @@ const ProductDisplay = () => {
               return (
                 <div
                   key={star}
-                  className={`flex items-center gap-3 ${index < 4 ? "mb-4" : ""
-                    }`}
+                  className={`flex items-center gap-3 ${
+                    index < 4 ? "mb-4" : ""
+                  }`}
                 >
                   <span className="text-purple-800">{star} ★</span>
                   <div className="w-full bg-gray-200 rounded-md h-3 flex-1">

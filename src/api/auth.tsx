@@ -34,7 +34,22 @@ export const LoginApi = createAsyncThunk(
       return res.data;
     } catch (error) {
       console.error("Login error", error);
+      //@ts-ignore
       return rejectWithValue(error.response?.data || "Something went wrong");
     }
   }
 );
+
+export const SignUpCustomer = async (data: any) => {
+  try {
+    const res = await axios.post(`${BACKEND_URL}/auth/signup/customer`, {
+      name: data?.name,
+      email: data?.email,
+      password: data?.password,
+    });
+
+    return res.data;
+  } catch (error) {
+    console.log("error", error);
+  }
+};

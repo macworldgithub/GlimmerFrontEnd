@@ -1,5 +1,15 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+interface Type {
+  id: string;
+  value: string;
+}
+interface Size {
+  id: string;
+  value: string;
+  unit: string;
+}
+
 interface Product {
   id: string;
   name: string;
@@ -12,6 +22,8 @@ interface Product {
   discounted_price: 0;
   status: "Active";
   store: string;
+  size: Size;
+  type: Type;
 }
 
 interface CompleteOrder {
@@ -110,10 +122,47 @@ const CartSlice = createSlice({
       state.total = sum;
       state.discountedTotal = discountSum;
     },
+
+    updateProductSize: (
+      state,
+      action: PayloadAction<{ id: string; size: Size }>
+    ) => {
+      const { id, size } = action.payload;
+      state.ProductList = state.ProductList.map((item) =>
+        item.product.id === id
+          ? { ...item, product: { ...item.product, size } }
+          : item
+      );
+    },
+
+    updateProductType: (
+      state,
+      action: PayloadAction<{ id: string; type: Type }>
+    ) => {
+      const { id, type } = action.payload;
+      state.ProductList = state.ProductList.map((item) =>
+        item.product.id === id
+          ? { ...item, product: { ...item.product, type } }
+          : item
+      );
+    },
+
+    clearCart: (state) => {
+      state.ProductList = [];
+      state.total = 0;
+      state.discountedTotal = 0;
+    },
   },
 });
 
-export const { updateQty, totalCartAmount, removeItem, addItem } =
-  CartSlice.actions;
+export const {
+  updateQty,
+  totalCartAmount,
+  removeItem,
+  addItem,
+  updateProductSize,
+  updateProductType,
+  clearCart,
+} = CartSlice.actions;
 
 export default CartSlice;

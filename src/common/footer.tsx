@@ -18,7 +18,7 @@ import img4 from "@/assets/partners/partner 4.png";
 
 const Footer = () => {
   return (
-    <footer className="w-[99vw] bg-neutral md:p-10 text-neutral-content">
+    <footer className="w-[99vw] bg-neutral md:p-10 text-neutral-content mt-5">
       <div className="mt-[9rem] container mx-auto flex flex-col md:flex-row justify-between gap-10">
         {/* Logo and Description */}
         <aside className="w-full md:w-1/3 text-center md:text-left">
@@ -58,13 +58,23 @@ const Footer = () => {
           </div>
 
           {/* Contact */}
-          <h2 className="mt-6 font-bold text-xl md:text-2xl text-white">Contact us</h2>
+          <h2 className="mt-6 font-bold text-xl md:text-2xl text-white">
+            Contact us
+          </h2>
           <div className="flex flex-col items-center md:items-start mt-3">
-            <Link href="https://wa.me/0331-2062376" target="_blank" className="flex items-center opacity-90 hover:opacity-100 hover:text-white">
+            <Link
+              href="https://wa.me/0331-2062376"
+              target="_blank"
+              className="flex items-center opacity-90 hover:opacity-100 hover:text-white"
+            >
               <FaWhatsapp className="mr-2" />
               <p>0331-2062376</p>
             </Link>
-            <Link href="mailto:info@glimmer.com.pk" target="_blank" className="flex items-center opacity-90 hover:opacity-100 hover:text-white mt-2">
+            <Link
+              href="mailto:info@glimmer.com.pk"
+              target="_blank"
+              className="flex items-center opacity-90 hover:opacity-100 hover:text-white mt-2"
+            >
               <FaEnvelope className="mr-2" />
               <p>info@glimmer.com.pk</p>
             </Link>
@@ -73,10 +83,17 @@ const Footer = () => {
 
         {/* Partner Logos */}
         <nav className="w-full md:w-1/3 text-center md:text-left">
-          <h2 className="font-bold text-xl md:text-2xl text-white">Our partners</h2>
+          <h2 className="font-bold text-xl md:text-2xl text-white">
+            Our partners
+          </h2>
           <div className="grid grid-cols-2 gap-3 mt-3">
             {[img1, img2, img3, img4].map((img, index) => (
-              <img key={index} src={img.src} alt="partner logo" className="h-[60px] mx-auto md:mx-0" />
+              <img
+                key={index}
+                src={img.src}
+                alt="partner logo"
+                className="h-[60px] mx-auto md:mx-0"
+              />
             ))}
           </div>
         </nav>

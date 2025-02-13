@@ -183,7 +183,11 @@ const Cart = () => {
               <span>Subtotal</span>
               <span>{Cart.discountedTotal + deliveryCharges} PKR</span>
             </div>
-            <button className="btn btn-secondary mt-4 w-full">Checkout</button>
+            <Link href={"/checkout"}>
+              <button className="btn btn-secondary mt-4 w-full">
+                Checkout
+              </button>
+            </Link>
           </div>
         </div>
       </div>
