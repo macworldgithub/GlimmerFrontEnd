@@ -5,21 +5,12 @@ import axios from "axios";
 
 export const createOrder = async (data: any, token: string) => {
   try {
-    const res = await axios.post(
-      `${BACKEND_URL}/order/create`,
-      {
-        order_items: data.map((item: any) => ({
-          product: item?.product?._id,
-          quantity: item?.quantity,
-        })),
-        payment_method: "Credit/Debit Card",
+    data = { ...data, status: "Confirmed" };
+    const res = await axios.post(`${BACKEND_URL}/order/create`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    });
     return res.data;
   } catch (error) {
     console.error("Error creating order:", error);

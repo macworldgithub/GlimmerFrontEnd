@@ -11,11 +11,14 @@ import CategoryNavMenu from "./category-nav-menu";
 const Cart = () => {
   const dispatch = useDispatch();
   const Cart = useSelector((state: RootState) => state.cart);
-  const deliveryCharges = 250;
 
   const updateQuantity = (id: string, newQuantity: number) => {
     console.log(`Quantity updated to: ${newQuantity}`);
     dispatch(updateQty({ _id: id, qty: newQuantity }));
+  };
+
+  const deleteProduct = (id: string) => {
+    dispatch(removeItem({ id: id }));
   };
 
   // Ensure cartItems are available after hydration
@@ -137,9 +140,7 @@ const Cart = () => {
                       <td>
                         <button
                           className="btn btn-sm btn-error"
-                          onClick={() =>
-                            dispatch(removeItem({ p_id: item.product.id }))
-                          }
+                          onClick={() => deleteProduct(item.product.id)}
                         >
                           <span role="img" aria-label="remove">
                             <RiDeleteBin5Line className="size-4" />
@@ -175,13 +176,13 @@ const Cart = () => {
               <span> {Cart?.discountedTotal} PKR</span>
             </div>
             <div className="flex justify-between">
-              <span>Delivery</span>
-              <span> {deliveryCharges} PKR</span>
+              {/* <span>Delivery</span>
+              <span> {deliveryCharges} PKR</span> */}
             </div>
             <hr className="my-2" />
             <div className="flex justify-between font-semibold">
               <span>Subtotal</span>
-              <span>{Cart.discountedTotal + deliveryCharges} PKR</span>
+              <span>{Cart.discountedTotal} PKR</span>
             </div>
             <Link href={"/checkout"}>
               <button className="btn btn-secondary mt-4 w-full">

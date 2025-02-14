@@ -81,15 +81,15 @@ const CartSlice = createSlice({
     },
 
     removeItem: (state, action) => {
-      const { p_id } = action.payload;
+      const { id } = action.payload;
 
-      if (p_id === undefined || p_id === null) {
-        console.error("Error: p_id is required to remove an item.");
+      if (id === undefined || id === null) {
+        console.error("Error: id is required to remove an item.");
         return;
       }
 
       state.ProductList = state.ProductList.filter(
-        (item) => item.product.id !== p_id
+        (item) => item.product.id !== id
       );
 
       const { sum, discountSum } = CalculateTotal(state.ProductList);

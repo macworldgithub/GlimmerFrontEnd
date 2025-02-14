@@ -20,6 +20,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
+import toast, { Toaster } from "react-hot-toast";
 
 const ProductDisplay = () => {
   const Cart = useSelector((state: RootState) => state.cart);
@@ -42,8 +43,12 @@ const ProductDisplay = () => {
         ?.product?.type
   );
 
-  const [selectedSize, setSelectedSize] = useState();
-  const [selectedType, setSelectedType] = useState();
+  const [selectedSize, setSelectedSize] = useState({
+    id: "",
+    value: "",
+    unit: "",
+  });
+  const [selectedType, setSelectedType] = useState({ id: "", value: "" });
 
   const path = useParams();
 
@@ -83,6 +88,8 @@ const ProductDisplay = () => {
 
   const handleAddToCart = () => {
     dispatch(addItem({ product: product }));
+
+    toast.success("Product Added Successfully");
   };
 
   const updateQuantity = (newQuantity: any) => {
@@ -115,7 +122,9 @@ const ProductDisplay = () => {
 
   return (
     <>
+      <Toaster />
       <CategoryNavMenu />
+
       <div className="mb-8 lg:ml-[14rem] flex flex-col justify-center gap-8 p-8 md:mb-5 md:flex-row md:gap-16 lg:mb-10">
         {/* Left Side: Product Image Gallery */}
         <div className="flex flex-col items-center">
