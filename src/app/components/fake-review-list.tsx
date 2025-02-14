@@ -12,7 +12,7 @@ const FakeReviewList = () => {
 			<CardList
 				dataType="review"
 				cards={reviewsData}
-				className="xl:justify-center"
+				className="xl:justify-center w-99vw]"
 			/>
 		</>
 	);

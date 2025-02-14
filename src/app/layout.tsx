@@ -48,7 +48,7 @@ export default function RootLayout({
           {children}
           <div className="relative mt-10">
             <Footer />
-            <div className="absolute bottom-[20rem] pb-[5rem] z-10 justify-center w-[99vw] max-sm:w-[80%] hidden md:block">
+            <div className="absolute bottom-[20rem] z-10 justify-center w-[99vw] max-sm:w-[80%] hidden md:block">
               <BoxContainer />
             </div>
           </div>
