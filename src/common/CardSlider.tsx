@@ -23,7 +23,7 @@ const CardSlider = ({ ProductList }: { ProductList: any }) => {
   };
 
   return (
-    <div className="w-[99vw] px-5 h-max relative p-10 max-md:text-center">
+    <div className="w-[97vw] px-5 h-max relative p-10 max-md:text-center">
       <div className="relative">
         {/* Left Arrow */}
         <button
