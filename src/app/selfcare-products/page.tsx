@@ -28,7 +28,7 @@ export default async function Home() {
         <VideoTutorial />
         <MustItems />
         <SaloonPictures />
-        <BoxContainer className="pb-[10rem] justify-center w-[99vw]" text="Shop Now and Unleash Your Inner Glow!" showInput={false} textAligned={true} animateGlow={true} />
+        <BoxContainer className="pb-[20rem] justify-center w-[99vw]" text="Shop Now and Unleash Your Inner Glow!" showInput={false} textAligned={true} animateGlow={true} />
         <AdditionalSaloonPicture />
       </Suspense>
     </>
