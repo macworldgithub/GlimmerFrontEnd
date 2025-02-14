@@ -24,7 +24,11 @@ const BoxContainer: React.FC<BoxContainerProps> = ({
             )}
         >
             <div
-                style={{ backgroundImage: "url('/assets/addtoBag/boxContainer.png')" }}
+                style={{
+                    backgroundImage: "url('/assets/addtoBag/boxContainer.png')", objectFit: "cover",
+                    backgroundPosition: "center",
+                    backgroundSize: "cover",
+                }}
                 className={clsx(
                     "bg-black bg-opacity-60 p-10 md:p-[5%] rounded-2xl text-white max-w-5xl min-w-min shadow-lg backdrop-blur-md",
                     { "animate-pulse": animateGlow }
