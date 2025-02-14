@@ -20,7 +20,6 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
-import toast, { Toaster } from "react-hot-toast";
 
 const ProductDisplay = () => {
   const Cart = useSelector((state: RootState) => state.cart);
@@ -43,12 +42,8 @@ const ProductDisplay = () => {
         ?.product?.type
   );
 
-  const [selectedSize, setSelectedSize] = useState({
-    id: "",
-    value: "",
-    unit: "",
-  });
-  const [selectedType, setSelectedType] = useState({ id: "", value: "" });
+  const [selectedSize, setSelectedSize] = useState();
+  const [selectedType, setSelectedType] = useState();
 
   const path = useParams();
 
@@ -88,8 +83,6 @@ const ProductDisplay = () => {
 
   const handleAddToCart = () => {
     dispatch(addItem({ product: product }));
-
-    toast.success("Product Added Successfully");
   };
 
   const updateQuantity = (newQuantity: any) => {
@@ -122,46 +115,35 @@ const ProductDisplay = () => {
 
   return (
     <>
-      <Toaster />
       <CategoryNavMenu />
-
-      <div className="mb-8 lg:ml-[14rem] flex flex-col justify-center gap-8 p-8 md:mb-5 md:flex-row md:gap-16 lg:mb-10">
+      <div className="mb-8 flex flex-col justify-center w-[99vw] gap-8 p-8 md:mb-5 md:flex-row md:gap-16 lg:mb-10">
         {/* Left Side: Product Image Gallery */}
         <div className="flex flex-col items-center">
-          <img
-            src={product?.image1}
-            alt={product?.name}
-            width={650}
-            height={650}
-            className="rounded-md object-cover shadow"
-          />
-          <div className="mt-6 flex gap-4">
+          {/* Main Image Container */}
+          <div className="w-full max-w-[650px] sm:w-[450px] md:w-[550px] h-auto flex items-center justify-center overflow-hidden rounded-md shadow bg-gray-100">
             <img
               src={product?.image1}
-              alt="Thumbnail 1"
-              width={120}
-              height={120}
-              className="rounded-md object-cover shadow"
+              alt={product?.name}
+              className="w-full h-auto max-h-[650px] object-contain"
             />
-            {product?.image2 && (
-              <img
-                src={product?.image2}
-                alt="Thumbnail 2"
-                width={120}
-                height={120}
-                className="rounded-md object-cover shadow"
-              />
-            )}
-            {product?.image3 && (
-              <img
-                src={product?.image3}
-                alt="Thumbnail 3"
-                width={120}
-                height={120}
-                className="rounded-md object-cover shadow"
-              />
+          </div>
+
+          {/* Thumbnails Section */}
+          <div className="mt-6 flex gap-4 flex-wrap justify-center">
+            {[product?.image1, product?.image2, product?.image3].map(
+              (image, index) =>
+                image && (
+                  <div
+                    key={index}
+                    className="w-[80px] h-[80px] sm:w-[100px] sm:h-[100px] md:w-[120px] md:h-[120px] flex items-center justify-center overflow-hidden rounded-md shadow bg-gray-100"
+                  >
+                    <img src={image} alt={`Thumbnail ${index + 1}`} className="w-full h-full object-cover" />
+                  </div>
+                )
             )}
           </div>
+
+
 
           {/* Ratings Section */}
           <div className="mt-8 w-full hidden lg:block">
@@ -173,11 +155,10 @@ const ProductDisplay = () => {
               {[...Array(5)].map((_, index) => (
                 <svg
                   key={index}
-                  className={`w-5 h-5 ms-1 ${
-                    product?.ratings && index < Math.round(product.ratings)
-                      ? "text-purple-800"
-                      : "text-gray-300"
-                  }`}
+                  className={`w-5 h-5 ms-1 ${product?.ratings && index < Math.round(product.ratings)
+                    ? "text-purple-800"
+                    : "text-gray-300"
+                    }`}
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
@@ -196,9 +177,8 @@ const ProductDisplay = () => {
               return (
                 <div
                   key={star}
-                  className={`flex items-center gap-3 ${
-                    index < 4 ? "mb-4" : ""
-                  }`}
+                  className={`flex items-center gap-3 ${index < 4 ? "mb-4" : ""
+                    }`}
                 >
                   <span className="text-purple-800">{star} ★</span>
                   <div className="w-full bg-gray-200 rounded-md h-3 flex-1">
@@ -226,10 +206,10 @@ const ProductDisplay = () => {
             <span className="text-gray-500 text-sm">
               {product?.base_price > product?.discounted_price
                 ? ` -${Math.round(
-                    ((product?.base_price - product.discounted_price) /
-                      product?.base_price) *
-                      100
-                  )}%`
+                  ((product?.base_price - product.discounted_price) /
+                    product?.base_price) *
+                  100
+                )}%`
                 : ""}
             </span>
           </div>
@@ -278,19 +258,19 @@ const ProductDisplay = () => {
             <div className="text-gray-600 dark:text-gray-400 flex gap-2 flex-wrap ">
               {product?.size?.length > 0
                 ? product.size.map((s: any) => (
-                    <span
-                      key={s.id}
-                      onClick={() => handleSize(product?.id, s)}
-                      className={`${
-                        //@ts-ignore
-                        selectedSize?.id === s?.id
-                          ? "bg-[#6B21A8] text-white"
-                          : "bg-white"
+                  <span
+                    key={s.id}
+                    onClick={() => handleSize(product?.id, s)}
+                    className={`${
+                      //@ts-ignore
+                      selectedSize?.id === s?.id
+                        ? "bg-[#6B21A8] text-white"
+                        : "bg-white"
                       } px-2 py-1 border hover:bg-[#6B21A8] hover:text-white cursor-pointer border-gray-300 dark:border-gray-600 rounded-md text-sm `}
-                    >
-                      {s.value} {s.unit}
-                    </span>
-                  ))
+                  >
+                    {s.value} {s.unit}
+                  </span>
+                ))
                 : "No size found"}
             </div>
 
@@ -307,19 +287,19 @@ const ProductDisplay = () => {
             <div className="space-x-2 flex gap-2 flex-wrap">
               {product?.type?.length > 0
                 ? product.type.map((t: any) => (
-                    <button
-                      key={t.id}
-                      onClick={() => handleType(product?.id, t)}
-                      className={`${
-                        //@ts-ignore
-                        selectedType?.id === t?.id
-                          ? "bg-[#6B21A8] text-white"
-                          : "bg-white"
+                  <button
+                    key={t.id}
+                    onClick={() => handleType(product?.id, t)}
+                    className={`${
+                      //@ts-ignore
+                      selectedType?.id === t?.id
+                        ? "bg-[#6B21A8] text-white"
+                        : "bg-white"
                       } px-3 py-1 border hover:bg-[#6B21A8] hover:text-white cursor-pointer border-gray-300 dark:border-gray-600 rounded-md text-sm text-gray-700 dark:text-gray-500 hover:border-purple-700`}
-                    >
-                      {t.value}
-                    </button>
-                  ))
+                  >
+                    {t.value}
+                  </button>
+                ))
                 : "No type found"}
             </div>
           </div>
@@ -382,7 +362,7 @@ const ProductDisplay = () => {
           {/* Buttons Section */}
           <div className="flex items-center gap-4 mt-4">
             <button
-              className="flex-1 flex items-center justify-center gap-2 py-2 px-4 border border-purple-800 text-purple-800 font-semibold rounded-md hover:border-purple-800 hover:text-purple-800"
+              className="flex-1 flex items-center w-[11rem] justify-center gap-2 py-2 px-4 border border-purple-800 text-purple-800 font-semibold rounded-md hover:border-purple-800 hover:text-purple-800"
               onClick={handleAddToCart}
             >
               <Image
@@ -421,11 +401,10 @@ const ProductDisplay = () => {
                 <button
                   key={tab.title}
                   onClick={() => setActiveTab(tab.title)}
-                  className={`flex-1 py-2 px-4 font-semibold ${
-                    activeTab === tab.title
-                      ? "text-purple-800 border-b-2 border-purple-800"
-                      : "text-gray-600"
-                  }`}
+                  className={`flex-1 py-2 px-4 font-semibold ${activeTab === tab.title
+                    ? "text-purple-800 border-b-2 border-purple-800"
+                    : "text-gray-600"
+                    }`}
                 >
                   {tab.title}
                 </button>
@@ -448,11 +427,10 @@ const ProductDisplay = () => {
               {[...Array(5)].map((_, index) => (
                 <svg
                   key={index}
-                  className={`w-5 h-5 ms-1 ${
-                    product?.ratings && index < Math.round(product.ratings)
-                      ? "text-purple-800"
-                      : "text-gray-300"
-                  }`}
+                  className={`w-5 h-5 ms-1 ${product?.ratings && index < Math.round(product.ratings)
+                    ? "text-purple-800"
+                    : "text-gray-300"
+                    }`}
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
@@ -471,9 +449,8 @@ const ProductDisplay = () => {
               return (
                 <div
                   key={star}
-                  className={`flex items-center gap-3 ${
-                    index < 4 ? "mb-4" : ""
-                  }`}
+                  className={`flex items-center gap-3 ${index < 4 ? "mb-4" : ""
+                    }`}
                 >
                   <span className="text-purple-800">{star} ★</span>
                   <div className="w-full bg-gray-200 rounded-md h-3 flex-1">
