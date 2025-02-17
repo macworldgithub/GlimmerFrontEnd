@@ -195,24 +195,34 @@ const ProductDisplay = () => {
         </div>
 
         {/* Right Side: Product Info */}
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 relative">
           <h1 className="font-semibold text-2xl">{product?.name}</h1>
           {/* Price */}
           <div className="font-semibold text-2xl">
-            {product?.discounted_price === 0
-              ? product?.base_price
-              : product?.discounted_price}{" "}
-            <span className="text-lg">PKR</span>
-            <span className="text-gray-500 text-sm">
-              {product?.base_price > product?.discounted_price
-                ? ` -${Math.round(
-                  ((product?.base_price - product.discounted_price) /
-                    product?.base_price) *
-                  100
-                )}%`
-                : ""}
-            </span>
+            {product?.discounted_price > 0 ? (
+              <>
+                <span>{product?.discounted_price} PKR</span>
+                {product?.base_price > product?.discounted_price && (
+                  <span className="text-gray-500 line-through ml-2 mr-2 text-xs">
+                    {product?.base_price} PKR
+                  </span>
+                )}
+                <div className="absolute top-2 right-2 w-12 h-12 md:w-14 md:h-14 flex items-center justify-center">
+                  <img
+                    src="/assets/addtoBag/discount.png"
+                    alt="Discount"
+                    className="w-full h-full"
+                  />
+                  <span className="absolute text-center text-white text-[10px] md:text-sm font-bold">
+                    {`${Math.round(((product?.base_price - product?.discounted_price) / product?.base_price) * 100)}% OFF`}
+                  </span>
+                </div>
+              </>
+            ) : (
+              <span>{product?.base_price} PKR</span>
+            )}
           </div>
+
 
           {/* Star Rating */}
           <div className="flex items-center mt-2">
@@ -271,7 +281,7 @@ const ProductDisplay = () => {
                     {s.value} {s.unit}
                   </span>
                 ))
-                : "No size found"}
+                : "No size"}
             </div>
 
             <div className="flex items-center font-semibold text-gray-700 dark:text-gray-700">
@@ -284,7 +294,7 @@ const ProductDisplay = () => {
             <div className="flex items-center font-semibold text-gray-700 dark:text-gray-700">
               <span>Type:</span>
             </div>
-            <div className="space-x-2 flex gap-2 flex-wrap">
+            <div className="text-gray-600 dark:text-gray-400 space-x-2 flex gap-2 flex-wrap">
               {product?.type?.length > 0
                 ? product.type.map((t: any) => (
                   <button
@@ -300,7 +310,7 @@ const ProductDisplay = () => {
                     {t.value}
                   </button>
                 ))
-                : "No type found"}
+                : "No type"}
             </div>
           </div>
 

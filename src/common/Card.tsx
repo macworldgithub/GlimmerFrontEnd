@@ -20,23 +20,62 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
 
   return (
     <div
-      className="w-[280px] shadow-lg max-md:w-full cursor-pointer"
+      className="w-[280px] h-[440px] shadow-lg max-md:w-full cursor-pointer rounded-lg"
       onClick={() => {
         router.push(`${path}/${item._id}`);
       }}
     >
-      <img
-        src={item.image1}
-        alt="Image 1"
-        className="w-full h-40 object-cover  rounded-[6px]"
-      />
+      <div className="relative w-full h-[280px]">
+        <img
+          src={item.image1}
+          alt="Image 1"
+          className="w-full h-full object-cover rounded-t-lg"
+        />
+        <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex gap-2 w-[15vw] 
+                  max-md:w-[50%] max-sm:w-[60%] justify-center">
+          <button
+            onClick={() => {
+              router.push(`${path}/${item._id}`);
+            }}
+            className="w-[50%] py-2 gap-1 bg-[#583FA8] rounded-sm flex justify-center items-center 
+                 max-md:py-1 max-sm:w-full">
+            <Image
+              src={"/assets/addtoBag/icon.png"}
+              width={12}
+              height={12}
+              alt="bag"
+            />
+            <p className="text-white text-[12px] mt-1 max-md:text-[10px] max-sm:text-[9px]">
+              ADD TO BAG
+            </p>
+          </button>
+
+          <div className="px-2 h-[38px] border-[#583FA8] border border-solid flex justify-center items-center 
+                    max-md:h-[32px] max-sm:h-[30px]">
+            <FaHeart className="hover:text-red-500 text-base max-md:text-sm max-sm:text-xs" />
+          </div>
+        </div>
+        {item?.base_price > item?.discounted_price && item?.discounted_price > 0 && (
+          <div className="absolute top-2 right-2 w-12 h-12 md:w-14 md:h-14 flex items-center justify-center">
+            <img
+              src="/assets/addtoBag/discount.png"
+              alt="Discount"
+              className="w-full h-full"
+            />
+            <span className="absolute text-center text-white text-[10px] md:text-sm font-bold">
+              {`${Math.round(((item?.base_price - item?.discounted_price) / item?.base_price) * 100)}% OFF`}
+            </span>
+          </div>
+        )}
+      </div>
+
       <div className="p-1 px-3 mt-2">
         <div className="flex justify-between mb-2">
           <div className="flex flex-col">
-            <h2 className=" font-light font-sans text-[10px] text-[#636363]">
-              Skin Care
+            <h2 className=" font-light font-sans text-[14px] text-[#636363]">
+              {item.item}
             </h2>
-            <h2 className="text-[14px] font-sans  font-medium text-[#303030] mb-1">
+            <h2 className="text-[18px] font-sans  font-medium text-[#303030] mb-1">
               {item.name}
             </h2>
           </div>
@@ -51,11 +90,15 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
     </span> */}
 
             <span className="text-[18px] font-sans font-medium">
-              PKR.
-              {item.discounted_price === 0
-                ? item.base_price
-                : item.discounted_price}
+              {item?.discounted_price > 0 ? item?.discounted_price : item?.base_price} PKR
             </span>
+
+            {item?.discounted_price > 0 && item?.base_price > item?.discounted_price && (
+              <span className="text-gray-500 line-through ml-2 mr-2 text-xs">
+                {item?.base_price} PKR
+              </span>
+            )}
+
           </p>
 
           {/* Discount percentage (optional) */}
@@ -72,32 +115,7 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
             fillColor="#583FA8"
           />
         </div>
-        <div className="flex gap-2">
-          <button
-            onClick={() => {
-              router.push(`${path}/${item._id}`);
-            }}
-            className="w-[50%] py-2 gap-1 bg-[#583FA8]  rounded-sm flex justify-center items-center"
-          >
-            <Image
-              src={"/assets/addtoBag/icon.png"}
-              width={10}
-              height={10}
-              alt="bag"
-            />
-            <p className="text-white text-[8px] mt-1">Add to Bag</p>
-          </button>
-          <div className="px-2 h-[25px]  border-[#583FA8] border-solid border flex justify-center items-center py-4 ">
-            {/* <Image
-              src={"/assets/addtoBag/heart.svg"}
-              width={15}
-              height={15}
-              alt="bag"
-              color="red"
-            /> */}
-            <FaHeart className=" hover:text-red-500 " />
-          </div>
-        </div>
+
       </div>
     </div>
   );

@@ -35,7 +35,7 @@ const ProductsList = () => {
   return (
     <div>
       <CategoryNavMenu />
-      <div className="pb-[20rem] w-[99vw] h-max flex flex-wrap gap-2 p-[2rem] justify-between">
+      <div className="pb-[20rem] w-[99vw] h-max flex flex-wrap gap-7 p-[2rem]">
         {data.length ? (
           data?.map((item: any) => <Card key={item.id} item={item} />)
         ) : (
