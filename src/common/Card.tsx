@@ -20,7 +20,7 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
 
   return (
     <div
-      className="w-[280px] h-[440px] shadow-lg max-md:w-full cursor-pointer rounded-lg"
+      className="w-[280px] h-[450px] shadow-lg max-md:w-full cursor-pointer rounded-lg"
       onClick={() => {
         router.push(`${path}/${item._id}`);
       }}
@@ -50,9 +50,9 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
             </p>
           </button>
 
-          <div className="px-2 h-[38px] border-[#583FA8] border border-solid flex justify-center items-center 
+          <div className="px-2 h-[38px] border-[#583FA8] border border-solid bg-white flex justify-center items-center 
                     max-md:h-[32px] max-sm:h-[30px]">
-            <FaHeart className="hover:text-red-500 text-base max-md:text-sm max-sm:text-xs" />
+            <FaHeart className="text-purple-300 hover:text-purple-800 text-base max-md:text-sm max-sm:text-xs" />
           </div>
         </div>
         {item?.base_price > item?.discounted_price && item?.discounted_price > 0 && (
@@ -72,12 +72,14 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
       <div className="p-1 px-3 mt-2">
         <div className="flex justify-between mb-2">
           <div className="flex flex-col">
-            <h2 className=" font-light font-sans text-[14px] text-[#636363]">
-              {item.item}
+            <h2 className={`font-light font-sans text-[18px] overflow-hidden line-clamp-1 text-[#636363] ${!item.name && 'h-[24px]'}`}>
+              {item.name || " "}
             </h2>
-            <h2 className="text-[18px] font-sans  font-medium text-[#303030] mb-1">
-              {item.name}
+
+            <h2 className={`text-[14px] font-sans font-medium text-[#303030] mt-3 mb-3 overflow-hidden line-clamp-1 ${!item.description && 'h-[24px]'}`}>
+              {item.description || "..."}
             </h2>
+
           </div>
         </div>
         {/* <p className="text-gray-700 mb-4">{item.description}</p> */}
