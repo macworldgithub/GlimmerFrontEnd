@@ -117,7 +117,7 @@ const ProductsList = () => {
       {/* Banner Image */}
       <div className="w-full min-h-[250px] sm:min-h-[300px] md:h-[400px] lg:h-[600px] rounded-lg overflow-hidden relative group">
         <img
-          src="/assets/addToBag/cr7.jpg"
+          src="https://gymnation.com/media/d1efluel/ronaldo-cr7.jpg"
           alt="Banner"
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
         />

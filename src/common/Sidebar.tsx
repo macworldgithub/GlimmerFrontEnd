@@ -25,6 +25,8 @@ const Sidebar = ({
     const [selectedSubCategory, setSelectedSubCategory] = useState<string | undefined>("");
     const [selectedItem, setSelectedItem] = useState<string | undefined>("");
     const [itemName, setItemName] = useState<string>("");
+    const [minPrice, setMinPrice] = useState<string>("");
+    const [maxPrice, setMaxPrice] = useState<string>("");
 
 
     const [showAllSubCategories, setShowAllSubCategories] = useState(false);
@@ -48,17 +50,23 @@ const Sidebar = ({
         onFilterChange({ category: selectedCategory, sub_category: selectedSubCategory, item: itemId, name: itemName });
     };
 
-    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setItemName(e.target.value);
-        onFilterChange({ category: selectedCategory, sub_category: selectedSubCategory, item: selectedItem, name: e.target.value });
-    };
-
     const subCategories = selections.flatMap(category => category.sub_categories);
     const displayedSubCategories = showAllSubCategories ? subCategories : subCategories.slice(0, 5);
 
     const items = selections.flatMap(category => category.sub_categories)
         .flatMap(subCategory => subCategory.items);
     const displayedItems = showAllItems ? items : items.slice(0, 5);
+
+    const handlePriceChange = () => {
+        onFilterChange({
+            category: selectedCategory,
+            sub_category: selectedSubCategory,
+            item: selectedItem,
+            name: itemName,
+            min_price: minPrice,
+            max_price: maxPrice
+        });
+    };
 
     return (
         <div className="p-6 border-r bg-[#FDF3D2] shadow-md hidden md:block">
@@ -181,6 +189,33 @@ const Sidebar = ({
                     placeholder="Type item name"
                 />
             </div> */}
+
+            {/* Price Filter */}
+            <div className="mt-6">
+                <h3 className="font-semibold text-lg text-gray-700">Price Range</h3>
+                <div className="flex space-x-2">
+                    <input
+                        type="number"
+                        placeholder="Min"
+                        value={minPrice}
+                        onChange={(e) => setMinPrice(e.target.value)}
+                        className="w-1/2 p-2 border rounded-md"
+                    />
+                    <input
+                        type="number"
+                        placeholder="Max"
+                        value={maxPrice}
+                        onChange={(e) => setMaxPrice(e.target.value)}
+                        className="w-1/2 p-2 border rounded-md"
+                    />
+                </div>
+                <button
+                    onClick={handlePriceChange}
+                    className="mt-2 bg-purple-700 text-white px-4 py-2 rounded-md hover:bg-purple-800"
+                >
+                    Apply
+                </button>
+            </div>
         </div>
     );
 };
