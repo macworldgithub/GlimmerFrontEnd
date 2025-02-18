@@ -26,14 +26,6 @@ const Sidebar = ({
     const [selectedItem, setSelectedItem] = useState<string | undefined>("");
     const [itemName, setItemName] = useState<string>("");
 
-    const applyFilters = () => {
-        onFilterChange({
-            category: selectedCategory,
-            sub_category: selectedSubCategory,
-            item: selectedItem,
-            name: itemName,
-        });
-    };
 
     const [showAllSubCategories, setShowAllSubCategories] = useState(false);
     const [showAllItems, setShowAllItems] = useState(false);
@@ -74,7 +66,7 @@ const Sidebar = ({
 
             {/* Category Selection */}
             <div className="mt-4">
-                <h3 className="font-semibold text-lg text-gray-700">Category</h3>
+                <h3 className="font-semibold text-lg text-gray-700">Categories</h3>
                 {selections.map((category) => (
                     <label
                         key={category.category_id}
@@ -88,11 +80,11 @@ const Sidebar = ({
                             className="hidden"
                         />
                         <span
-                            className={`w-5 h-5 border-2 rounded-full flex items-center justify-center mr-3 ${selectedCategory === category.category_id ? "border-blue-500" : "border-gray-400"}`}
+                            className={`w-5 h-5 border-2 rounded-full flex items-center justify-center mr-3 ${selectedCategory === category.category_id ? "border-purple-700" : "border-gray-400"}`}
                         >
                             {selectedCategory === category.category_id && (
                                 <motion.div
-                                    className="w-3 h-3 bg-blue-500 rounded-full"
+                                    className="w-3 h-3 bg-purple-500 rounded-full"
                                     layoutId="categorySelection"
                                 />
                             )}
@@ -104,7 +96,7 @@ const Sidebar = ({
 
             {/* Subcategory Selection */}
             <div className="mt-6">
-                <h3 className="font-semibold text-lg text-gray-700">Subcategory</h3>
+                <h3 className="font-semibold text-lg text-gray-700">Sub Categories</h3>
                 {displayedSubCategories.map(subCategory => (
                     <label
                         key={subCategory.sub_category_id}
@@ -118,11 +110,11 @@ const Sidebar = ({
                             className="hidden"
                         />
                         <span
-                            className={`w-5 h-5 border-2 rounded-full flex items-center justify-center mr-3 ${selectedSubCategory === subCategory.sub_category_id ? "border-blue-500" : "border-gray-400"}`}
+                            className={`w-5 h-5 border-2 rounded-full flex items-center justify-center mr-3 ${selectedSubCategory === subCategory.sub_category_id ? "border-purple-700" : "border-gray-400"}`}
                         >
                             {selectedSubCategory === subCategory.sub_category_id && (
                                 <motion.div
-                                    className="w-3 h-3 bg-blue-500 rounded-full"
+                                    className="w-3 h-3 bg-purple-500 rounded-full"
                                     layoutId="subCategorySelection"
                                 />
                             )}
@@ -133,7 +125,7 @@ const Sidebar = ({
                 {subCategories.length > 5 && (
                     <button
                         onClick={() => setShowAllSubCategories(!showAllSubCategories)}
-                        className="mt-2 text-blue-600 hover:underline transition"
+                        className="mt-2 text-purple-800 hover:underline transition"
                     >
                         {showAllSubCategories ? "Show Less" : "View All"}
                     </button>
@@ -142,7 +134,7 @@ const Sidebar = ({
 
             {/* Item Selection */}
             <div className="mt-6">
-                <h3 className="font-semibold text-lg text-gray-700">Item Name</h3>
+                <h3 className="font-semibold text-lg text-gray-700">Item</h3>
                 {displayedItems.map(item => (
                     <label
                         key={item.item_id}
@@ -156,11 +148,11 @@ const Sidebar = ({
                             className="hidden"
                         />
                         <span
-                            className={`w-5 h-5 border-2 rounded-full flex items-center justify-center mr-3 ${selectedItem === item.item_id ? "border-blue-500" : "border-gray-400"}`}
+                            className={`w-5 h-5 border-2 rounded-full flex items-center justify-center mr-3 ${selectedItem === item.item_id ? "border-purple-700" : "border-gray-400"}`}
                         >
                             {selectedItem === item.item_id && (
                                 <motion.div
-                                    className="w-3 h-3 bg-blue-500 rounded-full"
+                                    className="w-3 h-3 bg-purple-500 rounded-full"
                                     layoutId="itemSelection"
                                 />
                             )}
@@ -171,16 +163,16 @@ const Sidebar = ({
                 {items.length > 5 && (
                     <button
                         onClick={() => setShowAllItems(!showAllItems)}
-                        className="mt-2 text-blue-600 hover:underline transition"
+                        className="mt-2 text-purple-800 hover:underline transition"
                     >
                         {showAllItems ? "Show Less" : "View All"}
                     </button>
                 )}
             </div>
 
-            {/* Search Filter */}
+            {/* Search Filter
             <div className="mt-6">
-                <h3 className="font-semibold text-lg text-gray-700">Search by Name</h3>
+                <h3 className="font-semibold text-lg text-gray-700">Name</h3>
                 <input
                     type="text"
                     value={itemName}
@@ -188,15 +180,7 @@ const Sidebar = ({
                     className="w-full p-3 border rounded-md shadow-sm focus:ring-2 focus:ring-blue-300"
                     placeholder="Type item name"
                 />
-            </div>
-
-            {/* Apply Filter Button */}
-            <button
-                onClick={applyFilters}
-                className="w-full mt-4 px-4 py-2 bg-purple-800 text-white rounded-md hover:bg-purple-700"
-            >
-                Apply Filters
-            </button>
+            </div> */}
         </div>
     );
 };

@@ -1,14 +1,10 @@
 "use client";
 import React from "react";
 import "tailwindcss/tailwind.css";
-import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
-import { RiShoppingCart2Line } from "react-icons/ri";
-import { FaStar } from "react-icons/fa6";
-import { useSearchParams, usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { CardItem, RealCardItem } from "@/data";
+import { RealCardItem } from "@/data";
 import { Rating } from "react-simple-star-rating";
 
 import { FaHeart } from "react-icons/fa";

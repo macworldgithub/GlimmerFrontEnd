@@ -31,28 +31,30 @@ const Loading = () => (
 const ProductsList = () => {
   const [data, setData] = useState<any[]>([]);
   const [total, setTotal] = useState(0); 
-  const [filters, setFilters] = useState<{ category?: string; sub_category?: string; item?: string; }>({});
   const [selections, setSelections] = useState<CategorySelection[]>([]);
-  const pageSize = 10; 
+  const pageSize = 8;
 
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
 
-  const category = searchParams.get("category") ?? "";
-  const subCategory = searchParams.get("sub_category") ?? "";
-  const item = searchParams.get("item") ?? "";
+  const categoryFilter = searchParams.get("category") ?? "";
+  const subCategoryFilter = searchParams.get("sub_category") ?? "";
+  const itemFilter = searchParams.get("item") ?? "";
   const page = Number(searchParams.get("page")) || 1;
 
-  const fetchSelections = async () => {
-    try {
-      const productItemsRes = await getAllProductItem();
-      const transformedSelections = transformData(productItemsRes);
-      setSelections(transformedSelections);
-    } catch (error) {
-      console.error("Error fetching selections:", error);
-    }
-  };
+  useEffect(() => {
+    const fetchSelections = async () => {
+      try {
+        const productItemsRes = await getAllProductItem();
+        const transformedSelections = transformData(productItemsRes);
+        setSelections(transformedSelections);
+      } catch (error) {
+        console.error("Error fetching selections:", error);
+      }
+    };
+    fetchSelections();
+  }, []);
 
   function transformData(data: any[]): CategorySelection[] {
     return data.map((category) => ({
@@ -71,15 +73,18 @@ const ProductsList = () => {
   }
 
   const fetchData = async () => {
-    const res = await getAllProducts(category, subCategory, item, page);
-    setData(res.products);
-    setTotal(res.total);
+    try {
+      const res = await getAllProducts(categoryFilter, subCategoryFilter, itemFilter, page);
+      setData(res.products); 
+      setTotal(res.total);     
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   };
-
+  
   useEffect(() => {
-    fetchSelections();  
-    fetchData();  
-  }, [page, category, subCategory, item]);
+    fetchData();
+  }, [page, categoryFilter, subCategoryFilter, itemFilter]);
 
   const handlePageChange = (newPage: number) => {
     const params = new URLSearchParams(searchParams);
@@ -88,11 +93,20 @@ const ProductsList = () => {
   };
 
   const handleFilterChange = (newFilters: { category?: string; sub_category?: string; item?: string }) => {
-    setFilters(newFilters);
+    const params = new URLSearchParams(searchParams);
+
+    if (newFilters.category) params.set("category", newFilters.category);
+    if (newFilters.sub_category) params.set("sub_category", newFilters.sub_category);
+    if (newFilters.item) params.set("item", newFilters.item);
+
+    // Reset the page to 1 whenever a filter changes
+    params.set("page", "1");
+
+    router.push(`${pathname}?${params.toString()}`);
   };
 
   return (
-    <div className="flex flex-col md:flex-row w-[99vw] pb-[10rem]">
+    <div className="flex flex-col md:flex-row w-[99vw] pb-[20rem]">
       {/* Sidebar */}
       <motion.aside
         initial={{ x: -100, opacity: 0 }}
@@ -101,7 +115,7 @@ const ProductsList = () => {
         className="w-full md:w-[30%] lg:w-[20%] p-6"
       >
         <Sidebar selections={selections} onFilterChange={handleFilterChange} />
-        
+
       </motion.aside>
 
       {/* Main Content */}
@@ -112,21 +126,21 @@ const ProductsList = () => {
         className="w-full md:w-[70%] lg:w-[80%] p-6"
       >
         <CategoryNavMenu />
-        <div className="w-full h-max flex flex-wrap gap-7 p-[2rem]">
-        {data.length ? (
-          data.map((item) => (
-            <motion.div key={item.id} whileHover={{ scale: 1.05 }}>
-              <Card item={item} />
-            </motion.div>
-          ))
-        ) : (
-          <div className="justify-center flex min-h-[70vh] w-full items-center">
-            <div className="text-center font-bold text-3xl">
-              Ops! No items to display in this category
+        <div className="w-full h-max flex flex-wrap gap-10 p-[2rem]">
+          {data.length ? (
+            data.map((item) => (
+              <motion.div key={item.id} whileHover={{ scale: 1.03 }}>
+                <Card item={item} />
+              </motion.div>
+            ))
+          ) : (
+            <div className="justify-center flex min-h-[70vh] w-full items-center">
+              <div className="text-center font-bold text-3xl">
+                Ops! No items to display in this category
+              </div>
             </div>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
 
         {total > 0 && (
           <div className="pb-[20rem] w-full flex justify-center items-center space-x-2 py-4">
