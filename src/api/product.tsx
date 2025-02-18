@@ -7,11 +7,13 @@ export const getAllProducts = async (
   category?: string,
   subcategory?: string,
   item?: string,
+  maxPrice?: number,
+  minPrice?: number,
   page?: number
 ) => {
   try {
     const res = await axios.get(
-      `${BACKEND_URL}/product/get_all_products?page_no=${page}&category=${category}&sub_category=${subcategory}&item=${item}` // Ensure `development` is defined properly
+      `${BACKEND_URL}/product/get_all_products?page_no=${page}&category=${category}&sub_category=${subcategory}&item=${item}&max_price=${maxPrice}&min_price=${minPrice}` // Ensure `development` is defined properly
     );
 
     return res.data; // Return the response data

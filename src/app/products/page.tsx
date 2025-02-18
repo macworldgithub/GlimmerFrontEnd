@@ -7,7 +7,6 @@ import Card from "@/common/Card";
 import { getAllProductItem, getAllProducts } from "@/api/product";
 import Sidebar from "@/common/Sidebar";
 import { motion } from "framer-motion";
-import GlimmerBanner from "../salons/[id]/components/glimmer-banner";
 
 interface CategorySelection {
   category_id: string;
@@ -42,6 +41,8 @@ const ProductsList = () => {
   const categoryFilter = searchParams.get("category") ?? "";
   const subCategoryFilter = searchParams.get("sub_category") ?? "";
   const itemFilter = searchParams.get("item") ?? "";
+  const minPriceFilter = Number(searchParams.get("min_price")) ?? "";
+  const maxPriceFilter = Number(searchParams.get("max_price")) ?? "";
   const page = Number(searchParams.get("page")) || 1;
 
   useEffect(() => {
@@ -75,7 +76,7 @@ const ProductsList = () => {
 
   const fetchData = async () => {
     try {
-      const res = await getAllProducts(categoryFilter, subCategoryFilter, itemFilter, page);
+      const res = await getAllProducts(categoryFilter, subCategoryFilter, itemFilter, minPriceFilter, maxPriceFilter, page);
       setData(res.products);
       setTotal(res.total);
     } catch (error) {
@@ -93,12 +94,14 @@ const ProductsList = () => {
     router.push(`${pathname}?${params.toString()}`);
   };
 
-  const handleFilterChange = (newFilters: { category?: string; sub_category?: string; item?: string }) => {
+  const handleFilterChange = (newFilters: { category?: string; sub_category?: string; item?: string; min_price?: string; max_price?: string }) => {
     const params = new URLSearchParams(searchParams);
 
     if (newFilters.category) params.set("category", newFilters.category);
     if (newFilters.sub_category) params.set("sub_category", newFilters.sub_category);
     if (newFilters.item) params.set("item", newFilters.item);
+    if (newFilters.min_price) params.set("min_price", newFilters.min_price);
+    if (newFilters.max_price) params.set("max_price", newFilters.max_price);
 
     // Reset the page to 1 whenever a filter changes
     params.set("page", "1");
@@ -151,21 +154,23 @@ const ProductsList = () => {
           className="w-full md:w-[70%] lg:w-[80%] p-6"
         >
           {/* Items Grid */}
-          <div className="w-full h-max flex flex-wrap gap-10 p-[2rem]">
+          <div className="w-full h-max grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
             {data.length ? (
               data.map((item) => (
-                <motion.div key={item.id} whileHover={{ scale: 1.03 }}>
+                <motion.div key={item.id} whileHover={{ scale: 1.03 }} className="flex">
                   <Card item={item} />
                 </motion.div>
               ))
             ) : (
-              <div className="justify-center flex min-h-[70vh] w-full items-center">
+              <div className="w-full flex justify-center items-center min-h-[70vh]">
                 <div className="text-center font-bold text-3xl">
                   Oops! No items to display in this category
                 </div>
               </div>
             )}
           </div>
+
+
 
           {/* Pagination */}
           {total > 0 && (
