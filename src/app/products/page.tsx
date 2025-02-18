@@ -92,13 +92,13 @@ const ProductsList = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row w-[99vw]">
+    <div className="flex flex-col md:flex-row w-[99vw] pb-[10rem]">
       {/* Sidebar */}
       <motion.aside
         initial={{ x: -100, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="w-full md:w-[40%] lg:w-[30%] p-6"
+        className="w-full md:w-[30%] lg:w-[20%] p-6"
       >
         <Sidebar selections={selections} onFilterChange={handleFilterChange} />
         
@@ -109,12 +109,16 @@ const ProductsList = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="w-full md:w-[60%] lg:w-[70%] p-6"
+        className="w-full md:w-[70%] lg:w-[80%] p-6"
       >
         <CategoryNavMenu />
         <div className="w-full h-max flex flex-wrap gap-7 p-[2rem]">
         {data.length ? (
-          data.map((item: any) => <Card key={item.id} item={item} />)
+          data.map((item) => (
+            <motion.div key={item.id} whileHover={{ scale: 1.05 }}>
+              <Card item={item} />
+            </motion.div>
+          ))
         ) : (
           <div className="justify-center flex min-h-[70vh] w-full items-center">
             <div className="text-center font-bold text-3xl">
@@ -125,7 +129,7 @@ const ProductsList = () => {
       </div>
 
         {total > 0 && (
-          <div className="w-full flex justify-center items-center space-x-2 py-4">
+          <div className="pb-[20rem] w-full flex justify-center items-center space-x-2 py-4">
             <button
               onClick={() => handlePageChange(page - 1)}
               disabled={page === 1}
