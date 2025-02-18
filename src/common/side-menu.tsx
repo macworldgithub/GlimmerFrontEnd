@@ -1,7 +1,7 @@
 "use client";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { FaArrowRight } from "react-icons/fa";
 import DefaultAvatar from "@/assets/images/default-avatar.png";
@@ -11,6 +11,7 @@ import { useDispatch } from "react-redux";
 
 import { logout } from "@/reduxSlices/loginSlice";
 import { RootState } from "@/store/reduxStore";
+import { usePathname } from "next/navigation";
 
 const SideMenu = ({
   isLoggedIn,
@@ -22,7 +23,12 @@ const SideMenu = ({
   const credentials = useSelector((state: RootState) => state.login);
   const dispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(false);
-
+  const pathname = usePathname();
+  
+  useEffect(() => {
+    setIsOpen(false);
+  }, [pathname]);
+  
   const Menu = ({ className }: { className?: string }) => {
     return (
       <ul tabIndex={0} className={cn("", className)}>

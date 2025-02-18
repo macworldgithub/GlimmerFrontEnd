@@ -122,7 +122,7 @@ const ProductDisplay = () => {
           {/* Main Image Container */}
           <div className="w-full max-w-[650px] sm:w-[450px] md:w-[550px] h-auto flex items-center justify-center overflow-hidden rounded-md shadow bg-gray-100">
             <img
-              src={product?.image1}
+              src={product?.image1 ? product.image1 : "/assets/images/default_image.jpg"}
               alt={product?.name}
               className="w-full h-auto max-h-[650px] object-contain"
             />
@@ -288,7 +288,7 @@ const ProductDisplay = () => {
               <span>Stock:</span>
             </div>
             <div className="text-gray-600 dark:text-gray-400">
-              {product?.quantity}
+              {product?.quantity ? product.quantity : "No stock"}
             </div>
 
             <div className="flex items-center font-semibold text-gray-700 dark:text-gray-700">
