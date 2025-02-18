@@ -17,29 +17,30 @@ import Image from "next/image";
 import ShowUser from "./ShowUser";
 
 const Navbar = async () => {
-  const cookie = (await cookies()).get("session")?.value;
-  const session = await decrypt(cookie);
+	const cookie = (await cookies()).get("session")?.value;
+	const session = await decrypt(cookie);
 
-  return (
-    <div className="navbar bg-base-100 w-[99vw]">
-      <div className="flex-1">
-        <Link className="btn btn-ghost text-xl" href="/">
-          <img src={Logo.src} alt="logo" className="h-10" />
-        </Link>
+	return (
+		<div className="navbar bg-base-100 w-[99vw]">
+			<div className="flex-1">
+				<Link className="btn btn-ghost text-xl" href="/">
+					<img src={Logo.src} alt="logo" className="h-10" />
+				</Link>
+				<div className="flex w-full justify-end pr-10">
+					<ProductSearchBar />
+				</div>
+			</div>
 
-        <ProductSearchBar />
-      </div>
+			<div className="flex-none">
+				{/* <IoMdCall className="size-4" /> */}
+				{/* <PhoneBtn /> */}
 
-      <div className="flex-none">
-        {/* <IoMdCall className="size-4" /> */}
-        {/* <PhoneBtn /> */}
+				<ShowUser />
 
-       <ShowUser/>
+				<CartNavbar />
 
-        <CartNavbar />
-
-        <SideMenu isLoggedIn={!!session?.userId} handleLogout={handleLogout} />
-        {/* <div className="dropdown dropdown-end hidden md:block">
+				<SideMenu isLoggedIn={!!session?.userId} handleLogout={handleLogout} />
+				{/* <div className="dropdown dropdown-end hidden md:block">
 					<div
 						tabIndex={0}
 						role="button"
@@ -70,9 +71,9 @@ const Navbar = async () => {
 						</li>
 					</ul>
 				</div> */}
-      </div>
-    </div>
-  );
+			</div>
+		</div>
+	);
 };
 
 export default Navbar;
