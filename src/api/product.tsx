@@ -4,10 +4,10 @@ const server = null;
 import axios from "axios";
 
 export const getAllProducts = async (
-  category: string | null,
-  subcategory: string | null,
-  item: string | null,
-  page: number
+  category?: string,
+  subcategory?: string,
+  item?: string,
+  page?: number
 ) => {
   try {
     const res = await axios.get(
@@ -30,6 +30,19 @@ export const getProductById = async (id: string) => {
     return res.data;
   } catch (error) {
     console.error("Error Fetching Product by Id", error);
+    throw error;
+  }
+};
+
+export const getAllProductItem = async () => {
+  try {
+    const res = await axios.get(
+      `${BACKEND_URL}/product_item/get_all_product_item`
+    );
+
+    return res.data;
+  } catch (error) {
+    console.error("error", error);
     throw error;
   }
 };

@@ -4,7 +4,22 @@ import React, { Suspense, useEffect, useState } from "react";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import CategoryNavMenu from "@/common/category-nav-menu";
 import Card from "@/common/Card";
-import { getAllProducts } from "@/api/product";
+import { getAllProductItem, getAllProducts } from "@/api/product";
+import Sidebar from "@/common/Sidebar";
+import { motion } from "framer-motion";
+
+interface CategorySelection {
+  category_id: string;
+  category_name: string;
+  sub_categories: {
+      sub_category_id: string;
+      name: string;
+      items: {
+          item_id: string;
+          name: string;
+      }[];
+  }[];
+}
 
 // A loading component for suspense fallback
 const Loading = () => (
@@ -16,6 +31,8 @@ const Loading = () => (
 const ProductsList = () => {
   const [data, setData] = useState<any[]>([]);
   const [total, setTotal] = useState(0); 
+  const [filters, setFilters] = useState<{ category?: string; sub_category?: string; item?: string; }>({});
+  const [selections, setSelections] = useState<CategorySelection[]>([]);
   const pageSize = 10; 
 
   const searchParams = useSearchParams();
@@ -27,6 +44,32 @@ const ProductsList = () => {
   const item = searchParams.get("item") ?? "";
   const page = Number(searchParams.get("page")) || 1;
 
+  const fetchSelections = async () => {
+    try {
+      const productItemsRes = await getAllProductItem();
+      const transformedSelections = transformData(productItemsRes);
+      setSelections(transformedSelections);
+    } catch (error) {
+      console.error("Error fetching selections:", error);
+    }
+  };
+
+  function transformData(data: any[]): CategorySelection[] {
+    return data.map((category) => ({
+      category_id: category.product_category._id,
+      category_name: category.product_category.name,
+      sub_categories: category.sub_categories.map((subCategory:any) => ({
+        sub_category_id: subCategory._id,
+        name: subCategory.name,
+        items: subCategory.items.map((item:any) => ({
+          item_id: item._id,
+          name: item.name,
+        })),
+      })),
+      created_at: category.product_category.created_at,
+    }));
+  }
+
   const fetchData = async () => {
     const res = await getAllProducts(category, subCategory, item, page);
     setData(res.products);
@@ -34,7 +77,8 @@ const ProductsList = () => {
   };
 
   useEffect(() => {
-    fetchData();
+    fetchSelections();  
+    fetchData();  
   }, [page, category, subCategory, item]);
 
   const handlePageChange = (newPage: number) => {
@@ -43,10 +87,32 @@ const ProductsList = () => {
     router.push(`${pathname}?${params.toString()}`);
   };
 
+  const handleFilterChange = (newFilters: { category?: string; sub_category?: string; item?: string }) => {
+    setFilters(newFilters);
+  };
+
   return (
-    <div>
-      <CategoryNavMenu />
-      <div className="w-[99vw] h-max flex flex-wrap gap-7 p-[2rem]">
+    <div className="flex flex-col md:flex-row w-[99vw]">
+      {/* Sidebar */}
+      <motion.aside
+        initial={{ x: -100, opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className="w-full md:w-[40%] lg:w-[30%] p-6"
+      >
+        <Sidebar selections={selections} onFilterChange={handleFilterChange} />
+        
+      </motion.aside>
+
+      {/* Main Content */}
+      <motion.main 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className="w-full md:w-[60%] lg:w-[70%] p-6"
+      >
+        <CategoryNavMenu />
+        <div className="w-full h-max flex flex-wrap gap-7 p-[2rem]">
         {data.length ? (
           data.map((item: any) => <Card key={item.id} item={item} />)
         ) : (
@@ -58,27 +124,28 @@ const ProductsList = () => {
         )}
       </div>
 
-      {total > 0 && (
-        <div className="pb-[20rem] w-[99vw] flex justify-center items-center space-x-2 py-4">
-          <button
-            onClick={() => handlePageChange(page - 1)}
-            disabled={page === 1}
-            className="px-4 py-2 bg-gray-200 text-gray-500 rounded-md hover:bg-gray-300 disabled:opacity-50"
-          >
-            Previous
-          </button>
-          <span className="text-lg text-gray-600">
-            Page {page} of {Math.ceil(total / pageSize)}
-          </span>
-          <button
-            onClick={() => handlePageChange(page + 1)}
-            disabled={page === Math.ceil(total / pageSize)}
-            className="px-4 py-2 bg-gray-200 text-gray-500 rounded-md hover:bg-gray-300 disabled:opacity-50"
-          >
-            Next
-          </button>
-        </div>
-      )}
+        {total > 0 && (
+          <div className="w-full flex justify-center items-center space-x-2 py-4">
+            <button
+              onClick={() => handlePageChange(page - 1)}
+              disabled={page === 1}
+              className="px-4 py-2 bg-gray-200 text-gray-500 rounded-md hover:bg-gray-300 disabled:opacity-50"
+            >
+              Previous
+            </button>
+            <span className="text-lg text-gray-600">
+              Page {page} of {Math.ceil(total / pageSize)}
+            </span>
+            <button
+              onClick={() => handlePageChange(page + 1)}
+              disabled={page === Math.ceil(total / pageSize)}
+              className="px-4 py-2 bg-gray-200 text-gray-500 rounded-md hover:bg-gray-300 disabled:opacity-50"
+            >
+              Next
+            </button>
+          </div>
+        )}
+      </motion.main>
     </div>
   );
 };
