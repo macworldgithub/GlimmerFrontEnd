@@ -23,7 +23,7 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
     >
       <div className="relative w-full h-[280px]">
         <img
-          src={item.image1}
+          src={item.image1 ? item.image1 : "/assets/images/default_image.jpg"}
           alt="Image 1"
           className="w-full h-full object-cover rounded-t-lg"
         />
