@@ -162,7 +162,7 @@ const ProductsList = () => {
                 </motion.div>
               ))
             ) : (
-              <div className="w-full flex justify-center items-center min-h-[70vh]">
+              <div className="col-span-full flex justify-center items-center min-h-[70vh]">
                 <div className="text-center font-bold text-3xl">
                   Oops! No items to display in this category
                 </div>
