@@ -120,11 +120,11 @@ const ProductDisplay = () => {
         {/* Left Side: Product Image Gallery */}
         <div className="flex flex-col items-center">
           {/* Main Image Container */}
-          <div className="w-full max-w-[650px] sm:w-[450px] md:w-[550px] h-auto flex items-center justify-center overflow-hidden rounded-md shadow bg-gray-100">
+          <div className="w-full max-w-[650px] sm:w-[450px] md:w-[550px] h-[400px] flex items-center justify-center overflow-hidden rounded-md shadow bg-gray-100">
             <img
               src={product?.image1 ? product.image1 : "/assets/images/default_image.jpg"}
               alt={product?.name}
-              className="w-full h-auto max-h-[650px] object-contain"
+              className="w-full h-full  object-cover"
             />
           </div>
 
@@ -195,7 +195,7 @@ const ProductDisplay = () => {
         </div>
 
         {/* Right Side: Product Info */}
-        <div className="flex flex-col gap-4 relative">
+        <div className="flex flex-col gap-4 relative w-[20rem]">
           <h1 className="font-semibold text-2xl">{product?.name}</h1>
           {/* Price */}
           <div className="font-semibold text-2xl">
@@ -207,13 +207,12 @@ const ProductDisplay = () => {
                     {product?.base_price} PKR
                   </span>
                 )}
-                <div className="absolute top-2 right-2 w-12 h-12 md:w-14 md:h-14 flex items-center justify-center">
+                <div className="w-12 h-12 absolute right-0 flex justify-center items-center">
                   <img
                     src="/assets/addtoBag/discount.png"
                     alt="Discount"
-                    className="w-full h-full"
                   />
-                  <span className="absolute text-center text-white text-[10px] md:text-sm font-bold">
+                  <span className="absolute text-center text-white md:text-sm font-bold">
                     {`${Math.round(((product?.base_price - product?.discounted_price) / product?.base_price) * 100)}% OFF`}
                   </span>
                 </div>

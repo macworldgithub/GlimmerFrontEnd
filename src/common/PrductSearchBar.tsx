@@ -24,14 +24,13 @@ const PrductSearchBar = () => {
   }, []);
 
   return (
-    <div className="flex items-center w-full max-w-[500px] h-[50px] border border-gray-300 rounded-md shadow-sm bg-white overflow-hidden transition-all duration-300 focus-within:ring-1 focus-within:ring-[#583FA8] max-md:hidden">
+    <div className="flex items-center w-full max-w-[350px] h-[50px] border border-gray-300 rounded-md shadow-sm bg-white overflow-hidden transition-all duration-300 focus-within:ring-1 max-md:hidden">
       <Input
-        placeholder="Search here..."
+        placeholder="Search for products and brand"
         className="w-full px-4 py-2 border-none outline-none text-gray-700 focus:ring-0"
       />
       <div className="w-[1px] h-[70%] bg-gray-300"></div>
-
-        <Select defaultValue="all" className="w-[150px] text-gray-600 border-none focus:ring-0 focus:outline-none pr-2">
+        {/* <Select defaultValue="all" className="w-[150px] text-gray-600 border-none focus:ring-0 focus:outline-none pr-2">
           <Option value="all">All Products</Option>
           {products.map((product: any) => (
             //@ts-ignore
@@ -39,9 +38,9 @@ const PrductSearchBar = () => {
               {product?.name}
             </Option>
           ))}
-        </Select>
+        </Select> */}
 
-      <button className="flex items-center justify-center bg-[#583FA8] hover:bg-[#472E8A] text-white px-4 h-full transition-all duration-300">
+      <button className="flex items-center justify-center text-gray-400 px-4 h-full transition-all duration-300">
         <BsSearch className="size-5" />
       </button>
     </div>
