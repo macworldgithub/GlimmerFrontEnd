@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import Link from "next/link";
@@ -11,17 +11,30 @@ import CategoryNavMenu from "./category-nav-menu";
 const Cart = () => {
   const dispatch = useDispatch();
   const Cart = useSelector((state: RootState) => state.cart);
+  const [bulkProducts, setBulkProducts] = useState<{ [key: string]: boolean }>({});  // Track bulk state globally
 
   const updateQuantity = (id: string, newQuantity: number) => {
-    console.log(`Quantity updated to: ${newQuantity}`);
     dispatch(updateQty({ _id: id, qty: newQuantity }));
   };
 
   const deleteProduct = (id: string) => {
-    dispatch(removeItem({ id: id }));
+    dispatch(removeItem(id));
   };
 
-  // Ensure cartItems are available after hydration
+  // Handle the bulk checkbox
+  const handleBulkCheckbox = (e: React.ChangeEvent<HTMLInputElement>, id: string) => {
+    const isChecked = e.target.checked;
+    setBulkProducts((prev) => ({
+      ...prev,
+      [id]: isChecked,
+    }));
+
+    // Reset quantity to 5 when unchecked
+    if (!isChecked) {
+      updateQuantity(id, 5);
+    }
+  };
+
   if (!Cart.ProductList) return null;
   if (Cart.ProductList.length === 0)
     return (
@@ -64,23 +77,11 @@ const Cart = () => {
               </thead>
               <tbody>
                 {Cart.ProductList.map((item) => {
-                  const [isBulk, setIsBulk] = useState(false);
                   const disableMinus = item.quantity === 1;
-                  const disablePlus = item.quantity === 5 && !isBulk;
-
-                  const handleBulkCheckbox = (
-                    e: React.ChangeEvent<HTMLInputElement>
-                  ) => {
-                    setIsBulk(e.target.checked);
-
-                    if (!e.target.checked) {
-                      // Reset to 5 when unchecked
-                      updateQuantity(item.product.id, 5);
-                    }
-                  };
+                  const disablePlus = item.quantity === 5 && !bulkProducts[item.product.id];
 
                   return (
-                    <tr key={item.product.id} className="">
+                    <tr key={item.product.id}>
                       <td className="flex items-center gap-4 flex-none max-lg:min-w-80">
                         <img
                           src={item.product.image1}
@@ -88,9 +89,7 @@ const Cart = () => {
                           className="h-16 w-16 rounded-md object-cover"
                         />
                         <div>
-                          <p className="font-semibold flex-none">
-                            {item.product.name}
-                          </p>
+                          <p className="font-semibold flex-none">{item.product.name}</p>
                         </div>
                       </td>
                       <td className="text-nowrap">
@@ -126,14 +125,12 @@ const Cart = () => {
                           <div className="mt-2 flex items-center">
                             <input
                               type="checkbox"
-                              checked={isBulk}
-                              onChange={handleBulkCheckbox}
+                              checked={bulkProducts[item.product.id] || false}
+                              onChange={(e) => handleBulkCheckbox(e, item.product.id)}
                               id={`bulk-${item.product.id}`}
                               className="mr-2"
                             />
-                            <label htmlFor={`bulk-${item.product.id}`}>
-                              Bulk of Bag
-                            </label>
+                            <label htmlFor={`bulk-${item.product.id}`}>Bulk of Bag</label>
                           </div>
                         )}
                       </td>
@@ -173,7 +170,7 @@ const Cart = () => {
             <h3 className="mb-4 font-semibold text-lg">Total</h3>
             <div className="flex justify-between">
               <span>Total</span>
-              <span> {Cart?.discountedTotal} PKR</span>
+              <span>{Cart?.discountedTotal} PKR</span>
             </div>
             <div className="flex justify-between">
               {/* <span>Delivery</span>
@@ -185,9 +182,7 @@ const Cart = () => {
               <span>{Cart.discountedTotal} PKR</span>
             </div>
             <Link href={"/checkout"}>
-              <button className="btn btn-secondary mt-4 w-full">
-                Checkout
-              </button>
+              <button className="btn btn-secondary mt-4 w-full">Checkout</button>
             </Link>
           </div>
         </div>

@@ -58,7 +58,7 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
               alt="Discount"
               className="w-full h-full"
             />
-            <span className="absolute text-center text-white text-[10px] md:text-sm font-bold">
+            <span className="absolute text-center text-white text-[10px] text-base font-bold">
               {`${Math.round(((item?.base_price - item?.discounted_price) / item?.base_price) * 100)}% OFF`}
             </span>
           </div>

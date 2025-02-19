@@ -122,7 +122,7 @@ const ProductsList = () => {
         <img
           src="https://gymnation.com/media/d1efluel/ronaldo-cr7.jpg"
           alt="Banner"
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+          className="w-full h-full object-cover transition-transform duration-500 "
         />
         <div className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/20 transition-all duration-500 px-4">
           <h1 className="text-white text-2xl sm:text-3xl md:text-4xl font-bold text-center">

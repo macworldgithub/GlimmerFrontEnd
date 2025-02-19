@@ -11,7 +11,7 @@ import CartNavbar from "./cart-navbar";
 
 const NavbarClient = ({ session, handleLogout }: { session: any; handleLogout: () => void }) => {
     const pathname = usePathname();
-    const isProductsPage = pathname === "/selfcare-products";
+    const isProductsPage = pathname === "/selfcare-products" || pathname === "/products";
 
     return (
         <>

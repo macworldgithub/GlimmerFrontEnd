@@ -81,21 +81,14 @@ const CartSlice = createSlice({
     },
 
     removeItem: (state, action) => {
-      const { id } = action.payload;
-
-      if (id === undefined || id === null) {
-        console.error("Error: id is required to remove an item.");
-        return;
-      }
-
-      state.ProductList = state.ProductList.filter(
-        (item) => item.product.id !== id
-      );
-
+      const productId = action.payload;
+      state.ProductList = state.ProductList.filter(item => item.product.id !== productId);
+      
       const { sum, discountSum } = CalculateTotal(state.ProductList);
       state.total = sum;
       state.discountedTotal = discountSum;
     },
+
 
     totalCartAmount: (state) => {
       let sum = 0;

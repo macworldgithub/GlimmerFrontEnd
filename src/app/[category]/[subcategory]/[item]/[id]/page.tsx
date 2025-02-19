@@ -207,12 +207,12 @@ const ProductDisplay = () => {
                     {product?.base_price} PKR
                   </span>
                 )}
-                <div className="w-12 h-12 absolute right-0 flex justify-center items-center">
+                <div className="w-12 h-12 text-sm absolute right-0 flex justify-center items-center">
                   <img
                     src="/assets/addtoBag/discount.png"
                     alt="Discount"
                   />
-                  <span className="absolute text-center text-white md:text-sm font-bold">
+                  <span className="absolute text-center text-sm text-white  font-bold">
                     {`${Math.round(((product?.base_price - product?.discounted_price) / product?.base_price) * 100)}% OFF`}
                   </span>
                 </div>
