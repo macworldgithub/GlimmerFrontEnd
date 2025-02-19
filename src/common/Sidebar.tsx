@@ -67,11 +67,7 @@ const Sidebar = ({
     });
   };
 
-   const sortedCategories = selections.sort((a, b) => a.category_name.localeCompare(b.category_name));
-
-   const sortedSubCategories = subCategories.sort((a, b) => a.name.localeCompare(b.name));
- 
-   const sortedItems = items.sort((a, b) => a.name.localeCompare(b.name));
+  const sortedCategories = selections.sort((a, b) => a.category_name.localeCompare(b.category_name));
 
   return (
     <div className="p-6 border-r bg-[#FDF3D2] shadow-md hidden md:block">
@@ -83,9 +79,8 @@ const Sidebar = ({
         {sortedCategories.map((category) => (
           <label
             key={category.category_id}
-            className={`flex items-center cursor-pointer p-2 rounded-lg transition ${
-              selectedCategory === category.category_id ? "bg-blue-100" : "hover:bg-gray-100"
-            }`}
+            className={`flex items-center cursor-pointer p-2 rounded-lg transition ${selectedCategory === category.category_id ? "bg-blue-100" : "hover:bg-gray-100"
+              }`}
           >
             <input
               type="radio"
@@ -95,9 +90,8 @@ const Sidebar = ({
               className="hidden"
             />
             <span
-              className={`w-5 h-5 border-2 rounded-full flex items-center justify-center mr-3 ${
-                selectedCategory === category.category_id ? "border-purple-700" : "border-gray-400"
-              }`}
+              className={`w-5 h-5 border-2 rounded-full flex items-center justify-center mr-3 ${selectedCategory === category.category_id ? "border-purple-700" : "border-gray-400"
+                }`}
             >
               {selectedCategory === category.category_id && (
                 <motion.div className="w-3 h-3 bg-purple-500 rounded-full" layoutId="categorySelection" />
@@ -111,12 +105,11 @@ const Sidebar = ({
       {/* Subcategory Selection */}
       <div className="mt-6">
         <h3 className="font-semibold text-lg text-gray-700">Sub Categories</h3>
-        {sortedSubCategories.map((subCategory) => (
+        {displayedSubCategories.sort((a, b) => a.name.localeCompare(b.name)).map((subCategory) => (
           <label
             key={subCategory.sub_category_id}
-            className={`flex items-center cursor-pointer p-2 rounded-lg transition ${
-              selectedSubCategory === subCategory.sub_category_id ? "bg-blue-100" : "hover:bg-gray-100"
-            }`}
+            className={`flex items-center cursor-pointer p-2 rounded-lg transition ${selectedSubCategory === subCategory.sub_category_id ? "bg-blue-100" : "hover:bg-gray-100"
+              }`}
           >
             <input
               type="radio"
@@ -126,9 +119,8 @@ const Sidebar = ({
               className="hidden"
             />
             <span
-              className={`w-5 h-5 border-2 rounded-full flex items-center justify-center mr-3 ${
-                selectedSubCategory === subCategory.sub_category_id ? "border-purple-700" : "border-gray-400"
-              }`}
+              className={`w-5 h-5 border-2 rounded-full flex items-center justify-center mr-3 ${selectedSubCategory === subCategory.sub_category_id ? "border-purple-700" : "border-gray-400"
+                }`}
             >
               {selectedSubCategory === subCategory.sub_category_id && (
                 <motion.div className="w-3 h-3 bg-purple-500 rounded-full" layoutId="subCategorySelection" />
@@ -150,12 +142,11 @@ const Sidebar = ({
       {/* Item Selection */}
       <div className="mt-6">
         <h3 className="font-semibold text-lg text-gray-700">Item</h3>
-        {sortedItems.map((item) => (
+        {displayedItems.sort((a, b) => a.name.localeCompare(b.name)).map((item) => (
           <label
             key={item.item_id}
-            className={`flex items-center cursor-pointer p-2 rounded-lg transition ${
-              selectedItem === item.item_id ? "bg-blue-100" : "hover:bg-gray-100"
-            }`}
+            className={`flex items-center cursor-pointer p-2 rounded-lg transition ${selectedItem === item.item_id ? "bg-blue-100" : "hover:bg-gray-100"
+              }`}
           >
             <input
               type="radio"
@@ -165,9 +156,8 @@ const Sidebar = ({
               className="hidden"
             />
             <span
-              className={`w-5 h-5 border-2 rounded-full flex items-center justify-center mr-3 ${
-                selectedItem === item.item_id ? "border-purple-700" : "border-gray-400"
-              }`}
+              className={`w-5 h-5 border-2 rounded-full flex items-center justify-center mr-3 ${selectedItem === item.item_id ? "border-purple-700" : "border-gray-400"
+                }`}
             >
               {selectedItem === item.item_id && (
                 <motion.div className="w-3 h-3 bg-purple-500 rounded-full" layoutId="itemSelection" />
