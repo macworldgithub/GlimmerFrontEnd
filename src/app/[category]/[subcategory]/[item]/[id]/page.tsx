@@ -20,6 +20,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
+import { motion } from "framer-motion";
 
 const ProductDisplay = () => {
   const Cart = useSelector((state: RootState) => state.cart);
@@ -29,6 +30,8 @@ const ProductDisplay = () => {
   const [copied, setCopied] = useState("");
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [activeTab, setActiveTab] = useState("Description");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
 
   const size = useSelector(
     (state: RootState) =>
@@ -82,6 +85,8 @@ const ProductDisplay = () => {
   }, [Product]);
 
   const handleAddToCart = () => {
+    setIsModalOpen(true);
+    setTimeout(() => setIsModalOpen(false), 2000);
     dispatch(addItem({ product: product }));
   };
 
@@ -371,7 +376,7 @@ const ProductDisplay = () => {
           {/* Buttons Section */}
           <div className="flex items-center gap-4 mt-4">
             <button
-              className="flex-1 flex items-center w-[11rem] justify-center gap-2 py-2 px-4 border border-purple-800 text-purple-800 font-semibold rounded-md hover:border-purple-800 hover:text-purple-800"
+              className="flex-1 w-full flex items-center text-xs justify-center gap-2 py-3 px-6 border border-purple-800 text-purple-800 font-semibold rounded-md hover:border-purple-800 hover:text-purple-800"
               onClick={handleAddToCart}
             >
               <Image
@@ -383,7 +388,23 @@ const ProductDisplay = () => {
               ADD TO BAG
             </button>
 
-            <button className="flex-1 py-2 px-4 bg-purple-800 text-white font-semibold rounded-md hover:bg-purple-900">
+            {/* Modal */}
+            {isModalOpen && (
+              <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  className="bg-white rounded-lg shadow-xl p-6 w-80 text-center"
+                >
+                  <p className="text-lg font-semibold text-gray-800">
+                    Product is added to the cart!
+                  </p>
+                </motion.div>
+              </div>
+            )}
+
+            <button className="flex-1 w-full py-3 px-6 text-xs bg-purple-800 text-white font-semibold rounded-md hover:bg-purple-900">
               BULK BUYING
             </button>
             <button
@@ -402,6 +423,7 @@ const ProductDisplay = () => {
               />
             </button>
           </div>
+
 
           {/* Tabs Section */}
           <div className="mt-6">
