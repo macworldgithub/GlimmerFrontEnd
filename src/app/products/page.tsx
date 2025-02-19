@@ -76,9 +76,15 @@ const ProductsList = () => {
 
   const fetchData = async () => {
     try {
-      const res = await getAllProducts(categoryFilter, subCategoryFilter, itemFilter, minPriceFilter, maxPriceFilter, page);
-      setData(res.products);
-      setTotal(res.total);
+      if (categoryFilter && !subCategoryFilter && !itemFilter && !minPriceFilter && !maxPriceFilter) {
+        const res = await getAllProducts(categoryFilter, "", "", 0, 0, page);
+        setData(res.products);
+        setTotal(res.total);
+      } else {
+        const res = await getAllProducts(categoryFilter, subCategoryFilter, itemFilter, minPriceFilter, maxPriceFilter, page);
+        setData(res.products);
+        setTotal(res.total);
+      }
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -96,13 +102,20 @@ const ProductsList = () => {
 
   const handleFilterChange = (newFilters: { category?: string; sub_category?: string; item?: string; min_price?: string; max_price?: string }) => {
     const params = new URLSearchParams(searchParams);
-
-    if (newFilters.category) params.set("category", newFilters.category);
-    if (newFilters.sub_category) params.set("sub_category", newFilters.sub_category);
-    if (newFilters.item) params.set("item", newFilters.item);
-    if (newFilters.min_price) params.set("min_price", newFilters.min_price);
-    if (newFilters.max_price) params.set("max_price", newFilters.max_price);
-
+  
+    if (newFilters.category && !newFilters.sub_category && !newFilters.item && !newFilters.min_price && !newFilters.max_price) {
+      params.set("category", newFilters.category);
+      params.delete("sub_category");
+      params.delete("item");
+      params.delete("min_price");
+      params.delete("max_price");
+    } else {
+      if (newFilters.category) params.set("category", newFilters.category);
+      if (newFilters.sub_category) params.set("sub_category", newFilters.sub_category);
+      if (newFilters.item) params.set("item", newFilters.item);
+      if (newFilters.min_price) params.set("min_price", newFilters.min_price);
+      if (newFilters.max_price) params.set("max_price", newFilters.max_price);
+    }
     // Reset the page to 1 whenever a filter changes
     params.set("page", "1");
 
