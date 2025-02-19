@@ -67,6 +67,12 @@ const Sidebar = ({
     });
   };
 
+   const sortedCategories = selections.sort((a, b) => a.category_name.localeCompare(b.category_name));
+
+   const sortedSubCategories = subCategories.sort((a, b) => a.name.localeCompare(b.name));
+ 
+   const sortedItems = items.sort((a, b) => a.name.localeCompare(b.name));
+
   return (
     <div className="p-6 border-r bg-[#FDF3D2] shadow-md hidden md:block">
       <h2 className="font-bold text-2xl text-gray-800">Filters</h2>
@@ -74,7 +80,7 @@ const Sidebar = ({
       {/* Category Selection */}
       <div className="mt-4">
         <h3 className="font-semibold text-lg text-gray-700">Categories</h3>
-        {selections.map((category) => (
+        {sortedCategories.map((category) => (
           <label
             key={category.category_id}
             className={`flex items-center cursor-pointer p-2 rounded-lg transition ${
@@ -105,7 +111,7 @@ const Sidebar = ({
       {/* Subcategory Selection */}
       <div className="mt-6">
         <h3 className="font-semibold text-lg text-gray-700">Sub Categories</h3>
-        {displayedSubCategories.map((subCategory) => (
+        {sortedSubCategories.map((subCategory) => (
           <label
             key={subCategory.sub_category_id}
             className={`flex items-center cursor-pointer p-2 rounded-lg transition ${
@@ -144,7 +150,7 @@ const Sidebar = ({
       {/* Item Selection */}
       <div className="mt-6">
         <h3 className="font-semibold text-lg text-gray-700">Item</h3>
-        {displayedItems.map((item) => (
+        {sortedItems.map((item) => (
           <label
             key={item.item_id}
             className={`flex items-center cursor-pointer p-2 rounded-lg transition ${

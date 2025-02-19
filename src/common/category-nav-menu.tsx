@@ -41,28 +41,44 @@ type Category = {
   };
 };
 
+type MenuItem = {
+  key: string;
+  label: JSX.Element;
+  children?: MenuItem[];
+};
+
 const CategoryNavMenu = ({ className }: { className?: string }) => {
   const [categories, setCategories] = useState<any[]>([]);
   const router = useRouter();
   const [selectedSubCategory, setSelectedSubCategory] = useState([]);
-  const [menuItems, setMenuItems] = useState([]);
+  const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
 
   const [open, setOpen] = useState(false);
 
-  const transformToMenuItems = (data: any, handleClick: any) => {
-    return data.map((category: any) => ({
+  const sortItems = (arr: any[]) => {
+    return arr.sort((a, b) => a.name.localeCompare(b.name)); 
+  };
+
+  const sortCategories = (arr: any[]) => {
+    return arr.sort((a, b) => a.product_category.name.localeCompare(b.product_category.name)); 
+  };
+
+
+  const transformToMenuItems = (data: Category[], handleClick: any): MenuItem[] => {
+    const sortedCategories = sortCategories(data);
+    return sortedCategories.map((category: any) => ({
       key: category._id,
       label: (
         <span
           onClick={(e) => {
-            e.stopPropagation(); // Prevents submenu from opening
+            e.stopPropagation(); 
             handleClick(`${category._id}`);
           }}
         >
           {category.product_category.name}
         </span>
       ),
-      children: category.sub_categories.map((subCategory: any) => ({
+      children: sortItems(category.sub_categories).map((subCategory: any) => ({
         key: `${category._id}-${subCategory._id}`,
         label: (
           <span
@@ -74,7 +90,7 @@ const CategoryNavMenu = ({ className }: { className?: string }) => {
             {subCategory.name}
           </span>
         ),
-        children: subCategory.items.map((item: any) => ({
+        children: sortItems(subCategory.items).map((item: any) => ({
           key: `${category._id}-${subCategory._id}-${item._id}`,
           label: (
             <span
