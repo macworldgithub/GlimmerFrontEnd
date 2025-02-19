@@ -13,7 +13,6 @@ import VideoTutorial from "./components/VideoTutorial";
 import MustItems from "./components/MustItems";
 import SaloonPictures from "@/common/SaloonPictures";
 import { Suspense } from "react";
-import { AdditionalSaloonPicture } from "@/common/AdditionalSaloonPicture";
 import BoxContainer from "@/common/box-container";
 
 export default async function Home() {
@@ -28,8 +27,7 @@ export default async function Home() {
         <VideoTutorial />
         <MustItems />
         <SaloonPictures />
-        <BoxContainer className="pb-[20rem] justify-center w-[99vw]" text="Shop Now and Unleash Your Inner Glow!" showInput={false} textAligned={true} animateGlow={true} />
-        <AdditionalSaloonPicture />
+        <BoxContainer className="lg:pb-[22rem] md:pb-[12rem] justify-center w-[99vw]" text="Shop Now and Unleash Your Inner Glow!" showInput={false} textAligned={true} animateGlow={true} />
       </Suspense>
     </>
   );

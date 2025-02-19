@@ -42,11 +42,11 @@ const CartNavbar = () => {
         </div>
       </div>
 
-      <p className=" text-[10px] flex">
+      {/* <p className=" text-[10px] flex">
         <p className=" max-md:hidden mr-1 ">My Bag </p>{" "}
         <p className="text-[10px] mx-1">PKR</p>
         <p className=" font-bold font-sans">{data.discountedTotal}</p>
-      </p>
+      </p> */}
     </>
   );
 };
