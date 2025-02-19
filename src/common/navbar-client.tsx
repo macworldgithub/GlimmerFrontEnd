@@ -17,8 +17,8 @@ const NavbarClient = ({ session, handleLogout }: { session: any; handleLogout: (
         <>
             <div className="navbar bg-base-100 w-[99vw]">
                 <div className="flex-1">
-                    <Link className="btn btn-ghost text-xl" href="/">
-                        <img src={Logo.src} alt="logo" className="h-10" />
+                    <Link className="btn btn-ghost text-xl h-16" href="/">
+                        <img src={Logo.src} alt="logo" className="h-16" />
                     </Link>
                     <div className={cn("flex w-full", { "justify-end pr-10": isProductsPage })}>
                         <ProductSearchBar className="max-md:hidden" />

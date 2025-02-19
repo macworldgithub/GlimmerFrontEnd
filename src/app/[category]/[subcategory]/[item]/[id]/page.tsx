@@ -87,7 +87,7 @@ const ProductDisplay = () => {
   const handleAddToCart = () => {
     setIsModalOpen(true);
     setTimeout(() => setIsModalOpen(false), 2000);
-    dispatch(addItem({ product: product }));
+    dispatch(addItem({ product: {...product}, quantity: 1 }));
   };
 
   const updateQuantity = (newQuantity: any) => {
