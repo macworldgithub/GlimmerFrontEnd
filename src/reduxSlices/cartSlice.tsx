@@ -75,6 +75,9 @@ const CartSlice = createSlice({
       if (existingItemIndex !== -1) {
         state.ProductList[existingItemIndex].quantity += 1;
       } else {
+        if (!product?.orderProductStatus) {
+          product.orderProductStatus = "Pending";
+        }
         state.ProductList.push({ product, quantity: 1 });
       }
 
