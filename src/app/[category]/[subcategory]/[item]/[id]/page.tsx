@@ -31,7 +31,8 @@ const ProductDisplay = () => {
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [activeTab, setActiveTab] = useState("Description");
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [isBulkModalOpen, setIsBulkModalOpen] = useState(false);
+  const [bulkForm, setBulkForm] = useState({ name: "", phone: "", email: "" });
 
   const size = useSelector(
     (state: RootState) =>
@@ -87,7 +88,7 @@ const ProductDisplay = () => {
   const handleAddToCart = () => {
     setIsModalOpen(true);
     setTimeout(() => setIsModalOpen(false), 2000);
-    dispatch(addItem({ product: {...product}, quantity: 1 }));
+    dispatch(addItem({ product: { ...product }, quantity: 1 }));
   };
 
   const updateQuantity = (newQuantity: any) => {
@@ -116,6 +117,16 @@ const ProductDisplay = () => {
   const handleType = (productId: string, type: any) => {
     setSelectedType(type);
     dispatch(updateProductType({ id: productId, type: type }));
+  };
+
+  const handleBulkBuy = () => {
+    setIsBulkModalOpen(true);
+  };
+
+  const handleBulkSubmit = () => {
+    console.log("Bulk Buying Form Data:", bulkForm);
+    setIsBulkModalOpen(false);
+    alert("Your bulk buying request has been submitted!");
   };
 
   return (
@@ -404,9 +415,67 @@ const ProductDisplay = () => {
               </div>
             )}
 
-            <button className="flex-1 w-full py-3 px-6 text-xs bg-purple-800 text-white font-semibold rounded-md hover:bg-purple-900">
+            <button onClick={handleBulkBuy} className="flex-1 w-full py-3 px-6 text-xs bg-purple-800 text-white font-semibold rounded-md hover:bg-purple-900">
               BULK BUYING
             </button>
+            {isBulkModalOpen && (
+              <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  className="bg-white rounded-lg shadow-xl p-6 w-96 text-center"
+                >
+                  <h2 className="text-lg font-semibold text-gray-800">
+                    Looking for bulk options as a salon owner or reseller?
+                  </h2>
+                  <p className="text-sm text-gray-600 mb-4">
+                    Share your details below, and our team will get in touch!
+                  </p>
+
+                  {/* Bulk Form */}
+                  <div className="space-y-3">
+                    <input
+                      type="text"
+                      placeholder="Your Name"
+                      value={bulkForm.name}
+                      onChange={(e) => setBulkForm({ ...bulkForm, name: e.target.value })}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500"
+                    />
+                    <input
+                      type="tel"
+                      placeholder="Phone Number"
+                      value={bulkForm.phone}
+                      onChange={(e) => setBulkForm({ ...bulkForm, phone: e.target.value })}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500"
+                    />
+                    <input
+                      type="email"
+                      placeholder="Email Address"
+                      value={bulkForm.email}
+                      onChange={(e) => setBulkForm({ ...bulkForm, email: e.target.value })}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500"
+                    />
+                  </div>
+
+                  {/* Submit Button */}
+                  <button
+                    onClick={handleBulkSubmit}
+                    className="mt-4 w-full py-2 px-6 bg-purple-800 text-white font-semibold rounded-md hover:bg-purple-900 transition duration-200"
+                  >
+                    Submit
+                  </button>
+
+                  {/* Close Button */}
+                  <button
+                    onClick={() => setIsBulkModalOpen(false)}
+                    className="mt-4 w-full py-2 px-6 bg-gray-500 text-white font-semibold rounded-md hover:bg-gray-400 transition duration-200"
+                  >
+                    Close
+                  </button>
+                </motion.div>
+              </div>
+            )}
             <button
               onClick={() => setIsWishlisted(!isWishlisted)}
               className="p-2"

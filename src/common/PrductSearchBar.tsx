@@ -32,26 +32,31 @@ const PrductSearchBar = ({ selections, className }: { selections: CategorySelect
     let matchedSubCategory: string | null = null;
     let matchedItem: string | null = null;
 
-    selections.forEach((category) => {
-      if (!matchedCategory && category.category_name.toLowerCase().includes(searchQuery.toLowerCase())) {
-        matchedCategory = category.category_id;
-      }
-
-      category.sub_categories.forEach((subCategory) => {
-        if (!matchedSubCategory && subCategory.name.toLowerCase().includes(searchQuery.toLowerCase())) {
-          matchedSubCategory = subCategory.sub_category_id;
-          matchedCategory = category.category_id; // Ensure category is matched if subcategory is matched
+    // Special case: If the search query is "Makeup", set category ID directly
+    if (searchQuery.toLowerCase() === "makeup") {
+      matchedCategory = "6790d2749a0b078319c69e9d";
+    } else {
+      selections.forEach((category) => {
+        if (!matchedCategory && category.category_name.toLowerCase().includes(searchQuery.toLowerCase())) {
+          matchedCategory = category.category_id;
         }
 
-        subCategory.items.forEach((item) => {
-          if (!matchedItem && item.name.toLowerCase().includes(searchQuery.toLowerCase())) {
-            matchedItem = item.item_id;
+        category.sub_categories.forEach((subCategory) => {
+          if (!matchedSubCategory && subCategory.name.toLowerCase().includes(searchQuery.toLowerCase())) {
             matchedSubCategory = subCategory.sub_category_id;
             matchedCategory = category.category_id;
           }
+
+          subCategory.items.forEach((item) => {
+            if (!matchedItem && item.name.toLowerCase().includes(searchQuery.toLowerCase())) {
+              matchedItem = item.item_id;
+              matchedSubCategory = subCategory.sub_category_id;
+              matchedCategory = category.category_id;
+            }
+          });
         });
       });
-    });
+    }
 
     if (!matchedCategory && !matchedSubCategory && !matchedItem) {
       setIsModalOpen(true);
@@ -69,8 +74,6 @@ const PrductSearchBar = ({ selections, className }: { selections: CategorySelect
     // Navigate to the updated URL
     router.push(`/products?${params.toString()}`);
   };
-
-
 
   return (
     <>
