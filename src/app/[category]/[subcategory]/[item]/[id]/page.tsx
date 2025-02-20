@@ -424,7 +424,7 @@ const ProductDisplay = () => {
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.8 }}
-                  className="bg-white rounded-lg shadow-xl p-6 w-96 text-center"
+                  className="bg-white rounded-lg shadow-xl p-6 w-96"
                 >
                   <h2 className="text-lg font-semibold text-gray-800">
                     Looking for bulk options as a salon owner or reseller?
