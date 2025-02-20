@@ -26,13 +26,13 @@ interface CategorySelection {
 
 const NavbarClient = ({ session, handleLogout }: { session: any; handleLogout: () => void }) => {
     const pathname = usePathname();
-    const router = useRouter();
+    // const router = useRouter();
     const searchParams = useSearchParams();
     const isProductsPage = pathname === "/selfcare-products" || pathname === "/products";
 
     const [selections, setSelections] = useState<CategorySelection[]>([]);
-    const [products, setProducts] = useState<any[]>([]);
-    const [total, setTotal] = useState(0);
+    // const [products, setProducts] = useState<any[]>([]);
+    // const [total, setTotal] = useState(0);
 
     useEffect(() => {
         const fetchSelections = async () => {
@@ -62,24 +62,24 @@ const NavbarClient = ({ session, handleLogout }: { session: any; handleLogout: (
         }));
     }
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const categoryFilter = searchParams.get("category") ?? "";
-                const subCategoryFilter = searchParams.get("sub_category") ?? "";
-                const itemFilter = searchParams.get("item") ?? "";
-                const page = Number(searchParams.get("page")) || 1;
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             const categoryFilter = searchParams.get("category") ?? "";
+    //             const subCategoryFilter = searchParams.get("sub_category") ?? "";
+    //             const itemFilter = searchParams.get("item") ?? "";
+    //             const page = Number(searchParams.get("page")) || 1;
 
-                const res = await getAllProducts(categoryFilter, subCategoryFilter, itemFilter, 0, 0, page);
-                setProducts(res.products);
-                setTotal(res.total);
-            } catch (error) {
-                console.error("Error fetching products:", error);
-            }
-        };
+    //             const res = await getAllProducts(categoryFilter, subCategoryFilter, itemFilter, 0, 0, page);
+    //             setProducts(res.products);
+    //             setTotal(res.total);
+    //         } catch (error) {
+    //             console.error("Error fetching products:", error);
+    //         }
+    //     };
 
-        fetchData();
-    }, [searchParams]);
+    //     fetchData();
+    // }, [searchParams]);
 
     return (
         <>

@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Input } from "antd";
 import { BsSearch } from "react-icons/bs";
 import { useRouter, useSearchParams } from "next/navigation";
+import { motion } from "framer-motion";
 
 interface CategorySelection {
   category_id: string;
@@ -19,30 +20,31 @@ interface CategorySelection {
 
 
 const PrductSearchBar = ({ selections, className }: { selections: CategorySelection[]; className?: string }) => {
-  const [searchQuery, setSearchQuery] = useState("");
   const router = useRouter();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const searchParams = useSearchParams();
 
   const handleSearch = () => {
     if (!searchQuery) return;
 
-    let matchedCategory = "";
-    let matchedSubCategory = "";
-    let matchedItem = "";
-    let matchedProduct = false;
+    let matchedCategory: string | null = null;
+    let matchedSubCategory: string | null = null;
+    let matchedItem: string | null = null;
 
-    // Check for matching categories, subcategories, and items
     selections.forEach((category) => {
-      if (category.category_name.toLowerCase().includes(searchQuery.toLowerCase())) {
+      if (!matchedCategory && category.category_name.toLowerCase().includes(searchQuery.toLowerCase())) {
         matchedCategory = category.category_id;
       }
+
       category.sub_categories.forEach((subCategory) => {
-        if (subCategory.name.toLowerCase().includes(searchQuery.toLowerCase())) {
+        if (!matchedSubCategory && subCategory.name.toLowerCase().includes(searchQuery.toLowerCase())) {
           matchedSubCategory = subCategory.sub_category_id;
-          matchedCategory = category.category_id;
+          matchedCategory = category.category_id; // Ensure category is matched if subcategory is matched
         }
+
         subCategory.items.forEach((item) => {
-          if (item.name.toLowerCase().includes(searchQuery.toLowerCase())) {
+          if (!matchedItem && item.name.toLowerCase().includes(searchQuery.toLowerCase())) {
             matchedItem = item.item_id;
             matchedSubCategory = subCategory.sub_category_id;
             matchedCategory = category.category_id;
@@ -50,6 +52,12 @@ const PrductSearchBar = ({ selections, className }: { selections: CategorySelect
         });
       });
     });
+
+    if (!matchedCategory && !matchedSubCategory && !matchedItem) {
+      setIsModalOpen(true);
+      setTimeout(() => setIsModalOpen(false), 2000);
+      return;
+    }
 
     // Create URL search params
     const params = new URLSearchParams(searchParams);
@@ -65,23 +73,39 @@ const PrductSearchBar = ({ selections, className }: { selections: CategorySelect
 
 
   return (
-    <div
-      className={`flex items-center w-full max-w-[350px] h-[50px] border border-gray-300 rounded-md shadow-sm bg-white overflow-hidden transition-all duration-300 focus-within:ring-1 ${className}`}
-    >
-      <Input
-        placeholder="Search for products and brand"
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-        onPressEnter={handleSearch}
-        className="w-full px-4 py-2 border-none outline-none text-gray-700 focus:ring-0"
-      />
-      <button
-        onClick={handleSearch}
-        className="flex items-center justify-center text-gray-400 px-4 h-full transition-all duration-300"
-      >
-        <BsSearch className="size-5" />
-      </button>
-    </div>
+    <>
+      <div className={`flex items-center w-full max-w-[350px] h-[50px] border border-gray-300 rounded-md shadow-sm bg-white overflow-hidden transition-all duration-300 focus-within:ring-1 ${className}`}>
+        <Input
+          placeholder="Search for products and brands"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          onPressEnter={handleSearch}
+          className="w-full px-4 py-2 border-none outline-none text-gray-700 focus:ring-0"
+        />
+        <button
+          onClick={handleSearch}
+          className="flex items-center justify-center text-gray-400 px-4 h-full transition-all duration-300"
+        >
+          <BsSearch className="size-5" />
+        </button>
+        {/* Modal */}
+        {isModalOpen && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              className="bg-white rounded-lg shadow-xl p-6 w-80 text-center"
+            >
+              <p className="text-lg font-semibold text-gray-800">
+                No matching category, subcategory, or item found.
+              </p>
+            </motion.div>
+          </div>
+        )}
+      </div>
+
+    </>
   );
 };
 
