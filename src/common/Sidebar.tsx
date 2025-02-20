@@ -48,13 +48,13 @@ const Sidebar = ({
     onFilterChange({ category: selectedCategory, sub_category: selectedSubCategory, item: itemId, name: itemName, min_price: minPrice, max_price: maxPrice });
   };
 
-  const subCategories = selections.flatMap((category) => category.sub_categories);
-  const displayedSubCategories = showAllSubCategories ? subCategories : subCategories.slice(0, 5);
+  const selectedCategoryData = selections.find(category => category.category_id === selectedCategory);
+  const filteredSubCategories = selectedCategoryData ? selectedCategoryData.sub_categories : [];
+  const displayedSubCategories = showAllSubCategories ? filteredSubCategories : filteredSubCategories.slice(0, 5);
 
-  const items = selections
-    .flatMap((category) => category.sub_categories)
-    .flatMap((subCategory) => subCategory.items);
-  const displayedItems = showAllItems ? items : items.slice(0, 5);
+  const selectedSubCategoryData = filteredSubCategories.find(subCategory => subCategory.sub_category_id === selectedSubCategory);
+  const filteredItems = selectedSubCategoryData ? selectedSubCategoryData.items : [];
+  const displayedItems = showAllItems ? filteredItems : filteredItems.slice(0, 5);
 
   const handlePriceChange = () => {
     onFilterChange({
@@ -103,78 +103,78 @@ const Sidebar = ({
       </div>
 
       {/* Subcategory Selection */}
-      <div className="mt-6">
-        <h3 className="font-semibold text-lg text-gray-700">Sub Categories</h3>
-        {displayedSubCategories.sort((a, b) => a.name.localeCompare(b.name)).map((subCategory) => (
-          <label
-            key={subCategory.sub_category_id}
-            className={`flex items-center cursor-pointer p-2 rounded-lg transition ${selectedSubCategory === subCategory.sub_category_id ? "bg-blue-100" : "hover:bg-gray-100"
-              }`}
-          >
-            <input
-              type="radio"
-              name="subCategory"
-              checked={selectedSubCategory === subCategory.sub_category_id}
-              onChange={() => handleSubCategoryChange(subCategory.sub_category_id)}
-              className="hidden"
-            />
-            <span
-              className={`w-5 h-5 border-2 rounded-full flex items-center justify-center mr-3 ${selectedSubCategory === subCategory.sub_category_id ? "border-purple-700" : "border-gray-400"
-                }`}
+      {selectedCategory && (
+        <div className="mt-6">
+          <h3 className="font-semibold text-lg text-gray-700">Sub Categories</h3>
+          {displayedSubCategories.sort((a, b) => a.name.localeCompare(b.name)).map((subCategory) => (
+            <label
+              key={subCategory.sub_category_id}
+              className={`flex items-center cursor-pointer p-2 rounded-lg transition ${selectedSubCategory === subCategory.sub_category_id ? "bg-blue-100" : "hover:bg-gray-100"}`}
             >
-              {selectedSubCategory === subCategory.sub_category_id && (
-                <motion.div className="w-3 h-3 bg-purple-500 rounded-full" layoutId="subCategorySelection" />
-              )}
-            </span>
-            {subCategory.name}
-          </label>
-        ))}
-        {subCategories.length > 5 && (
-          <button
-            onClick={() => setShowAllSubCategories(!showAllSubCategories)}
-            className="mt-2 text-purple-800 hover:underline transition"
-          >
-            {showAllSubCategories ? "Show Less" : "View All"}
-          </button>
-        )}
-      </div>
+              <input
+                type="radio"
+                name="subCategory"
+                checked={selectedSubCategory === subCategory.sub_category_id}
+                onChange={() => handleSubCategoryChange(subCategory.sub_category_id)}
+                className="hidden"
+              />
+              <span
+                className={`w-5 h-5 border-2 rounded-full flex items-center justify-center mr-3 ${selectedSubCategory === subCategory.sub_category_id ? "border-purple-700" : "border-gray-400"}`}
+              >
+                {selectedSubCategory === subCategory.sub_category_id && (
+                  <motion.div className="w-3 h-3 bg-purple-500 rounded-full" layoutId="subCategorySelection" />
+                )}
+              </span>
+              {subCategory.name}
+            </label>
+          ))}
+          {filteredSubCategories.length > 5 && (
+            <button
+              onClick={() => setShowAllSubCategories(!showAllSubCategories)}
+              className="mt-2 text-purple-800 hover:underline transition"
+            >
+              {showAllSubCategories ? "Show Less" : "View All"}
+            </button>
+          )}
+        </div>
+      )}
 
       {/* Item Selection */}
-      <div className="mt-6">
-        <h3 className="font-semibold text-lg text-gray-700">Item</h3>
-        {displayedItems.sort((a, b) => a.name.localeCompare(b.name)).map((item) => (
-          <label
-            key={item.item_id}
-            className={`flex items-center cursor-pointer p-2 rounded-lg transition ${selectedItem === item.item_id ? "bg-blue-100" : "hover:bg-gray-100"
-              }`}
-          >
-            <input
-              type="radio"
-              name="item"
-              checked={selectedItem === item.item_id}
-              onChange={() => handleItemChange(item.item_id)}
-              className="hidden"
-            />
-            <span
-              className={`w-5 h-5 border-2 rounded-full flex items-center justify-center mr-3 ${selectedItem === item.item_id ? "border-purple-700" : "border-gray-400"
-                }`}
+      {selectedSubCategory && (
+        <div className="mt-6">
+          <h3 className="font-semibold text-lg text-gray-700">Items</h3>
+          {displayedItems.sort((a, b) => a.name.localeCompare(b.name)).map((item) => (
+            <label
+              key={item.item_id}
+              className={`flex items-center cursor-pointer p-2 rounded-lg transition ${selectedItem === item.item_id ? "bg-blue-100" : "hover:bg-gray-100"}`}
             >
-              {selectedItem === item.item_id && (
-                <motion.div className="w-3 h-3 bg-purple-500 rounded-full" layoutId="itemSelection" />
-              )}
-            </span>
-            {item.name}
-          </label>
-        ))}
-        {items.length > 5 && (
-          <button
-            onClick={() => setShowAllItems(!showAllItems)}
-            className="mt-2 text-purple-800 hover:underline transition"
-          >
-            {showAllItems ? "Show Less" : "View All"}
-          </button>
-        )}
-      </div>
+              <input
+                type="radio"
+                name="item"
+                checked={selectedItem === item.item_id}
+                onChange={() => handleItemChange(item.item_id)}
+                className="hidden"
+              />
+              <span
+                className={`w-5 h-5 border-2 rounded-full flex items-center justify-center mr-3 ${selectedItem === item.item_id ? "border-purple-700" : "border-gray-400"}`}
+              >
+                {selectedItem === item.item_id && (
+                  <motion.div className="w-3 h-3 bg-purple-500 rounded-full" layoutId="itemSelection" />
+                )}
+              </span>
+              {item.name}
+            </label>
+          ))}
+          {filteredItems.length > 5 && (
+            <button
+              onClick={() => setShowAllItems(!showAllItems)}
+              className="mt-2 text-purple-800 hover:underline transition"
+            >
+              {showAllItems ? "Show Less" : "View All"}
+            </button>
+          )}
+        </div>
+      )}
 
       {/* Price Filter */}
       <div className="mt-6">

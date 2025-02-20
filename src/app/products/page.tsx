@@ -131,30 +131,32 @@ const ProductsList = () => {
       </div>
 
       {/* Banner Image */}
-      <div className="w-full min-h-[250px] sm:min-h-[300px] md:h-[400px] lg:h-[600px] rounded-lg overflow-hidden relative group">
-        <img
-          src="https://gymnation.com/media/d1efluel/ronaldo-cr7.jpg"
-          alt="Banner"
-          className="w-full h-full object-cover transition-transform duration-500 "
-        />
-        <div className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/20 transition-all duration-500 px-4">
-          <h1 className="text-white text-2xl sm:text-3xl md:text-4xl font-bold text-center">
-            Explore Our Best Collection
-          </h1>
+      <div className="pt-[3rem] px-[1rem] sm:px-[2rem] md:px-[4rem] lg:px-[6rem] xl:px-[10rem]">
+        <div className="w-full min-h-[250px] sm:min-h-[300px] md:h-[400px] lg:h-[450px] relative group">
+          <img
+            src="https://gymnation.com/media/d1efluel/ronaldo-cr7.jpg"
+            alt="Banner"
+            className="w-full h-full object-contain sm:object-cover transition-transform duration-500 "
+          />
+          <div className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/20 transition-all duration-500 px-4 lg:p-[8rem]">
+            <h1 className="text-white text-2xl sm:text-3xl md:text-4xl font-bold text-center">
+              Explore Our Best Collection
+            </h1>
+          </div>
         </div>
       </div>
 
 
 
       {/* Content Area: Sidebar & Items Grid */}
-      <div className="flex flex-col md:flex-row">
+      <div className="flex flex-col md:flex-row lg:p-[8rem]">
 
         {/* Sidebar */}
         <motion.aside
           initial={{ x: -100, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           transition={{ duration: 0.5 }}
-          className="w-full md:w-[30%] lg:w-[20%] p-6"
+          className="w-full md:w-[30%] lg:w-[30%] p-6"
         >
           <Sidebar selections={selections} onFilterChange={handleFilterChange} />
         </motion.aside>
@@ -164,10 +166,10 @@ const ProductsList = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
-          className="w-full md:w-[70%] lg:w-[80%] p-6"
+          className="w-full"
         >
           {/* Items Grid */}
-          <div className="w-full h-max grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+          <div className="w-full h-max grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 p-6">
             {data.length ? (
               data.map((item) => (
                 <motion.div key={item.id} whileHover={{ scale: 1.03 }} className="flex">
