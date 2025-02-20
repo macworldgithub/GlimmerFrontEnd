@@ -1,6 +1,6 @@
 "use client";
 
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import ShowUser from "./ShowUser";
@@ -8,10 +8,78 @@ import ProductSearchBar from "./PrductSearchBar";
 import Logo from "@/assets/images/logo.png";
 import SideMenu from "./side-menu";
 import CartNavbar from "./cart-navbar";
+import { useEffect, useState } from "react";
+import { getAllProductItem, getAllProducts } from "@/api/product";
+
+interface CategorySelection {
+    category_id: string;
+    category_name: string;
+    sub_categories: {
+        sub_category_id: string;
+        name: string;
+        items: {
+            item_id: string;
+            name: string;
+        }[];
+    }[];
+}
 
 const NavbarClient = ({ session, handleLogout }: { session: any; handleLogout: () => void }) => {
     const pathname = usePathname();
+    const router = useRouter();
+    const searchParams = useSearchParams();
     const isProductsPage = pathname === "/selfcare-products" || pathname === "/products";
+
+    const [selections, setSelections] = useState<CategorySelection[]>([]);
+    const [products, setProducts] = useState<any[]>([]);
+    const [total, setTotal] = useState(0);
+
+    useEffect(() => {
+        const fetchSelections = async () => {
+            try {
+                const productItemsRes = await getAllProductItem();
+                setSelections(transformData(productItemsRes));
+            } catch (error) {
+                console.error("Error fetching selections:", error);
+            }
+        };
+        fetchSelections();
+    }, []);
+
+    function transformData(data: any[]): CategorySelection[] {
+        return data.map((category) => ({
+            category_id: category.product_category._id,
+            category_name: category.product_category.name,
+            sub_categories: category.sub_categories.map((subCategory: any) => ({
+                sub_category_id: subCategory._id,
+                name: subCategory.name,
+                items: subCategory.items.map((item: any) => ({
+                    item_id: item._id,
+                    name: item.name,
+                })),
+            })),
+            created_at: category.product_category.created_at,
+        }));
+    }
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const categoryFilter = searchParams.get("category") ?? "";
+                const subCategoryFilter = searchParams.get("sub_category") ?? "";
+                const itemFilter = searchParams.get("item") ?? "";
+                const page = Number(searchParams.get("page")) || 1;
+
+                const res = await getAllProducts(categoryFilter, subCategoryFilter, itemFilter, 0, 0, page);
+                setProducts(res.products);
+                setTotal(res.total);
+            } catch (error) {
+                console.error("Error fetching products:", error);
+            }
+        };
+
+        fetchData();
+    }, [searchParams]);
 
     return (
         <>
@@ -21,7 +89,7 @@ const NavbarClient = ({ session, handleLogout }: { session: any; handleLogout: (
                         <img src={Logo.src} alt="logo" className="h-16" />
                     </Link>
                     <div className={cn("flex w-full", { "justify-end pr-10": isProductsPage })}>
-                        <ProductSearchBar className="max-md:hidden" />
+                        <ProductSearchBar selections={selections} className="max-md:hidden" />
                     </div>
                 </div>
 
@@ -32,7 +100,7 @@ const NavbarClient = ({ session, handleLogout }: { session: any; handleLogout: (
                 </div>
             </div>
             <div className="flex justify-center mb-5">
-                <ProductSearchBar className="md:hidden" />
+                <ProductSearchBar selections={selections} className="md:hidden" />
             </div>
         </>
     );
