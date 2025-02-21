@@ -112,7 +112,6 @@ const CategoryNavMenu = ({ className }: { className?: string }) => {
       const response = await axios.get<any[]>(
         `${BACKEND_URL}/product_item/get_all_product_item`
       );
-      console.log(response.data, "lellllll");
       setMenuItems(transformToMenuItems(response.data, HandlePath));
       setCategories(response.data);
     } catch (error) {
@@ -125,13 +124,12 @@ const CategoryNavMenu = ({ className }: { className?: string }) => {
     get_all_categories();
   }, []);
 
-  useEffect(() => {
-    console.log("oooo", menuItems);
-  }, [menuItems]);
+  // useEffect(() => {
+  //   console.log("oooo", menuItems);
+  // }, [menuItems]);
 
   function HandlePath(e: any) {
     let path = e.split("-");
-    console.log(path, "hehe");
     let str = "/products?";
     if (path[0]) {
       str = str + `category=${path[0]}`;
