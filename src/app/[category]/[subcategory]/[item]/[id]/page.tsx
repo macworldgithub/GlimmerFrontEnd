@@ -142,17 +142,17 @@ const ProductDisplay = () => {
         <CategoryNavMenu />
       </div>
       {/* Breadcrumbs */}
-      <div className="breadcrumbs mb-4 text-xl px-10">
-        <Link href="/" className="text-gray-500 font-medium">Home</Link>
-        <span className="mx-2 text-gray-500 font-medium">/</span>
-        <Link href="/selfcare-products" className="text-gray-500 font-medium">Selfcare Products</Link>
-        <span className="mx-2 text-gray-500 font-medium">/</span>
-        <Link href={productsUrl} className="text-gray-500 font-medium">Products</Link>
+      <div className="breadcrumbs mb-4 text-xl lg:text-xl px-10">
+        <Link href="/" className="text-gray-500 font-medium text-base lg:text-xl">Home</Link>
+        <span className="mx-2 text-gray-500 font-medium text-base lg:text-xl">/</span>
+        <Link href="/selfcare-products" className="text-gray-500 font-medium text-base lg:text-xl">Selfcare Products</Link>
+        <span className="mx-2 text-gray-500 font-medium text-base lg:text-xl">/</span>
+        <Link href={productsUrl} className="text-gray-500 font-medium text-base lg:text-xl">Products</Link>
 
         {product && (
           <>
-            <span className="mx-2 text-purple-800">/</span>
-            <span className="text-purple-800 font-medium">Detail</span>
+            <span className="mx-2 text-purple-800 text-base lg:text-xl">/</span>
+            <span className="text-purple-800 font-medium text-base lg:text-xl">Detail</span>
           </>
         )}
       </div>
