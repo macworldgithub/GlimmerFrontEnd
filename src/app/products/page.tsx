@@ -7,6 +7,7 @@ import Card from "@/common/Card";
 import { getAllProductItem, getAllProducts } from "@/api/product";
 import Sidebar from "@/common/Sidebar";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 interface CategorySelection {
   category_id: string;
@@ -126,10 +127,22 @@ const ProductsList = () => {
     <div className="flex flex-col w-[99vw] pb-[17rem]">
 
       {/* Category Navigation Menu */}
-      <div className="w-full">
+      <div className="w-full mb-4">
         <CategoryNavMenu />
       </div>
+      {/* Breadcrumbs */}
+      <div className="breadcrumbs mb-4 text-xl px-10">
+        <Link href="/" className="text-gray-500 font-medium">Home</Link>
+        <span className="mx-2 text-gray-500 font-medium">/</span>
+        <Link href="/selfcare-products" className="text-gray-500 font-medium">Selfcare Products</Link>
 
+        {(categoryFilter || subCategoryFilter || itemFilter) && (
+          <>
+            <span className="mx-2 text-purple-800">/</span>
+            <span className="text-purple-800 font-medium">Products</span>
+          </>
+        )}
+      </div>
       {/* Banner Image */}
       <div className="pt-[3rem] px-[1rem] sm:px-[2rem] md:px-[4rem] lg:px-[6rem] xl:px-[10rem]">
         <div className="w-full min-h-[250px] sm:min-h-[300px] md:h-[400px] lg:h-[450px] relative group">

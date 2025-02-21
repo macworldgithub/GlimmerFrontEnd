@@ -14,12 +14,14 @@ import MustItems from "./components/MustItems";
 import SaloonPictures from "@/common/SaloonPictures";
 import { Suspense } from "react";
 import BoxContainer from "@/common/box-container";
+import Breadcrumbs from "@/common/breadcrumb";
 
 export default async function Home() {
   return (
     <>
       <Suspense fallback={<div>Loading...</div>}>
         <CategoryNavMenu className="mb-4" />
+        <Breadcrumbs />
         <Hero />
         <Assurity />
         <OfferPictures />

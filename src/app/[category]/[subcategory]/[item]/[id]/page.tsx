@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { sampleProducts } from "@/data";
-import { useParams } from "next/navigation";
+import { useParams, usePathname, useSearchParams } from "next/navigation";
 import CategoryNavMenu from "@/common/category-nav-menu";
 import { useDispatch } from "react-redux";
 import {
@@ -21,6 +21,7 @@ import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 const ProductDisplay = () => {
   const Cart = useSelector((state: RootState) => state.cart);
@@ -50,6 +51,12 @@ const ProductDisplay = () => {
   const [selectedType, setSelectedType] = useState();
 
   const path = useParams();
+  const pathname = usePathname();
+
+  const pathSegments = pathname.split("/").filter(Boolean);
+  const [category, subCategory, item] = pathSegments;
+
+  const productsUrl = `/products${category ? `?category=${category}` : ""}${subCategory ? `&sub_category=${subCategory}` : ""}${item ? `&item=${item}` : ""}`;
 
   const fetchData = async (id: string) => {
     try {
@@ -131,7 +138,24 @@ const ProductDisplay = () => {
 
   return (
     <>
-      <CategoryNavMenu />
+      <div className="w-full mb-4">
+        <CategoryNavMenu />
+      </div>
+      {/* Breadcrumbs */}
+      <div className="breadcrumbs mb-4 text-xl px-10">
+        <Link href="/" className="text-gray-500 font-medium">Home</Link>
+        <span className="mx-2 text-gray-500 font-medium">/</span>
+        <Link href="/selfcare-products" className="text-gray-500 font-medium">Selfcare Products</Link>
+        <span className="mx-2 text-gray-500 font-medium">/</span>
+        <Link href={productsUrl} className="text-gray-500 font-medium">Products</Link>
+
+        {product && (
+          <>
+            <span className="mx-2 text-purple-800">/</span>
+            <span className="text-purple-800 font-medium">Detail</span>
+          </>
+        )}
+      </div>
       <div className="mb-8 flex flex-col justify-center w-[99vw] gap-8 p-8 md:mb-5 md:flex-row md:gap-16 lg:mb-10">
         {/* Left Side: Product Image Gallery */}
         <div className="flex flex-col items-center">
