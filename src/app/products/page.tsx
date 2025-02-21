@@ -95,18 +95,6 @@ const ProductsList = () => {
   };
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-
-    if (categoryFilter || subCategoryFilter || itemFilter || (minPriceFilter && maxPriceFilter)) {
-      params.delete("category");
-      params.delete("sub_category");
-      params.delete("item");
-      params.delete("min_price");
-      params.delete("max_price");
-
-      router.replace(`${pathname}?${params.toString()}`);
-    }
-
     fetchData();
   }, [page, categoryFilter, subCategoryFilter, itemFilter, minPriceFilter, maxPriceFilter]);
 
