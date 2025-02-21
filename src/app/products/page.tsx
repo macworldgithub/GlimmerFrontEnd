@@ -42,8 +42,8 @@ const ProductsList = () => {
   const categoryFilter = searchParams.get("category") ?? "";
   const subCategoryFilter = searchParams.get("sub_category") ?? "";
   const itemFilter = searchParams.get("item") ?? "";
-  const minPriceFilter = Number(searchParams.get("min_price")) ?? "";
-  const maxPriceFilter = Number(searchParams.get("max_price")) ?? "";
+  const minPriceFilter = Number(searchParams.get("min_price")) ?? 0;
+  const maxPriceFilter = Number(searchParams.get("max_price")) ?? Infinity;
   const page = Number(searchParams.get("page")) || 1;
 
   useEffect(() => {
@@ -92,8 +92,14 @@ const ProductsList = () => {
   };
 
   useEffect(() => {
+    // if (minPriceFilter && maxPriceFilter) {
+    //   const currentUrl = new URL(window.location.href);
+    //   currentUrl.searchParams.delete('min_price');
+    //   currentUrl.searchParams.delete('max_price');
+    //   window.history.replaceState(null, '', currentUrl.toString());
+    // }
     fetchData();
-  }, [page, categoryFilter, subCategoryFilter, itemFilter]);
+  }, [page, categoryFilter, subCategoryFilter, itemFilter, minPriceFilter, maxPriceFilter]);
 
   const handlePageChange = (newPage: number) => {
     const params = new URLSearchParams(searchParams);

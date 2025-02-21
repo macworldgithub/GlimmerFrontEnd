@@ -57,13 +57,16 @@ const Sidebar = ({
   const displayedItems = showAllItems ? filteredItems : filteredItems.slice(0, 5);
 
   const handlePriceChange = () => {
+    const min = minPrice ? Number(minPrice) : 0;
+    const max = maxPrice ? Number(maxPrice) : Infinity;
+
     onFilterChange({
       category: selectedCategory,
       sub_category: selectedSubCategory,
       item: selectedItem,
       name: itemName,
-      min_price: minPrice,
-      max_price: maxPrice,
+      min_price: min,
+      max_price: max,
     });
   };
 
@@ -185,19 +188,19 @@ const Sidebar = ({
             placeholder="Min"
             value={minPrice}
             onChange={(e) => setMinPrice(e.target.value)}
-            className="w-1/2 p-2 border rounded-md"
+            className="w-1/2 p-2 border border-purple-800 bg-transparent rounded-md focus:outline-none focus:border-purple-800"
           />
           <input
             type="number"
             placeholder="Max"
             value={maxPrice}
             onChange={(e) => setMaxPrice(e.target.value)}
-            className="w-1/2 p-2 border rounded-md"
+            className="w-1/2 p-2 border border-purple-800 bg-transparent rounded-md focus:outline-none focus:border-purple-800"
           />
         </div>
         <button
           onClick={handlePriceChange}
-          className="mt-2 bg-purple-700 text-white px-4 py-2 rounded-md hover:bg-purple-800"
+          className="w-full mt-2 bg-purple-800 text-white px-4 py-2 rounded-md hover:bg-purple-900"
         >
           Apply
         </button>

@@ -292,13 +292,6 @@ const ProductDisplay = () => {
           </div>
           <hr className="my-2.5 border-t border-gray-400 dark:text-gray-500 w-full" />
 
-          {/* Product Description */}
-          <p className="text-gray-700 dark:text-gray-500 mt-1">
-            {product?.description
-              ? product.description
-              : "This product has no description."}
-          </p>
-
           {/* Size, Stock, Type */}
           <div className="grid grid-cols-2 gap-3 mt-3">
             <div className="flex items-center font-semibold text-gray-700 dark:text-gray-700">
