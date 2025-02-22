@@ -1,27 +1,27 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { sampleProducts } from "@/data";
-import { useParams, usePathname, useSearchParams } from "next/navigation";
+import { getProductById } from "@/api/product";
+import Card from "@/common/Card";
 import CategoryNavMenu from "@/common/category-nav-menu";
-import { useDispatch } from "react-redux";
+import { sampleProducts } from "@/data";
 import {
   addItem,
   updateProductSize,
   updateProductType,
   updateQty,
 } from "@/reduxSlices/cartSlice";
-import { useSelector } from "react-redux";
 import { RootState } from "@/store/reduxStore";
-import { getProductById } from "@/api/product";
 import Image from "next/image";
-import Card from "@/common/Card";
+import { useParams, usePathname } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/navigation";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { MdKeyboardArrowRight, MdOutlineKeyboardArrowLeft } from "react-icons/md";
+import "swiper/css";
+import "swiper/css/navigation";
+import { Navigation } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
 
 const ProductDisplay = () => {
   const Cart = useSelector((state: RootState) => state.cart);
@@ -136,6 +136,26 @@ const ProductDisplay = () => {
     alert("Your bulk buying request has been submitted!");
   };
 
+
+  const images = [product?.image1, product?.image2, product?.image3].filter(Boolean);
+
+  // Ensure there are always 3 images (fallback for missing ones)
+  while (images.length < 3) {
+    images.push("/assets/images/default_image.jpg");
+  }
+
+  const [index, setIndex] = useState(0);
+
+  // Handle Next Image
+  const handleNext = () => {
+    setIndex((prev) => (prev + 1) % images.length);
+  };
+
+  // Handle Previous Image
+  const handlePrev = () => {
+    setIndex((prev) => (prev - 1 + images.length) % images.length);
+  };
+
   return (
     <>
       <div className="w-full mb-4">
@@ -156,11 +176,11 @@ const ProductDisplay = () => {
           </>
         )}
       </div>
-      <div className="mb-8 flex flex-col justify-center w-[99vw] gap-8 p-8 md:mb-5 md:flex-row md:gap-16 lg:mb-10">
+      <div className="mb-8 flex flex-col w-[80vw] mx-auto gap-8 p-8 md:mb-5 md:flex-row md:gap-12 lg:mb-10">
         {/* Left Side: Product Image Gallery */}
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center w-[65%]">
           {/* Main Image Container */}
-          <div className="w-full max-w-[650px] sm:w-[450px] md:w-[550px] h-[400px] flex items-center justify-center overflow-hidden rounded-md shadow bg-gray-100">
+          <div className="w-full max-w-[650px] sm:w-[450px] md:w-[500px] h-[400px] flex items-center justify-center overflow-hidden rounded-md shadow bg-gray-100">
             <img
               src={product?.image1 ? product.image1 : "/assets/images/default_image.jpg"}
               alt={product?.name}
@@ -169,7 +189,7 @@ const ProductDisplay = () => {
           </div>
 
           {/* Thumbnails Section */}
-          <div className="mt-6 flex gap-4 flex-wrap justify-center">
+          {/* <div className="mt-6 flex gap-4 flex-wrap justify-center">
             {[product?.image1, product?.image2, product?.image3].map(
               (image, index) =>
                 image && (
@@ -181,12 +201,42 @@ const ProductDisplay = () => {
                   </div>
                 )
             )}
+          </div> */}
+
+
+          <div className="mt-10 flex items-center justify-center w-full max-w-[500px]">
+            {/* Left Arrow Button */}
+            <button onClick={handlePrev} className="p-2 text-gray-500">
+              <MdOutlineKeyboardArrowLeft size={50} />
+            </button>
+
+            {/* Thumbnails */}
+            <div className="flex gap-2 overflow-hidden">
+              {images.map((image, i) => (
+                <div
+                  key={i}
+                  className={`mx-4 w-[60px] h-[60px] sm:w-[100px] sm:h-[100px] md:w-[90px] md:h-[90px] flex items-center justify-center overflow-hidden rounded-md shadow bg-gray-100 border border-gray-300 cursor-pointer 
+            ${i === index ? "border-blue-500" : ""}`} // Highlight active thumbnail
+                >
+                  <img
+                    src={image}
+                    alt={`Thumbnail ${i + 1}`}
+                    className="w-full h-full object-cover"
+                    onError={(e) => (e.currentTarget.src = "/assets/images/default_image.jpg")}
+                  />
+                </div>
+              ))}
+            </div>
+
+            {/* Right Arrow Button */}
+            <button onClick={handleNext} className="p-2 text-gray-500">
+              <MdKeyboardArrowRight size={50} />
+            </button>
           </div>
 
 
-
           {/* Ratings Section */}
-          <div className="mt-8 w-full hidden lg:block">
+          <div className="mt-20 w-full hidden lg:block">
             <h2 className="text-4xl font-semibold text-gray-800">Ratings</h2>
             <p className="text-gray-700 mt-1 text-xl">
               {product?.ratings ? `${product.ratings}/5` : "No ratings yet"}
@@ -235,13 +285,13 @@ const ProductDisplay = () => {
         </div>
 
         {/* Right Side: Product Info */}
-        <div className="flex flex-col gap-4 relative w-[20rem]">
+        <div className="flex flex-col gap-4 relative w-[35%]">
           <h1 className="font-semibold text-2xl">{product?.name}</h1>
           {/* Price */}
-          <div className="font-semibold text-2xl">
+          <div className="font-semibold text-4xl">
             {product?.discounted_price > 0 ? (
               <>
-                <span>{product?.discounted_price} PKR</span>
+                <span className="text-[#583FA8]">{product?.discounted_price} PKR</span>
                 {product?.base_price > product?.discounted_price && (
                   <span className="text-gray-500 line-through ml-2 mr-2 text-xs">
                     {product?.base_price} PKR
@@ -268,7 +318,7 @@ const ProductDisplay = () => {
             {[...Array(4)].map((_, index) => (
               <svg
                 key={index}
-                className="w-4 h-4 text-purple-800 ms-1"
+                className="w-4 h-4 text-[#583FA8] ms-1"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="currentColor"
@@ -347,15 +397,15 @@ const ProductDisplay = () => {
           </div>
 
           {/* Voucher Promo */}
-          <div className="mt-4 bg-white border border-gray-200 shadow-sm dark:text-white p-4 rounded-lg">
+          <div className="mt-4 bg-white shadow-lg dark:text-white px-6 py-2 pl-8 rounded-lg">
             <div className="mb-4">
-              <h4 className="font-semibold text-xl text-gray-800">
+              <h4 className="font-semibold text-lg text-gray-800">
                 Voucher Promo
               </h4>
               <p className="text-gray-700 dark:text-gray-700">
                 {product?.promoCode
-                  ? `There are ${product.promoCode} promo codes for you`
-                  : "There are 3 promo codes for you"}
+                  ? `there are ${product.promoCode} promo codes for you`
+                  : "there are 3 promo codes for you"}
               </p>
             </div>
 
@@ -376,7 +426,7 @@ const ProductDisplay = () => {
               ].map((item, index) => (
                 <div key={index} className="mb-4 flex items-center">
                   <div>
-                    <h4 className="font-semibold text-xl text-gray-800 dark:text-purple-700">
+                    <h4 className="font-semibold text-md text-[#583FA8] ">
                       {item.title}
                     </h4>
                     <p className="text-gray-700 dark:text-gray-700">
@@ -404,7 +454,7 @@ const ProductDisplay = () => {
           {/* Buttons Section */}
           <div className="flex items-center gap-4 mt-4">
             <button
-              className="flex-1 w-full flex items-center text-xs justify-center gap-2 py-3 px-6 border border-purple-800 text-purple-800 font-semibold rounded-md hover:border-purple-800 hover:text-purple-800"
+              className="flex-1 w-full flex items-center text-xs justify-center gap-2 h-12 px-6 border border-[#583FA8] text-[#583FA8] font-semibold rounded-md hover:border-purple-800 hover:text-purple-800"
               onClick={handleAddToCart}
             >
               <Image
@@ -432,8 +482,8 @@ const ProductDisplay = () => {
               </div>
             )}
 
-            <button onClick={handleBulkBuy} className="flex-1 w-full py-3 px-6 text-xs bg-purple-800 text-white font-semibold rounded-md hover:bg-purple-900">
-              BULK BUYING
+            <button onClick={handleBulkBuy} className="flex-1 w-full h-12 px-6 text-xs bg-[#583FA8] text-white font-semibold rounded-md hover:bg-purple-900">
+              BUY NOW
             </button>
             {isBulkModalOpen && (
               <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
@@ -495,7 +545,7 @@ const ProductDisplay = () => {
             )}
             <button
               onClick={() => setIsWishlisted(!isWishlisted)}
-              className="p-2"
+                className="px-3 border border-[#583FA8] text-[#583FA8 ] h-11 rounded-md"
             >
               <Image
                 src={
@@ -512,7 +562,7 @@ const ProductDisplay = () => {
 
 
           {/* Tabs Section */}
-          <div className="mt-6">
+          <div className="mt-12">
             <div className="flex border-b border-gray-300">
               {tabs.map((tab) => (
                 <button
