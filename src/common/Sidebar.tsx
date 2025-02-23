@@ -34,7 +34,7 @@ const Sidebar = ({
     setSelectedCategory(categoryId);
     setSelectedSubCategory("");
     setSelectedItem("");
-    onFilterChange({ category: categoryId, sub_category: "", item: "", name: itemName, min_price: minPrice, max_price: maxPrice });
+    onFilterChange({ category: categoryId, sub_category: "", item: "", name: itemName, min_price: "", max_price: "" });
   };
 
   const handleSubCategoryChange = (subCategoryId: string) => {
@@ -48,18 +48,9 @@ const Sidebar = ({
     onFilterChange({ category: selectedCategory, sub_category: selectedSubCategory, item: itemId, name: itemName, min_price: minPrice, max_price: maxPrice });
   };
 
-  const selectedCategoryData = selections.find(category => category.category_id === selectedCategory);
-  const filteredSubCategories = selectedCategoryData ? selectedCategoryData.sub_categories : [];
-  const displayedSubCategories = showAllSubCategories ? filteredSubCategories : filteredSubCategories.slice(0, 5);
-
-  const selectedSubCategoryData = filteredSubCategories.find(subCategory => subCategory.sub_category_id === selectedSubCategory);
-  const filteredItems = selectedSubCategoryData ? selectedSubCategoryData.items : [];
-  const displayedItems = showAllItems ? filteredItems : filteredItems.slice(0, 5);
-
   const handlePriceChange = () => {
-    const min = minPrice ? Number(minPrice) : 0;
-    const max = maxPrice ? Number(maxPrice) : Infinity;
-
+    const min = Number(minPrice);
+    const max = Number(maxPrice);
     onFilterChange({
       category: selectedCategory,
       sub_category: selectedSubCategory,
@@ -69,6 +60,14 @@ const Sidebar = ({
       max_price: max,
     });
   };
+
+  const selectedCategoryData = selections.find(category => category.category_id === selectedCategory);
+  const filteredSubCategories = selectedCategoryData ? selectedCategoryData.sub_categories : [];
+  const displayedSubCategories = showAllSubCategories ? filteredSubCategories : filteredSubCategories.slice(0, 5);
+
+  const selectedSubCategoryData = filteredSubCategories.find(subCategory => subCategory.sub_category_id === selectedSubCategory);
+  const filteredItems = selectedSubCategoryData ? selectedSubCategoryData.items : [];
+  const displayedItems = showAllItems ? filteredItems : filteredItems.slice(0, 5);
 
   const sortedCategories = selections.sort((a, b) => a.category_name.localeCompare(b.category_name));
 

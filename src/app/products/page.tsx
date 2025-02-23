@@ -43,7 +43,7 @@ const ProductsList = () => {
   const subCategoryFilter = searchParams.get("sub_category") ?? "";
   const itemFilter = searchParams.get("item") ?? "";
   const minPriceFilter = Number(searchParams.get("min_price")) ?? 0;
-  const maxPriceFilter = Number(searchParams.get("max_price")) ?? Infinity;
+  const maxPriceFilter = Number(searchParams.get("max_price")) ?? 0;
   const page = Number(searchParams.get("page")) || 1;
 
   useEffect(() => {
@@ -77,27 +77,24 @@ const ProductsList = () => {
 
   const fetchData = async () => {
     try {
-      if (categoryFilter && !subCategoryFilter && !itemFilter && !minPriceFilter && !maxPriceFilter) {
-        const res = await getAllProducts(categoryFilter, "", "", 0, 0, page);
-        setData(res.products);
-        setTotal(res.total);
-      } else {
-        const res = await getAllProducts(categoryFilter, subCategoryFilter, itemFilter, minPriceFilter, maxPriceFilter, page);
-        setData(res.products);
-        setTotal(res.total);
-      }
+      const res = await getAllProducts(categoryFilter, subCategoryFilter, itemFilter, 0, 0, page);
+
+      const filteredProducts = res.products.filter((product: any) => {
+        const productPrice = product.base_price || 0;
+        return (
+          (minPriceFilter ? productPrice >= minPriceFilter : true) &&
+          (maxPriceFilter ? productPrice <= maxPriceFilter : true)
+        );
+      });
+
+      setData(filteredProducts);
+      setTotal(res.total || filteredProducts.length);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
   useEffect(() => {
-    // if (minPriceFilter && maxPriceFilter) {
-    //   const currentUrl = new URL(window.location.href);
-    //   currentUrl.searchParams.delete('min_price');
-    //   currentUrl.searchParams.delete('max_price');
-    //   window.history.replaceState(null, '', currentUrl.toString());
-    // }
     fetchData();
   }, [page, categoryFilter, subCategoryFilter, itemFilter, minPriceFilter, maxPriceFilter]);
 
