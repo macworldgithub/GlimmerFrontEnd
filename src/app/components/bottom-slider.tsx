@@ -11,7 +11,7 @@ const BottomSlider = ({ srcs = [] }: Props) => {
     srcs.length > 0 ? srcs : [BottomSliderImg1.src, BottomSliderImg12.src];
 
   return (
-    <div className="mb-6 md:mb-14  w-[99vw]">
+    <div className="px-[8rem] mb-6 md:mb-14  w-[99vw]">
       <AutoSlider type="fade" delay={2000} srcs={_srcs} />
     </div>
   );

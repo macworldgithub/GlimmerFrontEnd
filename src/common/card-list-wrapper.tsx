@@ -107,7 +107,7 @@ const CardListWrapper = ({
       </div>
 
       {/* Original Content for larger screens */}
-      <div className="relative hidden md:block pb-[10rem]">
+      <div className="relative hidden md:block">
         <Swiper
           modules={[Scrollbar]}
           spaceBetween={30}

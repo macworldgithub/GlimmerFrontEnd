@@ -9,11 +9,13 @@ const FakeReviewList = () => {
 			<h2 className="my-4 text-center font-bold text-3xl">
 				Our Trusted Clients
 			</h2>
-			<CardList
-				dataType="review"
-				cards={reviewsData}
-				className="xl:justify-center w-99vw]"
-			/>
+			<div className="mb-[15rem]">
+				<CardList
+					dataType="review"
+					cards={reviewsData}
+					className="xl:justify-center w-[99vw] mx-auto"
+				/>
+			</div>
 		</>
 	);
 };
