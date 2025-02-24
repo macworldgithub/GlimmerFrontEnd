@@ -19,7 +19,7 @@ interface CategorySelection {
 }
 
 
-const PrductSearchBar = ({ selections, className }: { selections: CategorySelection[]; className?: string }) => {
+const PrductSearchBar = ({ selections, products, className }: { selections: CategorySelection[]; products: any[]; className?: string }) => {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -31,7 +31,18 @@ const PrductSearchBar = ({ selections, className }: { selections: CategorySelect
     let matchedCategory: string | null = null;
     let matchedSubCategory: string | null = null;
     let matchedItem: string | null = null;
+    let matchedName: string | null = searchQuery; 
 
+    const matchedProduct = products.find((product) =>
+      product.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    console.log("match Product", matchedProduct);
+    if (matchedProduct) {
+      matchedName = matchedProduct.name;
+      console.log(matchedName);
+      matchedCategory = matchedProduct.category_id;
+      matchedSubCategory = matchedProduct.sub_category_id;
+    }
     // Special case: If the search query is "Makeup", set category ID directly
     if (searchQuery.toLowerCase() === "makeup") {
       matchedCategory = "6790d2749a0b078319c69e9d";
@@ -58,7 +69,7 @@ const PrductSearchBar = ({ selections, className }: { selections: CategorySelect
       });
     }
 
-    if (!matchedCategory && !matchedSubCategory && !matchedItem) {
+    if (!matchedCategory && !matchedSubCategory && !matchedItem && !matchedName) {
       setIsModalOpen(true);
       setTimeout(() => setIsModalOpen(false), 2000);
       return;
@@ -69,6 +80,7 @@ const PrductSearchBar = ({ selections, className }: { selections: CategorySelect
     if (matchedCategory) params.set("category", matchedCategory);
     if (matchedSubCategory) params.set("sub_category", matchedSubCategory);
     if (matchedItem) params.set("item", matchedItem);
+    if (matchedName) params.set("name", matchedName);
     params.set("page", "1"); // Reset page to 1 when filtering
 
     // Navigate to the updated URL
@@ -101,7 +113,7 @@ const PrductSearchBar = ({ selections, className }: { selections: CategorySelect
               className="bg-white rounded-lg shadow-xl p-6 w-80 text-center"
             >
               <p className="text-lg font-semibold text-gray-800">
-                No matching category, subcategory, or item found.
+                No matching category, subcategory, item or product found.
               </p>
             </motion.div>
           </div>
