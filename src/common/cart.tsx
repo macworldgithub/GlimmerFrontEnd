@@ -65,7 +65,7 @@ const Cart = () => {
             <h2 className="mr-2 font-semibold text-2xl">Shopping Cart </h2>
             <p className="text-gray-500">({Cart.ProductList.length} Items)</p>
           </div>
-          <div className="overflow-x-auto flex-none">
+          <div className="max-h-[21rem] overflow-y-auto overflow-x-auto flex-none">
             <table className="table w-full">
               <thead>
                 <tr>

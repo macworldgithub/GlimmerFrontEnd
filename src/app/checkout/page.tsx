@@ -10,7 +10,7 @@ import { RootState } from "@/store/reduxStore";
 import { createOrder } from "@/api/order";
 import toast, { Toaster } from "react-hot-toast";
 import { useDispatch } from "react-redux";
-import { clearCart } from "@/reduxSlices/cartSlice";
+import { clearCart, saveShippingInfo } from "@/reduxSlices/cartSlice";
 
 import { useRouter } from "next/navigation";
 
@@ -46,6 +46,7 @@ export default function Checkout() {
   const [discount, setDiscount] = useState(10);
   const handleInputChange = (e: any) => {
     const { name, value, type, checked } = e.target;
+    console.log(name);
     setFormData({
       ...formData,
       [name]: type === "checkbox" ? checked : value,
@@ -60,8 +61,18 @@ export default function Checkout() {
         router.push("/login");
         return;
       }
-      const res = await createOrder(cart, credentials.token);
 
+      dispatch(saveShippingInfo(formData));
+
+      const orderData = {
+        ...cart,
+        shippingInfo: formData,
+      };
+
+      console.log("Order Data:", orderData);
+
+      const res = await createOrder(orderData, credentials.token);
+      console.log(res);
       if (res) {
         toast.success(
           "Order has been confirmed! You will receive an email shortly."
@@ -77,7 +88,7 @@ export default function Checkout() {
   return (
     <>
       <Toaster />
-      <div className=" p-8 max-sm:h-max h-[100vh] mb-10">
+      <div className=" p-8 max-sm:h-max h-[100vh] mb-[6rem]">
         {cart.ProductList.length > 0 ? (
           <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
@@ -191,7 +202,7 @@ export default function Checkout() {
             </div>
             <div>
               <h2 className="text-lg font-semibold mb-6">Review your cart</h2>
-              <div className="space-y-4">
+              <div className="max-h-48 overflow-y-auto space-y-4">
                 {cart.ProductList.map((item) => (
                   <div key={item.product.id} className="flex justify-between">
                     <div className="flex gap-2">
