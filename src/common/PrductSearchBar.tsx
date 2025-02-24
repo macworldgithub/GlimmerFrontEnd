@@ -39,7 +39,6 @@ const PrductSearchBar = ({ selections, products, className }: { selections: Cate
     console.log("match Product", matchedProduct);
     if (matchedProduct) {
       matchedName = matchedProduct.name;
-      console.log(matchedName);
       matchedCategory = matchedProduct.category_id;
       matchedSubCategory = matchedProduct.sub_category_id;
     }

@@ -96,8 +96,6 @@ const ProductsList = () => {
         return matchesPrice && matchesName;
       });
   
-      console.log("22222222");
-      console.log(filteredProducts);
       setData(filteredProducts);
       setTotal(res.total || filteredProducts.length);
     } catch (error) {
