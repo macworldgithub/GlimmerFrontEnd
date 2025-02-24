@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 // import Router, { useRouter } from "next/router";
 import { useRouter } from "next/navigation";
@@ -55,12 +55,14 @@ const CategoryNavMenu = ({ className }: { className?: string }) => {
 
   const [open, setOpen] = useState(false);
 
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
   const sortItems = (arr: any[]) => {
-    return arr.sort((a, b) => a.name.localeCompare(b.name)); 
+    return arr.sort((a, b) => a.name.localeCompare(b.name));
   };
 
   const sortCategories = (arr: any[]) => {
-    return arr.sort((a, b) => a.product_category.name.localeCompare(b.product_category.name)); 
+    return arr.sort((a, b) => a.product_category.name.localeCompare(b.product_category.name));
   };
 
 
@@ -71,7 +73,7 @@ const CategoryNavMenu = ({ className }: { className?: string }) => {
       label: (
         <span
           onClick={(e) => {
-            e.stopPropagation(); 
+            e.stopPropagation();
             handleClick(`${category._id}`);
           }}
         >
@@ -124,9 +126,18 @@ const CategoryNavMenu = ({ className }: { className?: string }) => {
     get_all_categories();
   }, []);
 
-  // useEffect(() => {
-  //   console.log("oooo", menuItems);
-  // }, [menuItems]);
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setSelectedSubCategory([]);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   function HandlePath(e: any) {
     let path = e.split("-");
@@ -189,6 +200,7 @@ const CategoryNavMenu = ({ className }: { className?: string }) => {
 
         {/* Menu is below which need to appear smoothly */}
         <div
+          ref={dropdownRef}
           className={`w-full justify-between px-8 py-1 flex h-max bg-white absolute top-[40px] z-50 transition-all duration-500 ${selectedSubCategory.length > 0
             ? "opacity-100 translate-y-0"
             : "opacity-0 -translate-y-5 pointer-events-none"
