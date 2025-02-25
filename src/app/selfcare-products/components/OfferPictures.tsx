@@ -1,38 +1,36 @@
-"use client";
-import React, { useEffect } from "react";
-import Image from "next/image";
-import axios from "axios";
+import React from "react";
 
 const OfferPictures = () => {
+  const picture = [
+    {
+      id: 1,
+      name: "Hydrating Face Cream",
+      image1: "/assets/saloonPicture/salon.png",
+      discounted_price: 29.99,
+    },
+    {
+      id: 2,
+      name: "Glow Boost Serum",
+      image1: "/assets/saloonPicture/spa.png",
+      discounted_price: 39.99,
+    },
+  ];
+
   return (
-    <div className="w-[99vw] h-max flex justify-center items-center px-5 md:px-[8rem] gap-5 my-8 py-6 md:py-12 max-md:flex-col">
-      <div className="w-[750px] max-md:w-[100%] h-[435px] ">
-        <Image
-          src={"/assets/placeholder/image.png"}
-          width={0}
-          height={0}
-          style={{
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            borderRadius: "10px",
-          }}
-          alt={"Offers"}
-        />
-      </div>
-      <div className="w-[750px] max-md:w-[99%] h-[435px]">
-        <Image
-          src={"/assets/placeholder/image.png"}
-          width={0}
-          height={0}
-          style={{
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            borderRadius: "10px",
-          }}
-          alt="offers"
-        />
+    <div className="flex flex-col gap-4 w-[99vw] p-4 md:p-10 lg:pb-20 h-max rounded">
+      <div className="flex flex-wrap gap-4 w-full justify-center max-md:flex-col">
+        {picture.map((item) => (
+          <div
+            key={item.id}
+            className="w-[40%] max-md:w-full h-auto flex justify-center"
+          >
+            <img
+              src={item.image1}
+              className="w-full h-auto max-h-[576px] object-contain rounded-[10px]"
+              alt={item.name}
+            />
+          </div>
+        ))}
       </div>
     </div>
   );
