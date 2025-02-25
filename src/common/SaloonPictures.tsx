@@ -5,57 +5,40 @@ const SaloonPictures = () => {
     {
       id: 1,
       name: "Hydrating Face Cream",
-      image1:
-        "https://plus.unsplash.com/premium_photo-1683910767532-3a25b821f7ae?q=80&w=1708&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      image1: "/assets/saloonPicture/salon.png",
       discounted_price: 29.99,
     },
     {
       id: 2,
       name: "Glow Boost Serum",
-      image1:
-        "https://images.unsplash.com/photo-1626808642875-0aa545482dfb?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      image1: "/assets/saloonPicture/spa.png",
       discounted_price: 39.99,
     },
     {
       id: 3,
       name: "Daily Moisturizer",
-      image1:
-        "https://images.unsplash.com/photo-1620464003286-a5b0d79f32c2?q=80&w=1936&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      image1: "/assets/saloonPicture/clinic.png",
       discounted_price: 24.99,
     },
     {
       id: 4,
       name: "Daily Moisturizer",
-      image1:
-        "https://images.unsplash.com/photo-1596704017254-9b121068fb31?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      image1: "/assets/saloonPicture/gym.png",
       discounted_price: 24.99,
     },
   ];
+
   return (
-    <div className="flex flex-col gap-3 w-[99vw] lg:pb-[22rem] md:pb-[12rem] p-[10rem] h-max max-md:pb-[5rem] rounded">
-      <div className="flex h-[50%] w-[100%] gap-3 max-md:flex-col">
-        {picture.slice(0, 2).map((item) => (
+    <div className="flex flex-col w-[99vw] px-5 py-6 lg:pb-[22rem] md:pb-[12rem] md:p-[4rem] h-max rounded">
+      <div className="flex flex-wrap gap-5 gap-y-4 justify-center max-md:flex-col">
+        {picture.map((item) => (
           <div
             key={item.id}
-            className="w-[50%] max-md:w-[100%] h-[100%] flex justify-center"
+            className="w-[44%] max-md:w-[100%] h-auto flex justify-center"
           >
             <img
               src={item.image1}
-              className="w-[100%] max-w-[750px] h-auto max-h-[576px] object-cover rounded-[10px]"
-              alt={item.name}
-            />
-          </div>
-        ))}
-      </div>
-      <div className="flex h-[50%] w-[100%] gap-3 max-md:flex-col">
-        {picture.slice(2).map((item) => (
-          <div
-            key={item.id}
-            className="w-[50%] max-md:w-[100%] h-[100%] flex justify-center"
-          >
-            <img
-              src={item.image1}
-              className="w-[100%] max-w-[750px] h-auto max-h-[576px] object-cover rounded-[10px]"
+              className="w-full h-auto object-cover rounded-[10px]"
               alt={item.name}
             />
           </div>
