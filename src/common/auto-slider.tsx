@@ -35,7 +35,7 @@ const AutoSlider = ({ srcs = [], type = "slide", delay = 3000 }: Props) => {
 			onError={(e) => console.log("[hero swiper] error: ", e)}
 			autoplay={{ delay: delay as number }}
 			cssMode={true}
-			className=" mb-6 w-full md:mb-8 "
+			className=" mb-6 w-full md:mb-8 rounded-lg"
 		>
 			{_srcs.map((s, index) => (
 				<SwiperSlide key={s}>

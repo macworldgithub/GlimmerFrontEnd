@@ -63,14 +63,14 @@ const Card = ({ card }: { card: CardType }) => {
 	return (
 		<div
 			className={cn(
-				"flex-none rounded-sm max-md:mr-4 max-md:w-[350px] max-sm:w-[275px] max-md:mx-auto mb-[10rem]",
+				"flex-none rounded-lg max-md:mr-4 max-md:w-[350px] max-sm:w-[275px] max-md:mx-auto mb-[10rem]",
 				bgColor ? `bg-${bgColor}` : "bg-secondary",
 			)}
 		>
 			{image && <figure>{image}</figure>}
 			<div
 				className={cn(
-					"flex flex-col gap-2 p-3",
+					"flex flex-col gap-2 p-3 rounded-lg",
 					border && "border-base-300 border-r border-b border-l",
 				)}
 			>
