@@ -29,30 +29,16 @@ const SaloonPictures = () => {
   ];
 
   return (
-    <div className="flex flex-col gap-3 w-[99vw] px-5 py-6 lg:pb-[22rem] md:pb-[12rem] md:p-[4rem] h-max rounded">
-      <div className="flex flex-wrap gap-3 w-full justify-center max-md:flex-col">
-        {picture.slice(0, 2).map((item) => (
+    <div className="flex flex-col w-[99vw] px-5 py-6 lg:pb-[22rem] md:pb-[12rem] md:p-[4rem] h-max rounded">
+      <div className="flex flex-wrap gap-5 gap-y-4 justify-center max-md:flex-col">
+        {picture.map((item) => (
           <div
             key={item.id}
-            className="w-[48%] max-md:w-[100%] h-auto flex justify-center"
+            className="w-[44%] max-md:w-[100%] h-auto flex justify-center"
           >
             <img
               src={item.image1}
-              className="w-full h-auto max-h-[576px] object-cover rounded-[10px]"
-              alt={item.name}
-            />
-          </div>
-        ))}
-      </div>
-      <div className="flex flex-wrap gap-3 w-full justify-center max-md:flex-col">
-        {picture.slice(2).map((item) => (
-          <div
-            key={item.id}
-            className="w-[48%] max-md:w-[100%] h-auto flex justify-center"
-          >
-            <img
-              src={item.image1}
-              className="w-full h-auto max-h-[576px] object-cover rounded-[10px]"
+              className="w-full h-auto object-cover rounded-[10px]"
               alt={item.name}
             />
           </div>
