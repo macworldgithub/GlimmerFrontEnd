@@ -139,14 +139,23 @@ const ProductDisplay = () => {
   };
 
 
-  const images = [product?.image1, product?.image2, product?.image3].filter(Boolean);
+  const [index, setIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
-  // Ensure there are always 3 images (fallback for missing ones)
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  let images = [product?.image1, product?.image2, product?.image3].filter(Boolean);
+
+  // Ensure at least 3 images (fallback for missing ones)
   while (images.length < 3) {
     images.push("/assets/images/default_image.jpg");
   }
-
-  const [index, setIndex] = useState(0);
 
   // Handle Next Image
   const handleNext = () => {
@@ -157,6 +166,7 @@ const ProductDisplay = () => {
   const handlePrev = () => {
     setIndex((prev) => (prev - 1 + images.length) % images.length);
   };
+
 
   return (
     <>
@@ -178,11 +188,11 @@ const ProductDisplay = () => {
           </>
         )}
       </div>
-      <div className="mb-8 flex flex-col w-[80vw] mx-auto gap-8 p-8 md:mb-5 md:flex-row md:gap-12 lg:mb-10">
+      <div className="mb-8 flex flex-col justify-center lg:w-[80vw] w-full  mx-auto gap-8 p-8 md:mb-5 lg:flex-row lg:gap-12 lg:mb-10">
         {/* Left Side: Product Image Gallery */}
-        <div className="flex flex-col items-center w-[65%]">
+        <div className="flex flex-col items-center lg:w-[65%] w-full">
           {/* Main Image Container */}
-          <div className="w-full max-w-[650px] sm:w-[450px] md:w-[500px] h-[400px] flex items-center justify-center overflow-hidden rounded-md shadow bg-gray-100">
+          <div className="w-full max-w-[650px] max-sm:w-[300px] max-sm:h-[300px] sm:w-[400px] md:w-[500px] sm:h-[400px] flex items-center justify-center overflow-hidden rounded-md shadow bg-gray-100">
             <img
               src={product?.image1 ? product.image1 : "/assets/images/default_image.jpg"}
               alt={product?.name}
@@ -205,38 +215,52 @@ const ProductDisplay = () => {
             )}
           </div> */}
 
+<div className="mt-10 flex items-center justify-center w-full max-w-[500px]">
+      {/* Left Arrow Button (Always Visible) */}
+      <button onClick={handlePrev} className="p-2 text-gray-500">
+        <MdOutlineKeyboardArrowLeft size={50} />
+      </button>
 
-          <div className="mt-10 flex items-center justify-center w-full max-w-[500px]">
-            {/* Left Arrow Button */}
-            <button onClick={handlePrev} className="p-2 text-gray-500">
-              <MdOutlineKeyboardArrowLeft size={50} />
-            </button>
+      {/* Thumbnails */}
+      <div className="flex gap-2 overflow-hidden">
+        {isMobile
+          ? // Show only one image at a time in mobile view
+            [images[index]].map((image, i) => (
+              <div
+                key={i}
+                className="mx-4 w-[120px] h-[120px] sm:w-[140px] sm:h-[140px]  flex items-center justify-center overflow-hidden rounded-md shadow bg-gray-100 border  cursor-pointer border-purple-900"
+              >
+                <img
+                  src={image}
+                  alt={`Thumbnail ${i + 1}`}
+                  className="w-full h-full object-cover"
+                  onError={(e) => (e.currentTarget.src = "/assets/images/default_image.jpg")}
+                />
+              </div>
+            ))
+          : // Show all images in md+ screens
+            images.map((image, i) => (
+              <div
+                key={i}
+                className={`mx-4 md:w-[90px] md:h-[90px] flex items-center justify-center overflow-hidden rounded-md shadow bg-gray-100 border border-gray-300 cursor-pointer 
+              ${i === index ? "border-purple-900" : ""}`}
+              >
+                <img
+                  src={image}
+                  alt={`Thumbnail ${i + 1}`}
+                  className="w-full h-full object-cover"
+                  onError={(e) => (e.currentTarget.src = "/assets/images/default_image.jpg")}
+                />
+              </div>
+            ))}
+      </div>
 
-            {/* Thumbnails */}
-            <div className="flex gap-2 overflow-hidden">
-              {images.map((image, i) => (
-                <div
-                  key={i}
-                  className={`mx-4 w-[60px] h-[60px] sm:w-[100px] sm:h-[100px] md:w-[90px] md:h-[90px] flex items-center justify-center overflow-hidden rounded-md shadow bg-gray-100 border border-gray-300 cursor-pointer 
-            ${i === index ? "border-blue-500" : ""}`} // Highlight active thumbnail
-                >
-                  <img
-                    src={image}
-                    alt={`Thumbnail ${i + 1}`}
-                    className="w-full h-full object-cover"
-                    onError={(e) => (e.currentTarget.src = "/assets/images/default_image.jpg")}
-                  />
-                </div>
-              ))}
-            </div>
-
-            {/* Right Arrow Button */}
-            <button onClick={handleNext} className="p-2 text-gray-500">
-              <MdKeyboardArrowRight size={50} />
-            </button>
-          </div>
-
-
+      {/* Right Arrow Button (Always Visible) */}
+      <button onClick={handleNext} className="p-2 text-gray-500">
+        <MdKeyboardArrowRight size={50} />
+      </button>
+    </div>
+          
           {/* Ratings Section */}
           <div className="mt-20 w-full hidden lg:block">
             <h2 className="text-4xl font-semibold text-gray-800">Ratings</h2>
@@ -286,8 +310,8 @@ const ProductDisplay = () => {
           </div>
         </div>
 
-        {/* Right Side: Product Info */}
-        <div className="flex flex-col gap-4 relative w-[35%]">
+        {/* Right Side: Product Info */} 
+        <div className="flex flex-col gap-4 relative lg:w-[35%] w-full">
           <h1 className="font-semibold text-2xl">{product?.name}</h1>
           {/* Price */}
           <div className="font-semibold text-4xl">
@@ -310,7 +334,7 @@ const ProductDisplay = () => {
                 </div>
               </>
             ) : (
-              <span>{product?.base_price} PKR</span>
+              <span className="text-[[#583FA8]]">{product?.base_price} PKR</span>
             )}
           </div>
 
@@ -456,7 +480,7 @@ const ProductDisplay = () => {
           {/* Buttons Section */}
           <div className="flex items-center gap-4 mt-4">
             <button
-              className={`flex-1 w-full flex items-center text-xs justify-center gap-2 py-3 px-6 border text-purple-800 font-semibold rounded-md 
+              className={`flex-1 w-full flex items-center text-xs justify-center gap-2 py-3 xl:px-6 px-4 border text-purple-800 font-semibold rounded-md 
     ${isButtonDisabled ? 'border-gray-300 text-gray-500 cursor-not-allowed' : 'border-purple-800 hover:border-purple-800 hover:text-purple-800'}`}
               onClick={handleAddToCart}
               disabled={isButtonDisabled}
@@ -486,7 +510,7 @@ const ProductDisplay = () => {
               </div>
             )}
 
-            <button onClick={handleBulkBuy} className="flex-1 w-full h-12 px-6 text-xs bg-[#583FA8] text-white font-semibold rounded-md hover:bg-purple-900">
+            <button onClick={handleBulkBuy} className="flex-1 w-full h-12 xl:px-6 text-xs bg-[#583FA8] text-white font-semibold rounded-md hover:bg-purple-900">
               BUY NOW
             </button>
             {isBulkModalOpen && (
