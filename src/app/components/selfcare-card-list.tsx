@@ -10,7 +10,7 @@ const SeftcareCardList = ({ selfcareItems = [] }: Props) => {
 	const allSelfcareItems: ProductType[] =
 		selfcareItems.length > 0 ? selfcareItems : SelfCareProductsData;
 	return (
-		<div className="px-2  w-[99vw]">
+		<div className="px-[8rem]  w-[99vw]">
 			<Link href="/selfcare-products" className="prose lg:prose-xl">
 				<h2 className="mb-2 md:mb-3">Self-Care Items</h2>
 			</Link>

@@ -5,8 +5,8 @@ import axios from "axios";
 
 const OfferPictures = () => {
   return (
-    <div className="w-[99vw] h-max flex justify-center items-center  px-5 gap-2 my-8 max-md:flex-col  ">
-      <div className="w-[50%] max-md:w-[100%] h-[350px] ">
+    <div className="w-[99vw] h-max flex justify-center items-center px-5 md:px-[8rem] gap-5 my-8 py-6 md:py-12 max-md:flex-col">
+      <div className="w-[750px] max-md:w-[100%] h-[435px] ">
         <Image
           src={"/assets/placeholder/image.png"}
           width={0}
@@ -20,7 +20,7 @@ const OfferPictures = () => {
           alt={"Offers"}
         />
       </div>
-      <div className="w-[50%] max-md:w-[99%] h-[350px]">
+      <div className="w-[750px] max-md:w-[99%] h-[435px]">
         <Image
           src={"/assets/placeholder/image.png"}
           width={0}

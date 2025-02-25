@@ -3,7 +3,7 @@ import Img from "@/assets/images/admin-pannel-img.png";
 
 const GlimmerForBusiness = () => {
 	return (
-		<div className="flex flex-col items-center justify-center space-y-4 p-6 md:flex-row md:space-y-0">
+		<div className="flex flex-col items-center justify-center space-y-4 px-[10rem] lg:pb-[25rem] md:flex-row md:space-y-0 w-[99vw]">
 			{/* Text Container */}
 			<div className="md:w-[35%]">
 				{/* Heading */}

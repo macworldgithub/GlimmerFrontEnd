@@ -2,8 +2,8 @@ import React from "react";
 
 const VideoTutorial = () => {
   return (
-    <div className="flex flex-col justify-center items-center p-5 w-[99vw] max-md:text-center">
-      <h1 className="py-5 font-sans font-semibold text-[28px] max-md:text-center">
+    <div className="flex flex-col justify-center items-center p-5 md:px-[10rem] w-[99vw] max-md:text-center">
+      <h1 className="py-5 font-sans font-semibold text-[54px] max-md:text-center">
         DISCOVER THE SECRETS OF GLOWING SKIN
       </h1>
       <iframe

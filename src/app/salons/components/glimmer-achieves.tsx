@@ -2,7 +2,7 @@ import React from "react";
 
 const GlimmerAchieves = () => {
 	return (
-		<div className="mb-6 md:mb-14">
+		<div className="mb-6 md:mb-14 w-[99vw]">
 			<div className="px-4 text-center ">
 				<h1 className="font-bold text-2xl md:text-3xl lg:text-4xl ">
 					The top-rated destination for beauty and wellness

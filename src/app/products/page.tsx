@@ -42,6 +42,7 @@ const ProductsList = () => {
   const categoryFilter = searchParams.get("category") ?? "";
   const subCategoryFilter = searchParams.get("sub_category") ?? "";
   const itemFilter = searchParams.get("item") ?? "";
+  const nameFilter = searchParams.get("name") ?? "";
   const minPriceFilter = Number(searchParams.get("min_price")) ?? 0;
   const maxPriceFilter = Number(searchParams.get("max_price")) ?? 0;
   const page = Number(searchParams.get("page")) || 1;
@@ -77,16 +78,24 @@ const ProductsList = () => {
 
   const fetchData = async () => {
     try {
-      const res = await getAllProducts(categoryFilter, subCategoryFilter, itemFilter, 0, 0, page);
-
+      const res = await getAllProducts(categoryFilter, subCategoryFilter, itemFilter, nameFilter, 0, 0, page);
+      console.log("1111111");
+      console.log(res.products);
+      // Filter products by name if nameFilter is provided
       const filteredProducts = res.products.filter((product: any) => {
+        const productName = product.name?.toLowerCase() || '';
         const productPrice = product.base_price || 0;
-        return (
-          (minPriceFilter ? productPrice >= minPriceFilter : true) &&
-          (maxPriceFilter ? productPrice <= maxPriceFilter : true)
-        );
+  
+        // Apply price filter
+        const matchesPrice = (minPriceFilter ? productPrice >= minPriceFilter : true) &&
+                             (maxPriceFilter ? productPrice <= maxPriceFilter : true);
+  
+        // Apply name filter if it's present
+        const matchesName = nameFilter ? productName.includes(nameFilter.toLowerCase()) : true;
+  
+        return matchesPrice && matchesName;
       });
-
+  
       setData(filteredProducts);
       setTotal(res.total || filteredProducts.length);
     } catch (error) {
@@ -96,7 +105,7 @@ const ProductsList = () => {
 
   useEffect(() => {
     fetchData();
-  }, [page, categoryFilter, subCategoryFilter, itemFilter, minPriceFilter, maxPriceFilter]);
+  }, [page, categoryFilter, subCategoryFilter, itemFilter, nameFilter, minPriceFilter, maxPriceFilter]);
 
   const handlePageChange = (newPage: number) => {
     const params = new URLSearchParams(searchParams);
@@ -104,19 +113,21 @@ const ProductsList = () => {
     router.push(`${pathname}?${params.toString()}`);
   };
 
-  const handleFilterChange = (newFilters: { category?: string; sub_category?: string; item?: string; min_price?: string; max_price?: string }) => {
+  const handleFilterChange = (newFilters: { category?: string; sub_category?: string; item?: string; name?: string; min_price?: string; max_price?: string }) => {
     const params = new URLSearchParams(searchParams);
   
-    if (newFilters.category && !newFilters.sub_category && !newFilters.item && !newFilters.min_price && !newFilters.max_price) {
+    if (newFilters.category && !newFilters.sub_category && !newFilters.item && !newFilters.name && !newFilters.min_price && !newFilters.max_price) {
       params.set("category", newFilters.category);
       params.delete("sub_category");
       params.delete("item");
+      params.delete("name");
       params.delete("min_price");
       params.delete("max_price");
     } else {
       if (newFilters.category) params.set("category", newFilters.category);
       if (newFilters.sub_category) params.set("sub_category", newFilters.sub_category);
       if (newFilters.item) params.set("item", newFilters.item);
+      if (newFilters.name) params.set("item", newFilters.name);
       if (newFilters.min_price) params.set("min_price", newFilters.min_price);
       if (newFilters.max_price) params.set("max_price", newFilters.max_price);
     }
@@ -139,7 +150,7 @@ const ProductsList = () => {
         <span className="mx-2 text-gray-500 font-medium text-base lg:text-xl">/</span>
         <Link href="/selfcare-products" className="text-gray-500 font-medium text-base lg:text-xl">Selfcare Products</Link>
 
-        {(categoryFilter || subCategoryFilter || itemFilter) && (
+        {(categoryFilter || subCategoryFilter || itemFilter || nameFilter) && (
           <>
             <span className="mx-2 text-purple-800 text-base lg:text-xl">/</span>
             <span className="text-purple-800 font-medium text-base lg:text-xl">Products</span>

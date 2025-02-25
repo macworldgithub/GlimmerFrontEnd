@@ -31,8 +31,8 @@ const NavbarClient = ({ session, handleLogout }: { session: any; handleLogout: (
     const isProductsPage = pathname === "/selfcare-products" || pathname === "/products";
 
     const [selections, setSelections] = useState<CategorySelection[]>([]);
-    // const [products, setProducts] = useState<any[]>([]);
-    // const [total, setTotal] = useState(0);
+    const [products, setProducts] = useState<any[]>([]);
+    const [total, setTotal] = useState(0);
 
     useEffect(() => {
         const fetchSelections = async () => {
@@ -62,24 +62,26 @@ const NavbarClient = ({ session, handleLogout }: { session: any; handleLogout: (
         }));
     }
 
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         try {
-    //             const categoryFilter = searchParams.get("category") ?? "";
-    //             const subCategoryFilter = searchParams.get("sub_category") ?? "";
-    //             const itemFilter = searchParams.get("item") ?? "";
-    //             const page = Number(searchParams.get("page")) || 1;
+    const fetchData = async () => {
+        try {
+            const categoryFilter = searchParams.get("category") ?? "";
+            const subCategoryFilter = searchParams.get("sub_category") ?? "";
+            const itemFilter = searchParams.get("item") ?? "";
+            const nameFilter = searchParams.get("name") ?? "";
+            const page = Number(searchParams.get("page")) || 1;
+    
+            const res = await getAllProducts(categoryFilter, subCategoryFilter, itemFilter, nameFilter, 0, 0, page);
+            console.log("Hello World....", res.products);
+            setProducts(res.products || products);
+            setTotal(res.total || res.products.length || total);
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    };
 
-    //             const res = await getAllProducts(categoryFilter, subCategoryFilter, itemFilter, 0, 0, page);
-    //             setProducts(res.products);
-    //             setTotal(res.total);
-    //         } catch (error) {
-    //             console.error("Error fetching products:", error);
-    //         }
-    //     };
-
-    //     fetchData();
-    // }, [searchParams]);
+    useEffect(() => {
+        fetchData();
+    }, [searchParams]);
 
     return (
         <>
@@ -89,7 +91,7 @@ const NavbarClient = ({ session, handleLogout }: { session: any; handleLogout: (
                         <img src={Logo.src} alt="logo" className="h-16" />
                     </Link>
                     <div className={cn("flex w-full", { "justify-end pr-10": isProductsPage })}>
-                        <ProductSearchBar selections={selections} className="max-md:hidden" />
+                        <ProductSearchBar selections={selections} products={products} className="max-md:hidden" />
                     </div>
                 </div>
 
@@ -100,7 +102,7 @@ const NavbarClient = ({ session, handleLogout }: { session: any; handleLogout: (
                 </div>
             </div>
             <div className="flex justify-center mb-5">
-                <ProductSearchBar selections={selections} className="md:hidden" />
+                <ProductSearchBar selections={selections} products={products} className="md:hidden" />
             </div>
         </>
     );

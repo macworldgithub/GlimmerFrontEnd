@@ -32,6 +32,7 @@ const ProductDisplay = () => {
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [activeTab, setActiveTab] = useState("Description");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [isBulkModalOpen, setIsBulkModalOpen] = useState(false);
   const [bulkForm, setBulkForm] = useState({ name: "", phone: "", email: "" });
 
@@ -93,6 +94,7 @@ const ProductDisplay = () => {
   }, [Product]);
 
   const handleAddToCart = () => {
+    setIsButtonDisabled(true);
     setIsModalOpen(true);
     setTimeout(() => setIsModalOpen(false), 2000);
     dispatch(addItem({ product: { ...product }, quantity: 1 }));
@@ -454,8 +456,10 @@ const ProductDisplay = () => {
           {/* Buttons Section */}
           <div className="flex items-center gap-4 mt-4">
             <button
-              className="flex-1 w-full flex items-center text-xs justify-center gap-2 h-12 px-6 border border-[#583FA8] text-[#583FA8] font-semibold rounded-md hover:border-purple-800 hover:text-purple-800"
+              className={`flex-1 w-full flex items-center text-xs justify-center gap-2 py-3 px-6 border text-purple-800 font-semibold rounded-md 
+    ${isButtonDisabled ? 'border-gray-300 text-gray-500 cursor-not-allowed' : 'border-purple-800 hover:border-purple-800 hover:text-purple-800'}`}
               onClick={handleAddToCart}
+              disabled={isButtonDisabled}
             >
               <Image
                 alt="cart-icon"

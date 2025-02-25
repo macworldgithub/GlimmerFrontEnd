@@ -107,7 +107,7 @@ const CardListWrapper = ({
       </div>
 
       {/* Original Content for larger screens */}
-      <div className="relative hidden md:block pb-[10rem]">
+      <div className="relative hidden md:block">
         <Swiper
           modules={[Scrollbar]}
           spaceBetween={30}
@@ -118,10 +118,10 @@ const CardListWrapper = ({
             [screenBreakpoints.xl]: { slidesPerView: 4 },
             [screenBreakpoints["2xl"]]: { slidesPerView: 5 },
           }}
-          className="my-2 w-full md:my-8"
+          className="my-2 w-full md:my-8 flex justify-center"
         >
           {cards.map((c, i) => (
-            <SwiperSlide key={i} className="">
+            <SwiperSlide key={i} className="flex justify-center">
               {c}
             </SwiperSlide>
           ))}

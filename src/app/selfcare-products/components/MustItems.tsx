@@ -148,8 +148,8 @@ const List2 = [
 
 const MustItems = () => {
   return (
-    <div className="w-[99vw] h-max p-5 flex flex-col text-center">
-      <h1 className="font-sans font-semibold text-[28px] py-5 ">
+    <div className="w-[99vw] h-max p-5 md:px-[8rem] flex flex-col text-center">
+      <h1 className="font-sans font-semibold text-[54px] py-5 ">
         YOU MUST HAVE THIS
       </h1>
       <CardSlider ProductList={List1} />

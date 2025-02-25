@@ -7,7 +7,7 @@ import { FaPerson } from "react-icons/fa6";
 const Hero = () => {
 	return (
 		<div
-			className="hero mb-8 min-h-[75vh] lg:min-h-[65vh]"
+			className="hero mb-8 min-h-[75vh] lg:min-h-[65vh] w-[99vw]"
 			style={{
 				background:
 					"linear-gradient(135deg, rgba(255,199,89,1) 5%, rgba(255,199,89,1) 80%, rgba(255,255,255,1) 100%)",

@@ -31,16 +31,30 @@ interface CompleteOrder {
   quantity: number;
 }
 
+interface ShippingInfo {
+  fullName: string;
+  email: string;
+  phone: string;
+  country: string;
+  city: string;
+  state: string;
+  zip: string;
+  deliveryMethod: string;
+  agree: boolean;
+}
+
 interface Cart {
   ProductList: CompleteOrder[];
   total: number;
   discountedTotal: number;
+  shippingInfo: ShippingInfo | null;
 }
 
 const initialState: Cart = {
   ProductList: [],
   total: 0,
   discountedTotal: 0,
+  shippingInfo: null,
 };
 
 const CalculateTotal = (list: CompleteOrder[]) => {
@@ -158,6 +172,11 @@ const CartSlice = createSlice({
       state.total = 0;
       state.discountedTotal = 0;
     },
+
+    saveShippingInfo: (state, action: PayloadAction<ShippingInfo>) => {
+      console.log("11111");
+      state.shippingInfo = action.payload;
+    },
   },
 });
 
@@ -169,6 +188,7 @@ export const {
   updateProductSize,
   updateProductType,
   clearCart,
+  saveShippingInfo,
 } = CartSlice.actions;
 
 export default CartSlice;
