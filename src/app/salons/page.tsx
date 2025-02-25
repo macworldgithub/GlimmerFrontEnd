@@ -20,7 +20,7 @@ export default async function Page() {
       <QrCodeSection />
       <GlimmerAchieves />
       <GlimmerForBusiness />
-      <BrowseByAreaList />
+      {/* <BrowseByAreaList /> */}
     </>
   );
 }
