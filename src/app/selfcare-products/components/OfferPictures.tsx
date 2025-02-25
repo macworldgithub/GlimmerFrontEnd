@@ -27,7 +27,7 @@ const OfferPictures = () => {
             <div className="w-full h-full rounded-lg overflow-hidden">
               <img
                 src={item.image1}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-fill"
                 alt={item.name}
               />
             </div>
