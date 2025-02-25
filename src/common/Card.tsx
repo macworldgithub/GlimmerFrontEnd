@@ -16,49 +16,49 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
 
   return (
     <div
-      className="w-[280px] h-[450px] shadow-lg max-md:w-full cursor-pointer rounded-lg"
+      className="w-[280px] h-[350px] shadow-lg max-md:w-full cursor-pointer rounded-lg"
       onClick={() => {
         router.push(`${path}/${item._id}`);
       }}
     >
-      <div className="relative w-full h-[280px]">
+      <div className="relative w-full h-[200px]">
         <img
           src={item.image1 ? item.image1 : "/assets/images/default_image.jpg"}
           alt="Image 1"
           className="w-full h-full object-cover rounded-t-lg"
         />
-        <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex gap-2 w-[15vw] 
-                  max-md:w-[50%] max-sm:w-[60%] justify-center">
+        <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 flex gap-2 w-full 
+                  max-md:w-[50%] max-sm:w-[60%] justify-center px-2">
           <button
             onClick={() => {
               router.push(`${path}/${item._id}`);
             }}
-            className="w-[50%] py-2 gap-1 bg-[#583FA8] rounded-sm flex justify-center items-center 
-                 max-md:py-1 max-sm:w-full">
+            className=" w-full py-2 gap-2 bg-[#583FA8]  flex justify-center items-center 
+                 max-md:py-1 max-sm:w-full rounded-md">
             <Image
               src={"/assets/addtoBag/icon.png"}
               width={12}
               height={12}
               alt="bag"
             />
-            <p className="text-white text-[12px] mt-1 max-md:text-[10px] max-sm:text-[9px]">
+            <p className="text-white text-[12px] mt-1 max-xl:text-[10px] max-sm:text-[9px]">
               ADD TO BAG
             </p>
           </button>
 
           <div className="px-2 h-[38px] border-[#583FA8] border border-solid bg-white flex justify-center items-center 
-                    max-md:h-[32px] max-sm:h-[30px]">
+                    max-md:h-[32px] max-sm:h-[30px] rounded-md">
             <FaHeart className="text-purple-300 hover:text-purple-800 text-base max-md:text-sm max-sm:text-xs" />
           </div>
         </div>
         {item?.base_price > item?.discounted_price && item?.discounted_price > 0 && (
-          <div className="absolute top-2 right-2 w-12 h-12 md:w-14 md:h-14 flex items-center justify-center">
+          <div className="absolute top-2 right-2 w-8 h-8 md:w-10 md:h-10 flex items-center justify-center">
             <img
               src="/assets/addtoBag/discount.png"
               alt="Discount"
               className="w-full h-full"
             />
-            <span className="absolute text-center text-white text-[10px] text-base font-bold">
+            <span className="absolute text-center text-white text-sm  font-bold">
               {`${Math.round(((item?.base_price - item?.discounted_price) / item?.base_price) * 100)}% OFF`}
             </span>
           </div>

@@ -8,6 +8,7 @@ import { getAllProductItem, getAllProducts } from "@/api/product";
 import Sidebar from "@/common/Sidebar";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { BiChevronDown } from "react-icons/bi";
 
 interface CategorySelection {
   category_id: string;
@@ -21,6 +22,10 @@ interface CategorySelection {
     }[];
   }[];
 }
+
+
+const priceOptions = ["Low to High", "High to Low"];
+
 
 // A loading component for suspense fallback
 const Loading = () => (
@@ -85,17 +90,17 @@ const ProductsList = () => {
       const filteredProducts = res.products.filter((product: any) => {
         const productName = product.name?.toLowerCase() || '';
         const productPrice = product.base_price || 0;
-  
+
         // Apply price filter
         const matchesPrice = (minPriceFilter ? productPrice >= minPriceFilter : true) &&
-                             (maxPriceFilter ? productPrice <= maxPriceFilter : true);
-  
+          (maxPriceFilter ? productPrice <= maxPriceFilter : true);
+
         // Apply name filter if it's present
         const matchesName = nameFilter ? productName.includes(nameFilter.toLowerCase()) : true;
-  
+
         return matchesPrice && matchesName;
       });
-  
+
       setData(filteredProducts);
       setTotal(res.total || filteredProducts.length);
     } catch (error) {
@@ -115,7 +120,7 @@ const ProductsList = () => {
 
   const handleFilterChange = (newFilters: { category?: string; sub_category?: string; item?: string; name?: string; min_price?: string; max_price?: string }) => {
     const params = new URLSearchParams(searchParams);
-  
+
     if (newFilters.category && !newFilters.sub_category && !newFilters.item && !newFilters.name && !newFilters.min_price && !newFilters.max_price) {
       params.set("category", newFilters.category);
       params.delete("sub_category");
@@ -136,6 +141,9 @@ const ProductsList = () => {
 
     router.push(`${pathname}?${params.toString()}`);
   };
+
+  const [activeSort, setActiveSort] = useState("Date");
+  const [showPriceDropdown, setShowPriceDropdown] = useState(false);
 
   return (
     <div className="flex flex-col w-[99vw] pb-[17rem]">
@@ -176,7 +184,7 @@ const ProductsList = () => {
 
 
       {/* Content Area: Sidebar & Items Grid */}
-      <div className="flex flex-col md:flex-row lg:p-[8rem]">
+      <div className="flex flex-col md:flex-row px-[1rem] sm:px-[2rem] md:px-[4rem] lg:px-[5rem] xl:px-[10rem] lg:py-[2rem]">
 
         {/* Sidebar */}
         <motion.aside
@@ -195,8 +203,49 @@ const ProductsList = () => {
           transition={{ duration: 0.5 }}
           className="w-full"
         >
-          {/* Items Grid */}
-          <div className="w-full h-max grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 p-6">
+          {/* SORT BY*/}
+          <div className="flex items-center gap-3 px-4 pt-6">
+            <span className="text-gray-600 text-sm">Sort by</span>
+
+            <button
+              onClick={() => setActiveSort("Date")}
+              className={`border px-5 py-1 rounded-sm ${activeSort === "Date" ? "border-black font-medium" : "border-gray-300"
+                }`}
+            >
+              Date
+            </button>
+
+            <div className="relative">
+              <button
+                onClick={() => setShowPriceDropdown(!showPriceDropdown)}
+                className={`flex items-center gap-1 border px-5 py-1 rounded-sm ${activeSort === "Price" ? "border-black font-medium" : "border-gray-300"
+                  }`}
+              >
+                Price <BiChevronDown size={16} />
+              </button>
+
+              {showPriceDropdown && (
+                <div className="absolute left-0 mt-2 w-36 bg-white border border-gray-300 rounded-md shadow-md">
+                  {priceOptions.map((price) => (
+                    <button
+                      key={price}
+                      onClick={() => {
+                        setActiveSort("Price");
+                        setShowPriceDropdown(false);
+                      }}
+                      className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                    >
+                      {price}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+
+
+          <div className="w-full h-max grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-6">
             {data.length ? (
               data.map((item) => (
                 <motion.div key={item.id} whileHover={{ scale: 1.03 }} className="flex">
