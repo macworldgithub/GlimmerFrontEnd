@@ -5,11 +5,11 @@ import CardList from "@/common/card-list";
 const FakeReviewList = () => {
 	return (
 		<>
-			<div className="mx-auto my-2 h-[2px] w-[80%] bg-neutral"></div>
-			<h2 className="my-4 text-center font-bold text-3xl">
+			<div className="ml-auto my-2 h-[2px] w-[80%] bg-neutral"></div>
+			<h2 className="w-[99vw] my-4 text-center font-bold text-3xl">
 				Our Trusted Clients
 			</h2>
-			<div className="mb-[15rem]">
+			<div className="mb-[15rem] custom-swiper">
 				<CardList
 					dataType="review"
 					cards={reviewsData}
