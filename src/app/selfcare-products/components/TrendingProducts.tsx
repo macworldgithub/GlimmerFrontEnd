@@ -96,13 +96,16 @@ const TrendingProducts = () => {
     },
   ];
   return (
-    <div className="w-[99vw] px-5 h-max relative p-10 max-md:text-center">
-      <h1 className="font-sans font-semibold text-[28px] py-5  ">
-        TRENDING PRODUCTS
-      </h1>
-
+    <div className="w-[99vw] px-5 md:px-[10rem] h-max relative py-10 max-md:text-center mx-auto">
+    <h1 className="font-sans font-semibold text-[24px] md:text-[54px] px-5">
+      TRENDING PRODUCTS
+    </h1>
+  
+    <div className="w-full overflow-hidden">
       <CardSlider ProductList={fakeProducts} />
     </div>
+  </div>
+  
   );
 };
 

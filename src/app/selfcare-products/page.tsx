@@ -29,7 +29,7 @@ export default async function Home() {
         <VideoTutorial />
         <MustItems />
         <SaloonPictures />
-        <BoxContainer className="lg:pb-[22rem] md:pb-[12rem] justify-center w-[99vw]" text="Shop Now and Unleash Your Inner Glow!" showInput={false} textAligned={true} animateGlow={true} />
+        {/* <BoxContainer className="lg:pb-[22rem] md:pb-[12rem] justify-center" text="Shop Now and Unleash Your Inner Glow!" showInput={false} textAligned={true} animateGlow={true} /> */}
       </Suspense>
     </>
   );

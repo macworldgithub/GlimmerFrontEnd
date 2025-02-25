@@ -32,16 +32,16 @@ const SaloonPictures = () => {
     },
   ];
   return (
-    <div className="flex flex-col gap-3 w-[99vw] p-5 h-[800px] max-md:h-max pb-[10rem] rounded">
+    <div className="flex flex-col gap-3 w-[99vw] lg:pb-[22rem] md:pb-[12rem] p-[10rem] h-max max-md:pb-[5rem] rounded">
       <div className="flex h-[50%] w-[100%] gap-3 max-md:flex-col">
         {picture.slice(0, 2).map((item) => (
           <div
             key={item.id}
-            className="w-[50%] max-md:w-[100%] h-[100%] rounded-[10px]"
+            className="w-[50%] max-md:w-[100%] h-[100%] flex justify-center"
           >
             <img
               src={item.image1}
-              className="w-[100%] h-[100%] object-cover rounded-[10px]"
+              className="w-[100%] max-w-[750px] h-auto max-h-[576px] object-cover rounded-[10px]"
               alt={item.name}
             />
           </div>
@@ -51,11 +51,11 @@ const SaloonPictures = () => {
         {picture.slice(2).map((item) => (
           <div
             key={item.id}
-            className="w-[50%] max-md:w-[100%] h-[100%] rounded-[10px]"
+            className="w-[50%] max-md:w-[100%] h-[100%] flex justify-center"
           >
             <img
               src={item.image1}
-              className="w-[100%] h-[100%] object-cover rounded-[10px]"
+              className="w-[100%] max-w-[750px] h-auto max-h-[576px] object-cover rounded-[10px]"
               alt={item.name}
             />
           </div>

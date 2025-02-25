@@ -9,6 +9,7 @@ import axios from "axios";
 
 import { Menu, Drawer, Button } from "antd";
 import { MenuOutlined } from "@ant-design/icons";
+import Link from "next/link";
 
 type Item = {
   _id: string;
@@ -185,12 +186,12 @@ const CategoryNavMenu = ({ className }: { className?: string }) => {
   return (
     <>
       <div
-        className={`max-md:hidden bg-[#ffc759] relative h-[max] w-[99vw] flex justify-center py-2  ${className}`}
+        className={`max-md:hidden bg-[#FBE8A5] relative h-[70px] w-[99vw] flex justify-center py-2  ${className}`}
       >
-        <div className="flex gap-5 font-sans font-semibold ">
+        <div className="flex gap-12 font-sans items-center">
           {categories.map((item: any) => (
             <div
-              className=" cursor-pointer hover:font-extrabold transition-all duration-500 "
+              className=" cursor-pointer hover:text-purple-900 hover:font-extrabold transition-all duration-500 "
               onClick={() => HandleSelectCategory(item?.sub_categories)}
             >
               {item?.product_category?.name}
@@ -201,7 +202,7 @@ const CategoryNavMenu = ({ className }: { className?: string }) => {
         {/* Menu is below which need to appear smoothly */}
         <div
           ref={dropdownRef}
-          className={`w-full justify-between px-8 py-1 flex h-max bg-white absolute top-[40px] z-50 transition-all duration-500 ${selectedSubCategory.length > 0
+          className={`w-full justify-between px-8 py-1 flex h-max bg-white absolute top-[70px] z-50 transition-all duration-500 ${selectedSubCategory.length > 0
             ? "opacity-100 translate-y-0"
             : "opacity-0 -translate-y-5 pointer-events-none"
             }`}
@@ -234,7 +235,12 @@ const CategoryNavMenu = ({ className }: { className?: string }) => {
             </div>
           ))}
         </div>
-      </div>
+        <Link href="/salons" className="flex">
+          <div className="flex text-white bg-[#583FA8] ml-12 px-6 py-2 rounded-md shadow-md hover:bg-[#452d88] transition-all duration-300">
+            <button>Book Salon Now</button>
+          </div>
+        </Link>
+      </div >
 
       <div className="md:hidden">
         <MenuOutlined
