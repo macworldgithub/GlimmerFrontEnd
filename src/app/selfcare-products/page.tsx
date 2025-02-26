@@ -15,6 +15,9 @@ import SaloonPictures from "@/common/SaloonPictures";
 import { Suspense } from "react";
 import BoxContainer from "@/common/box-container";
 import Breadcrumbs from "@/common/breadcrumb";
+import Faq from "./components/Faq";
+import Banner from "./components/Banner";
+import DynamicBanner from "./components/Banner";
 
 export default async function Home() {
   return (
@@ -29,6 +32,11 @@ export default async function Home() {
         <VideoTutorial />
         <MustItems />
         <SaloonPictures />
+        <DynamicBanner imageUrl="/path/to/image.jpg" title="Exciting Offers!" />
+
+        <Faq/>
+        
+        
         {/* <BoxContainer className="lg:pb-[22rem] md:pb-[12rem] justify-center" text="Shop Now and Unleash Your Inner Glow!" showInput={false} textAligned={true} animateGlow={true} /> */}
       </Suspense>
     </>
