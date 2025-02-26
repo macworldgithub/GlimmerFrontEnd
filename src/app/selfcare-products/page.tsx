@@ -32,7 +32,7 @@ export default async function Home() {
         <VideoTutorial />
         <MustItems />
         <SaloonPictures />
-        <DynamicBanner imageUrl="/path/to/image.jpg" title="Exciting Offers!" />
+        <DynamicBanner imageUrl="" title="Shop Now and Unleash Your Inner Glow!" />
 
         <Faq/>
         
