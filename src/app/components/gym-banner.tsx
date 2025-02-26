@@ -10,7 +10,7 @@ const GymBanner = ({ srcs = [] }: Props) => {
   const _srcs = srcs.length > 0 ? srcs : [GymBanner1.src];
 
   return (
-    <div className="px-[8rem] mb-6 md:mb-14  w-[99vw]">
+    <div className="lg:px-[8rem] mb-6 md:mb-14 w-[99vw]">
       <AutoSlider delay={null} srcs={_srcs} />
     </div>
   );
