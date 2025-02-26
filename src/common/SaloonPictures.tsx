@@ -29,8 +29,8 @@ const SaloonPictures = () => {
   ];
 
   return (
-    <div className="flex flex-col w-[99vw] px-5 md:p-[4rem] h-max rounded">
-      <div className="flex flex-wrap gap-5 gap-y-4 justify-center max-md:flex-col">
+    <div className="flex flex-col w-[99vw] px-5 md:p-[0rem]  h-max rounded">
+      <div className="flex flex-wrap gap-5 gap-y-4 justify-center max-md:flex-col pb-[6rem]">
         {picture.map((item) => (
           <div
             key={item.id}
