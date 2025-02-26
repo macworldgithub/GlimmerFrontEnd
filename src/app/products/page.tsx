@@ -83,20 +83,31 @@ const ProductsList = () => {
 
   const fetchData = async () => {
     try {
-      const res = await getAllProducts(categoryFilter, subCategoryFilter, itemFilter, nameFilter, 0, 0, page);
+      const res = await getAllProducts(
+        categoryFilter,
+        subCategoryFilter,
+        itemFilter,
+        nameFilter,
+        0,
+        0,
+        page
+      );
       console.log("1111111");
       console.log(res.products);
       // Filter products by name if nameFilter is provided
       const filteredProducts = res.products.filter((product: any) => {
-        const productName = product.name?.toLowerCase() || '';
+        const productName = product.name?.toLowerCase() || "";
         const productPrice = product.base_price || 0;
 
         // Apply price filter
-        const matchesPrice = (minPriceFilter ? productPrice >= minPriceFilter : true) &&
+        const matchesPrice =
+          (minPriceFilter ? productPrice >= minPriceFilter : true) &&
           (maxPriceFilter ? productPrice <= maxPriceFilter : true);
 
         // Apply name filter if it's present
-        const matchesName = nameFilter ? productName.includes(nameFilter.toLowerCase()) : true;
+        const matchesName = nameFilter
+          ? productName.includes(nameFilter.toLowerCase())
+          : true;
 
         return matchesPrice && matchesName;
       });
@@ -110,7 +121,15 @@ const ProductsList = () => {
 
   useEffect(() => {
     fetchData();
-  }, [page, categoryFilter, subCategoryFilter, itemFilter, nameFilter, minPriceFilter, maxPriceFilter]);
+  }, [
+    page,
+    categoryFilter,
+    subCategoryFilter,
+    itemFilter,
+    nameFilter,
+    minPriceFilter,
+    maxPriceFilter,
+  ]);
 
   const handlePageChange = (newPage: number) => {
     const params = new URLSearchParams(searchParams);
@@ -118,10 +137,24 @@ const ProductsList = () => {
     router.push(`${pathname}?${params.toString()}`);
   };
 
-  const handleFilterChange = (newFilters: { category?: string; sub_category?: string; item?: string; name?: string; min_price?: string; max_price?: string }) => {
+  const handleFilterChange = (newFilters: {
+    category?: string;
+    sub_category?: string;
+    item?: string;
+    name?: string;
+    min_price?: string;
+    max_price?: string;
+  }) => {
     const params = new URLSearchParams(searchParams);
 
-    if (newFilters.category && !newFilters.sub_category && !newFilters.item && !newFilters.name && !newFilters.min_price && !newFilters.max_price) {
+    if (
+      newFilters.category &&
+      !newFilters.sub_category &&
+      !newFilters.item &&
+      !newFilters.name &&
+      !newFilters.min_price &&
+      !newFilters.max_price
+    ) {
       params.set("category", newFilters.category);
       params.delete("sub_category");
       params.delete("item");
@@ -130,7 +163,8 @@ const ProductsList = () => {
       params.delete("max_price");
     } else {
       if (newFilters.category) params.set("category", newFilters.category);
-      if (newFilters.sub_category) params.set("sub_category", newFilters.sub_category);
+      if (newFilters.sub_category)
+        params.set("sub_category", newFilters.sub_category);
       if (newFilters.item) params.set("item", newFilters.item);
       if (newFilters.name) params.set("item", newFilters.name);
       if (newFilters.min_price) params.set("min_price", newFilters.min_price);
@@ -147,31 +181,44 @@ const ProductsList = () => {
 
   return (
     <div className="flex flex-col w-[99vw] pb-[17rem]">
-
       {/* Category Navigation Menu */}
       <div className="w-full mb-4">
         <CategoryNavMenu />
       </div>
       {/* Breadcrumbs */}
       <div className="breadcrumbs mb-4 text-xl lg:text-xl px-10">
-        <Link href="/" className="text-gray-500 font-medium text-base lg:text-xl">Home</Link>
-        <span className="mx-2 text-gray-500 font-medium text-base lg:text-xl">/</span>
-        <Link href="/selfcare-products" className="text-gray-500 font-medium text-base lg:text-xl">Selfcare Products</Link>
+        <Link
+          href="/"
+          className="text-gray-500 font-medium text-base lg:text-xl"
+        >
+          Home
+        </Link>
+        <span className="mx-2 text-gray-500 font-medium text-base lg:text-xl">
+          /
+        </span>
+        <Link
+          href="/selfcare-products"
+          className="text-gray-500 font-medium text-base lg:text-xl"
+        >
+          Selfcare Products
+        </Link>
 
         {(categoryFilter || subCategoryFilter || itemFilter || nameFilter) && (
           <>
             <span className="mx-2 text-purple-800 text-base lg:text-xl">/</span>
-            <span className="text-purple-800 font-medium text-base lg:text-xl">Products</span>
+            <span className="text-purple-800 font-medium text-base lg:text-xl">
+              Products
+            </span>
           </>
         )}
       </div>
       {/* Banner Image */}
       <div className="pt-[3rem] px-[1rem] sm:px-[2rem] md:px-[4rem] lg:px-[6rem] xl:px-[10rem]">
-        <div className="w-full min-h-[250px] sm:min-h-[300px] md:h-[400px] lg:h-[450px] relative group">
+        <div className="w-full h-[100vh] sm:h-[80vh] md:h-[80vh] lg:h-[80vh] xl:h-[80vh] relative group">
           <img
-            src="https://gymnation.com/media/d1efluel/ronaldo-cr7.jpg"
+            src="/assets/images/banner.png"
             alt="Banner"
-            className="w-full h-full object-contain sm:object-cover transition-transform duration-500 "
+            className="w-full h-full object-cover transition-transform duration-500"
           />
           <div className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/20 transition-all duration-500 px-4 lg:p-[8rem]">
             <h1 className="text-white text-2xl sm:text-3xl md:text-4xl font-bold text-center">
@@ -181,11 +228,8 @@ const ProductsList = () => {
         </div>
       </div>
 
-
-
       {/* Content Area: Sidebar & Items Grid */}
       <div className="flex flex-col md:flex-row px-[1rem] sm:px-[2rem] md:px-[4rem] lg:px-[5rem] xl:px-[10rem] lg:py-[2rem]">
-
         {/* Sidebar */}
         <motion.aside
           initial={{ x: -100, opacity: 0 }}
@@ -193,7 +237,10 @@ const ProductsList = () => {
           transition={{ duration: 0.5 }}
           className="w-full md:w-[30%] lg:w-[30%] p-6"
         >
-          <Sidebar selections={selections} onFilterChange={handleFilterChange} />
+          <Sidebar
+            selections={selections}
+            onFilterChange={handleFilterChange}
+          />
         </motion.aside>
 
         {/* Main Content */}
@@ -209,8 +256,11 @@ const ProductsList = () => {
 
             <button
               onClick={() => setActiveSort("Date")}
-              className={`border px-5 py-1 rounded-sm ${activeSort === "Date" ? "border-black font-medium" : "border-gray-300"
-                }`}
+              className={`border px-5 py-1 rounded-sm ${
+                activeSort === "Date"
+                  ? "border-black font-medium"
+                  : "border-gray-300"
+              }`}
             >
               Date
             </button>
@@ -218,8 +268,11 @@ const ProductsList = () => {
             <div className="relative">
               <button
                 onClick={() => setShowPriceDropdown(!showPriceDropdown)}
-                className={`flex items-center gap-1 border px-5 py-1 rounded-sm ${activeSort === "Price" ? "border-black font-medium" : "border-gray-300"
-                  }`}
+                className={`flex items-center gap-1 border px-5 py-1 rounded-sm ${
+                  activeSort === "Price"
+                    ? "border-black font-medium"
+                    : "border-gray-300"
+                }`}
               >
                 Price <BiChevronDown size={16} />
               </button>
@@ -243,12 +296,14 @@ const ProductsList = () => {
             </div>
           </div>
 
-
-
           <div className="w-full h-max grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-6">
             {data.length ? (
               data.map((item) => (
-                <motion.div key={item.id} whileHover={{ scale: 1.03 }} className="flex">
+                <motion.div
+                  key={item.id}
+                  whileHover={{ scale: 1.03 }}
+                  className="flex"
+                >
                   <Card item={item} />
                 </motion.div>
               ))
@@ -260,8 +315,6 @@ const ProductsList = () => {
               </div>
             )}
           </div>
-
-
 
           {/* Pagination */}
           {total > 0 && (
@@ -289,7 +342,6 @@ const ProductsList = () => {
       </div>
     </div>
   );
-
 };
 
 const Temp = () => {

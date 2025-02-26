@@ -16,12 +16,12 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
 
   return (
     <div
-      className="w-[280px] h-[350px] shadow-lg max-md:w-full cursor-pointer rounded-lg"
+      className="w-[280px] h-auto shadow-lg max-md:w-full cursor-pointer rounded-lg"
       onClick={() => {
         router.push(`${path}/${item._id}`);
       }}
     >
-      <div className="relative w-full h-[200px]">
+      <div className="relative w-full h-[150px]">
         <img
           src={item.image1 ? item.image1 : "/assets/images/default_image.jpg"}
           alt="Image 1"
@@ -58,7 +58,7 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
               alt="Discount"
               className="w-full h-full"
             />
-            <span className="absolute text-center text-white text-sm  font-bold">
+            <span className="absolute text-center text-white text-[14px]  font-bold">
               {`${Math.round(((item?.base_price - item?.discounted_price) / item?.base_price) * 100)}% OFF`}
             </span>
           </div>
@@ -68,11 +68,11 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
       <div className="p-1 px-3 mt-2">
         <div className="flex justify-between mb-2">
           <div className="flex flex-col">
-            <h2 className={`font-light font-sans text-[18px] overflow-hidden line-clamp-1 text-[#636363] ${!item.name && 'h-[24px]'}`}>
+            <h2 className={`font-light font-sans text-[14px] overflow-hidden line-clamp-1 text-[#636363] ${!item.name && 'h-[24px]'}`}>
               {item.name || " "}
             </h2>
 
-            <h2 className={`text-[14px] font-sans font-medium text-[#303030] mt-3 mb-3 overflow-hidden line-clamp-1 ${!item.description && 'h-[24px]'}`}>
+            <h2 className={`text-[12px] font-sans font-medium text-[#303030] mt-3 mb-3 overflow-hidden line-clamp-1 ${!item.description && 'h-[24px]'}`}>
               {item.description || "..."}
             </h2>
 
@@ -87,12 +87,12 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
       ${item.base_price}
     </span> */}
 
-            <span className="text-[18px] font-sans font-medium">
+            <span className="text-[14px] font-sans font-medium">
               {item?.discounted_price > 0 ? item?.discounted_price : item?.base_price} PKR
             </span>
 
             {item?.discounted_price > 0 && item?.base_price > item?.discounted_price && (
-              <span className="text-gray-500 line-through ml-2 mr-2 text-xs">
+              <span className="text-gray-500 line-through ml-2 mr-2 text-[14px]">
                 {item?.base_price} PKR
               </span>
             )}
@@ -106,7 +106,7 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
         </div>
         <div className="flex w-max">
           <Rating
-            size={15}
+            size={14}
             initialValue={3}
             SVGstyle={{ display: "inline-flex" }}
             allowHover={false}
