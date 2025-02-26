@@ -17,12 +17,13 @@ const OfferPictures = () => {
   ];
 
   return (
-    <div className="flex flex-col gap-4 w-[99vw] p-4 md:p-10 lg:pb-20 h-max rounded-lg">
-      <div className="flex flex-wrap gap-4 w-full justify-center max-md:flex-col">
+    <div className="flex flex-col gap-4 w-[99vw] p-4 lg:p-[4rem] md:p-10 lg:pb-20 h-max rounded-lg">
+      {/* Ensuring row layout on large screens and column layout on mobile */}
+      <div className="flex flex-wrap lg:flex-nowrap gap-4 w-full justify-center">
         {picture.map((item) => (
           <div
             key={item.id}
-            className="w-[750px] h-[435px] max-w-full max-md:w-full flex justify-center overflow-hidden rounded-lg"
+            className="w-[850px] h-[335px] max-w-full flex justify-center overflow-hidden rounded-lg"
           >
             <div className="w-full h-full rounded-lg overflow-hidden">
               <img
