@@ -9,7 +9,7 @@ type Props = {
 const SalonCardList = ({ salons = [] }: Props) => {
   const allSalons: SalonType[] = salons.length > 0 ? salons : SalonsData;
   return (
-    <div className="px-[8rem] w-[99vw]">
+    <div className="lg:px-[8rem] w-[99vw]">
       <Link href={"/salons"} className="prose lg:prose-xl">
         <h2 className="mb-2 md:mb-3">Salons</h2>
       </Link>
