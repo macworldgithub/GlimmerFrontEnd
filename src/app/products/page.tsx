@@ -233,7 +233,7 @@ const ProductsList = () => {
           <img
             src="/assets/images/banner.png"
             alt="Banner"
-            className="w-full h-full object-cover transition-transform duration-500"
+            className="w-full h-full transition-transform duration-500"
           />
           <div className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/20 transition-all duration-500 px-4 lg:p-[8rem]">
             <h1 className="text-white text-2xl sm:text-3xl md:text-4xl font-bold text-center">
@@ -348,7 +348,7 @@ const ProductsList = () => {
             </div>
           </div>
 
-          <div className="w-full h-max grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-6">
+          <div className=" w-full h-max grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-8 gap-y-10 p-6">
             {data.length ? (
               data.map((item) => (
                 <motion.div
