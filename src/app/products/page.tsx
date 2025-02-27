@@ -249,7 +249,7 @@ const ProductsList = () => {
         <motion.aside
           initial={{ x: -100, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 1 }}
           className="w-full md:w-[30%] lg:w-[30%] p-6"
         >
           <Sidebar
@@ -274,7 +274,7 @@ const ProductsList = () => {
                 setActiveSort("Date");
                 setSortOrder(sortOrder === "desc" ? "asc" : "desc");
               }}
-              className={`border px-6 py-2 rounded-md text-lg font-medium transition duration-300 ease-in-out ${activeSort === "Date" ? "border-purple-800 text-purple-800 bg-blue-100" : "border-gray-400 text-gray-700 hover:bg-[#FDF3D2]"
+              className={`border px-6 py-2 rounded-md text-lg font-medium transition duration-300 ease-in-out ${activeSort === "Date" ? "border-purple-800 text-purple-800 bg-purple-100" : "border-gray-400 text-gray-700 hover:bg-[#FDF3D2]"
                 }`}
             >
               Date {activeSort === "Date" ? (sortOrder === "desc" ? "↓" : "↑") : ""}
@@ -283,7 +283,7 @@ const ProductsList = () => {
             <div className="relative">
               <button
                 onClick={() => setShowPriceDropdown(!showPriceDropdown)}
-                className={`flex items-center gap-2 border px-6 py-2 rounded-md text-lg font-medium transition duration-300 ease-in-out ${activeSort === "Price" ? "border-purple-800 text-purple-800 bg-blue-100" : "border-gray-400 text-gray-700 hover:bg-[#FDF3D2]"
+                className={`flex items-center gap-2 border px-6 py-2 rounded-md text-lg font-medium transition duration-300 ease-in-out ${activeSort === "Price" ? "border-purple-800 text-purple-800 bg-purple-100" : "border-gray-400 text-gray-700 hover:bg-[#FDF3D2]"
                   }`}
               >
                 Price {activeSort === "Price" ? (sortOrder === "desc" ? "↓" : "↑") : ""} <BiChevronDown size={20} />
