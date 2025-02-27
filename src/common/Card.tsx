@@ -8,6 +8,7 @@ import { RealCardItem } from "@/data";
 import { Rating } from "react-simple-star-rating";
 
 import { FaHeart } from "react-icons/fa";
+import { RiShoppingBag4Line } from "react-icons/ri";
 
 const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
   const router = useRouter();
@@ -28,27 +29,22 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
           className="w-full h-full max-lg:object-cover rounded-t-lg"
         />
         <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 flex gap-2 w-full 
-                  max-md:w-[50%] max-sm:w-[60%] justify-center px-2">
+               justify-center px-2 max-md:justify-between">
           <button
             onClick={() => {
               router.push(`${path}/${item._id}`);
             }}  
-            className=" w-full py-2 xl:gap-2 gap-1 bg-[#583FA8]  flex justify-center items-center 
-                 max-md:py-1 max-sm:w-full rounded-md max-lg:px-4 max-lg:w-[50%]">
-            <Image
-              src={"/assets/addtoBag/icon.png"}
-              width={12}
-              height={12}
-              alt="bag"
-            />
-            <p className="text-white text-[12px] mt-1 max-xl:text-[10px] max-sm:text-[9px] max-xl:px-3">
+            className=" w-full py-2 max-xl:py-1 xl:gap-2 max-xl:gap-[2px] max-xl:px-1  gap-1 bg-[#583FA8]  flex justify-center items-center 
+                 max-md:py-1  rounded-md max-lg:px-2 max-lg:gap-1 max-md:w-fit">
+                  <RiShoppingBag4Line size={20} className="text-white max-lg:h-5 max-lg:w-5 max-md:w-7 max-md:h-7"/>
+            <p className="text-white text-[12px] mt-1 max-xl:text-[8px] max-lg:text-6px max-sm:text-[9px] max-md:hidden">
               ADD TO BAG
             </p>
           </button>
 
-          <div className="px-2 h-[38px] border-[#583FA8] border border-solid bg-white flex justify-center items-center 
-                    max-md:h-[32px] max-sm:h-[30px] rounded-md">
-            <FaHeart className="text-purple-300 hover:text-purple-800 text-base max-md:text-sm max-sm:text-xs" />
+          <div className="md:h-8 mt-1 px-2  border-[#583FA8] border border-solid bg-white flex justify-center items-center 
+                    max-md:h-[32px] max-sm:h-[30px] rounded-md ">
+            <FaHeart className="text-purple-300 hover:text-purple-800 text-base max-md:w-6  max-md:h-6 max-sm:text-xs" />
           </div>
         </div>
         {item?.base_price > item?.discounted_price && item?.discounted_price > 0 && (

@@ -138,7 +138,6 @@ const ProductDisplay = () => {
     alert("Your bulk buying request has been submitted!");
   };
 
-
   const [index, setIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
@@ -167,7 +166,6 @@ const ProductDisplay = () => {
     setIndex((prev) => (prev - 1 + images.length) % images.length);
   };
 
-
   return (
     <>
       <div className="w-full mb-4">
@@ -189,77 +187,65 @@ const ProductDisplay = () => {
         )}
       </div>
       <div className="mb-8 flex flex-col justify-center lg:w-[80vw] w-full  mx-auto gap-8 p-8 md:mb-5 lg:flex-row lg:gap-12 lg:mb-10">
+
+
+
         {/* Left Side: Product Image Gallery */}
+
         <div className="flex flex-col items-center lg:w-[65%] w-full">
           {/* Main Image Container */}
           <div className="w-full max-w-[650px] max-sm:w-[300px] max-sm:h-[300px] sm:w-[400px] md:w-[500px] sm:h-[400px] flex items-center justify-center overflow-hidden rounded-md shadow bg-gray-100">
             <img
-              src={product?.image1 ? product.image1 : "/assets/images/default_image.jpg"}
+              src={images[index]}
               alt={product?.name}
-              className="w-full h-full  object-cover"
+              className="w-full h-full"
             />
           </div>
 
           {/* Thumbnails Section */}
-          {/* <div className="mt-6 flex gap-4 flex-wrap justify-center">
-            {[product?.image1, product?.image2, product?.image3].map(
-              (image, index) =>
-                image && (
+          <div className="mt-10 flex items-center justify-center w-full max-w-[500px]">
+            {/* Left Arrow Button */}
+            <button onClick={handlePrev} className="p-2 text-gray-500">
+              <MdOutlineKeyboardArrowLeft size={50} />
+            </button>
+
+            {/* Thumbnails */}
+            <div className="flex gap-2 overflow-hidden">
+              {isMobile
+                ? [images[index]].map((image, i) => (
                   <div
-                    key={index}
-                    className="w-[80px] h-[80px] sm:w-[100px] sm:h-[100px] md:w-[120px] md:h-[120px] flex items-center justify-center overflow-hidden rounded-md shadow bg-gray-100"
+                    key={i}
+                    className="mx-4 w-[120px] h-[120px] sm:w-[140px] sm:h-[140px] flex items-center justify-center overflow-hidden rounded-md shadow bg-gray-100 border cursor-pointer border-purple-900"
                   >
-                    <img src={image} alt={`Thumbnail ${index + 1}`} className="w-full h-full object-cover" />
+                    <img
+                      src={image}
+                      alt={`Thumbnail ${i + 1}`}
+                      className="w-full h-full object-cover"
+                      onError={(e) => (e.currentTarget.src = "/assets/images/default_image.jpg")}
+                    />
                   </div>
-                )
-            )}
-          </div> */}
+                ))
+                : images.map((image, i) => (
+                  <div
+                    key={i}
+                    className={`mx-4 md:w-[90px] md:h-[90px] flex items-center justify-center overflow-hidden rounded-md shadow bg-gray-100 border border-gray-300 cursor-pointer ${i === index ? "border-purple-900" : ""}`}
+                    onClick={() => setIndex(i)}
+                  >
+                    <img
+                      src={image}
+                      alt={`Thumbnail ${i + 1}`}
+                      className="w-full h-full object-cover"
+                      onError={(e) => (e.currentTarget.src = "/assets/images/default_image.jpg")}
+                    />
+                  </div>
+                ))}
+            </div>
 
-<div className="mt-10 flex items-center justify-center w-full max-w-[500px]">
-      {/* Left Arrow Button (Always Visible) */}
-      <button onClick={handlePrev} className="p-2 text-gray-500">
-        <MdOutlineKeyboardArrowLeft size={50} />
-      </button>
-
-      {/* Thumbnails */}
-      <div className="flex gap-2 overflow-hidden">
-        {isMobile
-          ? // Show only one image at a time in mobile view
-            [images[index]].map((image, i) => (
-              <div
-                key={i}
-                className="mx-4 w-[120px] h-[120px] sm:w-[140px] sm:h-[140px]  flex items-center justify-center overflow-hidden rounded-md shadow bg-gray-100 border  cursor-pointer border-purple-900"
-              >
-                <img
-                  src={image}
-                  alt={`Thumbnail ${i + 1}`}
-                  className="w-full h-full object-cover"
-                  onError={(e) => (e.currentTarget.src = "/assets/images/default_image.jpg")}
-                />
-              </div>
-            ))
-          : // Show all images in md+ screens
-            images.map((image, i) => (
-              <div
-                key={i}
-                className={`mx-4 md:w-[90px] md:h-[90px] flex items-center justify-center overflow-hidden rounded-md shadow bg-gray-100 border border-gray-300 cursor-pointer 
-              ${i === index ? "border-purple-900" : ""}`}
-              >
-                <img
-                  src={image}
-                  alt={`Thumbnail ${i + 1}`}
-                  className="w-full h-full object-cover"
-                  onError={(e) => (e.currentTarget.src = "/assets/images/default_image.jpg")}
-                />
-              </div>
-            ))}
-      </div>
-
-      {/* Right Arrow Button (Always Visible) */}
-      <button onClick={handleNext} className="p-2 text-gray-500">
-        <MdKeyboardArrowRight size={50} />
-      </button>
-    </div>
+            {/* Right Arrow Button */}
+            <button onClick={handleNext} className="p-2 text-gray-500">
+              <MdKeyboardArrowRight size={50} />
+            </button>
+          </div>
           
           {/* Ratings Section */}
           <div className="mt-20 w-full hidden lg:block">
@@ -309,8 +295,8 @@ const ProductDisplay = () => {
             })}
           </div>
         </div>
-
-        {/* Right Side: Product Info */} 
+  
+          {/* Right Side: Product Details */}
         <div className="flex flex-col gap-4 relative lg:w-[35%] w-full">
           <h1 className="font-semibold text-2xl">{product?.name}</h1>
           {/* Price */}
@@ -573,7 +559,7 @@ const ProductDisplay = () => {
             )}
             <button
               onClick={() => setIsWishlisted(!isWishlisted)}
-                className="px-3 border border-[#583FA8] text-[#583FA8 ] h-11 rounded-md"
+              className="px-3 border border-[#583FA8] text-[#583FA8 ] h-11 rounded-md"
             >
               <Image
                 src={
@@ -734,4 +720,3 @@ const ProductDisplay = () => {
 };
 
 export default ProductDisplay;
- 
