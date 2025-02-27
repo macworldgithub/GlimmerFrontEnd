@@ -38,6 +38,9 @@ const ProductsList = () => {
   const [data, setData] = useState<any[]>([]);
   const [total, setTotal] = useState(0);
   const [selections, setSelections] = useState<CategorySelection[]>([]);
+  const [activeSort, setActiveSort] = useState("Date");
+  const [showPriceDropdown, setShowPriceDropdown] = useState(false);
+  const [sortOrder, setSortOrder] = useState("desc");
   const pageSize = 8;
 
   const searchParams = useSearchParams();
@@ -95,7 +98,7 @@ const ProductsList = () => {
       console.log("1111111");
       console.log(res.products);
       // Filter products by name if nameFilter is provided
-      const filteredProducts = res.products.filter((product: any) => {
+      let filteredProducts = res.products.filter((product: any) => {
         const productName = product.name?.toLowerCase() || "";
         const productPrice = product.base_price || 0;
 
@@ -110,6 +113,17 @@ const ProductsList = () => {
           : true;
 
         return matchesPrice && matchesName;
+      });
+
+      filteredProducts = filteredProducts.sort((a: any, b: any) => {
+        if (activeSort === "Date") {
+          return sortOrder === "desc"
+            ? new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+            : new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+        } else if (activeSort === "Price") {
+          return sortOrder === "desc" ? b.base_price - a.base_price : a.base_price - b.base_price;
+        }
+        return 0;
       });
 
       setData(filteredProducts);
@@ -129,6 +143,8 @@ const ProductsList = () => {
     nameFilter,
     minPriceFilter,
     maxPriceFilter,
+    activeSort,
+    sortOrder,
   ]);
 
   const handlePageChange = (newPage: number) => {
@@ -175,9 +191,6 @@ const ProductsList = () => {
 
     router.push(`${pathname}?${params.toString()}`);
   };
-
-  const [activeSort, setActiveSort] = useState("Date");
-  const [showPriceDropdown, setShowPriceDropdown] = useState(false);
 
   return (
     <div className="flex flex-col w-[99vw] pb-[8rem]">
@@ -251,46 +264,51 @@ const ProductsList = () => {
           className="w-full"
         >
           {/* SORT BY*/}
-          <div className="flex items-center gap-3 px-4 pt-6">
-            <span className="text-gray-600 text-sm">Sort by</span>
+          <div className="flex items-center gap-6 px-8 pt-8 pb-8">
+            <span className="text-gray-700 text-[20px]">Sort by</span>
 
             <button
-              onClick={() => setActiveSort("Date")}
-              className={`border px-5 py-1 rounded-sm ${
-                activeSort === "Date"
-                  ? "border-black font-medium"
-                  : "border-gray-300"
-              }`}
+              onClick={() => {
+                setActiveSort("Date");
+                setSortOrder(sortOrder === "desc" ? "asc" : "desc");
+              }}
+              className={`border px-6 py-2 rounded-md text-lg font-medium transition duration-300 ease-in-out ${activeSort === "Date" ? "border-purple-800 text-purple-800 bg-blue-100" : "border-gray-400 text-gray-700 hover:bg-[#FDF3D2]"
+                }`}
             >
-              Date
+              Date {activeSort === "Date" ? (sortOrder === "desc" ? "↓" : "↑") : ""}
             </button>
 
             <div className="relative">
               <button
                 onClick={() => setShowPriceDropdown(!showPriceDropdown)}
-                className={`flex items-center gap-1 border px-5 py-1 rounded-sm ${
-                  activeSort === "Price"
-                    ? "border-black font-medium"
-                    : "border-gray-300"
-                }`}
+                className={`flex items-center gap-2 border px-6 py-2 rounded-md text-lg font-medium transition duration-300 ease-in-out ${activeSort === "Price" ? "border-purple-800 text-purple-800 bg-blue-100" : "border-gray-400 text-gray-700 hover:bg-[#FDF3D2]"
+                  }`}
               >
-                Price <BiChevronDown size={16} />
+                Price {activeSort === "Price" ? (sortOrder === "desc" ? "↓" : "↑") : ""} <BiChevronDown size={20} />
               </button>
 
               {showPriceDropdown && (
-                <div className="absolute left-0 mt-2 w-36 bg-white border border-gray-300 rounded-md shadow-md">
-                  {priceOptions.map((price) => (
-                    <button
-                      key={price}
-                      onClick={() => {
-                        setActiveSort("Price");
-                        setShowPriceDropdown(false);
-                      }}
-                      className="block w-full text-left px-4 py-2 hover:bg-gray-100"
-                    >
-                      {price}
-                    </button>
-                  ))}
+                <div className="absolute z-50 left-0 mt-2 w-44 bg-white border border-gray-300 rounded-lg shadow-lg">
+                  <button
+                    onClick={() => {
+                      setActiveSort("Price");
+                      setSortOrder("asc");
+                      setShowPriceDropdown(false);
+                    }}
+                    className="block w-full text-left px-5 py-3 text-lg font-medium hover:bg-gray-200"
+                  >
+                    Low to High
+                  </button>
+                  <button
+                    onClick={() => {
+                      setActiveSort("Price");
+                      setSortOrder("desc");
+                      setShowPriceDropdown(false);
+                    }}
+                    className="block w-full text-left px-5 py-3 text-lg font-medium hover:bg-gray-200"
+                  >
+                    High to Low
+                  </button>
                 </div>
               )}
             </div>

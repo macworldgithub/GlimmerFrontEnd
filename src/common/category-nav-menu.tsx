@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 
 // import Router, { useRouter } from "next/router";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { development, BACKEND_URL } from "@/api/config";
 import axios from "axios";
 
@@ -51,6 +51,8 @@ type MenuItem = {
 const CategoryNavMenu = ({ className }: { className?: string }) => {
   const [categories, setCategories] = useState<any[]>([]);
   const router = useRouter();
+  const pathname = usePathname();
+  const isProductsPage = pathname === "/products";
   const [selectedSubCategory, setSelectedSubCategory] = useState([]);
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
 
@@ -186,7 +188,8 @@ const CategoryNavMenu = ({ className }: { className?: string }) => {
   return (
     <>
       <div
-        className={`max-md:hidden bg-[#FBE8A5] relative h-[60px] w-[99vw] flex justify-center py-2  ${className}`}
+        className={`max-md:hidden relative h-[60px] w-[99vw] flex justify-center py-2 ${isProductsPage ? "bg-white border-[1px] border-black" : "bg-[#FBE8A5]"
+          } ${className}`}
       >
         <div className="flex gap-12 font-sans items-center">
           {categories.map((item: any) => (
