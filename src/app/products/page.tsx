@@ -228,8 +228,8 @@ const ProductsList = () => {
         )}
       </div>
       {/* Banner Image */}
-      <div className="pt-[3rem] px-[1rem] sm:px-[2rem] md:px-[4rem] lg:px-[6rem] xl:px-[10rem]">
-        <div className="w-full h-[100vh] sm:h-[80vh] md:h-[80vh] lg:h-[80vh] xl:h-[80vh] relative group">
+      <div className="hidden md:block pt-[3rem] px-[1rem] sm:px-[2rem] md:px-[4rem] lg:px-[6rem] xl:px-[12rem]">
+        <div className="w-full h-[50vh] sm:h-[50vh] md:h-[50vh] lg:h-[50vh] xl:h-[50vh] rounded-lg overflow-hidden relative group">
           <img
             src="/assets/images/banner.png"
             alt="Banner"
@@ -266,7 +266,7 @@ const ProductsList = () => {
           className="w-full"
         >
           {/* SORT BY*/}
-          <div className="flex items-center gap-6 px-8 pt-8 pb-8">
+          <div className="flex flex-wrap md:flex-row sm:flex-col items-center gap-4 sm:gap-6 px-4 sm:px-6 md:px-8 pt-4 sm:pt-6 md:pt-8 pb-4 sm:pb-6 md:pb-8">
             <span className="text-gray-700 text-[20px]">Sort by</span>
 
             <button
