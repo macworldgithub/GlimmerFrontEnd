@@ -19,7 +19,7 @@ const BoxContainer: React.FC<BoxContainerProps> = ({
     return (
         <div
             className={clsx(
-                "flex flex-row items-center justify-center px-5 sm:px-6 md:px-10 opacity-0 animate-fadeInUp",
+                "flex flex-row items-center justify-center w-[99vw] px-5 sm:px-6 md:px-10 opacity-0 animate-fadeInUp",
                 "relative z-10 -mb-[10%]",
                 className
             )}
