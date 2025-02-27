@@ -13,7 +13,6 @@ import VideoTutorial from "./components/VideoTutorial";
 import MustItems from "./components/MustItems";
 import SaloonPictures from "@/common/SaloonPictures";
 import { Suspense } from "react";
-import BoxContainer from "@/common/box-container";
 import Breadcrumbs from "@/common/breadcrumb";
 import Faq from "./components/Faq";
 import Banner from "./components/Banner";
@@ -33,11 +32,7 @@ export default async function Home() {
         <MustItems />
         <SaloonPictures />
         <DynamicBanner imageUrl="" title="Shop Now and Unleash Your Inner Glow!" />
-
         <Faq/>
-        
-        
-        {/* <BoxContainer className="lg:pb-[22rem] md:pb-[12rem] justify-center" text="Shop Now and Unleash Your Inner Glow!" showInput={false} textAligned={true} animateGlow={true} /> */}
       </Suspense>
     </>
   );

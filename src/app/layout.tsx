@@ -46,12 +46,14 @@ export default function RootLayout({
           <Navbar />
 
           {children}
-          <div className="relative mt-10">
+          <BoxContainer />
+          <Footer />
+          {/* <div className="relative mt-10">
             <Footer />
             <div className="absolute bottom-[20rem] z-10 justify-center w-[99vw] max-sm:w-[80%] hidden md:block">
               <BoxContainer />
             </div>
-          </div>
+          </div> */}
           <CookieBanner />
         </CartStoreProvider>
       </body>

@@ -186,7 +186,7 @@ const CategoryNavMenu = ({ className }: { className?: string }) => {
   return (
     <>
       <div
-        className={`max-md:hidden bg-[#FBE8A5] relative h-[70px] w-[99vw] flex justify-center py-2  ${className}`}
+        className={`max-md:hidden bg-[#FBE8A5] relative h-[60px] w-[99vw] flex justify-center py-2  ${className}`}
       >
         <div className="flex gap-12 font-sans items-center">
           {categories.map((item: any) => (

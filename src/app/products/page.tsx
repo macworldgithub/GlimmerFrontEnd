@@ -180,7 +180,7 @@ const ProductsList = () => {
   const [showPriceDropdown, setShowPriceDropdown] = useState(false);
 
   return (
-    <div className="flex flex-col w-[99vw] pb-[17rem]">
+    <div className="flex flex-col w-[99vw] pb-[8rem]">
       {/* Category Navigation Menu */}
       <div className="w-full mb-4">
         <CategoryNavMenu />

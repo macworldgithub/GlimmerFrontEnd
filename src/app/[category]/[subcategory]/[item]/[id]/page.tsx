@@ -666,7 +666,7 @@ const ProductDisplay = () => {
         <h2 className="text-4xl font-semibold">Related Products</h2>
 
         {/* Grid Layout for larger screens */}
-        <div className="mb-[20rem] hidden sm:grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 lg:gap-6 mt-5 justify-center">
+        <div className="mb-[8rem] hidden sm:grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 lg:gap-6 mt-5 justify-center">
           {sampleProducts.map((item: any) => (
             <div className="flex justify-center">
               <Card key={item.id} item={item} />

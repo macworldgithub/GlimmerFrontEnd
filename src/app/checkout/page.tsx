@@ -88,7 +88,7 @@ export default function Checkout() {
   return (
     <>
       <Toaster />
-      <div className="w-[99vw] p-8 max-sm:h-max h-[100vh] mb-[6rem]">
+      <div className="w-[99vw] p-8 max-sm:h-max h-[100vh]">
         {cart.ProductList.length > 0 ? (
           <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
