@@ -6,7 +6,7 @@ import Link from "next/link";
 const FakeReviewList = () => {
 	return (
 		<>
-		<div className="lg:px-[8rem] w-[99vw]">
+		<div className="lg:px-[6rem] w-[99vw]">
 			<Link href="/selfcare-products" className="prose lg:prose-xl">
 				<h2 className="mb-2 md:mb-3">Our Trusted Clients</h2>
 			</Link>

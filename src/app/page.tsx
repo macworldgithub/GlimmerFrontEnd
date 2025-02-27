@@ -6,6 +6,7 @@ import SeftcareCardList from "./components/selfcare-card-list";
 import FakeReviewList from "./components/fake-review-list";
 import { Provider } from "react-redux";
 import store from "@/store/reduxStore";
+import SaloonPictures from "@/common/SaloonPictures";
 
 export default async function Home() {
   return (
@@ -13,6 +14,7 @@ export default async function Home() {
       <Hero />
       <SalonCardList />
       <SeftcareCardList />
+      <SaloonPictures />
       <BottomSlider />
       <GymBanner />
       <FakeReviewList />
