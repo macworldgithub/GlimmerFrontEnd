@@ -17,6 +17,7 @@ import Breadcrumbs from "@/common/breadcrumb";
 import Faq from "./components/Faq";
 import Banner from "./components/Banner";
 import DynamicBanner from "./components/Banner";
+import ProductFilter from "@/common/ProductFilter";
 
 export default async function Home() {
   return (
@@ -31,7 +32,7 @@ export default async function Home() {
         <VideoTutorial />
         <MustItems />
         <BestSellers />
-        <SaloonPictures />
+        <ProductFilter />
         <DynamicBanner imageUrl="" title="Shop Now and Unleash Your Inner Glow!" />
         <Faq/>
       </Suspense>
