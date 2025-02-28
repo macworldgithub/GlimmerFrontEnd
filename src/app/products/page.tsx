@@ -55,6 +55,7 @@ const ProductsList = () => {
   const nameFilter = searchParams.get("name") ?? "";
   const minPriceFilter = Number(searchParams.get("min_price")) ?? 0;
   const maxPriceFilter = Number(searchParams.get("max_price")) ?? 0;
+  const createdAtFilter = searchParams.get("created_at");
   const page = Number(searchParams.get("page")) || 1;
 
   useEffect(() => {
@@ -97,12 +98,11 @@ const ProductsList = () => {
         0,
         page
       );
-      console.log("1111111");
-      console.log(res.products);
       // Filter products by name if nameFilter is provided
       let filteredProducts = res.products.filter((product: any) => {
         const productName = product.name?.toLowerCase() || "";
         const productPrice = product.base_price || 0;
+        const productCreatedAt = new Date(product.created_at);
 
         // Apply price filter
         const matchesPrice =
@@ -114,7 +114,11 @@ const ProductsList = () => {
           ? productName.includes(nameFilter.toLowerCase())
           : true;
 
-        return matchesPrice && matchesName;
+        const matchesCreatedAt = createdAtFilter
+          ? productCreatedAt >= new Date(createdAtFilter)
+          : true;
+
+        return matchesPrice && matchesName && matchesCreatedAt;
       });
 
       filteredProducts = filteredProducts.sort((a: any, b: any) => {
