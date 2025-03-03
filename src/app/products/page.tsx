@@ -127,7 +127,9 @@ const ProductsList = () => {
             ? new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
             : new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
         } else if (activeSort === "Price") {
-          return sortOrder === "desc" ? b.base_price - a.base_price : a.base_price - b.base_price;
+          return sortOrder === "desc"
+            ? (b.discounted_price || b.base_price) - (a.discounted_price || a.base_price)
+            : (a.discounted_price || a.base_price) - (b.discounted_price || b.base_price);
         }
         return 0;
       });
@@ -188,7 +190,7 @@ const ProductsList = () => {
       if (newFilters.sub_category)
         params.set("sub_category", newFilters.sub_category);
       if (newFilters.item) params.set("item", newFilters.item);
-      if (newFilters.name) params.set("item", newFilters.name);
+      if (newFilters.name) params.set("name", newFilters.name);
       if (newFilters.min_price) params.set("min_price", newFilters.min_price);
       if (newFilters.max_price) params.set("max_price", newFilters.max_price);
     }
