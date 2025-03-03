@@ -32,16 +32,17 @@ const ProductFilter = () => {
         },
     ];
 
-    const handleFilterClick = (id:any) => {
+    const handleFilterClick = (id: any) => {
         const params = new URLSearchParams(window.location.search);
-    
+
         if (id === 1) {
             const pastWeek = new Date();
-            pastWeek.setDate(pastWeek.getDate() - 7); 
+            pastWeek.setDate(pastWeek.getDate() - 7);
             params.set("filter", "new");
-            params.set("created_at", pastWeek.toISOString()); 
+            params.set("created_at", pastWeek.toISOString());
         }
-    
+        const currentPage = params.get("page") || "1";
+        params.set("page", currentPage);
         router.push(`/products?${params.toString()}`);
     };
 
@@ -51,9 +52,9 @@ const ProductFilter = () => {
             router.push(`/products?${savedFilters}`);
         }
     }, []);
-    
+
     return (
-        <div className="flex flex-col w-[99vw] px-5 md:p-[0rem]  h-max rounded">
+        <div className="flex flex-col w-[99vw] px-5 md:p-[0rem]  h-max rounded cursor-pointer">
             <div className="flex flex-wrap gap-5 gap-y-4 justify-center max-md:flex-col pb-[6rem]">
                 {picture.map((item) => (
                     <div
@@ -63,9 +64,10 @@ const ProductFilter = () => {
                     >
                         <img
                             src={item.image1}
-                            className="w-full h-auto object-cover rounded-[10px]"
+                            className="w-full h-auto object-cover rounded-[10px] transition-transform duration-300 hover:scale-105"
                             alt={item.name}
                         />
+
                     </div>
                 ))}
             </div>
