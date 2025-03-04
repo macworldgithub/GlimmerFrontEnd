@@ -31,7 +31,7 @@ const PrductSearchBar = ({ selections, products, className }: { selections: Cate
     let matchedCategory: string | null = null;
     let matchedSubCategory: string | null = null;
     let matchedItem: string | null = null;
-    let matchedName: string | null = searchQuery; 
+    let matchedName: string | null = null; 
 
     const matchedProduct = products.find((product) =>
       product.name.toLowerCase().includes(searchQuery.toLowerCase())
