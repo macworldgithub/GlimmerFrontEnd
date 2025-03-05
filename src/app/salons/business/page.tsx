@@ -6,6 +6,12 @@ import Link from "next/link";
 import React, { useState } from "react";
 import NewSaloons from "../components/new-salons";
 import TrendingSaloons from "../components/trending-saloons";
+import Assurity from "@/app/selfcare-products/components/Assurity";
+import BrowseByAreaList from "../components/browse-by-area-list";
+import GlimmerAchieves from "../components/glimmer-achieves";
+import GlimmerForBusiness from "../components/glimmer-for-business";
+import Services from "../components/services";
+import Faq from "@/app/selfcare-products/components/Faq";
 
 const Page = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -133,6 +139,19 @@ const Page = () => {
             </p>
           </div>
         </div>
+      </div>
+      <div className="pt-[6rem]">
+        <Assurity />
+      </div>
+      <div className="pt-[6rem]">
+        <Services />
+      </div>
+      <div className="pt-[6rem]">
+        <Faq />
+      </div>
+     
+      <div className="pt-[6rem]">
+        <GlimmerAchieves />
       </div>
     </>
   );

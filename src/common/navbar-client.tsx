@@ -100,9 +100,6 @@ const NavbarClient = ({
     fetchData();
   }, [searchParams]);
 
-  const handleBusinessClick = () => {
-    router.push("/salons/business");
-  };
   return (
     <>
       <div className="navbar bg-base-100 w-[99vw]">
@@ -121,16 +118,6 @@ const NavbarClient = ({
                 products={products}
                 className="max-md:hidden"
               />
-            </div>
-          )}
-          {isSalonPage && (
-            <div className="mr-10 rounded-3xl hidden md:block">
-              <button
-                onClick={handleBusinessClick}
-                className="px-6 py-3 text-white bg-black rounded-3xl hover:bg-gray-700 transition duration-300"
-              >
-                For business
-              </button>
             </div>
           )}
         </div>

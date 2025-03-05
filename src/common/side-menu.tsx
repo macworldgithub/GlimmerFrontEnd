@@ -71,7 +71,7 @@ const SideMenu = ({
         <li>
           <Link
             className="text-base"
-            href="/signup"
+            href="/salons/business"
             onClick={() => setIsOpen(false)}
           >
             <FaArrowRight className="size-4" /> Register your salon
