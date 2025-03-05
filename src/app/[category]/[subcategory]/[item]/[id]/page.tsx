@@ -188,7 +188,7 @@ const ProductDisplay = () => {
           </>
         )}
       </div>
-      <div className="mb-8 flex flex-col justify-center lg:w-[80vw] w-full  mx-auto gap-8 p-8 md:mb-5 lg:flex-row lg:gap-12 lg:mb-10">
+      <div className="mb-8 flex flex-col justify-center lg:w-[91vw] mx-auto gap-8 p-8 md:mb-5 lg:flex-row lg:gap-12 lg:mb-10">
         {/* Left Side: Product Image Gallery */}
         <div className="flex flex-col items-center lg:w-[65%] w-full">
           {/* Main Image Container */}

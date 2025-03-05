@@ -270,7 +270,7 @@ export default function Checkout() {
         ) : (
           <div className="max-w-4xl mx-auto text-center  justify-center items-center bg-white shadow-lg rounded-lg p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
             {" "}
-            <p className=" font-sans font-medium">
+            <p className="font-medium">
               Please Add Some Products in Cart
             </p>
           </div>

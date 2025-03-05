@@ -97,7 +97,7 @@ const TrendingProducts = () => {
   ];
   return (
     <div className="w-[99vw] px-5 md:px-[4rem] h-max relative py-10 max-md:text-center mx-auto">
-    <h1 className="font-sans font-semibold text-[24px] md:text-[34px] px-5">
+    <h1 className="font-semibold text-[24px] md:text-[34px] px-5">
       TRENDING PRODUCTS
     </h1>
   
