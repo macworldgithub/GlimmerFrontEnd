@@ -76,7 +76,7 @@ const Page = () => {
         <div>
           <img
             className="w-[99vw] pt-[6rem]"
-            src="/assets/saloonPicture/calendar.jpg"
+            src="/assets/images/banner.png"
             alt=""
           />
         </div>

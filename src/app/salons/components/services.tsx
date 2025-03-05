@@ -45,7 +45,7 @@ const Services = () => {
               <img
                 src={service.image}
                 alt={service.name}
-                className="w-full h-48 object-cover"
+                className="w-full h-44"
               />
               <div className="p-4">
                 <h3 className="text-lg font-semibold">{service.name}</h3>
@@ -71,7 +71,7 @@ const Services = () => {
                 <img
                   src={service.image}
                   alt={service.name}
-                  className="w-full h-48 object-cover"
+                  className="w-full h-48"
                 />
                 <div className="p-4">
                   <h3 className="text-lg font-semibold">{service.name}</h3>

@@ -25,8 +25,6 @@ const SideMenu = ({
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
 
-  const isSalonPage = pathname.startsWith("/salons");
-
   useEffect(() => {
     setIsOpen(false);
   }, [pathname]);
@@ -48,17 +46,6 @@ const SideMenu = ({
             <FaArrowRight className="size-4" /> Salons
           </Link>
         </li>
-        {isSalonPage && (
-          <li>
-            <Link
-              className="text-base"
-              href="/business"
-              onClick={() => setIsOpen(false)}
-            >
-              <FaArrowRight className="size-4" /> For businesses
-            </Link>
-          </li>
-        )}
         <li>
           <Link
             className="text-base"
