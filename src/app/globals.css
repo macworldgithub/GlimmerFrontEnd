@@ -112,3 +112,7 @@ body {
     justify-content: center !important;
   }
 }
+
+.margin-bottom-unset {
+  margin-bottom: 0 !important;
+}
