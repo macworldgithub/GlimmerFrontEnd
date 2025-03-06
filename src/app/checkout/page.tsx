@@ -29,6 +29,7 @@ export default function Checkout() {
     city: "",
     state: "",
     zip: "",
+    address: "",
     deliveryMethod: "Delivery",
     agree: false,
   });
@@ -88,7 +89,7 @@ export default function Checkout() {
   return (
     <>
       <Toaster />
-      <div className="w-[99vw] p-8 max-sm:h-max h-[100vh]">
+      <div className="w-[99vw] p-8 max-sm:h-max">
         {cart.ProductList.length > 0 ? (
           <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
@@ -186,8 +187,16 @@ export default function Checkout() {
                     value={formData.zip}
                     onChange={handleInputChange}
                     className="w-full p-3 border rounded"
-                  />
+                  />  
                 </div>
+                <input
+                    type="text"
+                    name="address"
+                    placeholder="Address"
+                    value={formData.address}
+                    onChange={handleInputChange}
+                    className="w-full p-3 border rounded"
+                  />
                 <label className="flex items-center space-x-2">
                   <input
                     type="checkbox"
