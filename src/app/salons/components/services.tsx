@@ -1,3 +1,4 @@
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { FaArrowRight } from "react-icons/fa"; // Right arrow icon from react-icons
 
@@ -21,12 +22,16 @@ const servicesData = [
 ];
 
 const Services = () => {
+  const router = useRouter();
   const [showAll, setShowAll] = useState(false);
 
   const handleToggle = () => {
     setShowAll(!showAll);
   };
 
+  const handleServices = () => {
+    router.push('/salons/services');
+  }
   return (
     <div className="px-4 md:px-16 lg:px-[10rem] w-[99vw] mt-10">
       <div className="text-center mb-8">
@@ -40,7 +45,8 @@ const Services = () => {
           {servicesData.slice(0, 9).map((service, index) => (
             <div
               key={index}
-              className="relative bg-gray-100 rounded-lg shadow-lg overflow-hidden hover:scale-105 transform transition-all duration-300"
+              className="relative bg-gray-100 rounded-lg shadow-lg overflow-hidden hover:scale-105 transform transition-all duration-300 cursor-pointer"
+              onClick={handleServices}
             >
               <img
                 src={service.image}
@@ -66,7 +72,8 @@ const Services = () => {
             {servicesData.map((service, index) => (
               <div
                 key={index}
-                className="relative bg-gray-100 rounded-lg shadow-lg overflow-hidden hover:scale-105 transform transition-all duration-300"
+                className="relative bg-gray-100 rounded-lg shadow-lg overflow-hidden hover:scale-105 transform transition-all duration-300 cursor-pointer"
+                onClick={handleServices}
               >
                 <img
                   src={service.image}
