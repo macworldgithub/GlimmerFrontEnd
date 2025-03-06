@@ -63,20 +63,19 @@ const Card = ({ card }: { card: CardType }) => {
 	return (
 		<div
 			className={cn(
-				"flex-none rounded-lg max-md:mr-4 max-md:w-[350px] max-sm:w-[275px] max-md:mx-auto",
-				bgColor ? `bg-${bgColor}` : "bg-secondary",
+				"relative flex flex-col rounded-2xl shadow-lg overflow-hidden max-md:w-[350px] max-sm:w-[275px]", 
+				bgColor ? `bg-${bgColor}` : "bg-[secondary]",
 			)}
 		>
-			{image && <figure>{image}</figure>}
+			{image && <div className="w-full h-48 overflow-hidden">{image}</div>}
 			<div
 				className={cn(
-					"flex flex-col gap-2 p-3 rounded-lg",
-					border && "border-base-300 border-r border-b border-l",
+					"p-4 flex flex-col gap-3", border && "border border-gray-200",
 				)}
 			>
 				<div
 					className={cn(
-						"flex items-center",
+						"flex justify-between items-center font-medium text-gray-900",
 						top?.full && !top?.right && !top?.left && "justify-center",
 						top?.left && top?.right && "justify-between",
 						top?.left && !top?.full && !top?.right && "justify-start",
@@ -89,7 +88,7 @@ const Card = ({ card }: { card: CardType }) => {
 				</div>
 				<div
 					className={cn(
-						"flex items-center",
+						"flex justify-between items-center text-gray-700 text-sm",
 						bottom?.full && !bottom?.right && !bottom?.left && "justify-center",
 						bottom?.left && bottom?.right && "justify-between",
 						bottom?.left && !bottom?.full && !bottom?.right && "justify-start",
