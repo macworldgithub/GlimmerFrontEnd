@@ -66,11 +66,11 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
       <div className="p-1 px-3 mt-2">
         <div className="flex justify-between mb-2">
           <div className="flex flex-col">
-            <h2 className={`font-light font-sans text-[14px] overflow-hidden line-clamp-1 text-[#636363] ${!item.name && 'h-[24px]'}`}>
+            <h2 className={`font-light text-[14px] overflow-hidden line-clamp-1 text-[#636363] ${!item.name && 'h-[24px]'}`}>
               {item.name || " "}
             </h2>
 
-            <h2 className={`text-[12px] font-sans font-medium text-[#303030] mt-3 mb-3 overflow-hidden line-clamp-1 ${!item.description && 'h-[24px]'}`}>
+            <h2 className={`text-[12px] font-medium text-[#303030] mt-3 mb-3 overflow-hidden line-clamp-1 ${!item.description && 'h-[24px]'}`}>
               {item.description || "..."}
             </h2>
 
@@ -85,7 +85,7 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
       ${item.base_price}
     </span> */}
 
-            <span className="text-[14px] font-sans font-medium">
+            <span className="text-[14px] font-medium">
               {item?.discounted_price > 0 ? item?.discounted_price : item?.base_price} PKR
             </span>
 

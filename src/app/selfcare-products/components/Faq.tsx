@@ -47,7 +47,7 @@ const FAQSection: React.FC = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <div className="p-8 bg-[#fcf1c9] w-[99vw] mb-64 xl:mb-80">
+    <div className="p-8 bg-[#fcf1c9] w-[99vw] mb-10">
       <h2 className="text-2xl font-bold text-center text-[#583FA8] mb-6">Got Questions? We've Got Answers!</h2>
       <div className="max-w-2xl mx-auto shadow-md rounded-lg">
         {faqs.map((faq, index) => (

@@ -191,10 +191,10 @@ const CategoryNavMenu = ({ className }: { className?: string }) => {
         className={`max-md:hidden relative h-[60px] w-[99vw] flex justify-center py-2 ${isProductsPage ? "bg-white border-[1px] border-black" : "bg-[#FBE8A5]"
           } ${className}`}
       >
-        <div className="flex gap-12 font-sans items-center">
+        <div className="flex gap-12 items-center">
           {categories.map((item: any) => (
             <div
-              className=" cursor-pointer hover:text-purple-900 hover:font-extrabold transition-all duration-500 "
+              className=" cursor-pointer hover:text-purple-900 hover:font-medium transition-all duration-500 "
               onClick={() => HandleSelectCategory(item?.sub_categories)}
             >
               {item?.product_category?.name}
@@ -216,7 +216,7 @@ const CategoryNavMenu = ({ className }: { className?: string }) => {
                 onClick={() =>
                   HandlePath(`${item?.product_category}-${item?._id}`)
                 }
-                className="font-semibold text-[20px] font-sans cursor-pointer"
+                className="font-semibold text-[20px] cursor-pointer"
               >
                 {item?.name}
               </p>

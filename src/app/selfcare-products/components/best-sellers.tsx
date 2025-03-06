@@ -77,7 +77,7 @@ const List1 = [
 const BestSellers = () => {
   return (
     <div className="w-[99vw] h-max p-5 md:px-[4rem] flex flex-col text-center">
-      <h1 className="font-sans font-semibold text-[24px] md:text-[34px] py-5 ">
+      <h1 className="font-semibold text-[24px] md:text-[34px] py-5 ">
         Best Sellers
       </h1>
       <CardSlider ProductList={List1} />

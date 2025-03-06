@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+import { Prompt } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/common/navbar";
 import Footer from "@/common/footer";
@@ -10,17 +10,10 @@ import ToastComponent from "./components/toast-component";
 import { Provider } from "react-redux";
 import store from "@/store/reduxStore";
 import BoxContainer from "@/common/box-container";
-// import 'daisyui/dist/full.css';
-
-const geistSans = localFont({
-  src: "../fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "../fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
+const prompt = Prompt({
+  subsets: ["latin"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  variable: "--font-prompt",
 });
 
 export const metadata: Metadata = {
@@ -35,25 +28,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" data-theme="light">
-      <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-        rel="stylesheet"
-      ></link>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} container  bg-base-100 antialiased`}
-      >
+      <body className={`${prompt.variable} container bg-base-100 antialiased`}>
         <CartStoreProvider>
           <Navbar />
-
+          
           {children}
           <BoxContainer />
           <Footer />
-          {/* <div className="relative mt-10">
-            <Footer />
-            <div className="absolute bottom-[20rem] z-10 justify-center w-[99vw] max-sm:w-[80%] hidden md:block">
-              <BoxContainer />
-            </div>
-          </div> */}
           <CookieBanner />
         </CartStoreProvider>
       </body>

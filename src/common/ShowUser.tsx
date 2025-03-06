@@ -10,7 +10,7 @@ const ShowUser = () => {
   const credentials = useSelector((state: RootState) => state.login);
 
   return (
-    <div className="flex justify-center items-center gap-2 font-sans text-[16px] max-md:hidden">
+    <div className="flex justify-center items-center gap-2 text-[16px] max-md:hidden">
       {credentials?.token?.length > 0 ? (
         <p className="font-semibold">Welcome, {credentials?.name}</p>
       ) : (

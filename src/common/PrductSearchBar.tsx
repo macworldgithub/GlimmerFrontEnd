@@ -31,7 +31,7 @@ const PrductSearchBar = ({ selections, products, className }: { selections: Cate
     let matchedCategory: string | null = null;
     let matchedSubCategory: string | null = null;
     let matchedItem: string | null = null;
-    let matchedName: string | null = searchQuery; 
+    let matchedName: string | null = null;
 
     const matchedProduct = products.find((product) =>
       product.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -76,10 +76,30 @@ const PrductSearchBar = ({ selections, products, className }: { selections: Cate
 
     // Create URL search params
     const params = new URLSearchParams(searchParams);
-    if (matchedCategory) params.set("category", matchedCategory);
-    if (matchedSubCategory) params.set("sub_category", matchedSubCategory);
-    if (matchedItem) params.set("item", matchedItem);
-    if (matchedName) params.set("name", matchedName);
+    if (matchedCategory) {
+      params.set("category", matchedCategory);
+    } else {
+      params.delete("category"); 
+    }
+
+    if (matchedSubCategory) {
+      params.set("sub_category", matchedSubCategory);
+    } else {
+      params.delete("sub_category");
+    }
+
+    if (matchedItem) {
+      params.set("item", matchedItem);
+    } else {
+      params.delete("item"); 
+    }
+
+    if (matchedName) {
+      params.set("name", matchedName);
+    } else {
+      params.delete("name");
+    }
+
     params.set("page", "1"); // Reset page to 1 when filtering
 
     // Navigate to the updated URL

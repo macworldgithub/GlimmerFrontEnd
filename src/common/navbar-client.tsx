@@ -12,100 +12,136 @@ import { useEffect, useState } from "react";
 import { getAllProductItem, getAllProducts } from "@/api/product";
 
 interface CategorySelection {
-    category_id: string;
-    category_name: string;
-    sub_categories: {
-        sub_category_id: string;
-        name: string;
-        items: {
-            item_id: string;
-            name: string;
-        }[];
+  category_id: string;
+  category_name: string;
+  sub_categories: {
+    sub_category_id: string;
+    name: string;
+    items: {
+      item_id: string;
+      name: string;
     }[];
+  }[];
 }
 
-const NavbarClient = ({ session, handleLogout }: { session: any; handleLogout: () => void }) => {
-    const pathname = usePathname();
-    // const router = useRouter();
-    const searchParams = useSearchParams();
-    const isProductsPage = pathname === "/selfcare-products" || pathname === "/products";
+const NavbarClient = ({
+  session,
+  handleLogout,
+}: {
+  session: any;
+  handleLogout: () => void;
+}) => {
+  const router = useRouter();
+  const pathname = usePathname();
+  // const router = useRouter();
+  const searchParams = useSearchParams();
+  const isProductsPage =
+    pathname === "/selfcare-products" || pathname === "/products";
+  const isSalonPage = pathname.startsWith("/salons");
 
-    const [selections, setSelections] = useState<CategorySelection[]>([]);
-    const [products, setProducts] = useState<any[]>([]);
-    const [total, setTotal] = useState(0);
+  const [selections, setSelections] = useState<CategorySelection[]>([]);
+  const [products, setProducts] = useState<any[]>([]);
+  const [total, setTotal] = useState(0);
 
-    useEffect(() => {
-        const fetchSelections = async () => {
-            try {
-                const productItemsRes = await getAllProductItem();
-                setSelections(transformData(productItemsRes));
-            } catch (error) {
-                console.error("Error fetching selections:", error);
-            }
-        };
-        fetchSelections();
-    }, []);
-
-    function transformData(data: any[]): CategorySelection[] {
-        return data.map((category) => ({
-            category_id: category.product_category._id,
-            category_name: category.product_category.name,
-            sub_categories: category.sub_categories.map((subCategory: any) => ({
-                sub_category_id: subCategory._id,
-                name: subCategory.name,
-                items: subCategory.items.map((item: any) => ({
-                    item_id: item._id,
-                    name: item.name,
-                })),
-            })),
-            created_at: category.product_category.created_at,
-        }));
-    }
-
-    const fetchData = async () => {
-        try {
-            const categoryFilter = searchParams.get("category") ?? "";
-            const subCategoryFilter = searchParams.get("sub_category") ?? "";
-            const itemFilter = searchParams.get("item") ?? "";
-            const nameFilter = searchParams.get("name") ?? "";
-            const page = Number(searchParams.get("page")) || 1;
-    
-            const res = await getAllProducts(categoryFilter, subCategoryFilter, itemFilter, nameFilter, 0, 0, page);
-            console.log("Hello World....", res.products);
-            setProducts(res.products || products);
-            setTotal(res.total || res.products.length || total);
-        } catch (error) {
-            console.error("Error fetching data:", error);
-        }
+  useEffect(() => {
+    const fetchSelections = async () => {
+      try {
+        const productItemsRes = await getAllProductItem();
+        setSelections(transformData(productItemsRes));
+      } catch (error) {
+        console.error("Error fetching selections:", error);
+      }
     };
+    fetchSelections();
+  }, []);
 
-    useEffect(() => {
-        fetchData();
-    }, [searchParams]);
+  function transformData(data: any[]): CategorySelection[] {
+    return data.map((category) => ({
+      category_id: category.product_category._id,
+      category_name: category.product_category.name,
+      sub_categories: category.sub_categories.map((subCategory: any) => ({
+        sub_category_id: subCategory._id,
+        name: subCategory.name,
+        items: subCategory.items.map((item: any) => ({
+          item_id: item._id,
+          name: item.name,
+        })),
+      })),
+      created_at: category.product_category.created_at,
+    }));
+  }
 
-    return (
-        <>
-            <div className="navbar bg-base-100 w-[99vw]">
-                <div className="flex-1">
-                    <Link className="btn btn-ghost text-xl h-16" href="/">
-                        <img src={Logo.src} alt="logo" className="h-16" />
-                    </Link>
-                    <div className={cn("flex w-full", { "justify-end pr-10": isProductsPage })}>
-                        <ProductSearchBar selections={selections} products={products} className="max-md:hidden" />
-                    </div>
-                </div>
+  const fetchData = async () => {
+    try {
+      const categoryFilter = searchParams.get("category") ?? "";
+      const subCategoryFilter = searchParams.get("sub_category") ?? "";
+      const itemFilter = searchParams.get("item") ?? "";
+      const nameFilter = searchParams.get("name") ?? "";
+      const page = Number(searchParams.get("page")) || 1;
 
-                <div className="flex-none">
-                    <ShowUser />
-                    <CartNavbar />
-                    <SideMenu isLoggedIn={!!session?.userId} handleLogout={handleLogout} />
-                </div>
+      const res = await getAllProducts(
+        categoryFilter,
+        subCategoryFilter,
+        itemFilter,
+        nameFilter,
+        0,
+        0,
+        page
+      );
+      console.log("Hello World....", res.products);
+      setProducts(res.products || products);
+      setTotal(res.total || res.products.length || total);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [searchParams]);
+
+  return (
+    <>
+      <div className="navbar bg-base-100 w-[99vw]">
+        <div className="flex justify-between flex-1">
+          <Link className="btn btn-ghost text-xl h-16" href="/">
+            <img src={Logo.src} alt="logo" className="h-16" />
+          </Link>
+          {!isSalonPage && (
+            <div
+              className={cn("flex w-full", {
+                "justify-end pr-10": isProductsPage,
+              })}
+            >
+              <ProductSearchBar
+                selections={selections}
+                products={products}
+                className="max-md:hidden"
+              />
             </div>
-            <div className="flex justify-center mb-5">
-                <ProductSearchBar selections={selections} products={products} className="md:hidden" />
-            </div>
-        </>
-    );
+          )}
+        </div>
+
+        <div className="flex-none">
+          <ShowUser />
+          <CartNavbar />
+          <SideMenu
+            isLoggedIn={!!session?.userId}
+            handleLogout={handleLogout}
+          />
+        </div>
+      </div>
+      {!isSalonPage && (
+        <div className="flex justify-center mb-5">
+          <ProductSearchBar
+            selections={selections}
+            products={products}
+            className="md:hidden"
+          />
+        </div>
+      )}
+    </>
+  );
 };
 
 export default NavbarClient;

@@ -24,11 +24,11 @@ const SideMenu = ({
   const dispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
-  
+
   useEffect(() => {
     setIsOpen(false);
   }, [pathname]);
-  
+
   const Menu = ({ className }: { className?: string }) => {
     return (
       <ul tabIndex={0} className={cn("", className)}>
@@ -58,7 +58,7 @@ const SideMenu = ({
         <li>
           <Link
             className="text-base"
-            href="/signup"
+            href="/salons/business"
             onClick={() => setIsOpen(false)}
           >
             <FaArrowRight className="size-4" /> Register your salon

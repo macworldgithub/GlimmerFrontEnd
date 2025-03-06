@@ -186,10 +186,7 @@ const ProductDisplay = () => {
           </>
         )}
       </div>
-      <div className="mb-8 flex flex-col justify-center lg:w-[80vw] w-full  mx-auto gap-8 p-8 md:mb-5 lg:flex-row lg:gap-12 lg:mb-10">
-
-
-
+      <div className="mb-8 flex flex-col justify-center lg:w-[91vw] mx-auto gap-8 p-8 md:mb-5 lg:flex-row lg:gap-12 lg:mb-10">
         {/* Left Side: Product Image Gallery */}
 
         <div className="flex flex-col items-center lg:w-[65%] w-full">
@@ -497,7 +494,7 @@ const ProductDisplay = () => {
             )}
 
             <button onClick={handleBulkBuy} className="flex-1 w-full h-12 xl:px-6 text-xs bg-[#583FA8] text-white font-semibold rounded-md hover:bg-purple-900">
-              BUY NOW
+              BULK BUY
             </button>
             {isBulkModalOpen && (
               <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
