@@ -96,11 +96,11 @@ const TrendingSaloons = () => {
 	// const allSalons: SalonType[] = SalonsData;
 	return (
 		<div className="px-2 w-[99vw] ">
-			<Link href={"/salons"} className="text-3xl font-semibold">
+			{/* <Link href={"/salons"} className="text-3xl font-semibold">
 				<h2 className="mb-2 md:mb-3 pl-6">Trending</h2>
-			</Link>
+			</Link> */}
 			{/* <CardList cards={allSalons} dataType="salon" shouldAnimate={true} /> */}
-			 <SalonCards salons={data} />
+			 <SalonCards title="Trending" salons={data} />
 		</div>
 	);
 };

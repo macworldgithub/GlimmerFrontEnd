@@ -42,45 +42,18 @@ const data = [
         category: 'Beauty Salon',
         imageUrl: '/assets/saloonPicture/salon4.avif',
     },
-    {
-        id: 4,
-        name: 'Beauty Loft Salon Fz Lcc',
-        rating: 4.9,
-        reviews: 429,
-        location: 'Science Park Mont Rose Tower A',
-        category: 'Beauty Salon',
-        imageUrl: '/assets/saloonPicture/salon4.avif',
-    },
-    {
-        id: 4,
-        name: 'Beauty Loft Salon Fz Lcc',
-        rating: 4.9,
-        reviews: 429,
-        location: 'Science Park Mont Rose Tower A',
-        category: 'Beauty Salon',
-        imageUrl: '/assets/saloonPicture/salon4.avif',
-    },
-    {
-        id: 4,
-        name: 'Beauty Loft Salon Fz Lcc',
-        rating: 4.9,
-        reviews: 429,
-        location: 'Science Park Mont Rose Tower A',
-        category: 'Beauty Salon',
-        imageUrl: '/assets/saloonPicture/salon4.avif',
-    },
-	
   ];
 
 const Saloons = () => {
 	// const allSalons: SalonType[] = SalonsData;
 	return (
 		<div className="px-2 w-[99vw] ">
-			<Link href={"/salons"} className="text-3xl font-semibold">
+			{/* <Link href={"/salons"} className="text-3xl font-semibold">
 				<h2 className="mb-2 md:mb-3 pl-6">Salons</h2>
-			</Link>
+			</Link> */}
 			{/* <CardList cards={allSalons} dataType="salon" shouldAnimate={true} /> */}
-			 <SalonCards salons={data} />
+            <SalonCards title="Salons" salons={data} />
+			 
 		</div>
 	);
 };
