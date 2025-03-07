@@ -209,7 +209,7 @@ const SalonCards: React.FC<SalonCardsProps> = ({ salons, title }) => {
 
 
    const handleViewMore = () => {
-    router.push("/salons/business");
+    router.push("/salons/services");
    }
 
 
