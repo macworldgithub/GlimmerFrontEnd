@@ -10,7 +10,7 @@ import { RootState } from "@/store/reduxStore";
 import { createOrder } from "@/api/order";
 import toast, { Toaster } from "react-hot-toast";
 import { useDispatch } from "react-redux";
-import { clearCart, saveShippingInfo } from "@/reduxSlices/cartSlice";
+import { clearCart } from "@/reduxSlices/cartSlice";
 
 import { useRouter } from "next/navigation";
 
@@ -25,12 +25,13 @@ export default function Checkout() {
     fullName: "",
     email: "",
     phone: "",
-    country: "",
+    country: "Pakistan",
     city: "",
     state: "",
     zip: "",
     address: "",
-    deliveryMethod: "Delivery",
+    deliveryMethod: "COD",
+    shippingMethod: "Delivery",
     agree: false,
   });
   const [cartItems, setCartItems] = useState([
@@ -47,7 +48,6 @@ export default function Checkout() {
   const [discount, setDiscount] = useState(10);
   const handleInputChange = (e: any) => {
     const { name, value, type, checked } = e.target;
-    console.log(name);
     setFormData({
       ...formData,
       [name]: type === "checkbox" ? checked : value,
@@ -58,16 +58,17 @@ export default function Checkout() {
 
   const handleOrder = async () => {
     try {
-      if (!credentials.token) {
-        router.push("/login");
-        return;
-      }
-
-      dispatch(saveShippingInfo(formData));
+      // if (!credentials.token) {
+      //   router.push("/login");
+      //   return;
+      // }
 
       const orderData = {
+        customerName: formData.fullName,
+        customerEmail: formData.email,
         ...cart,
-        shippingInfo: formData,
+        paymentMethod: "COD",
+        ShippingInfo: formData,
       };
 
       console.log("Order Data:", orderData);
@@ -157,11 +158,12 @@ export default function Checkout() {
                             <option value="Canada">Canada</option>
                         </select> */}
                 <Select
-                  options={countries}
-                  value={country}
-                  onChange={handleCountryChange}
+                  value={"Pakistan"} 
+                  defaultValue={"Pakistan"} 
+                  // onChange={() => {}} 
                   className="mt-1"
-                  placeholder="Select a country"
+                  placeholder="Pakistan"
+                  isDisabled 
                 />
                 <div className="flex space-x-4">
                   <input
@@ -187,16 +189,16 @@ export default function Checkout() {
                     value={formData.zip}
                     onChange={handleInputChange}
                     className="w-full p-3 border rounded"
-                  />  
+                  />
                 </div>
                 <input
-                    type="text"
-                    name="address"
-                    placeholder="Address"
-                    value={formData.address}
-                    onChange={handleInputChange}
-                    className="w-full p-3 border rounded"
-                  />
+                  type="text"
+                  name="address"
+                  placeholder="Address"
+                  value={formData.address}
+                  onChange={handleInputChange}
+                  className="w-full p-3 border rounded"
+                />
                 <label className="flex items-center space-x-2">
                   <input
                     type="checkbox"

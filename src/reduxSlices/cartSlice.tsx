@@ -39,6 +39,7 @@ interface ShippingInfo {
   city: string;
   state: string;
   zip: string;
+  address: string;
   deliveryMethod: string;
   agree: boolean;
 }
@@ -172,11 +173,6 @@ const CartSlice = createSlice({
       state.total = 0;
       state.discountedTotal = 0;
     },
-
-    saveShippingInfo: (state, action: PayloadAction<ShippingInfo>) => {
-      console.log("11111");
-      state.shippingInfo = action.payload;
-    },
   },
 });
 
@@ -188,7 +184,6 @@ export const {
   updateProductSize,
   updateProductType,
   clearCart,
-  saveShippingInfo,
 } = CartSlice.actions;
 
 export default CartSlice;
