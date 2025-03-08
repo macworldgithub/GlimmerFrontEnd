@@ -16,7 +16,7 @@ import { useRouter } from "next/navigation";
 
 export default function Checkout() {
   const credentials = useSelector((state: RootState) => state.login);
-  const cart = useSelector((state: RootState) => state.cart);
+    const cart = useSelector((state: RootState) => state.cart);
   const router = useRouter();
 
   const dispatch = useDispatch();
@@ -66,7 +66,34 @@ export default function Checkout() {
       const orderData = {
         customerName: formData.fullName,
         customerEmail: formData.email,
-        ...cart,
+        // ...cart,
+        productList: cart.ProductList.map(productItem => ({
+          product: {
+            _id: productItem.product._id,
+            name: productItem.product.name,
+            base_price: productItem.product.base_price,
+            discounted_price: productItem.product.discounted_price,
+            description: productItem.product.description,
+            image1: productItem.product.image1,
+            image2: productItem.product.image2 || '', 
+            image3: productItem.product.image3 || '', 
+            status: productItem.product.status,
+            type: [{
+              id: productItem.product.type.id,
+              value: productItem.product.type.value || 'Unknown'
+            }],
+            size: [{
+              id: productItem.product.size.id,
+              value: productItem.product.size.value || 'Unknown',
+              unit: productItem.product.size.unit || 'Unknown'
+            }]
+          },
+          storeId: productItem.product.store,
+          quantity: productItem.quantity,
+          total_price: productItem.quantity * productItem.product.discounted_price 
+        })),
+        total: cart.total,
+        discountedTotal: cart.discountedTotal,
         paymentMethod: "COD",
         ShippingInfo: formData,
       };

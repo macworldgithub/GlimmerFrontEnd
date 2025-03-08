@@ -11,6 +11,7 @@ interface Size {
 }
 
 interface Product {
+  _id: string;
   id: string;
   name: string;
   quantity: 0;

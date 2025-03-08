@@ -5,7 +5,7 @@ import axios from "axios";
 
 export const createOrder = async (data: any, token: string) => {
   try {
-    data = { ...data, status: "Pending" };
+    data = { ...data };
     const res = await axios.post(`${BACKEND_URL}/order/create`, data, {
       headers: {
         Authorization: `Bearer ${token}`,
