@@ -80,12 +80,12 @@ export default function Checkout() {
             status: productItem.product.status,
             type: [{
               id: productItem.product.type.id,
-              value: productItem.product.type.value || 'Unknown'
+              value: productItem.product.type.value || '-'
             }],
             size: [{
               id: productItem.product.size.id,
-              value: productItem.product.size.value || 'Unknown',
-              unit: productItem.product.size.unit || 'Unknown'
+              value: productItem.product.size.value || '-',
+              unit: productItem.product.size.unit || '-'
             }]
           },
           storeId: productItem.product.store,
@@ -142,8 +142,8 @@ export default function Checkout() {
                     <input
                       type="radio"
                       name="deliveryMethod"
-                      value="Pick up"
-                      checked={formData.deliveryMethod === "Pick up"}
+                      value="Pick Up"
+                      checked={formData.deliveryMethod === "Pick Up"}
                       onChange={handleInputChange}
                       className="form-radio"
                     />
