@@ -16,7 +16,7 @@ import { useRouter } from "next/navigation";
 
 export default function Checkout() {
   const credentials = useSelector((state: RootState) => state.login);
-    const cart = useSelector((state: RootState) => state.cart);
+  const cart = useSelector((state: RootState) => state.cart);
   const router = useRouter();
 
   const dispatch = useDispatch();
@@ -67,7 +67,7 @@ export default function Checkout() {
         customerName: formData.fullName,
         customerEmail: formData.email,
         // ...cart,
-        productList: cart.ProductList.map(productItem => ({
+        productList: cart.ProductList.map((productItem) => ({
           product: {
             _id: productItem.product._id,
             name: productItem.product.name,
@@ -75,22 +75,23 @@ export default function Checkout() {
             discounted_price: productItem.product.discounted_price,
             description: productItem.product.description,
             image1: productItem.product.image1,
-            image2: productItem.product.image2 || '', 
-            image3: productItem.product.image3 || '', 
+            image2: productItem.product.image2 || "",
+            image3: productItem.product.image3 || "",
             status: productItem.product.status,
-            type: [{
-              id: productItem.product.type.id,
-              value: productItem.product.type.value || '-'
-            }],
-            size: [{
-              id: productItem.product.size.id,
-              value: productItem.product.size.value || '-',
-              unit: productItem.product.size.unit || '-'
-            }]
+            type: productItem.product.type.map((t) => ({
+              id: t.id || "",
+              value: t.value || "-",
+            })),
+            size: productItem.product.size.map((s) => ({
+              id: s.id || "",
+              value: s.value || "-",
+              unit: s.unit || "-",
+            })),
           },
           storeId: productItem.product.store,
           quantity: productItem.quantity,
-          total_price: productItem.quantity * productItem.product.discounted_price 
+          total_price:
+            productItem.quantity * productItem.product.discounted_price,
         })),
         total: cart.total,
         discountedTotal: cart.discountedTotal,
@@ -185,12 +186,12 @@ export default function Checkout() {
                             <option value="Canada">Canada</option>
                         </select> */}
                 <Select
-                  value={"Pakistan"} 
-                  defaultValue={"Pakistan"} 
-                  // onChange={() => {}} 
+                  value={"Pakistan"}
+                  defaultValue={"Pakistan"}
+                  // onChange={() => {}}
                   className="mt-1"
                   placeholder="Pakistan"
-                  isDisabled 
+                  isDisabled
                 />
                 <div className="flex space-x-4">
                   <input
@@ -308,9 +309,7 @@ export default function Checkout() {
         ) : (
           <div className="max-w-4xl mx-auto text-center  justify-center items-center bg-white shadow-lg rounded-lg p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
             {" "}
-            <p className="font-medium">
-              Please Add Some Products in Cart
-            </p>
+            <p className="font-medium">Please Add Some Products in Cart</p>
           </div>
         )}
       </div>

@@ -23,8 +23,8 @@ interface Product {
   discounted_price: 0;
   status: "Active";
   store: string;
-  size: Size;
-  type: Type;
+  size: Size[];
+  type: Type[];
 }
 
 interface CompleteOrder {
@@ -147,7 +147,7 @@ const CartSlice = createSlice({
 
     updateProductSize: (
       state,
-      action: PayloadAction<{ id: string; size: Size }>
+      action: PayloadAction<{ id: string; size: Size[] }>
     ) => {
       const { id, size } = action.payload;
       state.ProductList = state.ProductList.map((item) =>
@@ -159,7 +159,7 @@ const CartSlice = createSlice({
 
     updateProductType: (
       state,
-      action: PayloadAction<{ id: string; type: Type }>
+      action: PayloadAction<{ id: string; type: Type[] }>
     ) => {
       const { id, type } = action.payload;
       state.ProductList = state.ProductList.map((item) =>
