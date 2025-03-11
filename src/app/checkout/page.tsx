@@ -46,6 +46,16 @@ export default function Checkout() {
 
   const [discountCode, setDiscountCode] = useState("");
   const [discount, setDiscount] = useState(10);
+  const [errors, setErrors] = useState({
+    fullName: "",
+    email: "",
+    phone: "",
+    city: "",
+    state: "",
+    zip: "",
+    address: "",
+    agree: "",
+  });
   const handleInputChange = (e: any) => {
     const { name, value, type, checked } = e.target;
     setFormData({
@@ -56,13 +66,63 @@ export default function Checkout() {
 
   const total = cart.total;
 
+  const validateForm = () => {
+    let formErrors: any = {};
+    let valid = true;
+
+    if (!formData.fullName) {
+      formErrors.fullName = "Full name is required.";
+      valid = false;
+    }
+
+    if (!formData.email) {
+      formErrors.email = "Email is required.";
+      valid = false;
+    }
+
+    if (!formData.phone) {
+      formErrors.phone = "Phone number is required.";
+      valid = false;
+    }
+
+    if (!formData.city) {
+      formErrors.city = "City is required.";
+      valid = false;
+    }
+
+    if (!formData.state) {
+      formErrors.state = "State is required.";
+      valid = false;
+    }
+
+    if (!formData.zip) {
+      formErrors.zip = "ZIP code is required.";
+      valid = false;
+    }
+
+    if (!formData.address) {
+      formErrors.address = "Address is required.";
+      valid = false;
+    }
+
+    if (!formData.agree) {
+      formErrors.agree = "You must agree to the terms and conditions.";
+      valid = false;
+    }
+
+    setErrors(formErrors);
+    return valid;
+  };
+
   const handleOrder = async () => {
     try {
       // if (!credentials.token) {
       //   router.push("/login");
       //   return;
       // }
-
+      if (!validateForm()) {
+        return;
+      }
       const orderData = {
         customerName: formData.fullName,
         customerEmail: formData.email,
@@ -159,6 +219,9 @@ export default function Checkout() {
                   onChange={handleInputChange}
                   className="w-full p-3 border rounded"
                 />
+                {errors.fullName && (
+                  <p className="text-red-500 text-sm">{errors.fullName}</p>
+                )}
                 <input
                   type="email"
                   name="email"
@@ -167,6 +230,9 @@ export default function Checkout() {
                   onChange={handleInputChange}
                   className="w-full p-3 border rounded"
                 />
+                {errors.email && (
+                  <p className="text-red-500 text-sm">{errors.email}</p>
+                )}
                 <input
                   type="text"
                   name="phone"
@@ -175,6 +241,9 @@ export default function Checkout() {
                   onChange={handleInputChange}
                   className="w-full p-3 border rounded"
                 />
+                 {errors.phone && (
+                  <p className="text-red-500 text-sm">{errors.phone}</p>
+                )}
                 {/* <select
                             name="country"
                             value={formData.country}
@@ -202,6 +271,9 @@ export default function Checkout() {
                     onChange={handleInputChange}
                     className="w-full p-3 border rounded"
                   />
+                   {errors.city && (
+                    <p className="text-red-500 text-sm">{errors.city}</p>
+                  )}
                   <input
                     type="text"
                     name="state"
@@ -210,6 +282,9 @@ export default function Checkout() {
                     onChange={handleInputChange}
                     className="w-full p-3 border rounded"
                   />
+                  {errors.state && (
+                    <p className="text-red-500 text-sm">{errors.state}</p>
+                  )}
                   <input
                     type="text"
                     name="zip"
@@ -218,6 +293,9 @@ export default function Checkout() {
                     onChange={handleInputChange}
                     className="w-full p-3 border rounded"
                   />
+                  {errors.zip && (
+                    <p className="text-red-500 text-sm">{errors.zip}</p>
+                  )}
                 </div>
                 <input
                   type="text"
@@ -227,6 +305,9 @@ export default function Checkout() {
                   onChange={handleInputChange}
                   className="w-full p-3 border rounded"
                 />
+                {errors.address && (
+                  <p className="text-red-500 text-sm">{errors.address}</p>
+                )}
                 <label className="flex items-center space-x-2">
                   <input
                     type="checkbox"
@@ -237,6 +318,9 @@ export default function Checkout() {
                   />
                   <span>I have read and agree to the Terms and Conditions</span>
                 </label>
+                {errors.agree && (
+                  <p className="text-red-500 text-sm">{errors.agree}</p>
+                )}
               </form>
             </div>
             <div>
