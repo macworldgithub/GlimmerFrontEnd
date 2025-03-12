@@ -193,13 +193,14 @@ export default function Checkout() {
                       type="radio"
                       name="deliveryMethod"
                       value="Delivery"
-                      checked={formData.deliveryMethod === "Delivery"}
+                      checked={true}
+                      readOnly
                       onChange={handleInputChange}
                       className="form-radio"
                     />
                     <span className="ml-2">Delivery</span>
                   </label>
-                  <label className="flex items-center">
+                  {/* <label className="flex items-center">
                     <input
                       type="radio"
                       name="deliveryMethod"
@@ -209,7 +210,7 @@ export default function Checkout() {
                       className="form-radio"
                     />
                     <span className="ml-2">Pick up</span>
-                  </label>
+                  </label> */}
                 </div>
                 <input
                   type="text"
