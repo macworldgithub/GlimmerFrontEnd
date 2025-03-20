@@ -7,6 +7,8 @@ const Hero = () => {
       style={{
         background:
           "linear-gradient(135deg, #A120FF 2%, #8A2BE2 30%, #FBE8A5 100%)",
+        position: "relative",
+        zIndex: 10, 
       }}
     >
       <div className="hero-content">
