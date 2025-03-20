@@ -1,11 +1,13 @@
 "use client";
 
 import { getAllServices, getAllServicesById } from "@/api/salon";
+import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { message } from "antd";
 import { useState, useEffect } from "react";
 
 interface ServiceNavMenuProps {
-  className?: string; 
+  className?: string;
 }
 
 const ServiceNavMenu = ({ className }: ServiceNavMenuProps) => {
@@ -117,7 +119,11 @@ const ServiceNavMenu = ({ className }: ServiceNavMenuProps) => {
             : "Select Service"}
         </span>
         <button className="text-blue-500 hover:text-blue-700 transition-colors duration-300">
-          {isDropdownOpen ? "▲" : "▼"}
+          {isDropdownOpen ? (
+            <FontAwesomeIcon icon={faChevronUp} />
+          ) : (
+            <FontAwesomeIcon icon={faChevronDown} />
+          )}
         </button>
       </div>
 
@@ -135,7 +141,11 @@ const ServiceNavMenu = ({ className }: ServiceNavMenuProps) => {
                   {service.category}
                 </span>
                 <button className="text-blue-500 hover:text-blue-700 transition-colors duration-300">
-                  {expandedServices[service._id] ? "▲" : "▼"}
+                  {expandedServices[service._id] ? (
+                    <FontAwesomeIcon icon={faChevronUp} />
+                  ) : (
+                    <FontAwesomeIcon icon={faChevronDown} />
+                  )}
                 </button>
               </div>
 
@@ -155,7 +165,11 @@ const ServiceNavMenu = ({ className }: ServiceNavMenuProps) => {
                                 {subservice}
                               </span>
                               <button className="text-blue-500 hover:text-blue-700 transition-colors duration-300">
-                                {expandedSubservices[subservice] ? "▲" : "▼"}
+                                {expandedSubservices[subservice] ? (
+                                  <FontAwesomeIcon icon={faChevronUp} />
+                                ) : (
+                                  <FontAwesomeIcon icon={faChevronDown} />
+                                )}
                               </button>
                             </div>
 
