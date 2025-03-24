@@ -131,7 +131,7 @@ const NavbarClient = ({
           />
         </div>
       </div>
-      {!isSalonPage && (
+   
         <div className="flex justify-center mb-5">
           <ProductSearchBar
             selections={selections}
@@ -139,7 +139,7 @@ const NavbarClient = ({
             className="md:hidden"
           />
         </div>
-      )}
+      
     </>
   );
 };

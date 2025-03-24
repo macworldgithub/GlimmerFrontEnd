@@ -119,7 +119,7 @@ const SideMenu = ({
         >
           <GiHamburgerMenu className="size-5" />
         </div>
-        <Menu className="menu dropdown-content z-[2] mt-3 w-64 rounded-box bg-base-100 p-2 shadow" />
+        <Menu className="menu dropdown-content z-[9999] mt-3 w-64 rounded-box bg-base-100 p-2 shadow" />
       </div>
 
       {/* mobile */}

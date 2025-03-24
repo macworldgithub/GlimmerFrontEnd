@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Input } from "antd";
 import { BsSearch } from "react-icons/bs";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 
 interface CategorySelection {
@@ -18,12 +18,21 @@ interface CategorySelection {
   }[];
 }
 
-
-const PrductSearchBar = ({ selections, products, className }: { selections: CategorySelection[]; products: any[]; className?: string }) => {
+const PrductSearchBar = ({
+  selections,
+  products,
+  className,
+}: {
+  selections: CategorySelection[];
+  products: any[];
+  className?: string;
+}) => {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const isSalonPage = pathname.startsWith("/salons");
 
   const handleSearch = () => {
     if (!searchQuery) return;
@@ -47,18 +56,29 @@ const PrductSearchBar = ({ selections, products, className }: { selections: Cate
       matchedCategory = "6790d2749a0b078319c69e9d";
     } else {
       selections.forEach((category) => {
-        if (!matchedCategory && category.category_name.toLowerCase().includes(searchQuery.toLowerCase())) {
+        if (
+          !matchedCategory &&
+          category.category_name
+            .toLowerCase()
+            .includes(searchQuery.toLowerCase())
+        ) {
           matchedCategory = category.category_id;
         }
 
         category.sub_categories.forEach((subCategory) => {
-          if (!matchedSubCategory && subCategory.name.toLowerCase().includes(searchQuery.toLowerCase())) {
+          if (
+            !matchedSubCategory &&
+            subCategory.name.toLowerCase().includes(searchQuery.toLowerCase())
+          ) {
             matchedSubCategory = subCategory.sub_category_id;
             matchedCategory = category.category_id;
           }
 
           subCategory.items.forEach((item) => {
-            if (!matchedItem && item.name.toLowerCase().includes(searchQuery.toLowerCase())) {
+            if (
+              !matchedItem &&
+              item.name.toLowerCase().includes(searchQuery.toLowerCase())
+            ) {
               matchedItem = item.item_id;
               matchedSubCategory = subCategory.sub_category_id;
               matchedCategory = category.category_id;
@@ -68,7 +88,12 @@ const PrductSearchBar = ({ selections, products, className }: { selections: Cate
       });
     }
 
-    if (!matchedCategory && !matchedSubCategory && !matchedItem && !matchedName) {
+    if (
+      !matchedCategory &&
+      !matchedSubCategory &&
+      !matchedItem &&
+      !matchedName
+    ) {
       setIsModalOpen(true);
       setTimeout(() => setIsModalOpen(false), 2000);
       return;
@@ -79,7 +104,7 @@ const PrductSearchBar = ({ selections, products, className }: { selections: Cate
     if (matchedCategory) {
       params.set("category", matchedCategory);
     } else {
-      params.delete("category"); 
+      params.delete("category");
     }
 
     if (matchedSubCategory) {
@@ -91,7 +116,7 @@ const PrductSearchBar = ({ selections, products, className }: { selections: Cate
     if (matchedItem) {
       params.set("item", matchedItem);
     } else {
-      params.delete("item"); 
+      params.delete("item");
     }
 
     if (matchedName) {
@@ -108,37 +133,40 @@ const PrductSearchBar = ({ selections, products, className }: { selections: Cate
 
   return (
     <>
-      <div className={`flex items-center w-full max-w-[350px] h-[50px] border border-gray-300 rounded-md shadow-sm bg-white overflow-hidden transition-all duration-300 focus-within:ring-1 ${className}`}>
-        <Input
-          placeholder="Search for products and brands"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          onPressEnter={handleSearch}
-          className="w-full px-4 py-2 border-none outline-none text-gray-700 focus:ring-0"
-        />
-        <button
-          onClick={handleSearch}
-          className="flex items-center justify-center text-gray-400 px-4 h-full transition-all duration-300"
+      {!isSalonPage && (
+        <div
+          className={`flex items-center w-full max-w-[350px] h-[50px] border border-gray-300 rounded-md shadow-sm bg-white overflow-hidden transition-all duration-300 focus-within:ring-1 ${className}`}
         >
-          <BsSearch className="size-5" />
-        </button>
-        {/* Modal */}
-        {isModalOpen && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              className="bg-white rounded-lg shadow-xl p-6 w-80 text-center"
-            >
-              <p className="text-lg font-semibold text-gray-800">
-                No matching category, subcategory, item or product found.
-              </p>
-            </motion.div>
-          </div>
-        )}
-      </div>
-
+          <Input
+            placeholder="Search for products and brands"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onPressEnter={handleSearch}
+            className="w-full px-4 py-2 border-none outline-none text-gray-700 focus:ring-0"
+          />
+          <button
+            onClick={handleSearch}
+            className="flex items-center justify-center text-gray-400 px-4 h-full transition-all duration-300"
+          >
+            <BsSearch className="size-5" />
+          </button>
+          {/* Modal */}
+          {isModalOpen && (
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                className="bg-white rounded-lg shadow-xl p-6 w-80 text-center"
+              >
+                <p className="text-lg font-semibold text-gray-800">
+                  No matching category, subcategory, item or product found.
+                </p>
+              </motion.div>
+            </div>
+          )}
+        </div>
+      )}
     </>
   );
 };

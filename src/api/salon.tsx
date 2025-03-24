@@ -60,3 +60,17 @@ export const getAllActiveServices = createAsyncThunk(
       }
     }
   );
+
+  export const getServiceById = async (serviceId: string) => {
+    try {
+      const res = await axios.get(
+        `${BACKEND_URL}/salon-services/getServiceById?id=${serviceId}`
+      );
+  
+      return res.data;
+    } catch (error) {
+      console.error("Error Fetching Service by Id", error);
+      throw error;
+    }
+  };
+  

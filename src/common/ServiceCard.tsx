@@ -1,12 +1,12 @@
-"use client";
+"use client"
+
 import React from "react";
 import "tailwindcss/tailwind.css";
 import "swiper/css";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
 import { FaHeart } from "react-icons/fa";
 import { RiShoppingBag4Line } from "react-icons/ri";
 import { Rating } from "react-simple-star-rating";
+import { useRouter } from "next/navigation";
 
 const ServiceCard: React.FC<{ item: any }> = ({ item }) => {
   const router = useRouter();
@@ -16,8 +16,13 @@ const ServiceCard: React.FC<{ item: any }> = ({ item }) => {
     ? item.adminSetPrice - (item.adminSetPrice * item.discountPercentage) / 100
     : item.adminSetPrice;
 
+  const handleClick = () => {
+    router.push(`/salons/services/details?serviceId=${item._id}`);
+  };
   return (
-    <div className="w-[280px] xl:w-[380px] h-auto shadow-lg max-md:w-full cursor-pointer rounded-lg mx-auto">
+    <div className="w-[280px] xl:w-[380px] h-auto shadow-lg max-md:w-full cursor-pointer rounded-lg mx-auto"
+      onClick={handleClick}
+    >
       <div className="relative w-full h-[150px]">
         {/* Image handling */}
         <img
