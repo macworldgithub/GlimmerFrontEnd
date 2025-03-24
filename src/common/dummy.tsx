@@ -53,27 +53,25 @@ const ServiceNavMenu = () => {
     if (!categoryId) return;
     try {
       const data = await getAllServicesById(categoryId);
-
       let formattedSubservices: { [key: string]: string[] } = {};
       let formattedProducts: string[] = [];
-
       if (data.services && typeof data.services === "object") {
         Object.entries(data.services).forEach(([key, value]) => {
           if (typeof value === "object" && !Array.isArray(value)) {
-            // Ensure the key is a valid name, not an index like "0", "1"
-            formattedSubservices[key] = Object.keys(value); // Extract subservice names
+            if (value !== null) {
+              formattedSubservices[key] = Object.keys(value); // Extract subservice names
+            }
           } else if (Array.isArray(value)) {
             formattedProducts = value; // Store as products
           }
         });
-
         setSubservices((prev) => ({ ...prev, [categoryId]: formattedSubservices }));
         setProductItems((prev) => ({ ...prev, [categoryId]: formattedProducts }));
       }
     } catch (error) {
       message.error("Failed to fetch subservices and products");
     }
-  };
+  };  
 
   // Handle Service Click
   const handleServiceClick = (service: Service) => {
