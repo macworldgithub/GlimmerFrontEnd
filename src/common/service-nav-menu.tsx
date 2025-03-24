@@ -108,7 +108,7 @@ const ServiceNavMenu = ({ className }: ServiceNavMenuProps) => {
     <div className={`relative w-80 ${className}`}>
       {/* Dropdown Trigger */}
       <div
-        className="flex justify-between items-center p-3 cursor-pointer bg-gray-100 border border-gray-300 rounded-lg shadow-md hover:bg-gray-200 transition-all ease-in-out duration-300"
+        className="flex justify-between items-center p-3 cursor-pointer bg-gray-100 transition-all ease-in-out duration-300"
         onClick={toggleDropdown}
       >
         <span className="text-gray-700 font-medium">
@@ -129,7 +129,7 @@ const ServiceNavMenu = ({ className }: ServiceNavMenuProps) => {
 
       {/* Dropdown Content */}
       {isDropdownOpen && (
-        <div className="absolute z-10 bg-white border border-gray-300 rounded-lg mt-2 w-full max-h-60 overflow-y-auto shadow-lg transition-all ease-in-out duration-300">
+        <div className="absolute z-10 bg-white rounded-lg mt-2 w-full max-h-60 overflow-y-auto shadow-lg transition-all ease-in-out duration-300">
           {/* Services */}
           {services.map((service) => (
             <div key={service._id}>
