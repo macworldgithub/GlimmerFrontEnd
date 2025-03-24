@@ -17,7 +17,7 @@ const ServiceCard: React.FC<{ item: any }> = ({ item }) => {
     : item.adminSetPrice;
 
   return (
-    <div className="w-[280px] xl:w-[350px] h-auto shadow-lg max-md:w-full cursor-pointer rounded-lg">
+    <div className="w-[280px] xl:w-[380px] h-auto shadow-lg max-md:w-full cursor-pointer rounded-lg mx-auto">
       <div className="relative w-full h-[150px]">
         {/* Image handling */}
         <img
@@ -31,7 +31,7 @@ const ServiceCard: React.FC<{ item: any }> = ({ item }) => {
                justify-center px-2 max-md:justify-between"
         >
           {/* Add to Bag Button */}
-          <button
+      <button
             className=" w-full py-2 max-xl:py-1 xl:gap-2 max-xl:gap-[2px] max-xl:px-1  gap-1 bg-[#583FA8]  flex justify-center items-center 
                  max-md:py-1  rounded-md max-lg:px-2 max-lg:gap-1 max-md:w-fit"
           >
@@ -39,7 +39,7 @@ const ServiceCard: React.FC<{ item: any }> = ({ item }) => {
               size={20}
               className="text-white max-lg:h-5 max-lg:w-5 max-md:w-7 max-md:h-7"
             />
-            <p className="text-white text-[12px] mt-1 max-xl:text-[8px] max-lg:text-6px max-sm:text-[9px] max-md:hidden">
+            <p className="text-white text-[9px] sm:text-[6px] xl:text-[9px] mt-1 max-md:hidden">
               ADD TO BAG
             </p>
           </button>
@@ -70,27 +70,27 @@ const ServiceCard: React.FC<{ item: any }> = ({ item }) => {
       </div>
 
       <div className="p-1 px-3 mt-2">
-        <div className="flex justify-between mb-2">
-          <div className="flex flex-col">
-            {/* Service Title */}
-            <h2
-              className={`font-light text-[14px] overflow-hidden line-clamp-1 text-[#636363] ${
-                !item.name && "h-[24px]"
+        {/* <div className="flex justify-between mb-2"> */}
+        <div className="flex flex-col">
+          {/* Service Title */}
+          <h2
+            className={`font-light text-[14px] overflow-hidden line-clamp-1 text-[#636363] ${!item.name && "h-[24px]"
               }`}
-            >
-              {item.name || "Service Name"}
-            </h2>
+          >
+            {item.name ? (item.name.length > 12 ? item.name.slice(0, 12) + "..." : item.name) : "Service Name"}
+          </h2>
 
-            {/* Description */}
-            <h2
-              className={`text-[12px] font-medium text-[#303030] mt-3 mb-3 overflow-hidden line-clamp-1 ${
-                !item.description && "h-[24px]"
+
+
+          {/* Description */}
+          <h2
+            className={`text-[12px] font-medium text-[#303030] mt-2 mb-3 overflow-hidden line-clamp-1 ${!item.description && "h-[24px]"
               }`}
-            >
-              {item.description || "No description available"}
-            </h2>
-          </div>
+          >
+            {item.description || "No description available"}
+          </h2>
         </div>
+        {/* </div> */}
 
         <div className="flex justify-between items-center">
           <p className="text-gray-800 text-xl font-bold">
@@ -123,6 +123,8 @@ const ServiceCard: React.FC<{ item: any }> = ({ item }) => {
         </div>
       </div>
     </div>
+
+
   );
 };
 

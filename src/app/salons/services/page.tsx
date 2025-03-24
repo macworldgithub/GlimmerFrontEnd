@@ -121,7 +121,7 @@ const ServiceList = () => {
       </div>
 
       {/* Content Area: Sidebar & Items Grid */}
-      <div className="flex flex-col md:flex-row px-[1rem] sm:px-[2rem] md:px-[4rem] lg:px-[5rem] xl:px-[10rem] lg:py-[2rem]">
+      <div className="flex flex-col md:flex-row md:gap-x-8 xl:gap-x-0 px-[1rem] sm:px-[2rem] md:px-[4rem] lg:px-[5rem] xl:px-[10rem] lg:py-[2rem]">
         {/* Sidebar */}
         <motion.aside
           initial={{ x: -100, opacity: 0 }}
@@ -244,7 +244,7 @@ const ServiceList = () => {
             </div>
           </div>
 
-          <div className="w-full h-max grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-8 gap-y-10 p-6">
+          <div className="w-full h-max grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-8 gap-y-10  p-6 ">
             {data.length ? (
               data.map((item) => (
                 <motion.div
