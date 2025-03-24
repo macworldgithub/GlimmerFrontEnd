@@ -29,7 +29,7 @@ const ServiceList = () => {
   const pageSize = 8;
   const [data, setData] = useState<any[]>([]); // Store services
   const [total, setTotal] = useState(0); // Store total services
-
+  
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
@@ -82,7 +82,7 @@ const ServiceList = () => {
   return (
     <div className="flex flex-col w-[99vw] pb-[8rem]">
       {/* Category Navigation Menu */}
-      <div className="hero-content px-10 bg-[#FBE8A5] mb-4">
+      <div className="hero-content px-10 bg-[#FBE8A5] mb-4 z-10">
         <Salonfilter />
       </div>
       {/* Breadcrumbs */}

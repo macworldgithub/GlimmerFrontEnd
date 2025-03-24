@@ -108,7 +108,7 @@ const ServiceNavMenu = ({ className }: ServiceNavMenuProps) => {
     <div className={`relative w-80 ${className}`}>
       {/* Dropdown Trigger */}
       <div
-        className="flex justify-between items-center p-3 cursor-pointer bg-gray-100 transition-all ease-in-out duration-300"
+        className="flex justify-between items-center p-3 cursor-pointer transition-all ease-in-out duration-300"
         onClick={toggleDropdown}
       >
         <span className="text-gray-700 font-medium">

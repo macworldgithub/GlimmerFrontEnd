@@ -10,7 +10,7 @@ const Salonfilter = () => {
   return (
     <>
       <div className="flex flex-col p-10 gap-2 rounded-md bg-white lg:hidden">
-        <ServiceNavMenu />
+        <ServiceNavMenu className="w-full"/>
         <SearchFilterSection
           placeholder="Location"
           icon={<IoLocationSharp className="size-5" />}
