@@ -1,28 +1,16 @@
-"use client";
+"use client"
 
 import React, { Suspense, useEffect, useState } from "react";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
-import CategoryNavMenu from "@/common/category-nav-menu";
-import Card from "@/common/Card";
-import { getAllProductItem, getAllProducts } from "@/api/product";
-import Sidebar from "@/common/Sidebar";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { BiChevronDown } from "react-icons/bi";
 import Salonfilter from "../components/salonFIlter";
-
-interface CategorySelection {
-  category_id: string;
-  category_name: string;
-  sub_categories: {
-    sub_category_id: string;
-    name: string;
-    items: {
-      item_id: string;
-      name: string;
-    }[];
-  }[];
-}
+import ServiceSidebar from "@/common/ServiceSidebar";
+import { getAllActiveServices } from "@/api/salon";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "@/store/reduxStore";
+import ServiceCard from "@/common/ServiceCard";
+import { BiChevronDown } from "react-icons/bi";
 
 // A loading component for suspense fallback
 const Loading = () => (
@@ -32,113 +20,44 @@ const Loading = () => (
 );
 
 const ServiceList = () => {
-  const [data, setData] = useState<any[]>([]);
-  const [total, setTotal] = useState(0);
-  const [selections, setSelections] = useState<CategorySelection[]>([]);
   const [activeSort, setActiveSort] = useState("Date");
-  const [showPriceDropdown, setShowPriceDropdown] = useState(false);
   const [showRatingDropdown, setShowRatingDropdown] = useState(false);
+  const [showPriceDropdown, setShowPriceDropdown] = useState(false);
   const [sortOrder, setSortOrder] = useState("desc");
   const [ratingFilter, setRatingFilter] = useState<number | null>(null);
+
   const pageSize = 8;
+  const [data, setData] = useState<any[]>([]); // Store services
+  const [total, setTotal] = useState(0); // Store total services
 
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
+  const dispatch = useDispatch<AppDispatch>();
 
-  const categoryFilter = searchParams.get("category") ?? "";
-  const subCategoryFilter = searchParams.get("sub_category") ?? "";
-  const itemFilter = searchParams.get("item") ?? "";
-  const nameFilter = searchParams.get("name") ?? "";
-  const minPriceFilter = Number(searchParams.get("min_price")) ?? 0;
-  const maxPriceFilter = Number(searchParams.get("max_price")) ?? 0;
-  const createdAtFilter = searchParams.get("created_at");
+  const categoryIdFilter = searchParams.get("categoryId") ?? "";
+  const salonIdFilter = searchParams.get("salonId") ?? "";
+  const subCategoryNameFilter = searchParams.get("subCategoryName") ?? "";
+  const subSubCategoryNameFilter = searchParams.get("subSubCategoryName") ?? "";
   const page = Number(searchParams.get("page")) || 1;
-
-  useEffect(() => {
-    const fetchSelections = async () => {
-      try {
-        const productItemsRes = await getAllProductItem();
-        const transformedSelections = transformData(productItemsRes);
-        setSelections(transformedSelections);
-      } catch (error) {
-        console.error("Error fetching selections:", error);
-      }
-    };
-    fetchSelections();
-  }, []);
-
-  function transformData(data: any[]): CategorySelection[] {
-    return data.map((category) => ({
-      category_id: category.product_category._id,
-      category_name: category.product_category.name,
-      sub_categories: category.sub_categories.map((subCategory: any) => ({
-        sub_category_id: subCategory._id,
-        name: subCategory.name,
-        items: subCategory.items.map((item: any) => ({
-          item_id: item._id,
-          name: item.name,
-        })),
-      })),
-      created_at: category.product_category.created_at,
-    }));
-  }
 
   const fetchData = async () => {
     try {
-      const res = await getAllProducts(
-        categoryFilter,
-        subCategoryFilter,
-        itemFilter,
-        nameFilter,
-        0,
-        0,
-        page
+      const result = await dispatch(
+        getAllActiveServices({
+          page_no: page,
+          categoryId: categoryIdFilter,
+          salonId: salonIdFilter,
+          subCategoryName: subCategoryNameFilter,
+          subSubCategoryName: subSubCategoryNameFilter,
+        })
       );
-      // Filter products by name if nameFilter is provided
-      let filteredProducts = res.products.filter((product: any) => {
-        const productName = product.name?.toLowerCase() || "";
-        const productPrice = product.base_price || 0;
-        const productCreatedAt = new Date(product.created_at);
-
-        // Apply price filter
-        const matchesPrice =
-          (minPriceFilter ? productPrice >= minPriceFilter : true) &&
-          (maxPriceFilter ? productPrice <= maxPriceFilter : true);
-
-        // Apply name filter if it's present
-        const matchesName = nameFilter
-          ? productName.includes(nameFilter.toLowerCase())
-          : true;
-
-        const matchesCreatedAt = createdAtFilter
-          ? productCreatedAt >= new Date(createdAtFilter)
-          : true;
-
-        return matchesPrice && matchesName && matchesCreatedAt;
-      });
-
-      filteredProducts = filteredProducts.sort((a: any, b: any) => {
-        if (activeSort === "Date") {
-          return sortOrder === "desc"
-            ? new Date(b.created_at).getTime() -
-                new Date(a.created_at).getTime()
-            : new Date(a.created_at).getTime() -
-                new Date(b.created_at).getTime();
-        } else if (activeSort === "Price") {
-          return sortOrder === "desc"
-            ? (b.discounted_price || b.base_price) -
-                (a.discounted_price || a.base_price)
-            : (a.discounted_price || a.base_price) -
-                (b.discounted_price || b.base_price);
-        }
-        return 0;
-      });
-
-      setData(filteredProducts);
-      setTotal(res.total || filteredProducts.length);
+      if (result.payload) {
+        setData(result.payload.services);  // Assuming services are in result.payload.services
+        setTotal(result.payload.total);  // Assuming total count is in result.payload.total
+      }
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("Error fetching services", error);
     }
   };
 
@@ -146,12 +65,10 @@ const ServiceList = () => {
     fetchData();
   }, [
     page,
-    categoryFilter,
-    subCategoryFilter,
-    itemFilter,
-    nameFilter,
-    minPriceFilter,
-    maxPriceFilter,
+    categoryIdFilter,
+    salonIdFilter,
+    subCategoryNameFilter,
+    subSubCategoryNameFilter,
     activeSort,
     sortOrder,
   ]);
@@ -159,45 +76,6 @@ const ServiceList = () => {
   const handlePageChange = (newPage: number) => {
     const params = new URLSearchParams(searchParams);
     params.set("page", newPage.toString());
-    router.push(`${pathname}?${params.toString()}`);
-  };
-
-  const handleFilterChange = (newFilters: {
-    category?: string;
-    sub_category?: string;
-    item?: string;
-    name?: string;
-    min_price?: string;
-    max_price?: string;
-  }) => {
-    const params = new URLSearchParams(searchParams);
-
-    if (
-      newFilters.category &&
-      !newFilters.sub_category &&
-      !newFilters.item &&
-      !newFilters.name &&
-      !newFilters.min_price &&
-      !newFilters.max_price
-    ) {
-      params.set("category", newFilters.category);
-      params.delete("sub_category");
-      params.delete("item");
-      params.delete("name");
-      params.delete("min_price");
-      params.delete("max_price");
-    } else {
-      if (newFilters.category) params.set("category", newFilters.category);
-      if (newFilters.sub_category)
-        params.set("sub_category", newFilters.sub_category);
-      if (newFilters.item) params.set("item", newFilters.item);
-      if (newFilters.name) params.set("name", newFilters.name);
-      if (newFilters.min_price) params.set("min_price", newFilters.min_price);
-      if (newFilters.max_price) params.set("max_price", newFilters.max_price);
-    }
-    // Reset the page to 1 whenever a filter changes
-    params.set("page", "1");
-
     router.push(`${pathname}?${params.toString()}`);
   };
 
@@ -225,6 +103,7 @@ const ServiceList = () => {
           Services
         </Link>
       </div>
+
       {/* Banner Image */}
       <div className="hidden md:block pt-[3rem] px-[1rem] sm:px-[2rem] md:px-[4rem] lg:px-[6rem] xl:px-[12rem]">
         <div className="w-full h-[50vh] sm:h-[50vh] md:h-[50vh] lg:h-[50vh] xl:h-[50vh] rounded-lg overflow-hidden relative group">
@@ -250,10 +129,7 @@ const ServiceList = () => {
           transition={{ duration: 1 }}
           className="w-full md:w-[30%] lg:w-[30%] p-6"
         >
-          <Sidebar
-            selections={selections}
-            onFilterChange={handleFilterChange}
-          />
+          <ServiceSidebar />
         </motion.aside>
 
         {/* Main Content */}
@@ -263,8 +139,9 @@ const ServiceList = () => {
           transition={{ duration: 0.5 }}
           className="w-full"
         >
-          {/* SORT BY*/}
-          <div className="flex flex-wrap md:flex-row sm:flex-col items-center gap-4 sm:gap-6 px-4 sm:px-6 md:px-8 pt-4 sm:pt-6 md:pt-8 pb-4 sm:pb-6 md:pb-8">
+          {/* Sort and Filter UI */}
+         {/* SORT BY*/}
+         <div className="flex flex-wrap md:flex-row sm:flex-col items-center gap-4 sm:gap-6 px-4 sm:px-6 md:px-8 pt-4 sm:pt-6 md:pt-8 pb-4 sm:pb-6 md:pb-8">
             <span className="text-gray-700 text-[20px]">Sort by</span>
 
             <button
@@ -367,15 +244,15 @@ const ServiceList = () => {
             </div>
           </div>
 
-          <div className=" w-full h-max grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-8 gap-y-10 p-6">
+          <div className="w-full h-max grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-8 gap-y-10 p-6">
             {data.length ? (
               data.map((item) => (
                 <motion.div
-                  key={item.id}
+                  key={item._id}
                   whileHover={{ scale: 1.03 }}
                   className="flex"
                 >
-                  <Card item={item} />
+                  <ServiceCard item={item} />
                 </motion.div>
               ))
             ) : (
@@ -417,7 +294,7 @@ const ServiceList = () => {
 
 const Temp = () => {
   return (
-    <Suspense fallback={<Loading />}>
+    <Suspense fallback={<Loading />} >
       <ServiceList />
     </Suspense>
   );

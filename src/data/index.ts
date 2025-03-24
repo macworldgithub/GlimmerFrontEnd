@@ -399,6 +399,24 @@ export interface RealCardItem {
   item:string;
 }
 
+export interface ServicesItems {
+  name: string;
+  categoryId: string;
+  subCategoryName: string;
+  subSubCategoryName: string;
+  requestedPrice: number;
+  adminPrice: number;
+  adminSetPrice: number;
+  discountPercentage: number;
+  description: string;
+  duration: string;
+  image1: string;
+  image2: string;
+  image3: string;
+  status: "Active" | "Inactive";
+  created_at: string;
+}
+
 export const sampleProducts: CardItem[] = [
   {
     id: 1,

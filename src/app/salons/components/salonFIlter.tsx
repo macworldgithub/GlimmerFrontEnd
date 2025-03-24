@@ -27,24 +27,6 @@ const Salonfilter = () => {
         </div>
         <button className="btn btn-neutral btn-block">Search</button>
       </div>
-      <div className="flex flex-col p-10 gap-2 rounded-md bg-white lg:hidden">
-        <ServiceNavMenu />
-        <SearchFilterSection
-          placeholder="Location"
-          icon={<IoLocationSharp className="size-5" />}
-        />
-        <div className="flex gap-2">
-          <SearchFilterSection
-            placeholder="Price"
-            icon={<IoMdPricetags className="size-5" />}
-          />
-          <SearchFilterSection
-            placeholder="Gender"
-            icon={<FaPerson className="size-5" />}
-          />
-        </div>
-        <button className="btn btn-neutral btn-block">Search</button>
-      </div>
       <div className="hidden items-center px-10 justify-between rounded-full bg-white lg:flex">
         <ServiceNavMenu />
         <HorizontalDivider className="hidden lg:block" />
