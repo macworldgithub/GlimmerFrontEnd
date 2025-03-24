@@ -64,7 +64,7 @@ const SideMenu = ({
             <FaArrowRight className="size-4" /> Register your salon
           </Link>
         </li>
-        <li>
+        <li>  
           <Link
             className="text-base"
             href="/coming-soon"

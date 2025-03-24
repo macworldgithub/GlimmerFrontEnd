@@ -34,7 +34,7 @@ export default function RootLayout({
           
           {children}
           <BoxContainer />
-          <Footer />
+          <Footer />  
           <CookieBanner />
         </CartStoreProvider>
       </body>
