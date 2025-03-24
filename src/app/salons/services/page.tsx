@@ -244,7 +244,7 @@ const ServiceList = () => {
             </div>
           </div>
 
-          <div className="w-full h-max grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-8 gap-y-10  p-6 ">
+          <div className="w-full h-max grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-x-8 gap-y-10  p-6 ">
             {data.length ? (
               data.map((item) => (
                 <motion.div
