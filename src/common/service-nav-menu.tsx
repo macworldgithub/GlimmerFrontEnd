@@ -9,8 +9,14 @@ import { useState, useEffect } from "react";
 interface ServiceNavMenuProps {
   className?: string;
 }
+interface ServiceNavMenuProps {
+  className?: string;
+  onSelectService?: (service: string) => void;
+  onSelectSubservice?: (subservice: string) => void;
+}
 
-const ServiceNavMenu = ({ className }: ServiceNavMenuProps) => {
+
+const ServiceNavMenu = ({ className, onSelectService, onSelectSubservice }: ServiceNavMenuProps) => {
   const [services, setServices] = useState<{ _id: string; category: string }[]>([]);
   const [subServices, setSubservices] = useState<{ [key: string]: string[] }>({});
   const [productItems, setProductItems] = useState<string[]>([]);
@@ -19,7 +25,7 @@ const ServiceNavMenu = ({ className }: ServiceNavMenuProps) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [expandedServices, setExpandedServices] = useState<{ [key: string]: boolean }>({});
   const [expandedSubservices, setExpandedSubservices] = useState<{ [key: string]: boolean }>({});
-  const [searchTerm, setSearchTerm] = useState(""); // 🔍 Search input
+  const [searchTerm, setSearchTerm] = useState(""); 
 
   // Fetch Services (Categories)
   const fetchServices = async () => {
@@ -64,11 +70,17 @@ const ServiceNavMenu = ({ className }: ServiceNavMenuProps) => {
   const handleServiceClick = (service: { _id: string; category: string }) => {
     setSelectedService(service);
     setSelectedSubservice(null);
+    if (onSelectService) {
+      onSelectService(service.category);
+    }
     setExpandedServices((prev) => ({ ...prev, [service._id]: !prev[service._id] }));
   };
 
   const handleSubserviceClick = (subservice: string) => {
     setSelectedSubservice(subservice);
+    if (onSelectSubservice) {
+      onSelectSubservice(subservice);
+    }
     setExpandedSubservices((prev) => ({ ...prev, [subservice]: !prev[subservice] }));
   };
 
