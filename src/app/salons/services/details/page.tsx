@@ -16,8 +16,9 @@ import { Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { createBooking, getServiceById } from "@/api/salon";
 import { useSearchParams } from "next/navigation";
-import { Modal } from "antd";
+import { DatePicker, Modal } from "antd";
 import { RootState } from "@/store/reduxStore";
+import dayjs from "dayjs";
 
 const ServiceDetails = () => {
   const token = useSelector((state: RootState) => state.login.token);
@@ -108,11 +109,6 @@ const ServiceDetails = () => {
     setIsModalOpen(true);
   };
 
-  const handleCancel = () => {
-    console.log("Closing modal...");
-    setIsModalOpen(false);
-  };
-
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -124,8 +120,6 @@ const ServiceDetails = () => {
     let newErrors: any = {};
     if (!bulkForm.customerName.trim())
       newErrors.customerName = "Name is required!";
-    if (!bulkForm.customerEmail.trim())
-      newErrors.customerEmail = "Email is required!";
     if (!bulkForm.customerPhone.trim())
       newErrors.customerPhone = "Phone number is required!";
     if (!bulkForm.bookingDate.trim())
@@ -498,85 +492,77 @@ const ServiceDetails = () => {
             className="rounded-lg"
           >
             <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Payment Method */}
-              <div>
-                <label className="font-semibold text-gray-700 block mb-2">
-                  Payment Method:
-                </label>
-                <div className="flex items-center gap-4">
-                  <label className="flex items-center gap-2 text-gray-600">
-                    <input
-                      type="radio"
-                      name="paymentMethod"
-                      value="Pay at Counter"
-                      checked={bulkForm.paymentMethod === "Pay at Counter"}
-                      onChange={handleChange}
-                      className="cursor-pointer"
-                    />
-                    Counter Payment
-                  </label>
-                </div>
-              </div>
-
               {/* Input Fields */}
               {[
-                {
-                  label: "Customer Name",
-                  name: "customerName",
-                  type: "text",
-                  error: errors.customerName,
-                },
-                {
-                  label: "Customer Email",
-                  name: "customerEmail",
-                  type: "email",
-                  error: errors.customerEmail,
-                },
-                {
-                  label: "Customer Phone",
-                  name: "customerPhone",
-                  type: "tel",
-                  error: errors.customerPhone,
-                },
-                {
-                  label: "Booking Date",
-                  name: "bookingDate",
-                  type: "date",
-                  error: errors.bookingDate,
-                },
-              ].map(({ label, name, type, error }) => (
-                <div key={name}>
-                  <label className="font-semibold text-gray-700 block mb-1">
-                    {label}:
-                  </label>
-                  <input
-                    type={type}
-                    name={name}
-                    value={(bulkForm as any)[name]}
-                    onChange={handleChange}
-                    className={`w-full p-3 border ${
-                      error ? "border-red-500" : "border-gray-300"
-                    } rounded-md focus:ring-2 focus:ring-purple-500 outline-none`}
-                    required
-                  />
-                  {error && (
-                    <p className="text-red-500 text-sm mt-1">{error}</p>
-                  )}
-                </div>
-              ))}
+  {
+    label: "Customer Name",
+    name: "customerName",
+    type: "text",
+    error: errors.customerName,
+  },
+  {
+    label: "Customer Email",
+    name: "customerEmail",
+    type: "email",
+  },
+  {
+    label: "Customer Phone",
+    name: "customerPhone",
+    type: "tel",
+    error: errors.customerPhone,
+  },
+  {
+    label: "Booking Date",
+    name: "bookingDate",
+    type: "date",
+    error: errors.bookingDate,
+  },
+].map(({ label, name, type, error }) => (
+  <div key={name}>
+    <label className="font-semibold text-gray-700 block mb-1">
+      {label}:
+    </label>
 
-              {/* Notes */}
-              <div>
-                <label className="font-semibold text-gray-700 block mb-1">
-                  Additional Notes:
+    {type === "date" ? (
+      <DatePicker
+        format="YYYY-MM-DD"
+        disabledDate={(current) => current && current.isBefore(dayjs(), "day")}
+        onChange={(date, dateString) => setBulkForm((prev) => ({ ...prev, [name]: dateString }))}
+        className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 outline-none"
+      />
+    ) : (
+      <input
+        type={type}
+        name={name}
+        value={(bulkForm as Record<string, string>)[name] || ""}
+        onChange={handleChange}
+        className={`w-full p-3 border ${
+          error ? "border-red-500" : "border-gray-300"
+        } rounded-md focus:ring-2 focus:ring-purple-500 outline-none`}
+        required
+      />
+    )}
+
+    {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+  </div>
+))}
+
+              {/* Payment Method */}
+              <label className="font-semibold text-gray-700 block mb-2">
+                Payment Method:
+              </label>
+              <div className="flex items-center gap-4">
+                <label className="flex items-center gap-2 text-gray-600">
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    value="Pay at Counter"
+                    checked={bulkForm.paymentMethod === "Pay at Counter"}
+                    onChange={handleChange}
+                    className="cursor-pointer"
+                  />
+                  Counter Payment
                 </label>
-                <textarea
-                  name="notes"
-                  placeholder="Enter any special requests..."
-                  value={bulkForm.notes}
-                  onChange={handleChange}
-                  className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 outline-none"
-                ></textarea>
               </div>
 
               {/* Confirm Button */}
