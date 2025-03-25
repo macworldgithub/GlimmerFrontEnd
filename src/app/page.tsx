@@ -14,7 +14,7 @@ export default async function Home() {
       <Hero />
       <SalonCardList />
       <SeftcareCardList />
-      <SaloonPictures />
+      {/* <SaloonPictures /> */}
       <BottomSlider />
       <GymBanner />
       <FakeReviewList />

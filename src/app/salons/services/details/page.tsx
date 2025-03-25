@@ -1,12 +1,10 @@
 "use client";
 import Card from "@/common/Card";
 import { sampleProducts } from "@/data";
-import { addItem, updateQty } from "@/reduxSlices/cartSlice";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
-import { motion } from "framer-motion";
 import Link from "next/link";
 import {
   MdKeyboardArrowRight,
@@ -16,19 +14,36 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { getServiceById } from "@/api/salon";
+import { createBooking, getServiceById } from "@/api/salon";
 import { useSearchParams } from "next/navigation";
+import { DatePicker, Modal } from "antd";
+import { RootState } from "@/store/reduxStore";
+import dayjs from "dayjs";
 
 const ServiceDetails = () => {
-  const dispatch = useDispatch();
+  const token = useSelector((state: RootState) => state.login.token);
   const searchParams = useSearchParams();
   const serviceId = searchParams.get("serviceId");
   const [service, setService] = useState<any>();
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [copied, setCopied] = useState("");
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [activeTab, setActiveTab] = useState("Description");
-  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-  const [bulkForm, setBulkForm] = useState({ name: "", phone: "", email: "" });
+  const [bulkForm, setBulkForm] = useState({
+    customerName: "",
+    customerEmail: "",
+    customerPhone: "",
+    bookingDate: "",
+    paymentMethod: "Pay at Counter",
+    notes: "",
+  });
+
+  const [errors, setErrors] = useState({
+    customerName: "",
+    customerEmail: "",
+    customerPhone: "",
+    bookingDate: "",
+  });
 
   useEffect(() => {
     if (!serviceId) return;
@@ -45,7 +60,6 @@ const ServiceDetails = () => {
     service?.adminSetPrice -
     (service?.adminSetPrice * service?.discountPercentage) / 100;
 
-
   const handleCopy = (text: string, type: string) => {
     navigator.clipboard.writeText(text).then(() => {
       setCopied(type);
@@ -61,12 +75,12 @@ const ServiceDetails = () => {
   ];
 
   const [index, setIndex] = useState(0);
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
+    setIsMobile(window.innerWidth < 768); // Set after mounting
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
@@ -91,8 +105,56 @@ const ServiceDetails = () => {
   };
 
   const handleBuy = () => {
-    console.log('first');
-  }
+    console.log("Opening modal...");
+    setIsModalOpen(true);
+  };
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setBulkForm({ ...bulkForm, [e.target.name]: e.target.value });
+    setErrors({ ...errors, [e.target.name]: "" });
+  };
+
+  const validateForm = () => {
+    let newErrors: any = {};
+    if (!bulkForm.customerName.trim())
+      newErrors.customerName = "Name is required!";
+    if (!bulkForm.customerPhone.trim())
+      newErrors.customerPhone = "Phone number is required!";
+    if (!bulkForm.bookingDate.trim())
+      newErrors.bookingDate = "Booking date is required!";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!validateForm()) return;
+
+    const bookingData = {
+      ...bulkForm,
+      serviceId: serviceId,
+      finalPrice: discountedPrice,
+    };
+
+    console.log("Submitting Booking Data:", bookingData);
+
+    try {
+      const response = await createBooking(bookingData, token);
+
+      console.log("Booking Successful:", response);
+      alert("Booking Confirmed!");
+
+      setIsModalOpen(false); // Close modal only on success
+    } catch (error) {
+      console.error("Booking Failed:", error);
+      alert("Failed to book service. Please try again.");
+    }
+  };
+
   return (
     <>
       {/* Breadcrumbs */}
@@ -390,14 +452,8 @@ const ServiceDetails = () => {
           {/* Buttons Section */}
           <div className="flex items-center gap-4 mt-4">
             <button
-              className={`flex-1 w-full flex items-center text-xs justify-center gap-2 py-3 xl:px-6 px-4 border text-purple-800 font-semibold rounded-md 
-    ${
-      isButtonDisabled
-        ? "border-gray-300 text-gray-500 cursor-not-allowed"
-        : "border-purple-800 hover:border-purple-800 hover:text-purple-800"
-    }`}
+              className={`flex-1 w-full flex items-center text-xs justify-center gap-2 py-3 xl:px-6 px-4 border text-purple-800 font-semibold rounded-md`}
               onClick={handleBuy}
-              disabled={isButtonDisabled}
             >
               <Image
                 alt="cart-icon"
@@ -405,7 +461,7 @@ const ServiceDetails = () => {
                 height={15}
                 src={"/assets/addtoBag/cart-icon.png"}
               />
-              BUY NOW
+              BOOK NOW
             </button>
             <button
               onClick={() => setIsWishlisted(!isWishlisted)}
@@ -423,6 +479,101 @@ const ServiceDetails = () => {
               />
             </button>
           </div>
+          <Modal
+            title={
+              <h2 className="text-xl font-bold text-gray-800">
+                Complete Your Booking
+              </h2>
+            }
+            open={isModalOpen}
+            onCancel={() => setIsModalOpen(false)}
+            footer={null}
+            centered
+            className="rounded-lg"
+          >
+            <form onSubmit={handleSubmit} className="space-y-4">
+              {/* Input Fields */}
+              {[
+  {
+    label: "Customer Name",
+    name: "customerName",
+    type: "text",
+    error: errors.customerName,
+  },
+  {
+    label: "Customer Email",
+    name: "customerEmail",
+    type: "email",
+  },
+  {
+    label: "Customer Phone",
+    name: "customerPhone",
+    type: "tel",
+    error: errors.customerPhone,
+  },
+  {
+    label: "Booking Date",
+    name: "bookingDate",
+    type: "date",
+    error: errors.bookingDate,
+  },
+].map(({ label, name, type, error }) => (
+  <div key={name}>
+    <label className="font-semibold text-gray-700 block mb-1">
+      {label}:
+    </label>
+
+    {type === "date" ? (
+      <DatePicker
+        format="YYYY-MM-DD"
+        disabledDate={(current) => current && current.isBefore(dayjs(), "day")}
+        onChange={(date, dateString) => setBulkForm((prev) => ({ ...prev, [name]: dateString }))}
+        className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 outline-none"
+      />
+    ) : (
+      <input
+        type={type}
+        name={name}
+        value={(bulkForm as Record<string, string>)[name] || ""}
+        onChange={handleChange}
+        className={`w-full p-3 border ${
+          error ? "border-red-500" : "border-gray-300"
+        } rounded-md focus:ring-2 focus:ring-purple-500 outline-none`}
+        required
+      />
+    )}
+
+    {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+  </div>
+))}
+
+              {/* Payment Method */}
+              <label className="font-semibold text-gray-700 block mb-2">
+                Payment Method:
+              </label>
+              <div className="flex items-center gap-4">
+                <label className="flex items-center gap-2 text-gray-600">
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    value="Pay at Counter"
+                    checked={bulkForm.paymentMethod === "Pay at Counter"}
+                    onChange={handleChange}
+                    className="cursor-pointer"
+                  />
+                  Counter Payment
+                </label>
+              </div>
+
+              {/* Confirm Button */}
+              <button
+                type="submit"
+                className="w-full bg-purple-900 text-white py-3 rounded-md hover:bg-purple-800 transition"
+              >
+                Confirm Booking
+              </button>
+            </form>
+          </Modal>
 
           {/* Tabs Section */}
           <div className="mt-12">
