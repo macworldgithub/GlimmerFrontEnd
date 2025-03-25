@@ -74,3 +74,17 @@ export const getAllActiveServices = createAsyncThunk(
     }
   };
   
+  export const createBooking = async (data: any, token: string) => {
+    try {
+      data = { ...data };
+      const res = await axios.post(`${BACKEND_URL}/salon-service-bookings/create`, data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return res.data;
+    } catch (error) {
+      console.error("Error creating order:", error);
+      throw error;
+    }
+  };
