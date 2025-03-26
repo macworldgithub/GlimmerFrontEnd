@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import { message } from "antd";
 import { getAllServices, getAllServicesById } from "@/api/salon";
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 const ServiceSidebar = () => {
+  const router = useRouter();
   const [services, setServices] = useState<{ _id: string; category: string }[]>(
     []
   );
@@ -15,6 +17,8 @@ const ServiceSidebar = () => {
   const [selectedSubservice, setSelectedSubservice] = useState<string | null>(
     null
   );
+  const [subCategoryName, setSubCategoryName] = useState<string | null>(null);
+  const [subSubCategoryName, setSubSubCategoryName] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -52,7 +56,29 @@ const ServiceSidebar = () => {
 
   const handleSubserviceChange = (subservice: string) => {
     setSelectedSubservice(subservice);
+
+    setSubCategoryName(subservice);
   };
+
+  const handleProductClick = (product: string) => {
+    setSubSubCategoryName(product); // Update subSubCategoryName filter with product selection
+    updateUrlWithFilters(subCategoryName, product);
+  };
+  
+  const updateUrlWithFilters = (subCategory: string | null, subSubCategory: string | null) => {
+    const params = new URLSearchParams();
+    if (subCategory) params.set('subCategoryName', subCategory);
+    if (subSubCategory) params.set('subSubCategoryName', subSubCategory);
+
+    router.push(`?${params.toString()}`, { scroll: false });
+  };
+
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (subCategoryName) params.set('subCategoryName', subCategoryName);
+    if (subSubCategoryName) params.set('subSubCategoryName', subSubCategoryName);
+    router.push(`?${params.toString()}`, { scroll: false });
+  }, [subCategoryName, subSubCategoryName, router]);
 
 
   return (
@@ -74,9 +100,7 @@ const ServiceSidebar = () => {
               />
               <span
                 className={`w-5 h-5 border-2 rounded-full flex items-center justify-center mr-3 ${
-                  selectedService === service._id
-                    ? "border-purple-700"
-                    : "border-gray-400"
+                  selectedService === service._id ? 'border-purple-700' : 'border-gray-400'
                 }`}
               >
                 {selectedService === service._id && (
@@ -105,9 +129,7 @@ const ServiceSidebar = () => {
                           />
                           <span
                             className={`w-5 h-5 border-2 rounded-full flex items-center justify-center mr-3 ${
-                              selectedSubservice === sub
-                                ? "border-purple-700"
-                                : "border-gray-400"
+                              selectedSubservice === sub ? 'border-purple-700' : 'border-gray-400'
                             }`}
                           >
                             {selectedSubservice === sub && (
@@ -127,6 +149,7 @@ const ServiceSidebar = () => {
                               <div
                                 key={index}
                                 className="p-2 cursor-pointer hover:bg-gray-100"
+                                onClick={() => handleProductClick(product)}
                               >
                                 {product}
                               </div>
