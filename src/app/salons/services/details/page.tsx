@@ -34,7 +34,7 @@ const ServiceDetails = () => {
     customerEmail: "",
     customerPhone: "",
     bookingDate: "",
-    paymentMethod: "Pay at Counter",
+    paymentMethod: "",
     notes: "",
   });
 
@@ -494,58 +494,64 @@ const ServiceDetails = () => {
             <form onSubmit={handleSubmit} className="space-y-4">
               {/* Input Fields */}
               {[
-  {
-    label: "Customer Name",
-    name: "customerName",
-    type: "text",
-    error: errors.customerName,
-  },
-  {
-    label: "Customer Email",
-    name: "customerEmail",
-    type: "email",
-  },
-  {
-    label: "Customer Phone",
-    name: "customerPhone",
-    type: "tel",
-    error: errors.customerPhone,
-  },
-  {
-    label: "Booking Date",
-    name: "bookingDate",
-    type: "date",
-    error: errors.bookingDate,
-  },
-].map(({ label, name, type, error }) => (
-  <div key={name}>
-    <label className="font-semibold text-gray-700 block mb-1">
-      {label}:
-    </label>
+                {
+                  label: "Customer Name",
+                  name: "customerName",
+                  type: "text",
+                  error: errors.customerName,
+                },
+                {
+                  label: "Customer Email",
+                  name: "customerEmail",
+                  type: "email",
+                },
+                {
+                  label: "Customer Phone",
+                  name: "customerPhone",
+                  type: "tel",
+                  error: errors.customerPhone,
+                },
+                {
+                  label: "Booking Date",
+                  name: "bookingDate",
+                  type: "date",
+                  error: errors.bookingDate,
+                },
+              ].map(({ label, name, type, error }) => (
+                <div key={name}>
+                  <label className="font-semibold text-gray-700 block mb-1">
+                    {label}:
+                  </label>
 
-    {type === "date" ? (
-      <DatePicker
-        format="YYYY-MM-DD"
-        disabledDate={(current) => current && current.isBefore(dayjs(), "day")}
-        onChange={(date, dateString) => setBulkForm((prev) => ({ ...prev, [name]: dateString }))}
-        className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 outline-none"
-      />
-    ) : (
-      <input
-        type={type}
-        name={name}
-        value={(bulkForm as Record<string, string>)[name] || ""}
-        onChange={handleChange}
-        className={`w-full p-3 border ${
-          error ? "border-red-500" : "border-gray-300"
-        } rounded-md focus:ring-2 focus:ring-purple-500 outline-none`}
-        required
-      />
-    )}
+                  {type === "date" ? (
+                    <DatePicker
+                      format="YYYY-MM-DD"
+                      disabledDate={(current) =>
+                        current && current.isBefore(dayjs(), "day")
+                      }
+                      onChange={(date, dateString) =>
+                        setBulkForm((prev) => ({ ...prev, [name]: dateString }))
+                      }
+                      className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 outline-none"
+                    />
+                  ) : (
+                    <input
+                      type={type}
+                      name={name}
+                      value={(bulkForm as Record<string, string>)[name] || ""}
+                      onChange={handleChange}
+                      className={`w-full p-3 border ${
+                        error ? "border-red-500" : "border-gray-300"
+                      } rounded-md focus:ring-2 focus:ring-purple-500 outline-none`}
+                      required
+                    />
+                  )}
 
-    {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
-  </div>
-))}
+                  {error && (
+                    <p className="text-red-500 text-sm mt-1">{error}</p>
+                  )}
+                </div>
+              ))}
 
               {/* Payment Method */}
               <label className="font-semibold text-gray-700 block mb-2">
@@ -562,6 +568,16 @@ const ServiceDetails = () => {
                     className="cursor-pointer"
                   />
                   Counter Payment
+                </label>
+                <label className="flex items-center gap-2 text-gray-600">
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    value="Prepaid (Card)"
+                    onChange={handleChange}
+                    className="cursor-pointer"
+                  />
+                  Card Payment
                 </label>
               </div>
 
