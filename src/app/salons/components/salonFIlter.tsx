@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IoLocationSharp } from "react-icons/io5";
 import { IoMdPricetags } from "react-icons/io";
 import { FaPerson } from "react-icons/fa6";
@@ -8,50 +8,48 @@ import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { getAllActiveServices } from "@/api/salon";
+import { AppDispatch } from "@/store/reduxStore";
 
 const Salonfilter: React.FC = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
 
-  const [selectedService, setSelectedService] = useState<string | null>(null);
-  const [selectedSubservice, setSelectedSubservice] = useState<string | null>(null);
+  const [subCategoryName, setSubCategoryName] = useState<string | null>(null);
+  const [subSubCategoryName, setSubSubCategoryName] = useState<string | null>(null);
+  // Update query params dynamically when selection changes
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (subCategoryName) params.set("subCategoryName", subCategoryName);
+    if (subSubCategoryName) params.set("subSubCategoryName", subSubCategoryName);
+    router.push(`?${params.toString()}`, { scroll: false });
+  }, [subCategoryName, subSubCategoryName, router]);
 
-  // Handle Search
-  const handleSearch = async () => {
-    if (!selectedService) {
-      console.warn("Please select a service before searching!");
-      return;
-    }
+  // Handle search button click
+  const handleSearch = () => {
+    // Only dispatch API if the filters change
+    dispatch(
+      getAllActiveServices({
+        page_no: 1,
+        subCategoryName: subCategoryName || undefined,
+        subSubCategoryName: subSubCategoryName || undefined,
+      })
+    );
 
-    const filterParams: Record<string, string> = {
-      service: selectedService,
-    };
-
-    if (selectedSubservice) {
-      filterParams.subservice = selectedSubservice;
-    }
-
-    console.log("Filtered Values Before API Call:", filterParams);
-
-    try {
-      const response = await dispatch(
-        getAllActiveServices({ page_no: 1, ...filterParams })
-      ).unwrap();
-      console.log("Filtered API Response:", response);
-    } catch (error) {
-      console.error("API Error:", error);
-    }
+    // Update the URL
+    const filterParams: Record<string, string> = {};
+    if (subCategoryName) filterParams.subCategoryName = subCategoryName;
+    if (subSubCategoryName) filterParams.subSubCategoryName = subSubCategoryName;
 
     const queryParams = new URLSearchParams(filterParams).toString();
-    router.push(`/salons/services?${queryParams}`);
+    router.push(`/salons/services?${queryParams}`, { scroll: false });
   };
 
   return (
     <>
       <div className="flex flex-col p-10 gap-2 rounded-md bg-white lg:hidden">
         <ServiceNavMenu className="w-full"
-        onSelectService={setSelectedService}
-        onSelectSubservice={setSelectedSubservice}
+        onSubCategorySelect={setSubCategoryName}
+        onSubSubCategorySelect={setSubSubCategoryName}
         />
         <SearchFilterSection
           placeholder="Location"
@@ -75,8 +73,8 @@ const Salonfilter: React.FC = () => {
       </div>
       <div className="hidden items-center px-10 justify-between rounded-full bg-white lg:flex">
         <ServiceNavMenu 
-        onSelectService={setSelectedService}
-        onSelectSubservice={setSelectedSubservice}
+        onSubCategorySelect={setSubCategoryName}
+        onSubSubCategorySelect={setSubSubCategoryName}
         />
         <HorizontalDivider className="hidden lg:block" />
         <SearchFilterSection
