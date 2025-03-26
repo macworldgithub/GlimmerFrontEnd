@@ -11,12 +11,12 @@ interface ServiceNavMenuProps {
 }
 interface ServiceNavMenuProps {
   className?: string;
-  onSelectService?: (service: string) => void;
-  onSelectSubservice?: (subservice: string) => void;
+  onSubCategorySelect?: (subCategory: string) => void;
+  onSubSubCategorySelect?: (subSubCategory: string) => void;
 }
 
 
-const ServiceNavMenu = ({ className, onSelectService, onSelectSubservice }: ServiceNavMenuProps) => {
+const ServiceNavMenu = ({ className, onSubCategorySelect, onSubSubCategorySelect }: ServiceNavMenuProps) => {
   const [services, setServices] = useState<{ _id: string; category: string }[]>([]);
   const [subServices, setSubservices] = useState<{ [key: string]: string[] }>({});
   const [productItems, setProductItems] = useState<string[]>([]);
@@ -70,18 +70,20 @@ const ServiceNavMenu = ({ className, onSelectService, onSelectSubservice }: Serv
   const handleServiceClick = (service: { _id: string; category: string }) => {
     setSelectedService(service);
     setSelectedSubservice(null);
-    if (onSelectService) {
-      onSelectService(service.category);
-    }
+    // if (onSelectService) {
+    //   onSelectService(service.category);
+    // }
     setExpandedServices((prev) => ({ ...prev, [service._id]: !prev[service._id] }));
   };
 
   const handleSubserviceClick = (subservice: string) => {
     setSelectedSubservice(subservice);
-    if (onSelectSubservice) {
-      onSelectSubservice(subservice);
-    }
+    if (onSubCategorySelect) onSubCategorySelect(subservice);
     setExpandedSubservices((prev) => ({ ...prev, [subservice]: !prev[subservice] }));
+  };
+
+  const handleProductClick = (product: string) => {
+    if (onSubSubCategorySelect) onSubSubCategorySelect(product);
   };
 
   const toggleDropdown = () => {
@@ -148,17 +150,11 @@ const ServiceNavMenu = ({ className, onSelectService, onSelectSubservice }: Serv
                             {/* Products under subservice */}
                             {selectedSubservice === subservice &&
                               expandedSubservices[subservice] &&
-                              Array.isArray(subServices[subservice]) && (
-                                <div className="pl-4">
-                                  {subServices[subservice]
-                                    .filter((product) => product.toLowerCase().includes(searchTerm.toLowerCase()))
-                                    .map((product, index) => (
-                                      <div key={`${subservice}-${index}`} className="p-3 cursor-pointer hover:bg-gray-100 rounded-md transition-all ease-in-out duration-200">
-                                        {product}
-                                      </div>
-                                    ))}
+                              subServices[subservice].map((product, index) => (
+                                <div key={`${subservice}-${index}`} className="p-3 cursor-pointer" onClick={() => handleProductClick(product)}>
+                                  {product}
                                 </div>
-                              )}
+                              ))}
                           </div>
                         ))
                     : productItems
