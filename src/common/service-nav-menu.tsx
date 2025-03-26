@@ -95,21 +95,11 @@ const ServiceNavMenu = ({ className, onSelectService, onSelectSubservice }: Serv
 
   return (
     <div className={`relative w-80 ${className}`}>
+
+      
       {/* Dropdown Trigger */}
       <div className="flex justify-between items-center p-3 cursor-pointer transition-all ease-in-out duration-300" onClick={toggleDropdown}>
-        <span className="text-gray-700 font-medium">
-          {selectedService ? (selectedSubservice ? `${selectedService.category} > ${selectedSubservice}` : selectedService.category) : "Select Service"}
-        </span>
-        <button className="text-blue-500 hover:text-blue-700 transition-colors duration-300">
-          {isDropdownOpen ? <FontAwesomeIcon icon={faChevronUp} /> : <FontAwesomeIcon icon={faChevronDown} />}
-        </button>
-      </div>
-
-      {/* Dropdown Content */}
-      {isDropdownOpen && (
-        <div className="absolute z-10 bg-white rounded-lg mt-2 w-full max-h-80 overflow-y-auto shadow-lg transition-all ease-in-out duration-300">
-          {/* 🔍 Search Field */}
-          <div className="p-2 border-b flex items-center gap-2 bg-gray-100">
+      <div className="p-2 border-b flex items-center gap-2 bg-gray-100">
             <FontAwesomeIcon icon={faSearch} className="text-gray-500" />
             <input
               type="text"
@@ -119,6 +109,28 @@ const ServiceNavMenu = ({ className, onSelectService, onSelectSubservice }: Serv
               className="w-full p-2 border-none outline-none bg-gray-100"
             />
           </div>
+        {/* <span className="text-gray-700 font-medium">
+          {selectedService ? (selectedSubservice ? `${selectedService.category} > ${selectedSubservice}` : selectedService.category) : "Select Service"}
+        </span> */}
+        <button className="text-blue-500 hover:text-blue-700 transition-colors duration-300">
+          {isDropdownOpen ? <FontAwesomeIcon icon={faChevronUp} /> : <FontAwesomeIcon icon={faChevronDown} />}
+        </button>
+      </div>
+
+      {/* Dropdown Content */}
+      {isDropdownOpen && (
+        <div className="absolute z-10 bg-white rounded-lg mt-2 w-full max-h-80 overflow-y-auto shadow-lg transition-all ease-in-out duration-300">
+          {/* 🔍 Search Field */}
+          {/* <div className="p-2 border-b flex items-center gap-2 bg-gray-100">
+            <FontAwesomeIcon icon={faSearch} className="text-gray-500" />
+            <input
+              type="text"
+              placeholder="Search services..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full p-2 border-none outline-none bg-gray-100"
+            />
+          </div> */}
 
           {/* Services */}
           {filteredServices.map((service) => (
