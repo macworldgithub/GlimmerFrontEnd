@@ -88,3 +88,15 @@ export const getAllActiveServices = createAsyncThunk(
       throw error;
     }
   };
+
+  export const getAllSalons = createAsyncThunk(
+    "salons/getAllSalons",
+    async (page_no: number, { rejectWithValue }) => {
+      try {
+        const response = await axios.get(`${BACKEND_URL}/salon/get-all-salon?page_no=${page_no}`);
+        return response.data;
+      } catch (error: any) {
+        return rejectWithValue(error.response?.data || "Failed to fetch salons");
+      }
+    }
+  );

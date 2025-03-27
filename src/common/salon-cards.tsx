@@ -1,231 +1,163 @@
-// 'use client';
+"use client";
 
-// import { useState, useEffect, useRef } from 'react';
-// import Image from 'next/image';
-// import { FaStar } from 'react-icons/fa';
-// import { FiArrowRight, FiArrowLeft } from 'react-icons/fi';
-
-
-// interface Salon {
-//   id: number;
-//   name: string;
-//   rating: number;
-//   reviews: number;
-//   location: string;
-//   category: string;
-//   imageUrl: string;
-// }
-
-
-// interface SalonCardProps {
-//   salon: Salon;
-// }
-
-
-// const SalonCard: React.FC<SalonCardProps> = ({ salon }) => {
-//   return (
-//     <div className="flex-shrink-0 w-[285px] h-72 bg-white rounded-lg border border-gray-300 overflow-hidden mb-14">
-//       {/* Image Section */}
-//       <div className="h-[56%] w-full relative">
-//         <Image src={salon.imageUrl} alt={salon.name} layout="fill" />
-//       </div>
-
-//       {/* Content Section */}
-//       <div className="h-[40%] px-4 pt-2 pb-1 flex flex-col justify-between">
-//         <h3 className="text-md font-semibold">{salon.name}</h3>
-//         <div className="flex items-center">
-//           <span className="text-black flex items-center gap-1 text-sm font-semibold">
-//             {salon.rating} <FaStar size={12} />
-//           </span>
-//           <span className="text-gray-500 text-sm ml-1">({salon.reviews})</span>
-//         </div>
-//         <p className="text-xs text-gray-500 mb-1">{salon.location}</p>
-//         <span className="text-xs border border-gray-300 px-2 py-1 rounded-full inline-block self-start">
-//           {salon.category}
-//         </span>
-//       </div>
-//     </div>
-//   );
-// };
-
-
-// interface SalonCardsProps {
-//   salons: Salon[];
-// }
-
-
-// const SalonCards: React.FC<SalonCardsProps> = ({ salons }) => {
-//   const containerRef = useRef<HTMLDivElement | null>(null);
-//   const [showArrows, setShowArrows] = useState(false);
-
-//   useEffect(() => {
-//     const updateShowArrows = () => {
-//       setShowArrows(window.innerWidth >= 1024);
-//     };
-//     window.addEventListener('resize', updateShowArrows);
-//     updateShowArrows();
-//     return () => window.removeEventListener('resize', updateShowArrows);
-//   }, []);
-
-//   const nextSlide = () => {
-//     containerRef.current?.scrollBy({ left: 300, behavior: 'smooth' });
-//   };
-
-//   const prevSlide = () => {
-//     containerRef.current?.scrollBy({ left: -300, behavior: 'smooth' });
-//   };
-
-//   return (
-//     <div className="relative w-full max-w-7xl xl:w-full mx-auto">
-//       <div
-//         ref={containerRef}
-//         className="flex overflow-x-auto scroll-smooth gap-7 py-4 px-4 scrollbar-hide"
-//         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-//       >
-//         {salons.map((salon) => (
-//           <SalonCard key={salon.id} salon={salon} />
-//         ))}
-//       </div>
-
-//       {showArrows && (
-//         <>
-//           <button
-//             onClick={prevSlide}
-//             className="absolute left-0 top-1/2 transform -translate-y-1/2 border border-gray-300 bg-white p-2 rounded-full"
-//           >
-//             <FiArrowLeft size={24} />
-//           </button>
-//           <button
-//             onClick={nextSlide}
-//             className="absolute right-0 top-1/2 transform -translate-y-1/2 border border-gray-300 bg-white p-2 rounded-full"
-//           >
-//             <FiArrowRight size={24} />
-//           </button>
-//         </>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default SalonCards;
-
-
-
-
-
-'use client';
-
-import { useState, useEffect } from 'react';
-import Image from 'next/image';
-import { FaStar } from 'react-icons/fa';
-import { FiArrowRight, FiArrowLeft } from 'react-icons/fi';
-import { useRouter } from "next/navigation"; 
+import { useState, useEffect } from "react";
+import Image from "next/image";
+import { FaStar } from "react-icons/fa";
+import { FiArrowRight, FiArrowLeft } from "react-icons/fi";
+import { useRouter } from "next/navigation";
+import { getAllSalons } from "@/api/salon";
+import { Tooltip } from "antd";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/store/reduxStore";
 
 interface Salon {
-  id: number;
-  name: string;
+  _id: number;
+  salon_name: string;
   rating: number;
   reviews: number;
-  location: string;
-  category: string;
-  imageUrl: string;
+  address: string;
+  openingHour: string;
+  closingHour: string;
+  image1: string;
+  about: string;
 }
 
-interface SalonCardProps {
-  salon: Salon;
-}
-
-const SalonCard: React.FC<SalonCardProps> = ({ salon }) => {
-   return (
-    <div className="w-[320px] h-[320px] bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-      {/* Image Section */}
-      <div className="h-[60%] w-full relative">
-        <Image src={salon.imageUrl} alt={salon.name} layout="fill" objectFit="cover" />
-      </div>
-
-      {/* Content Section */}
-      <div className="h-[40%] px-4 pt-2 pb-1 flex flex-col justify-between">
-        <h3 className="text-md font-semibold self-start">{salon.name}</h3>
-        <div className="flex items-center">
-          <span className="text-black flex items-center gap-1 text-sm font-semibold">
-            {salon.rating} <FaStar size={12} />
-          </span>
-          <span className="text-gray-500 text-sm ml-1">({salon.reviews})</span>
+const SalonCard: React.FC<{ salons: Salon }> = ({ salons }) => (
+  <div className="w-[320px] h-[370px] bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+    <div className="h-[50%] w-full relative">
+      {salons.image1 ? (
+        <Image
+          src={salons.image1}
+          alt={salons.salon_name}
+          layout="fill"
+          objectFit="cover"
+        />
+      ) : (
+        <div className="h-full w-full flex items-center justify-center bg-gray-200 text-gray-500">
+          <Image
+            src={"/assets/saloonPicture/salon_profile.jpg"}
+            alt="salon_profile"
+            layout="fill"
+            objectFit="cover"
+          />
         </div>
-        <p className="text-xs text-gray-500 mb-1 self-start">{salon.location}</p>
-        <span className="text-xs border border-gray-300 px-2 py-1 rounded-full inline-block self-start">
-          {salon.category}
-        </span>
-      </div>
+      )}
     </div>
-  );
-};
+    <div className="h-[50%] px-5 py-4 flex flex-col justify-between bg-gradient-to-b from-white to-gray-100 rounded-b-xl shadow-md">
+      {/* Salon Name */}
+      <h3 className="text-lg font-semibold text-gray-900 truncate text-left mb-2">
+        {salons.salon_name}
+      </h3>
 
-interface SalonCardsProps {
-  salons: Salon[];
-  title: string;
-}
+      {/* Rating Section */}
+      <div className="flex items-center gap-2 text-left mb-2">
+        <span className="text-yellow-500 flex items-center gap-1 text-sm font-semibold">
+          4 <FaStar size={16} className="drop-shadow-md" />
+        </span>
+        <span className="text-gray-500 text-sm">(2859 Reviews)</span>
+      </div>
 
-const SalonCards: React.FC<SalonCardsProps> = ({ salons, title }) => {
+      {/* Address */}
+      <Tooltip title={salons.address}>
+        <span
+          className="text-sm text-gray-600 font-medium text-left mb-2 truncate cursor-pointer"
+          style={{ maxWidth: "200px", display: "inline-block" }}
+        >
+          {salons.address.length > 30
+            ? `${salons.address.substring(0, 30)}...`
+            : salons.address}
+        </span>
+      </Tooltip>
+
+      {/* Opening Hours */}
+      {salons.openingHour && salons.closingHour ? (
+        <span className="text-xs bg-green-100 text-green-700 px-4 py-1 rounded-full font-medium shadow-sm border border-green-300 text-left w-fit mb-2">
+          {salons.openingHour}am - {salons.closingHour}pm
+        </span>
+      ) : (
+        <span className="text-xs bg-red-100 text-red-700 px-4 py-1 rounded-full font-medium shadow-sm border border-red-300 text-left w-fit mb-2">
+          24/7 Available
+        </span>
+      )}
+
+      {/* About Section */}
+      <Tooltip title={salons.about}>
+        <span
+          className="text-xs text-gray-500 truncate cursor-pointer mt-2 text-left leading-relaxed"
+          style={{ maxWidth: "200px", display: "inline-block" }}
+        >
+          {salons.about.length > 30
+            ? `${salons.about.substring(0, 30)}...`
+            : salons.about}
+        </span>
+      </Tooltip>
+    </div>
+  </div>
+);
+
+const SalonCards: React.FC<{ title?: string; salon: Salon[] }> = ({ title, salon }) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const [salons, setSalons] = useState<Salon[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [startIndex, setStartIndex] = useState(0);
   const [visibleCount, setVisibleCount] = useState(4);
   const [showArrows, setShowArrows] = useState(true);
   const router = useRouter();
 
-  const getVisibleCount = () => {
-    if (window.innerWidth <= 640) return 1;
-    if (window.innerWidth <= 768) return 2;
-    if (window.innerWidth <= 1024) {
-      setShowArrows(true);
-      return 3;
-    }
-    setShowArrows(false);
-    return 4;
-  };
-
-  // Handle resizing
   useEffect(() => {
-    const handleResize = () => {
-      setVisibleCount(getVisibleCount());
+    const fetchSalons = async () => {
+      try {
+        const result = await dispatch(getAllSalons(1)).unwrap();
+        setSalons(result.salons); // Assuming response has `salons` array
+      } catch (err) {
+        setError("Failed to load salons");
+      } finally {
+        setLoading(false);
+      }
     };
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+
+    fetchSalons();
   }, []);
 
-  // Circular navigation logic
-  const nextSlide = () => {
-    setStartIndex((prevIndex) => (prevIndex + 1) % salons.length);
-  };
+  useEffect(() => {
+    const getVisibleCount = () => {
+      if (window.innerWidth <= 640) return 1;
+      if (window.innerWidth <= 768) return 2;
+      if (window.innerWidth <= 1024) {
+        setShowArrows(true);
+        return 3;
+      }
+      setShowArrows(false);
+      return 4;
+    };
 
-  const prevSlide = () => {
-    setStartIndex((prevIndex) => (prevIndex - 1 + salons.length) % salons.length);
-  };
+    const handleResize = () => setVisibleCount(getVisibleCount());
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
-  const visibleSalons = [];
-  for (let i = 0; i < visibleCount; i++) {
-    visibleSalons.push(salons[(startIndex + i) % salons.length]);
-  }
+  const nextSlide = () => setStartIndex((prev) => (prev + 1) % salons.length);
+  const prevSlide = () =>
+    setStartIndex((prev) => (prev - 1 + salons.length) % salons.length);
+  const handleViewMore = () => router.push("/salons/all_salons");
 
+  if (loading)
+    return <p className="text-center text-gray-500">Loading salons...</p>;
+  if (error) return <p className="text-center text-red-500">{error}</p>;
 
-   const handleViewMore = () => {
-    router.push("/salons/services");
-   }
-
+  const visibleSalons = salons.slice(startIndex, startIndex + visibleCount);
 
   return (
     <div className="relative w-full max-w-7xl mx-auto text-center">
-      {/* Dynamic Heading */}
-      <h2 className="text-3xl font-semibold  mb-4 text-left pl-6" >{title}</h2>
-
-      {/* Cards Display */}
+      <h2 className="text-3xl font-semibold mb-4 text-left pl-6">{title}</h2>
       <div className="flex justify-center gap-5 py-4 px-4">
-        {visibleSalons.map((salon) => (
-          <SalonCard key={salon.id} salon={salon} />
+        {visibleSalons.map((salons) => (
+          <SalonCard key={salons._id} salons={salons} />
         ))}
       </div>
 
-      {/* Arrows (Only Show on max-lg and Below) */}
       {showArrows && (
         <>
           <button
@@ -243,11 +175,12 @@ const SalonCards: React.FC<SalonCardsProps> = ({ salons, title }) => {
         </>
       )}
 
-      {/* View More Button */}
-      <button className="mt-4 bg-[#583FA8] text-white py-2 px-6 rounded-lg mb-6"
-      onClick={handleViewMore}
+      <button
+        className="mt-4 bg-[#583FA8] text-white py-2 px-6 rounded-lg mb-6"
+        onClick={handleViewMore}
       >
-        View More</button>
+        View More
+      </button>
     </div>
   );
 };
