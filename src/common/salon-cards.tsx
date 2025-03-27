@@ -95,7 +95,8 @@ const SalonCard: React.FC<{ salons: Salon }> = ({ salons }) => (
   </div>
 );
 
-const SalonCards: React.FC<{ title?: string; salon: Salon[] }> = ({ title, salon }) => {
+const SalonCards: React.FC<{ title?: string; salon: Salon[]; showButton?: boolean }> = ({ title, salon, showButton = false }) => {
+
   const dispatch = useDispatch<AppDispatch>();
   const [salons, setSalons] = useState<Salon[]>([]);
   const [loading, setLoading] = useState(true);
@@ -175,14 +176,20 @@ const SalonCards: React.FC<{ title?: string; salon: Salon[] }> = ({ title, salon
         </>
       )}
 
-      <button
-        className="mt-4 bg-[#583FA8] text-white py-2 px-6 rounded-lg mb-6"
-        onClick={handleViewMore}
-      >
-        View More
-      </button>
+      {showButton && (
+        <button
+          className="mt-4 bg-[#583FA8] text-white py-2 px-6 rounded-lg mb-6"
+          onClick={handleViewMore}
+        >
+          View More
+        </button>
+      )}
+
     </div>
   );
 };
 
 export default SalonCards;
+
+
+

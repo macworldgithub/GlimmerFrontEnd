@@ -100,7 +100,7 @@ const TrendingSaloons = () => {
 				<h2 className="mb-2 md:mb-3 pl-6">Trending</h2>
 			</Link> */}
 			{/* <CardList cards={allSalons} dataType="salon" shouldAnimate={true} /> */}
-			 <SalonCards title="Trending" salons={data} />
+			 <SalonCards title="Trending" salon={data} showButton={true}/>
 		</div>
 	);
 };

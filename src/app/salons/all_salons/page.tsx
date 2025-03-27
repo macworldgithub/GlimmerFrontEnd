@@ -13,6 +13,7 @@ import ServiceCard from "@/common/ServiceCard";
 import { BiChevronDown } from "react-icons/bi";
 import { message } from "antd";
 import SalonCards from "@/common/salon-cards";
+import Page from "./../[id]/page";
 
 // A loading component for suspense fallback
 const Loading = () => (
@@ -28,10 +29,12 @@ const SalonsList = () => {
   const [sortOrder, setSortOrder] = useState("desc");
   const [ratingFilter, setRatingFilter] = useState<number | null>(null);
 
-  const pageSize = 8;
+
   const [data, setData] = useState<any[]>([]); // Store services
   console.log(data);
   const [total, setTotal] = useState(0); // Store total services
+
+
 
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -40,28 +43,34 @@ const SalonsList = () => {
 
   const page = Number(searchParams.get("page")) || 1;
 
+  const pageSize = 3; // Number of items per page
   const fetchData = async () => {
     try {
-      const result = await dispatch(getAllSalons(page)).unwrap(); // Unwrap the promise
-      setData(result.salons);
+      const result = await dispatch(getAllSalons({ page })).unwrap();
+      setData(result.salons || []);
+      setTotal(result.totalCount ?? 0);
     } catch (error) {
-      console.error("Error fetching services", error);
-      message.error("Failed to fetch services");
+      console.error("Error fetching salons:", error);
+      message.error("Failed to fetch salons");
     }
   };
+
+  const paginatedData = data.slice((page - 1) * pageSize, page * pageSize);
+  // Calculate total pages properly
+  const totalPages = Math.max(1, Math.ceil(data.length / pageSize));
 
   useEffect(() => {
     fetchData();
   }, [page]);
 
-  const handlePageChange = (newPage: number) => {
-    const params = new URLSearchParams(searchParams);
-    params.set("page", newPage.toString());
-    router.push(`${pathname}?${params.toString()}`);
+  const handlePageChange = (newPage : number) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      router.push(`?page=${newPage}`);
+    }
   };
 
   return (
-    <div className="flex flex-col w-[99vw] pb-[8rem]">
+    <div className="flex flex-col w-[99vw] pb-[8rem] ">
       {/* Category Navigation Menu */}
       <div className="hero-content px-10 bg-[#FBE8A5] mb-4 z-10">
         <Salonfilter />
@@ -130,11 +139,10 @@ const SalonsList = () => {
                 setActiveSort("Date");
                 setSortOrder(sortOrder === "desc" ? "asc" : "desc");
               }}
-              className={`border px-6 py-2 rounded-md text-lg font-medium transition duration-300 ease-in-out ${
-                activeSort === "Date"
-                  ? "border-purple-800 text-purple-800 bg-purple-100"
-                  : "border-gray-400 text-gray-700 hover:bg-[#FDF3D2]"
-              }`}
+              className={`border px-6 py-2 rounded-md text-lg font-medium transition duration-300 ease-in-out ${activeSort === "Date"
+                ? "border-purple-800 text-purple-800 bg-purple-100"
+                : "border-gray-400 text-gray-700 hover:bg-[#FDF3D2]"
+                }`}
             >
               Date{" "}
               {activeSort === "Date" ? (sortOrder === "desc" ? "↓" : "↑") : ""}
@@ -143,11 +151,10 @@ const SalonsList = () => {
             <div className="relative">
               <button
                 onClick={() => setShowPriceDropdown(!showPriceDropdown)}
-                className={`flex items-center gap-2 border px-6 py-2 rounded-md text-lg font-medium transition duration-300 ease-in-out ${
-                  activeSort === "Price"
-                    ? "border-purple-800 text-purple-800 bg-purple-100"
-                    : "border-gray-400 text-gray-700 hover:bg-[#FDF3D2]"
-                }`}
+                className={`flex items-center gap-2 border px-6 py-2 rounded-md text-lg font-medium transition duration-300 ease-in-out ${activeSort === "Price"
+                  ? "border-purple-800 text-purple-800 bg-purple-100"
+                  : "border-gray-400 text-gray-700 hover:bg-[#FDF3D2]"
+                  }`}
               >
                 Price{" "}
                 {activeSort === "Price"
@@ -225,15 +232,11 @@ const SalonsList = () => {
             </div>
           </div>
 
-          <div className="w-full h-max grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-x-8 gap-y-10  p-6 ">
-            {data && data.length > 0 ? (
-              data.map((salon) => (
-                <motion.div
-                  key={salon._id}
-                  whileHover={{ scale: 1.03 }}
-                  className="flex"
-                >
-                  <SalonCards salon={salon} />
+          <div className="w-full h-max grid grid-cols-1  gap-y-10 p-6">
+            {paginatedData.length > 0 ? (
+              paginatedData.map((salon) => (
+                <motion.div key={salon._id} whileHover={{ scale: 1.03 }} className="flex">
+                  <SalonCards salon={salon} showButton={false} />
                 </motion.div>
               ))
             ) : (
@@ -243,30 +246,45 @@ const SalonsList = () => {
                 </div>
               </div>
             )}
+
+
+            {/* {data && data.length > 0 ? (
+              data.map((salon) => (
+                <motion.div
+                  key={salon._id}
+                  whileHover={{ scale: 1.03 }}
+                  className="flex"
+                >
+                  <SalonCards salon={salon} showButton={false} />
+                </motion.div>
+              ))
+            ) : (
+              <div className="col-span-full flex justify-center items-center min-h-[70vh]">
+                <div className="text-center font-bold text-3xl">
+                  Oops! No items to display in this category
+                </div>
+              </div>
+            )} */}
           </div>
 
           {/* Pagination */}
-          {total > 0 && (
-            <div className="w-full flex justify-center items-center space-x-2 py-4">
-              <button
-                onClick={() => handlePageChange(page - 1)}
-                disabled={page === 1}
-                className="px-4 py-2 bg-gray-200 text-gray-500 rounded-md hover:bg-gray-300 disabled:opacity-50"
-              >
-                Previous
-              </button>
-              <span className="text-lg text-gray-600">
-                Page {page} of {Math.ceil(total / pageSize)}
-              </span>
-              <button
-                onClick={() => handlePageChange(page + 1)}
-                disabled={page === Math.ceil(total / pageSize)}
-                className="px-4 py-2 bg-gray-200 text-gray-500 rounded-md hover:bg-gray-300 disabled:opacity-50"
-              >
-                Next
-              </button>
-            </div>
-          )}
+          <div>
+            {data.length > 0 ? (
+              <div className="flex justify-center items-center space-x-2 py-4 ">
+                <button className="bg-gray-200 py-2 px-6 rounded-lg cursor-pointer"
+                 onClick={() => handlePageChange(page - 1)} disabled={page === 1}>
+            Previous
+          </button>
+          <span> Page {page} of {totalPages} </span>
+          <button className="bg-gray-200 py-2 px-6 rounded-lg cursor-pointer"
+           onClick={() => handlePageChange(page + 1)} disabled={page === totalPages}>
+            Next
+          </button>
+              </div>
+            ) : (
+              <p className="text-center text-gray-500">No salons available.</p>
+            )}
+          </div>
         </motion.main>
       </div>
     </div>

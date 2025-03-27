@@ -52,7 +52,7 @@ const Saloons = () => {
 				<h2 className="mb-2 md:mb-3 pl-6">Salons</h2>
 			</Link> */}
 			{/* <CardList cards={allSalons} dataType="salon" shouldAnimate={true} /> */}
-            <SalonCards title="Salons" salons={data} />
+            <SalonCards title="Salons" salon={data} showButton={true} />
 			 
 		</div>
 	);

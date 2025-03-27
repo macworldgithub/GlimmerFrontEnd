@@ -102,7 +102,7 @@ const NewSaloons = () => {
 			</Link> */}
 			{/* <CardList cards={allSalons} dataType="salon" shouldAnimate={true} /> */}
 
-			 <SalonCards title="New to Glimmer" salons={data} />
+			 <SalonCards title="New to Glimmer" salon={data} showButton={true} />
 		</div>
 	);
 };

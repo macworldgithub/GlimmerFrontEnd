@@ -80,7 +80,7 @@ const RecommendedSaloons = () => {
 				<h2 className="mb-2 md:mb-3 pl-6">Recommended</h2>
 			</Link> */}
             
-			<SalonCards title="Recommended" salons={data} />
+			<SalonCards title="Recommended" salon={data} showButton={true}/>
 			{/* <CardList cards={allSalons} dataType="salon" shouldAnimate={true} /> */}
 		</div>
 	);
