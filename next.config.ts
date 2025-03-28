@@ -1,6 +1,14 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "glimmerbucket.s3.eu-north-1.amazonaws.com",
+      },
+    ],
+  },
   webpack: (config) => {
     // Suppress Webpack errors by disabling error overlays
     config.infrastructureLogging = {
@@ -16,6 +24,7 @@ const nextConfig: NextConfig = {
 export default nextConfig;
 
 module.exports = {
+  ...nextConfig,
   async redirects() {
     return [
       // Basic redirect
