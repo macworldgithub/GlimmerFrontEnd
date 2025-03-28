@@ -76,6 +76,10 @@ const SalonsList = () => {
     }
   };
 
+  const handleSalonClick = (salonId: number) => {
+    router.push(`/salons/details/?id=${salonId}`);
+  };
+
   return (
     <div className="flex flex-col w-[99vw] pb-[8rem]">
       <div className="hero-content px-10 bg-[#FBE8A5] mb-4 z-10">
@@ -225,13 +229,17 @@ const SalonsList = () => {
             )}
           </div>
         </div>
-        <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-6">
+        <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-6"
+       
+        >
           {data.length > 0 ? (
             data.map((salon) => (
               <motion.div
                 key={salon._id}
                 whileHover={{ scale: 1.03 }}
                 className="flex flex-col bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden"
+                onClick={() => handleSalonClick(salon._id)}
+                style={{ cursor: "pointer" }}             
               >
                 <div className="h-[200px] w-full relative">
                   {salon.image1 ? (
