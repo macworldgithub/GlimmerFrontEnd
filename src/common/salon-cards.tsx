@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { FaStar } from "react-icons/fa";
+import { FaArrowLeft, FaArrowRight, FaStar } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { getAllSalons } from "@/api/salon";
 import { Tooltip } from "antd";
@@ -26,7 +26,7 @@ const shuffleArray = <T,>(array: T[]): T[] => {
   const shuffledArray = [...array];
   for (let i = shuffledArray.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]]; 
+    [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
   }
   return shuffledArray;
 };
@@ -105,11 +105,16 @@ const SalonCards: React.FC<{ title?: string; showButton?: boolean }> = ({
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
+ // Index for carousel navigation
+ const [startIndex, setStartIndex] = useState(0);
+ const [cardsToShow, setCardsToShow] = useState(4);
+ const [isMobile, setIsMobile] = useState(false); 
+
   useEffect(() => {
     const fetchSalons = async () => {
       try {
         const result = await dispatch(getAllSalons(1)).unwrap();
-        const shuffledSalons = shuffleArray(result.salons); 
+        const shuffledSalons = shuffleArray(result.salons);
         setSalons(shuffledSalons);
       } catch (err) {
         setError("Failed to load salons");
@@ -121,6 +126,39 @@ const SalonCards: React.FC<{ title?: string; showButton?: boolean }> = ({
     fetchSalons();
   }, []);
 
+  useEffect(() => {
+    const updateScreenSize = () => {
+      const width = window.innerWidth;
+      if (width <= 640) {
+        setCardsToShow(1);
+      } else if (width <= 768) {
+        setCardsToShow(2);
+      } else if (width <= 1024) {
+        setCardsToShow(3);
+        setIsMobile(true); // Show arrows
+      } else {
+        setCardsToShow(4);
+        setIsMobile(false); // Hide arrows
+      }
+    };
+
+    updateScreenSize();
+    window.addEventListener("resize", updateScreenSize);
+    return () => window.removeEventListener("resize", updateScreenSize);
+  }, []);
+
+  const handleNext = () => {
+    if (startIndex + cardsToShow < salons.length) {
+      setStartIndex(startIndex + 1);
+    }
+  };
+
+  const handlePrev = () => {
+    if (startIndex > 0) {
+      setStartIndex(startIndex - 1);
+    }
+  };
+
   const handleViewMore = () => router.push("/salons/all_salons");
 
   if (loading)
@@ -129,21 +167,52 @@ const SalonCards: React.FC<{ title?: string; showButton?: boolean }> = ({
 
   return (
     <div className="relative w-full max-w-7xl mx-auto text-center">
-      <h2 className="text-3xl font-semibold mb-4 text-left pl-6">{title}</h2>
-      <div className="flex justify-center gap-5 py-4 px-4">
-        {salons.slice(0, 4).map((salon) => (
+    <h2 className="text-3xl font-semibold mb-4 text-left pl-6">{title}</h2>
+
+    <div className="relative flex items-center justify-center">
+      {/* Left Arrow - Always show on max-lg */}
+      {isMobile && (
+        <button
+          className={`absolute left-0 z-10 bg-white p-2 rounded-full shadow-lg ${
+            startIndex === 0 ? "opacity-50 cursor-not-allowed" : ""
+          }`}
+          onClick={handlePrev}
+          disabled={startIndex === 0}
+        >
+          <FaArrowLeft className="text-gray-600" />
+        </button>
+      )}
+
+      {/* Salon Cards */}
+      <div className="flex gap-5 py-4 px-4 overflow-hidden">
+        {salons.slice(startIndex, startIndex + cardsToShow).map((salon) => (
           <SalonCard key={salon._id} salons={salon} />
         ))}
       </div>
-      {showButton && (
+
+      {/* Right Arrow - Always show on max-lg */}
+      {isMobile && (
         <button
-          className="mt-4 bg-[#583FA8] text-white py-2 px-6 rounded-lg mb-6"
-          onClick={handleViewMore}
+          className={`absolute right-0 z-10 bg-white p-2 rounded-full shadow-lg ${
+            startIndex + cardsToShow >= salons.length ? "opacity-50 cursor-not-allowed" : ""
+          }`}
+          onClick={handleNext}
+          disabled={startIndex + cardsToShow >= salons.length}
         >
-          View More
+          <FaArrowRight className="text-gray-600" />
         </button>
       )}
     </div>
+
+    {showButton && (
+      <button
+        className="mt-4 bg-[#583FA8] text-white py-2 px-6 rounded-lg mb-6"
+        onClick={handleViewMore}
+      >
+        View More
+      </button>
+    )}
+  </div>
   );
 };
 

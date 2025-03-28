@@ -1,20 +1,21 @@
 "use client";
-
-import React, { Suspense, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import Salonfilter from "../components/salonFIlter";
+import { message } from "antd";
 import ServiceSidebar from "@/common/ServiceSidebar";
-import { getAllActiveServices, getAllSalons } from "@/api/salon";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch } from "@/store/reduxStore";
+import Salonfilter from "../components/salonFIlter";
+import { useDispatch } from "react-redux";
+import { getAllActiveServices, getAllSalons } from "@/api/salon"; // API action
+import { FaStar } from "react-icons/fa";
 import ServiceCard from "@/common/ServiceCard";
 import { BiChevronDown } from "react-icons/bi";
-import { message } from "antd";
 import SalonCards from "@/common/salon-cards";
 import Page from "./../[id]/page";
 
+import Image from "next/image";
+import type { AppDispatch } from "@/store/reduxStore";
 // A loading component for suspense fallback
 const Loading = () => (
   <div className="justify-center flex min-h-[70vh] w-full items-center">
@@ -28,13 +29,9 @@ const SalonsList = () => {
   const [showPriceDropdown, setShowPriceDropdown] = useState(false);
   const [sortOrder, setSortOrder] = useState("desc");
   const [ratingFilter, setRatingFilter] = useState<number | null>(null);
-
-
-  const [data, setData] = useState<any[]>([]); // Store services
-  console.log(data);
-  const [total, setTotal] = useState(0); // Store total services
-
-
+  const [data, setData] = useState<any[]>([]);
+  const [total, setTotal] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -42,38 +39,47 @@ const SalonsList = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const page = Number(searchParams.get("page")) || 1;
+  const pageSize = 4; // Har page per 4 items ayenge
 
-  const pageSize = 3; // Number of items per page
   const fetchData = async () => {
     try {
-      const result = await dispatch(getAllSalons({ page })).unwrap();
-      setData(result.salons || []);
-      setTotal(result.totalCount ?? 0);
+      const params = { page, pageSize }; 
+      //@ts-ignore
+      const result = await dispatch(getAllSalons(params)).unwrap();
+      console.log("Fetched Data:", result);
+
+      if (result && result.salons) {
+        setData(result.salons);
+        setTotal(result.totalCount ?? 0);
+      } else {
+        setData([]);
+      }
     } catch (error) {
       console.error("Error fetching salons:", error);
       message.error("Failed to fetch salons");
     }
   };
 
-  const paginatedData = data.slice((page - 1) * pageSize, page * pageSize);
-  // Calculate total pages properly
-  const totalPages = Math.max(1, Math.ceil(data.length / pageSize));
-
   useEffect(() => {
     fetchData();
-  }, [page]);
+  }, [currentPage]);
 
- 
+  // **Pagination Logic**
+  // const paginatedData = data.slice((page - 1) * pageSize, page * pageSize);
 
-  const handlePageChange = (newPage : number) => {
+  // Calculate total pages properly
+  const totalPages = Math.ceil(total / pageSize);
+
+
+  const handlePageChange = (newPage: number) => {
     if (newPage >= 1 && newPage <= totalPages) {
       router.push(`?page=${newPage}`);
+      setCurrentPage(newPage); // Ensure state updates
     }
   };
 
   return (
-    <div className="flex flex-col w-[99vw] pb-[8rem] ">
-      {/* Category Navigation Menu */}
+    <div className="flex flex-col w-[99vw] pb-[8rem]">
       <div className="hero-content px-10 bg-[#FBE8A5] mb-4 z-10">
         <Salonfilter />
       </div>
@@ -95,7 +101,6 @@ const SalonsList = () => {
           All Salons
         </Link>
       </div>
-
       {/* Banner Image */}
       <div className="hidden md:block pt-[3rem] px-[1rem] sm:px-[2rem] md:px-[4rem] lg:px-[6rem] xl:px-[12rem]">
         <div className="w-full h-[50vh] sm:h-[50vh] md:h-[50vh] lg:h-[50vh] xl:h-[50vh] rounded-lg overflow-hidden relative group">
@@ -112,193 +117,215 @@ const SalonsList = () => {
         </div>
       </div>
 
-      {/* Content Area: Sidebar & Items Grid */}
-      <div className="flex flex-col md:flex-row md:gap-x-8 xl:gap-x-0 px-[1rem] sm:px-[2rem] md:px-[4rem] lg:px-[5rem] xl:px-[10rem] lg:py-[2rem]">
-        {/* Sidebar */}
-        {/* <motion.aside
-          initial={{ x: -100, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          transition={{ duration: 1 }}
-          className="w-full md:w-[30%] lg:w-[30%] p-6"
-        >
-          <ServiceSidebar />
-        </motion.aside> */}
 
-        {/* Main Content */}
-        <motion.main
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-          className="w-full"
-        >
-          {/* Sort and Filter UI */}
-          {/* SORT BY*/}
-          <div className="flex flex-wrap md:flex-row sm:flex-col items-center gap-4 sm:gap-6 px-4 sm:px-6 md:px-8 pt-4 sm:pt-6 md:pt-8 pb-4 sm:pb-6 md:pb-8">
-            <span className="text-gray-700 text-[20px]">Sort by</span>
+      <motion.main
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className="w-full"
+      >
 
+        {/* Sort and Filter UI */}
+        {/* SORT BY*/}
+        <div className="flex flex-wrap md:flex-row sm:flex-col items-center gap-4 sm:gap-6 px-4 sm:px-6 md:px-8 pt-4 sm:pt-6 md:pt-8 pb-4 sm:pb-6 md:pb-8">
+          <span className="text-gray-700 text-[20px]">Sort by</span>
+
+          <button
+            onClick={() => {
+              setActiveSort("Date");
+              setSortOrder(sortOrder === "desc" ? "asc" : "desc");
+            }}
+            className={`border px-6 py-2 rounded-md text-lg font-medium transition duration-300 ease-in-out ${activeSort === "Date"
+              ? "border-purple-800 text-purple-800 bg-purple-100"
+              : "border-gray-400 text-gray-700 hover:bg-[#FDF3D2]"
+              }`}
+          >
+            Date{" "}
+            {activeSort === "Date" ? (sortOrder === "desc" ? "↓" : "↑") : ""}
+          </button>
+
+          <div className="relative">
             <button
-              onClick={() => {
-                setActiveSort("Date");
-                setSortOrder(sortOrder === "desc" ? "asc" : "desc");
-              }}
-              className={`border px-6 py-2 rounded-md text-lg font-medium transition duration-300 ease-in-out ${activeSort === "Date"
+              onClick={() => setShowPriceDropdown(!showPriceDropdown)}
+              className={`flex items-center gap-2 border px-6 py-2 rounded-md text-lg font-medium transition duration-300 ease-in-out ${activeSort === "Price"
                 ? "border-purple-800 text-purple-800 bg-purple-100"
                 : "border-gray-400 text-gray-700 hover:bg-[#FDF3D2]"
                 }`}
             >
-              Date{" "}
-              {activeSort === "Date" ? (sortOrder === "desc" ? "↓" : "↑") : ""}
+              Price{" "}
+              {activeSort === "Price"
+                ? sortOrder === "desc"
+                  ? "↓"
+                  : "↑"
+                : ""}{" "}
+              <BiChevronDown size={20} />
             </button>
 
-            <div className="relative">
-              <button
-                onClick={() => setShowPriceDropdown(!showPriceDropdown)}
-                className={`flex items-center gap-2 border px-6 py-2 rounded-md text-lg font-medium transition duration-300 ease-in-out ${activeSort === "Price"
-                  ? "border-purple-800 text-purple-800 bg-purple-100"
-                  : "border-gray-400 text-gray-700 hover:bg-[#FDF3D2]"
-                  }`}
+            {showPriceDropdown && (
+              <div className="absolute z-50 left-0 mt-2 w-44 bg-white border border-gray-300 rounded-lg shadow-lg">
+                <button
+                  onClick={() => {
+                    setActiveSort("Price");
+                    setSortOrder("asc");
+                    setShowPriceDropdown(false);
+                  }}
+                  className="block w-full text-left px-5 py-3 text-lg font-medium hover:bg-gray-200"
+                >
+                  Low to High
+                </button>
+                <button
+                  onClick={() => {
+                    setActiveSort("Price");
+                    setSortOrder("desc");
+                    setShowPriceDropdown(false);
+                  }}
+                  className="block w-full text-left px-5 py-3 text-lg font-medium hover:bg-gray-200"
+                >
+                  High to Low
+                </button>
+              </div>
+            )}
+          </div>
+
+          <div className="relative">
+            <button
+              onClick={() => setShowRatingDropdown(!showRatingDropdown)}
+              className="flex items-center gap-2 border px-6 py-2 rounded-md text-lg font-medium transition duration-300 ease-in-out border-gray-400 text-gray-700 hover:bg-[#FDF3D2]"
+            >
+              Ratings {ratingFilter ? `${ratingFilter} ★` : ""}{" "}
+              <BiChevronDown size={20} />
+            </button>
+
+            {showRatingDropdown && (
+              <div className="absolute z-50 left-0 mt-2 w-44 bg-white rounded-lg shadow-lg">
+                {showRatingDropdown && (
+                  <div className="absolute z-50 left-0 mt-2 w-44 bg-white border border-gray-300 rounded-lg shadow-lg">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <button
+                        key={star}
+                        onClick={() => {
+                          setRatingFilter(star);
+                          setShowRatingDropdown(false);
+                        }}
+                        className="block w-full text-left px-5 py-3 text-lg font-medium hover:bg-gray-200 items-center"
+                      >
+                        {[...Array(5)].map((_, i) => (
+                          <span
+                            key={i}
+                            className={
+                              i < star ? "text-purple-800" : "text-gray-300"
+                            }
+                          >
+                            ★
+                          </span>
+                        ))}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+        <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-6">
+          {data.length > 0 ? (
+            data.map((salon) => (
+              <motion.div
+                key={salon._id}
+                whileHover={{ scale: 1.03 }}
+                className="flex flex-col bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden"
               >
-                Price{" "}
-                {activeSort === "Price"
-                  ? sortOrder === "desc"
-                    ? "↓"
-                    : "↑"
-                  : ""}{" "}
-                <BiChevronDown size={20} />
-              </button>
-
-              {showPriceDropdown && (
-                <div className="absolute z-50 left-0 mt-2 w-44 bg-white border border-gray-300 rounded-lg shadow-lg">
-                  <button
-                    onClick={() => {
-                      setActiveSort("Price");
-                      setSortOrder("asc");
-                      setShowPriceDropdown(false);
-                    }}
-                    className="block w-full text-left px-5 py-3 text-lg font-medium hover:bg-gray-200"
-                  >
-                    Low to High
-                  </button>
-                  <button
-                    onClick={() => {
-                      setActiveSort("Price");
-                      setSortOrder("desc");
-                      setShowPriceDropdown(false);
-                    }}
-                    className="block w-full text-left px-5 py-3 text-lg font-medium hover:bg-gray-200"
-                  >
-                    High to Low
-                  </button>
-                </div>
-              )}
-            </div>
-
-            <div className="relative">
-              <button
-                onClick={() => setShowRatingDropdown(!showRatingDropdown)}
-                className="flex items-center gap-2 border px-6 py-2 rounded-md text-lg font-medium transition duration-300 ease-in-out border-gray-400 text-gray-700 hover:bg-[#FDF3D2]"
-              >
-                Ratings {ratingFilter ? `${ratingFilter} ★` : ""}{" "}
-                <BiChevronDown size={20} />
-              </button>
-
-              {showRatingDropdown && (
-                <div className="absolute z-50 left-0 mt-2 w-44 bg-white rounded-lg shadow-lg">
-                  {showRatingDropdown && (
-                    <div className="absolute z-50 left-0 mt-2 w-44 bg-white border border-gray-300 rounded-lg shadow-lg">
-                      {[1, 2, 3, 4, 5].map((star) => (
-                        <button
-                          key={star}
-                          onClick={() => {
-                            setRatingFilter(star);
-                            setShowRatingDropdown(false);
-                          }}
-                          className="block w-full text-left px-5 py-3 text-lg font-medium hover:bg-gray-200 items-center"
-                        >
-                          {[...Array(5)].map((_, i) => (
-                            <span
-                              key={i}
-                              className={
-                                i < star ? "text-purple-800" : "text-gray-300"
-                              }
-                            >
-                              ★
-                            </span>
-                          ))}
-                        </button>
-                      ))}
+                <div className="h-[200px] w-full relative">
+                  {salon.image1 ? (
+                    <Image
+                      src={salon.image1}
+                      alt={salon.salon_name}
+                      layout="fill"
+                      objectFit="cover"
+                    />
+                  ) : (
+                    <div className="h-full w-full flex items-center justify-center bg-gray-200 text-gray-500">
+                      <Image
+                        src={"/assets/saloonPicture/salon_profile.jpg"}
+                        alt="salon_profile"
+                        layout="fill"
+                        objectFit="cover"
+                      />
                     </div>
                   )}
                 </div>
-              )}
+
+                <div className="mt-4 px-2">
+                  <h2 className="text-lg font-semibold text-gray-900 truncate text-left mb-2">{salon.salon_name || "No Name"}</h2>
+                  {/* Rating */}
+                  <div className="flex items-center gap-2 text-left mb-2">
+                    <span className="text-yellow-500 flex items-center gap-1 text-sm font-semibold">
+                      4 <FaStar size={16} className="drop-shadow-md" />
+                    </span>
+                    <span className="text-gray-500 text-sm">(2859 Reviews)</span>
+                  </div>
+
+                  <span
+                    className="text-sm text-gray-600 font-medium text-left mb-2 truncate cursor-pointer"
+                    style={{ maxWidth: "200px", display: "inline-block" }}
+                  >
+                    {salon.address.length > 30
+                      ? `${salon.address.substring(0, 30)}...`
+                      : salon.address}
+                  </span>
+
+
+
+                  {/* Availability Badge */}
+                  {salon.openingHour && salon.closingHour ? (
+                    <div className="text-xs bg-green-100 text-green-700 px-4 py-1 rounded-full font-medium shadow-sm border border-green-300 text-left w-fit mb-2">
+                      {salon.openingHour}am - {salon.closingHour}pm
+                    </div>
+                  ) : (
+                    <div className="text-xs bg-red-100 text-red-700 px-4 py-1 rounded-full font-medium shadow-sm border border-red-300 text-left w-fit mb-2">
+                      24/7 Available
+                    </div>
+                  )}
+
+                  <span
+                    className="text-xs text-gray-500 truncate cursor-pointer mt-2 text-left leading-relaxed"
+                    style={{ maxWidth: "200px", display: "inline-block" }}
+                  >
+                    {salon.about.length > 30
+                      ? `${salon.about.substring(0, 30)}...`
+                      : salon.about}
+                  </span>
+                </div>
+              </motion.div>
+            ))
+          ) : (
+            <p className="text-center col-span-full">No Salons Available</p>
+          )}
+        </div>
+
+        {/* Pagination */}
+        <div>
+          {data.length > 0 ? (
+            <div className="flex justify-center items-center space-x-2 py-4 ">
+              <button className="bg-gray-200 py-2 px-6 rounded-lg cursor-pointer"
+                onClick={() => handlePageChange(page - 1)} disabled={page === 1}>
+                Previous
+              </button>
+              <span> Page {page} of {totalPages} </span>
+              <button className="bg-gray-200 py-2 px-6 rounded-lg cursor-pointer"
+                onClick={() => handlePageChange(page + 1)} disabled={page === totalPages}>
+                Next
+              </button>
             </div>
-          </div>
-
-          <div className="w-full h-max grid grid-cols-1  gap-y-10 p-6">
-            {paginatedData.length > 0 ? (
-              paginatedData.map((salon) => (
-                <motion.div key={salon._id} whileHover={{ scale: 1.03 }} className="flex">
-                  <SalonCards showButton={false} />
-                </motion.div>
-              ))
-            ) : (
-              <div className="col-span-full flex justify-center items-center min-h-[70vh]">
-                <div className="text-center font-bold text-3xl">
-                  Oops! No items to display in this category
-                </div>
-              </div>
-            )}
-
-
-            {/* {data && data.length > 0 ? (
-              data.map((salon) => (
-                <motion.div
-                  key={salon._id}
-                  whileHover={{ scale: 1.03 }}
-                  className="flex"
-                >
-                  <SalonCards salon={salon} showButton={false} />
-                </motion.div>
-              ))
-            ) : (
-              <div className="col-span-full flex justify-center items-center min-h-[70vh]">
-                <div className="text-center font-bold text-3xl">
-                  Oops! No items to display in this category
-                </div>
-              </div>
-            )} */}
-          </div>
-
-          {/* Pagination */}
-          <div>
-            {data.length > 0 ? (
-              <div className="flex justify-center items-center space-x-2 py-4 ">
-                <button className="bg-gray-200 py-2 px-6 rounded-lg cursor-pointer"
-                 onClick={() => handlePageChange(page - 1)} disabled={page === 1}>
-            Previous
-          </button>
-          <span> Page {page} of {totalPages} </span>
-          <button className="bg-gray-200 py-2 px-6 rounded-lg cursor-pointer"
-           onClick={() => handlePageChange(page + 1)} disabled={page === totalPages}>
-            Next
-          </button>
-              </div>
-            ) : (
-              <p className="text-center text-gray-500">No salons available.</p>
-            )}
-          </div>
-        </motion.main>
-      </div>
+          ) : (
+            <p className="text-center text-gray-500">No salons available.</p>
+          )}
+        </div>
+      </motion.main>
     </div>
   );
 };
 
-const Temp = () => {
-  return (
-    <Suspense fallback={<Loading />}>
-      <SalonsList />
-    </Suspense>
-  );
-};
+export default SalonsList;
 
-export default Temp;
+
