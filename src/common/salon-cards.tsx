@@ -26,13 +26,19 @@ const shuffleArray = <T,>(array: T[]): T[] => {
   const shuffledArray = [...array];
   for (let i = shuffledArray.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
+    [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]]; 
   }
   return shuffledArray;
 };
 
-const SalonCard: React.FC<{ salons: Salon }> = ({ salons }) => (
-  <div className="w-[320px] h-[370px] bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+const SalonCard: React.FC<{ salons: Salon; onClick: () => void }> = ({
+  salons,
+  onClick,
+}) => (
+  <div
+    className="w-[320px] h-[370px] bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden cursor-pointer"
+    onClick={onClick}
+  >
     <div className="h-[50%] w-full relative">
       {salons.image1 ? (
         <Image
@@ -161,6 +167,11 @@ const SalonCards: React.FC<{ title?: string; showButton?: boolean }> = ({
 
   const handleViewMore = () => router.push("/salons/all_salons");
 
+  const handleSalonClick = (salonId: number) => {
+    router.push(`/salons/details/?id=${salonId}`);
+  };
+
+
   if (loading)
     return <p className="text-center text-gray-500">Loading salons...</p>;
   if (error) return <p className="text-center text-red-500">{error}</p>;
@@ -185,8 +196,8 @@ const SalonCards: React.FC<{ title?: string; showButton?: boolean }> = ({
 
       {/* Salon Cards */}
       <div className="flex gap-5 py-4 px-4 overflow-hidden">
-        {salons.slice(startIndex, startIndex + cardsToShow).map((salon) => (
-          <SalonCard key={salon._id} salons={salon} />
+        {salons.slice(startIndex, startIndex + cardsToShow).map((salons) => (
+          <SalonCard key={salons._id} salons={salons} onClick={() => handleSalonClick(salons._id)}/>
         ))}
       </div>
 

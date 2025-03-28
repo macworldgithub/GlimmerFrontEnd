@@ -64,9 +64,7 @@ const SalonsList = () => {
     fetchData();
   }, [currentPage]);
 
-  // **Pagination Logic**
-  // const paginatedData = data.slice((page - 1) * pageSize, page * pageSize);
-
+  
   // Calculate total pages properly
   const totalPages = Math.ceil(total / pageSize);
 
