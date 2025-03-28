@@ -89,12 +89,28 @@ export const getAllActiveServices = createAsyncThunk(
     }
   };
 
-  export const getAllSalons = createAsyncThunk(
+  interface Salon {
+    _id: number;
+    salon_name: string;
+    rating: number;
+    reviews: number;
+    address: string;
+    openingHour: string;
+    closingHour: string;
+    image1: string;
+    about: string;
+  }
+  
+  interface GetAllSalonsResponse {
+    salons: Salon[];
+  }
+  
+  export const getAllSalons = createAsyncThunk<GetAllSalonsResponse, number>(
     "salons/getAllSalons",
     async (page_no: number, { rejectWithValue }) => {
       try {
         const response = await axios.get(`${BACKEND_URL}/salon/get-all-salon?page_no=${page_no}`);
-        return response.data;
+        return response.data; 
       } catch (error: any) {
         return rejectWithValue(error.response?.data || "Failed to fetch salons");
       }

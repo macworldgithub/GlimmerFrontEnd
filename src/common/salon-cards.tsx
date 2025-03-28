@@ -21,6 +21,16 @@ interface Salon {
   about: string;
 }
 
+// Helper function to shuffle an array
+const shuffleArray = <T,>(array: T[]): T[] => {
+  const shuffledArray = [...array];
+  for (let i = shuffledArray.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]]; 
+  }
+  return shuffledArray;
+};
+
 const SalonCard: React.FC<{ salons: Salon }> = ({ salons }) => (
   <div className="w-[320px] h-[370px] bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
     <div className="h-[50%] w-full relative">
@@ -99,7 +109,8 @@ const SalonCards: React.FC<{ title?: string; showButton?: boolean }> = ({
     const fetchSalons = async () => {
       try {
         const result = await dispatch(getAllSalons(1)).unwrap();
-        setSalons(result.salons);
+        const shuffledSalons = shuffleArray(result.salons); 
+        setSalons(shuffledSalons);
       } catch (err) {
         setError("Failed to load salons");
       } finally {
