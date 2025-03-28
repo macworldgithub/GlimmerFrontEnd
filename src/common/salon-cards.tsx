@@ -26,13 +26,19 @@ const shuffleArray = <T,>(array: T[]): T[] => {
   const shuffledArray = [...array];
   for (let i = shuffledArray.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]]; 
+    [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
   }
   return shuffledArray;
 };
 
-const SalonCard: React.FC<{ salons: Salon }> = ({ salons }) => (
-  <div className="w-[320px] h-[370px] bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+const SalonCard: React.FC<{ salons: Salon; onClick: () => void }> = ({
+  salons,
+  onClick,
+}) => (
+  <div
+    className="w-[320px] h-[370px] bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden cursor-pointer"
+    onClick={onClick}
+  >
     <div className="h-[50%] w-full relative">
       {salons.image1 ? (
         <Image
@@ -109,7 +115,7 @@ const SalonCards: React.FC<{ title?: string; showButton?: boolean }> = ({
     const fetchSalons = async () => {
       try {
         const result = await dispatch(getAllSalons(1)).unwrap();
-        const shuffledSalons = shuffleArray(result.salons); 
+        const shuffledSalons = shuffleArray(result.salons);
         setSalons(shuffledSalons);
       } catch (err) {
         setError("Failed to load salons");
@@ -123,6 +129,11 @@ const SalonCards: React.FC<{ title?: string; showButton?: boolean }> = ({
 
   const handleViewMore = () => router.push("/salons/all_salons");
 
+  const handleSalonClick = (salonId: number) => {
+    router.push(`/salons/details/?id=${salonId}`);
+  };
+
+
   if (loading)
     return <p className="text-center text-gray-500">Loading salons...</p>;
   if (error) return <p className="text-center text-red-500">{error}</p>;
@@ -131,8 +142,8 @@ const SalonCards: React.FC<{ title?: string; showButton?: boolean }> = ({
     <div className="relative w-full max-w-7xl mx-auto text-center">
       <h2 className="text-3xl font-semibold mb-4 text-left pl-6">{title}</h2>
       <div className="flex justify-center gap-5 py-4 px-4">
-        {salons.slice(0, 4).map((salon) => (
-          <SalonCard key={salon._id} salons={salon} />
+        {salons.slice(0, 4).map((salons) => (
+          <SalonCard key={salons._id} salons={salons} onClick={() => handleSalonClick(salons._id)}/>
         ))}
       </div>
       {showButton && (

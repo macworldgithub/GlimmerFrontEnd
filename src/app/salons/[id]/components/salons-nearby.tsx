@@ -1,4 +1,5 @@
 import CardList from "@/common/card-list";
+import SalonCards from "@/common/salon-cards";
 import { SalonsData } from "@/data";
 import { SalonType } from "@/types";
 import Link from "next/link";
@@ -16,15 +17,8 @@ const SalonsNearby = ({ currentSalonAddress }: SalonsNearbyProps) => {
 	});
 
 	return (
-		<div className="w-[99vw] p-10 md:mb-8">
-			<Link href="/salons" className="prose lg:prose-xl">
-				<h2 className="md:mb-3">Nearby Salons</h2>
-			</Link>
-			{nearbySalons.length > 0 ? (
-				<CardList cards={nearbySalons} dataType="salon" shouldAnimate={true} />
-			) : (
-				<p className="prose lg:prose-xl">No nearby salons found.</p>
-			)}
+		<div className="px-2 w-[99vw] ">
+            <SalonCards title="Nearby Salons" showButton={true} />
 		</div>
 	);
 };
