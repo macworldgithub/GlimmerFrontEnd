@@ -63,6 +63,8 @@ const SalonsList = () => {
     fetchData();
   }, [page]);
 
+ 
+
   const handlePageChange = (newPage : number) => {
     if (newPage >= 1 && newPage <= totalPages) {
       router.push(`?page=${newPage}`);
