@@ -102,37 +102,35 @@ const SalonServices = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+  
     if (!validateForm()) return;
-
-    const serviceIds = selectedServices.map((service) => service._id).join(",");
-    const finalPrice = selectedServices.reduce((total, service) => {
-      const discountedPrice =
-        service.adminSetPrice -
-        (service.adminSetPrice * service.discountPercentage) / 100;
-      return total + discountedPrice;
-    }, 0);
-
-    const bookingData = {
-      ...bulkForm,
-      serviceId: serviceIds,
-      finalPrice: finalPrice,
-    };
-
-    console.log("Submitting Booking Data:", bookingData);
+    const successfulBookings: string[] = [];
 
     try {
-      const response = await createBooking(bookingData, token);
+      for (const service of selectedServices) {
+        const discountedPrice =
+          service.adminSetPrice -
+          (service.adminSetPrice * service.discountPercentage) / 100;
+  
+        const bookingData = {
+          ...bulkForm,
+          serviceId: service._id, 
+          finalPrice: discountedPrice, 
+        };
+        await createBooking(bookingData, token);
+        successfulBookings.push(service.name);
+      }
 
-      console.log("Booking Successful:", response);
-      alert("Booking Confirmed!");
-
-      setIsModalOpen(false); // Close modal only on success
+      alert(`Booking Confirmed for: ${successfulBookings.join(", ")}`);
+      setIsModalOpen(false);
+      window.location.reload();
+      
     } catch (error) {
       console.error("Booking Failed:", error);
-      alert("Failed to book service. Please try again.");
+      alert("Failed to book services. Please try again.");
     }
   };
+  
 
   return (
     <div className="w-[99vw] p-10 md:mb-8">
