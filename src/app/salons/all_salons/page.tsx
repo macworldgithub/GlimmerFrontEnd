@@ -238,7 +238,7 @@ const SalonsList = () => {
             {paginatedData.length > 0 ? (
               paginatedData.map((salon) => (
                 <motion.div key={salon._id} whileHover={{ scale: 1.03 }} className="flex">
-                  <SalonCards salon={salon} showButton={false} />
+                  <SalonCards showButton={false} />
                 </motion.div>
               ))
             ) : (
