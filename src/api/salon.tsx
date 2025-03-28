@@ -28,38 +28,44 @@ export const getAllServicesById = async (category_id: string) => {
 };
 
 export const getAllActiveServices = createAsyncThunk(
-    "getAllActiveServices",
-    async (
-      payload: {
-        page_no: number;
-        categoryId?: string;
-        salonId?: string;
-        subCategoryName?: string;
-        subSubCategoryName?: string;
-      },
-      { rejectWithValue, getState }
-    ) => {
-      try {
-        // Access token from the Redux state
-        const state = getState() as RootState;
-        const token = state.login.token;
-  
-        // Make API request with page number as a query parameter
-        const response = await axios.get(
-          `${BACKEND_URL}/salon-services/getAllActiveServicesForWebiste?page_no=${payload.page_no}&categoryId=${payload.categoryId}&salonId=${payload.salonId}&subCategoryName=${payload.subCategoryName}&subSubCategoryName=${payload.subSubCategoryName}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`, // Add Bearer token
-            },
-          }
-        );
-  
-        return response.data; // Return the response data if successful
-      } catch (error: any) {
-        return rejectWithValue(error.response?.data || "An error occurred");
-      }
+  "getAllActiveServices",
+  async (
+    payload: {
+      page_no: number;
+      categoryId?: string;
+      salonId?: string;
+      subCategoryName?: string;
+      subSubCategoryName?: string;
+    },
+    { rejectWithValue, getState }
+  ) => {
+    try {
+      const state = getState() as RootState;
+      const token = state.login.token;
+
+      const params = new URLSearchParams();
+
+      if (payload.page_no) params.append("page_no", payload.page_no.toString());
+      if (payload.categoryId) params.append("categoryId", payload.categoryId);
+      if (payload.salonId) params.append("id", payload.salonId);  
+      if (payload.subCategoryName) params.append("subCategoryName", payload.subCategoryName);
+      if (payload.subSubCategoryName) params.append("subSubCategoryName", payload.subSubCategoryName);
+
+      const response = await axios.get(
+        `${BACKEND_URL}/salon-services/getAllActiveServicesForWebiste?${params.toString()}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Add Bearer token
+          },
+        }
+      );
+
+      return response.data; // Return the response data if successful
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data || "An error occurred");
     }
-  );
+  }
+);
 
   export const getServiceById = async (serviceId: string) => {
     try {
