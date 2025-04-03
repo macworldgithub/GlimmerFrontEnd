@@ -27,7 +27,7 @@ const AutoSlider = ({ srcs = [], type = "slide", delay = 3000 }: Props) => {
   if (delay) modules.push(Autoplay);
   if (type === "fade") modules.push(EffectFade);
   return (
-    <div className="relative w-full max-w-screen-xl mx-auto overflow-hidden rounded-lg shadow-lg">
+    <div className="relative w-full max-w-screen-2xl mx-auto overflow-hidden rounded-lg shadow-lg">
       <Swiper
         modules={modules}
         spaceBetween={50}

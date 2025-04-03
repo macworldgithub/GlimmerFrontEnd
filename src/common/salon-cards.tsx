@@ -26,7 +26,7 @@ const shuffleArray = <T,>(array: T[]): T[] => {
   const shuffledArray = [...array];
   for (let i = shuffledArray.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]]; 
+    [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
   }
   return shuffledArray;
 };
@@ -111,10 +111,10 @@ const SalonCards: React.FC<{ title?: string; showButton?: boolean }> = ({
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
- // Index for carousel navigation
- const [startIndex, setStartIndex] = useState(0);
- const [cardsToShow, setCardsToShow] = useState(4);
- const [isMobile, setIsMobile] = useState(false); 
+  // Index for carousel navigation
+  const [startIndex, setStartIndex] = useState(0);
+  const [cardsToShow, setCardsToShow] = useState(4);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const fetchSalons = async () => {
@@ -177,53 +177,51 @@ const SalonCards: React.FC<{ title?: string; showButton?: boolean }> = ({
   if (error) return <p className="text-center text-red-500">{error}</p>;
 
   return (
-    <div className="relative w-full max-w-7xl mx-auto text-center">
-    <h2 className="text-3xl font-semibold mb-4 text-left pl-6">{title}</h2>
+    <div className="relative w-full max-w-screen-2xl mx-auto text-center">
+      <h2 className="text-3xl font-semibold mb-4 text-left pl-6">{title}</h2>
 
-    <div className="relative flex items-center justify-center">
-      {/* Left Arrow - Always show on max-lg */}
-      {isMobile && (
-        <button
-          className={`absolute left-0 z-10 bg-white p-2 rounded-full shadow-lg ${
-            startIndex === 0 ? "opacity-50 cursor-not-allowed" : ""
-          }`}
-          onClick={handlePrev}
-          disabled={startIndex === 0}
-        >
-          <FaArrowLeft className="text-gray-600" />
-        </button>
-      )}
+      <div className="relative flex items-center justify-center">
+        {/* Left Arrow - Always show on max-lg */}
+        {isMobile && (
+          <button
+            className={`absolute left-0 z-10 bg-white p-2 rounded-full shadow-lg ${startIndex === 0 ? "opacity-50 cursor-not-allowed" : ""
+              }`}
+            onClick={handlePrev}
+            disabled={startIndex === 0}
+          >
+            <FaArrowLeft className="text-gray-600" />
+          </button>
+        )}
 
-      {/* Salon Cards */}
-      <div className="flex gap-5 py-4 px-4 overflow-hidden">
-        {salons.slice(startIndex, startIndex + cardsToShow).map((salons) => (
-          <SalonCard key={salons._id} salons={salons} onClick={() => handleSalonClick(salons._id)}/>
-        ))}
+        {/* Salon Cards */}
+        <div className="flex w-full max-w-screen-2xl mx-auto gap-[6rem] overflow-hidden">
+          {salons.slice(startIndex, startIndex + cardsToShow).map((salons) => (
+            <SalonCard key={salons._id} salons={salons} onClick={() => handleSalonClick(salons._id)} />
+          ))}
+        </div>
+
+        {/* Right Arrow - Always show on max-lg */}
+        {isMobile && (
+          <button
+            className={`absolute right-0 z-10 bg-white p-2 rounded-full shadow-lg ${startIndex + cardsToShow >= salons.length ? "opacity-50 cursor-not-allowed" : ""
+              }`}
+            onClick={handleNext}
+            disabled={startIndex + cardsToShow >= salons.length}
+          >
+            <FaArrowRight className="text-gray-600" />
+          </button>
+        )}
       </div>
 
-      {/* Right Arrow - Always show on max-lg */}
-      {isMobile && (
+      {showButton && (
         <button
-          className={`absolute right-0 z-10 bg-white p-2 rounded-full shadow-lg ${
-            startIndex + cardsToShow >= salons.length ? "opacity-50 cursor-not-allowed" : ""
-          }`}
-          onClick={handleNext}
-          disabled={startIndex + cardsToShow >= salons.length}
+          className="mt-10 bg-[#583FA8] text-white py-2 px-6 rounded-lg mb-6"
+          onClick={handleViewMore}
         >
-          <FaArrowRight className="text-gray-600" />
+          View More
         </button>
       )}
     </div>
-
-    {showButton && (
-      <button
-        className="mt-4 bg-[#583FA8] text-white py-2 px-6 rounded-lg mb-6"
-        onClick={handleViewMore}
-      >
-        View More
-      </button>
-    )}
-  </div>
   );
 };
 
