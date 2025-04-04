@@ -11,6 +11,7 @@ import SaloonPictures from "@/common/SaloonPictures";
 export default async function Home() {
   return (
     <>
+    <div className="w-[99vw]">
       <Hero />
       <SalonCardList />
       <SeftcareCardList />
@@ -18,6 +19,7 @@ export default async function Home() {
       <BottomSlider />
       <GymBanner />
       <FakeReviewList />
+      </div>
     </>
   );
 }

@@ -27,7 +27,7 @@ const AutoSlider = ({ srcs = [], type = "slide", delay = 3000 }: Props) => {
   if (delay) modules.push(Autoplay);
   if (type === "fade") modules.push(EffectFade);
   return (
-    <div className="relative w-full max-w-screen-2xl mx-auto overflow-hidden rounded-lg shadow-lg">
+    <div className="relative w-full max-w-screen-[1536px] max-xl:max-w-screen-2xl mx-auto overflow-hidden rounded-lg shadow-lg ">
       <Swiper
         modules={modules}
         spaceBetween={50}
@@ -46,7 +46,7 @@ const AutoSlider = ({ srcs = [], type = "slide", delay = 3000 }: Props) => {
               <Link href={index === 0 ? "/salons" : "/selfcare-products"}>
                 <img
                   src={s}
-                  className="w-full h-full object-cover rounded-lg transition-transform duration-500 hover:scale-105 hover:brightness-110"
+                  className="w-full h-full  max-xl:object-cover rounded-lg transition-transform duration-500 hover:scale-105 hover:brightness-110"
                   alt="Swiper Carousel component"
                 />
               </Link>
