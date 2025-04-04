@@ -114,7 +114,8 @@ const SalonCards: React.FC<{ title?: string; showButton?: boolean }> = ({
   // Index for carousel navigation
   const [startIndex, setStartIndex] = useState(0);
   const [cardsToShow, setCardsToShow] = useState(4);
-  const [isMobile, setIsMobile] = useState(false);
+  const [showArrows, setShowArrows] = useState(false);
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
 
   useEffect(() => {
     const fetchSalons = async () => {
@@ -137,14 +138,16 @@ const SalonCards: React.FC<{ title?: string; showButton?: boolean }> = ({
       const width = window.innerWidth;
       if (width <= 640) {
         setCardsToShow(1);
+        setIsSmallScreen(true);
       } else if (width <= 768) {
         setCardsToShow(2);
+        setIsSmallScreen(false);
       } else if (width <= 1024) {
         setCardsToShow(3);
-        setIsMobile(true); // Show arrows
+        setShowArrows(true);
       } else {
         setCardsToShow(4);
-        setIsMobile(false); // Hide arrows
+        setShowArrows(false);
       }
     };
 
@@ -172,6 +175,7 @@ const SalonCards: React.FC<{ title?: string; showButton?: boolean }> = ({
   };
 
 
+
   if (loading)
     return <p className="text-center text-gray-500">Loading salons...</p>;
   if (error) return <p className="text-center text-red-500">{error}</p>;
@@ -179,39 +183,42 @@ const SalonCards: React.FC<{ title?: string; showButton?: boolean }> = ({
   return (
     <div className="relative w-full max-w-7xl mx-auto text-center">
     <h2 className="text-3xl font-semibold mb-4 text-left pl-6">{title}</h2>
+
     <div className="relative flex items-center justify-center">
-      {/* Left Arrow - Always show on max-lg */}
-      {isMobile && (
+      {/* Left Arrow - Only visible on max-lg screens and on small screens over the card */}
+      {showArrows || isSmallScreen ? (
         <button
-          className={`absolute left-0 z-10 bg-white p-2 rounded-full shadow-lg ${
-            startIndex === 0 ? "opacity-50 cursor-not-allowed" : ""
-          }`}
+          className="absolute left-2 sm:-left-6 z-10 bg-white p-3 rounded-full shadow-lg text-2xl font-bold stroke-2 text-gray-900 shadow-gray-700 
+          top-1/2 transform -translate-y-1/2" // Position arrows over the card for small screens
           onClick={handlePrev}
           disabled={startIndex === 0}
         >
-          <FaArrowLeft className="text-gray-600" />
+          <FaArrowLeft />
         </button>
-      )}
+      ) : null}
 
-      {/* Salon Cards */}
-      <div className="flex gap-5 py-4 px-4 overflow-hidden">
-        {salons.slice(startIndex, startIndex + cardsToShow).map((salons) => (
-          <SalonCard key={salons._id} salons={salons} onClick={() => handleSalonClick(salons._id)}/>
+      {/* Salon Cards Wrapper */}
+      <div className="flex gap-4 py-4 px-2 overflow-hidden justify-center">
+        {salons.slice(startIndex, startIndex + cardsToShow).map((salon) => (
+          <SalonCard
+            key={salon._id}
+            salons={salon}
+            onClick={() => handleSalonClick(salon._id)}
+          />
         ))}
       </div>
 
-      {/* Right Arrow - Always show on max-lg */}
-      {isMobile && (
+      {/* Right Arrow - Only visible on max-lg screens and on small screens over the card */}
+      {showArrows || isSmallScreen ? (
         <button
-          className={`absolute right-0 z-10 bg-white p-2 rounded-full shadow-lg ${
-            startIndex + cardsToShow >= salons.length ? "opacity-50 cursor-not-allowed" : ""
-          }`}
+          className="absolute right-2 sm:-right-6 z-10 bg-white p-3 rounded-full shadow-lg text-2xl font-bold stroke-2 text-gray-900 shadow-gray-700 
+          top-1/2 transform -translate-y-1/2"
           onClick={handleNext}
           disabled={startIndex + cardsToShow >= salons.length}
         >
-          <FaArrowRight className="text-gray-600" />
+          <FaArrowRight />
         </button>
-      )}
+      ) : null}
     </div>
 
     {showButton && (

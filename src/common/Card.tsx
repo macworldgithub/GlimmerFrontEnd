@@ -17,7 +17,7 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
 
   return (
     <div
-      className="w-[280px] xl:w-[350px] h-auto shadow-lg max-md:w-full cursor-pointer rounded-lg"
+      className="w-[280px] xl:w-[300px] mx-auto h-auto shadow-lg max-md:w-full cursor-pointer rounded-lg"
       onClick={() => {
         router.push(`${path}/${item._id}`);
       }}

@@ -18,7 +18,7 @@ const CardSlider = ({ ProductList }: { ProductList: any }) => {
   return (
     <div className="w-full px-5 h-max relative p-10">
       {/* Product Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 xl:gap-8 max-w-7xl mx-auto">
         {displayedProducts.map((item: any, index: number) => (
           <div key={index} className="flex justify-center">
             <Card item={item} />

@@ -45,7 +45,7 @@ const SelfcareCardList = () => {
   const handleViewMore = () => router.push("/products");
 
   return (
-    <div className="lg:px-[2rem] w-[99vw]">
+    <div className="px-[2rem] w-[99vw] max-w-7xl mx-auto">
       <Link href="/selfcare-products" className="prose lg:prose-lg">
         <h2 className="mb-8 md:mb-8">Self-Care Items</h2>
       </Link>
@@ -53,7 +53,7 @@ const SelfcareCardList = () => {
       {loading && <p>Loading products...</p>}
       {error && <p className="text-red-500">{error}</p>}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-[2rem] mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-[3rem] mb-8">
         {products.length > 0 ? (
           products.map((product: RealCardItem) => (
             <Card key={product._id} item={product} />
