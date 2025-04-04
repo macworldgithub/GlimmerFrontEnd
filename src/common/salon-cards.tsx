@@ -111,10 +111,10 @@ const SalonCards: React.FC<{ title?: string; showButton?: boolean }> = ({
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
- // Index for carousel navigation
- const [startIndex, setStartIndex] = useState(0);
- const [cardsToShow, setCardsToShow] = useState(4);
- const [isMobile, setIsMobile] = useState(false); 
+  // Index for carousel navigation
+  const [startIndex, setStartIndex] = useState(0);
+  const [cardsToShow, setCardsToShow] = useState(4);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const fetchSalons = async () => {
@@ -179,7 +179,6 @@ const SalonCards: React.FC<{ title?: string; showButton?: boolean }> = ({
   return (
     <div className="relative w-full max-w-7xl mx-auto text-center">
     <h2 className="text-3xl font-semibold mb-4 text-left pl-6">{title}</h2>
-
     <div className="relative flex items-center justify-center">
       {/* Left Arrow - Always show on max-lg */}
       {isMobile && (
