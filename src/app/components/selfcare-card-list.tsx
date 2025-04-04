@@ -61,7 +61,7 @@ const SelfcareCardList = () => {
         ) : (
           <p>No products available</p>
         )}
-        <div className="relative w-[99vw] max-w-7xl mx-auto text-center">
+        <div className="relative max-w-7xl mx-auto text-center">
           <button
             className="mt-4 bg-[#583FA8] text-white py-2 px-6 rounded-lg mb-6"
             onClick={handleViewMore}
