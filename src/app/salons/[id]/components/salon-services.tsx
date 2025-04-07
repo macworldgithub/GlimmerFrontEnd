@@ -36,7 +36,7 @@ const SalonServices = () => {
   });
 
   const token = useSelector((state: RootState) => state.login.token);
-  const salonIdFilter = searchParams.get("id") ?? "";
+  const salonIdFilter = searchParams.get("salonId") ?? "";
   const page = Number(searchParams.get("page")) || 1;
 
   const fetchData = async () => {
@@ -102,7 +102,7 @@ const SalonServices = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-  
+
     if (!validateForm()) return;
     const successfulBookings: string[] = [];
 
@@ -111,11 +111,11 @@ const SalonServices = () => {
         const discountedPrice =
           service.adminSetPrice -
           (service.adminSetPrice * service.discountPercentage) / 100;
-  
+
         const bookingData = {
           ...bulkForm,
-          serviceId: service._id, 
-          finalPrice: discountedPrice, 
+          serviceId: service._id,
+          finalPrice: discountedPrice,
         };
         await createBooking(bookingData, token);
         successfulBookings.push(service.name);
@@ -124,13 +124,13 @@ const SalonServices = () => {
       alert(`Booking Confirmed for: ${successfulBookings.join(", ")}`);
       setIsModalOpen(false);
       window.location.reload();
-      
+
     } catch (error) {
       console.error("Booking Failed:", error);
       alert("Failed to book services. Please try again.");
     }
   };
-  
+
 
   return (
     <div className="w-[99vw] p-10 md:mb-8">
@@ -159,34 +159,41 @@ const SalonServices = () => {
       </div>
 
       <div className="w-full p-5 bg-[#FBE8A5]">
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          {data?.map((item) => (
-            <div
-              key={item._id}
-              className="bg-white rounded-lg border border-gray-300 shadow-md p-4 space-y-2"
-            >
-              <div className="flex flex-row justify-between">
-                <div className="text-lg font-semibold text-gray-800">
-                  {item.name} | {item.description || "No description"}
+        {data?.length === 0 ? (
+          <div className="text-center text-xl font-semibold text-gray-800">
+            No services for this salon, click below to view other salon services
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            {data?.map((item) => (
+              <div
+                key={item._id}
+                className="bg-white rounded-lg border border-gray-300 shadow-md p-4 space-y-2"
+              >
+                <div className="flex flex-row justify-between">
+                  <div className="text-lg font-semibold text-gray-800">
+                    {item.name} | {item.description || "No description"}
+                  </div>
+                  <div className="text-sm text-gray-500">
+                    {item.duration} mins
+                  </div>
+                  <div className="text-sm text-gray-500">
+                    {item.actualPrice} PKR
+                  </div>
                 </div>
-                <div className="text-sm text-gray-500">
-                  {item.duration} mins
-                </div>
-                <div className="text-sm text-gray-500">
-                  {item.actualPrice} PKR
+                <div className="flex justify-end">
+                  <button
+                    onClick={() => addToCart(item)}
+                    className="w-[200px] py-2 text-black border-2 border-black rounded-lg font-medium hover:bg-black hover:text-white transition duration-200"
+                  >
+                    Add to Cart
+                  </button>
                 </div>
               </div>
-              <div className="flex justify-end">
-                <button
-                  onClick={() => addToCart(item)}
-                  className="w-[200px] py-2 text-black border-2 border-black rounded-lg font-medium hover:bg-black hover:text-white transition duration-200"
-                >
-                  Add to Cart
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
+
         <div className="flex justify-center mt-4">
           <Link
             href="/salons/services"
@@ -230,7 +237,7 @@ const SalonServices = () => {
                     const discountedPrice =
                       service.adminSetPrice -
                       (service.adminSetPrice * service.discountPercentage) /
-                        100;
+                      100;
 
                     return (
                       <motion.div
@@ -353,9 +360,8 @@ const SalonServices = () => {
                         name={name}
                         value={(bulkForm as Record<string, string>)[name] || ""}
                         onChange={handleChange}
-                        className={`w-full p-3 border ${
-                          error ? "border-red-500" : "border-gray-300"
-                        } rounded-md focus:ring-2 focus:ring-purple-500 outline-none`}
+                        className={`w-full p-3 border ${error ? "border-red-500" : "border-gray-300"
+                          } rounded-md focus:ring-2 focus:ring-purple-500 outline-none`}
                         required
                       />
                     )}

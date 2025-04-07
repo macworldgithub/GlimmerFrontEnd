@@ -101,14 +101,14 @@ const ServiceNavMenu = ({ className, onSubCategorySelect, onSubSubCategorySelect
       
       {/* Dropdown Trigger */}
       <div className="flex justify-between items-center p-3 cursor-pointer transition-all ease-in-out duration-300" onClick={toggleDropdown}>
-      <div className="p-2 border-b flex items-center gap-2 bg-gray-100">
+      <div className="p-2 flex items-center gap-2">
             <FontAwesomeIcon icon={faSearch} className="text-gray-500" />
             <input
               type="text"
               placeholder="Search services..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full p-2 border-none outline-none bg-gray-100"
+              className="w-full p-2 border-none outline-none"
             />
           </div>
         {/* <span className="text-gray-700 font-medium">

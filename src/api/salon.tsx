@@ -47,7 +47,7 @@ export const getAllActiveServices = createAsyncThunk(
 
       if (payload.page_no) params.append("page_no", payload.page_no.toString());
       if (payload.categoryId) params.append("categoryId", payload.categoryId);
-      if (payload.salonId) params.append("id", payload.salonId);  
+      if (payload.salonId) params.append("salonId", payload.salonId);  
       if (payload.subCategoryName) params.append("subCategoryName", payload.subCategoryName);
       if (payload.subSubCategoryName) params.append("subSubCategoryName", payload.subSubCategoryName);
 

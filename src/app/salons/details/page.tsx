@@ -15,7 +15,7 @@ import SalonsNearby from "../[id]/components/salons-nearby";
 
 const SalonDetailsPage = () => {
   const searchParams = useSearchParams();
-  const id = searchParams.get("id");
+  const id = searchParams.get("salonId");
   const [salonData, setSalonData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);

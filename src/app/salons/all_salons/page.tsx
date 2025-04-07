@@ -65,7 +65,7 @@ const SalonsList = () => {
   };
 
   const handleSalonClick = (salonId: number) => {
-    router.push(`/salons/details/?id=${salonId}`);
+    router.push(`/salons/details/?salonId=${salonId}`);
   };
 
   return (

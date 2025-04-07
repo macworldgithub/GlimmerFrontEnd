@@ -171,7 +171,7 @@ const SalonCards: React.FC<{ title?: string; showButton?: boolean }> = ({
   const handleViewMore = () => router.push("/salons/all_salons");
 
   const handleSalonClick = (salonId: number) => {
-    router.push(`/salons/details/?id=${salonId}`);
+    router.push(`/salons/details/?salonId=${salonId}`);
   };
 
 
