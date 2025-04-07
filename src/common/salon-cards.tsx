@@ -185,41 +185,42 @@ const SalonCards: React.FC<{ title?: string; showButton?: boolean }> = ({
     <h2 className="text-3xl font-semibold mb-4 text-left pl-6">{title}</h2>
 
     <div className="relative flex items-center justify-center">
-      {/* Left Arrow - Only visible on max-lg screens and on small screens over the card */}
-      {showArrows || isSmallScreen ? (
-        <button
-          className="absolute left-2 sm:-left-6 z-10 bg-white p-3 rounded-full shadow-lg text-2xl font-bold stroke-2 text-gray-900 shadow-gray-700 
-          top-1/2 transform -translate-y-1/2" // Position arrows over the card for small screens
-          onClick={handlePrev}
-          disabled={startIndex === 0}
-        >
-          <FaArrowLeft />
-        </button>
-      ) : null}
+  {/* Left Arrow - Only visible on small and medium screens */}
+  {isSmallScreen && (
+    <button
+      className="absolute left-2 sm:-left-6 z-10 bg-white p-3 rounded-full shadow-lg text-2xl font-bold stroke-2 text-gray-900 shadow-gray-700 
+      top-1/2 transform -translate-y-1/2"
+      onClick={handlePrev}
+      disabled={startIndex === 0}
+    >
+      <FaArrowLeft />
+    </button>
+  )}
 
-      {/* Salon Cards Wrapper */}
-      <div className="flex gap-4 py-4 px-2 overflow-hidden justify-center">
-        {salons.slice(startIndex, startIndex + cardsToShow).map((salon) => (
-          <SalonCard
-            key={salon._id}
-            salons={salon}
-            onClick={() => handleSalonClick(salon._id)}
-          />
-        ))}
-      </div>
+  {/* Salon Cards Wrapper */}
+  <div className="flex gap-4 py-4 px-2 max-lg:overflow-hidden justify-center">
+    {salons.slice(startIndex, startIndex + cardsToShow).map((salon) => (
+      <SalonCard
+        key={salon._id}
+        salons={salon}
+        onClick={() => handleSalonClick(salon._id)}
+      />
+    ))}
+  </div>
 
-      {/* Right Arrow - Only visible on max-lg screens and on small screens over the card */}
-      {showArrows || isSmallScreen ? (
-        <button
-          className="absolute right-2 sm:-right-6 z-10 bg-white p-3 rounded-full shadow-lg text-2xl font-bold stroke-2 text-gray-900 shadow-gray-700 
-          top-1/2 transform -translate-y-1/2"
-          onClick={handleNext}
-          disabled={startIndex + cardsToShow >= salons.length}
-        >
-          <FaArrowRight />
-        </button>
-      ) : null}
-    </div>
+  {/* Right Arrow - Only visible on small and medium screens */}
+  {isSmallScreen && (
+    <button
+      className="absolute right-2 sm:-right-6 z-10 bg-white p-3 rounded-full shadow-lg text-2xl font-bold stroke-2 text-gray-900 shadow-gray-700 
+      top-1/2 transform -translate-y-1/2"
+      onClick={handleNext}
+      disabled={startIndex + cardsToShow >= salons.length}
+    >
+      <FaArrowRight />
+    </button>
+  )}
+</div>
+
 
     {showButton && (
       <button

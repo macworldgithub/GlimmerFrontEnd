@@ -63,7 +63,7 @@ const Card = ({ card }: { card: CardType }) => {
 	return (
 		<div
 			className={cn(
-				"relative flex flex-col rounded-2xl shadow-lg overflow-hidden max-md:w-[350px] max-sm:w-[275px]", 
+				"relative flex flex-col rounded-2xl shadow-lg overflow-hidden w-full max-w-sm",
 				bgColor ? `bg-${bgColor}` : "bg-[secondary]",
 			)}
 		>

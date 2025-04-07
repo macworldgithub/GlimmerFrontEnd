@@ -60,49 +60,51 @@ const CardListWrapper = ({
       <style>{keyframes}</style>
 
       {/* Swiper Slider for small screens */}
-      <div className="relative md:hidden mx-auto">
-        <Swiper
-          modules={[Navigation, Scrollbar]}
-          spaceBetween={10}
-          slidesPerView={1}
-          centeredSlides={true}
-          loop={true}
-          navigation={{
-            nextEl: nextButtonRef.current,
-            prevEl: prevButtonRef.current,
-          }}
-          onBeforeInit={(swiper) => {
-            // Attach refs to swiper navigation
-            if (swiper.params.navigation) {
-              const navigation = swiper.params.navigation as {
-                nextEl: HTMLElement | null;
-                prevEl: HTMLElement | null;
-              };
-              navigation.nextEl = nextButtonRef.current;
-              navigation.prevEl = prevButtonRef.current;
-            }
-          }}
-          scrollbar={{ draggable: true }}
-          className="my-4 absolute w-full flex items-center justify-center"
-        >
-          {cards.map((c, i) => (
-            <SwiperSlide key={i} className="mx-auto max-sm:w-[80%] sm:w-full">
-              {c}
-            </SwiperSlide> 
-          ))}
-        </Swiper>
-        {/* Navigation Arrows */}
-        <div
-          ref={prevButtonRef}
-          className="absolute top-1/2 left-0 transform -translate-y-1/2 bg-gray-300 p-2 rounded-full text-black cursor-pointer z-10"
-        >
-          <FontAwesomeIcon icon={faArrowLeft} />
-        </div>
-        <div
-          ref={nextButtonRef}
-          className="absolute top-1/2 right-0 transform -translate-y-1/2 bg-gray-300 p-2 rounded-full text-black cursor-pointer z-10"
-        >
-          <FontAwesomeIcon icon={faArrowRight} />
+      <div className="relative md:hidden mx-auto w-full">
+        <div className="relative flex items-center justify-center w-full">
+          <Swiper
+            modules={[Navigation, Scrollbar]}
+            spaceBetween={10}
+            slidesPerView={1}
+            centeredSlides={true}
+            loop={true}
+            navigation={{
+              nextEl: nextButtonRef.current,
+              prevEl: prevButtonRef.current,
+            }}
+            onBeforeInit={(swiper) => {
+              // Attach refs to swiper navigation
+              if (swiper.params.navigation) {
+                const navigation = swiper.params.navigation as {
+                  nextEl: HTMLElement | null;
+                  prevEl: HTMLElement | null;
+                };
+                navigation.nextEl = nextButtonRef.current;
+                navigation.prevEl = prevButtonRef.current;
+              }
+            }}
+            scrollbar={{ draggable: true }}
+            className="w-full"
+          >
+            {cards.map((c, i) => (
+              <SwiperSlide key={i} className="mx-auto max-sm:w-[80%] sm:w-full">
+                {c}
+              </SwiperSlide>
+            ))}
+          </Swiper>
+          {/* Navigation Arrows */}
+          <div
+            ref={prevButtonRef}
+            className="absolute top-1/2 left-0 transform -translate-y-1/2 bg-gray-300 p-2 rounded-full text-black cursor-pointer z-10"
+          >
+            <FontAwesomeIcon icon={faArrowLeft} />
+          </div>
+          <div
+            ref={nextButtonRef}
+            className="absolute top-1/2 right-0 transform -translate-y-1/2 bg-gray-300 p-2 rounded-full text-black cursor-pointer z-10"
+          >
+            <FontAwesomeIcon icon={faArrowRight} />
+          </div>
         </div>
       </div>
 
