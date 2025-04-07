@@ -31,49 +31,37 @@ const SalonsList = () => {
   const [ratingFilter, setRatingFilter] = useState<number | null>(null);
   const [data, setData] = useState<any[]>([]);
   const [total, setTotal] = useState(0);
-  const [currentPage, setCurrentPage] = useState(1);
 
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
 
-  const page = Number(searchParams.get("page")) || 1;
-  const pageSize = 4; // Har page per 4 items ayenge
+  const page = Number(searchParams.get("page_no")) || 1;
+  const pageSize = 8;
 
   const fetchData = async () => {
     try {
-      const params = { page, pageSize }; 
+      const params = { page_no: page }; 
       //@ts-ignore
-      const result = await dispatch(getAllSalons(params)).unwrap();
-      console.log("Fetched Data:", result);
+      const result = await dispatch(getAllSalons(params.page_no)).unwrap();
 
-      if (result && result.salons) {
-        setData(result.salons);
-        setTotal(result.totalCount ?? 0);
-      } else {
-        setData([]);
-      }
+      setData(result.salons);
+      setTotal(result.total);
     } catch (error) {
-      console.error("Error fetching salons:", error);
       message.error("Failed to fetch salons");
     }
   };
 
   useEffect(() => {
     fetchData();
-  }, [currentPage]);
-
-  
-  // Calculate total pages properly
-  const totalPages = Math.ceil(total / pageSize);
+  }, [page]);
 
 
   const handlePageChange = (newPage: number) => {
-    if (newPage >= 1 && newPage <= totalPages) {
-      router.push(`?page=${newPage}`);
-      setCurrentPage(newPage); // Ensure state updates
-    }
+    const params = new URLSearchParams(searchParams);
+    params.set("page_no", newPage.toString());
+    router.push(`${pathname}?${params.toString()}`);
   };
 
   const handleSalonClick = (salonId: number) => {
@@ -82,7 +70,7 @@ const SalonsList = () => {
 
   return (
     <div className="flex flex-col w-[99vw] pb-[8rem]">
-      <div className="hero-content px-10 bg-[#FBE8A5] mb-4 z-10">
+      <div className="px-10 py-10 bg-[#FBE8A5] mb-4 z-10">
         <Salonfilter />
       </div>
       {/* Breadcrumbs */}
@@ -310,23 +298,27 @@ const SalonsList = () => {
         </div>
 
         {/* Pagination */}
-        <div>
-          {data.length > 0 ? (
-            <div className="flex justify-center items-center space-x-2 py-4 ">
-              <button className="bg-gray-200 py-2 px-6 rounded-lg cursor-pointer"
-                onClick={() => handlePageChange(page - 1)} disabled={page === 1}>
-                Previous
-              </button>
-              <span> Page {page} of {totalPages} </span>
-              <button className="bg-gray-200 py-2 px-6 rounded-lg cursor-pointer"
-                onClick={() => handlePageChange(page + 1)} disabled={page === totalPages}>
-                Next
-              </button>
-            </div>
-          ) : (
-            <p className="text-center text-gray-500">No salons available.</p>
-          )}
-        </div>
+        {total > 0 && (
+          <div className="w-full flex justify-center items-center space-x-2 py-4">
+            <button
+              onClick={() => handlePageChange(page - 1)}
+              disabled={page === 1}
+              className="px-4 py-2 bg-gray-200 text-gray-500 rounded-md hover:bg-gray-300 disabled:opacity-50"
+            >
+              Previous
+            </button>
+            <span className="text-lg text-gray-600">
+              Page {page} of {Math.ceil(total / pageSize)}
+            </span>
+            <button
+              onClick={() => handlePageChange(page + 1)}
+              disabled={page === Math.ceil(total / pageSize)}
+              className="px-4 py-2 bg-gray-200 text-gray-500 rounded-md hover:bg-gray-300 disabled:opacity-50"
+            >
+              Next
+            </button>
+          </div>
+        )}
       </motion.main>
     </div>
   );

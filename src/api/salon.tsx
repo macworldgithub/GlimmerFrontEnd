@@ -109,7 +109,7 @@ export const getAllActiveServices = createAsyncThunk(
   
   interface GetAllSalonsResponse {
     salons: Salon[];
-    totalCount: number;
+    total: number;
   }
   
   export const getAllSalons = createAsyncThunk<GetAllSalonsResponse, number>(
