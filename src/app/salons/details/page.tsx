@@ -46,15 +46,15 @@ const SalonDetailsPage = () => {
       <div className=" mb-6 w-[99vw] md:mb-8 p-10">
         <div className="flex flex-col mt-4">
           <div className="flex justify-between items-center">
-            <div className="prose lg:prose-">
-              <h2>{salonData.salon_name || "Glimmer's Saloon"}</h2>
+            <div className="prose">
+              <h2 className="text-4xl">{salonData.salon_name || "Glimmer's Saloon"}</h2>
             </div>
             <div>
               <MdOutlineIosShare size={30} />
             </div>
           </div>
 
-          <div className="flex flex-row items-center mb-3">
+          <div className="flex flex-row items-center mb-3 text-2xl">
             <p className="mr-1">5.0</p>
             <div className="flex flex-row mr-1">
               {Array.from({ length: 5 }, (_, index) => (
@@ -72,55 +72,47 @@ const SalonDetailsPage = () => {
           </div>
         </div>
 
-        {/* Swiper for smaller screens */}
-        <div className="md:hidden">
-          <Swiper spaceBetween={30} loop={true} cssMode={true}>
-            {[
-              salonData.image1,
-              salonData.image2,
-              salonData.image3,
-              salonData.image4,
-            ].map((src, index) => (
-              <SwiperSlide key={index}>
-                <img
-                  src={src}
-                  className="w-full h-auto object-cover"
-                  alt={`Salon Image ${index + 1}`}
-                />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </div>
-
         {/* Grid for larger screens */}
-        <div className="hidden md:grid grid-cols-8 gap-4">
-          {/* Left Column (2 Images) */}
-          <div className="col-span-4 grid grid-rows-2 gap-2">
-            {[salonData.image1, salonData.image2].map((src, index) => (
+        <div className="hidden md:grid grid-cols-10 gap-4">
+          {/* Left Column */}
+          <div className={`col-span-4 grid gap-2 ${[salonData.image1, salonData.image2].filter(Boolean).length === 2 ? 'grid-rows-2' : 'grid-rows-1'}`}>
+            {salonData.image1 && (
               <img
-                key={index}
-                src={src}
-                className="w-full h-[175px] md:h-full object-cover rounded-none"
-                alt={`left img ${index + 1}`}
+                src={salonData.image1}
+                className="w-full h-[100px] md:h-full object-cover rounded-none"
+                alt="left img 1"
               />
-            ))}
+            )}
+            {salonData.image2 && (
+              <img
+                src={salonData.image2}
+                className="w-full h-[175px] md:h-full object-cover rounded-none"
+                alt="left img 2"
+              />
+            )}
           </div>
 
-          {/* Right Column (2 Images) */}
-          <div className="col-span-4 grid grid-rows-2 gap-2">
-            {[salonData.image3, salonData.image4].map((src, index) => (
+          {/* Right Column */}
+          <div className={`col-span-4 grid gap-2 ${[salonData.image3, salonData.image4].filter(Boolean).length === 2 ? 'grid-rows-2' : 'grid-rows-1'}`}>
+            {salonData.image3 && (
               <img
-                key={index + 2}
-                src={src}
+                src={salonData.image3}
                 className="w-full h-[175px] md:h-full object-cover rounded-none"
-                alt={`right img ${index + 3}`}
+                alt="right img 3"
               />
-            ))}
+            )}
+            {salonData.image4 && (
+              <img
+                src={salonData.image4}
+                className="w-full h-[175px] md:h-full object-cover rounded-none"
+                alt="right img 4"
+              />
+            )}
           </div>
         </div>
       </div>
       <SalonServices />
-      <AboutSalon />
+      <AboutSalon description={salonData?.about} />
       <RecommendedProducts />
       <SalonsNearby />
       <GlimmerBanner />

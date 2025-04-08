@@ -41,14 +41,16 @@ const SalonServices = () => {
 
   const fetchData = async () => {
     try {
-      const result = await dispatch(
-        getAllActiveServices({
-          page_no: page,
-          salonId: salonIdFilter,
-        })
-      );
-      if (result.payload) {
-        setData(result.payload.services);
+      if (salonIdFilter) {
+        const result = await dispatch(
+          getAllActiveServices({
+            page_no: page,
+            salonId: salonIdFilter,
+          })
+        );
+        if (result.payload) {
+          setData(result.payload.services);
+        }
       }
     } catch (error) {
       console.error("Error fetching services", error);
@@ -56,7 +58,9 @@ const SalonServices = () => {
   };
 
   useEffect(() => {
-    fetchData();
+    if (salonIdFilter) {
+      fetchData();
+    }
   }, [page, salonIdFilter]);
 
   const addToCart = (service: any) => {
@@ -196,7 +200,7 @@ const SalonServices = () => {
 
         <div className="flex justify-center mt-4">
           <Link
-            href="/salons/services"
+            href={`/salons/services?page_no=${page}&salonId=${salonIdFilter}`}
             className="text-center py-2 px-4 border-2 border-black rounded-lg text-black font-medium hover:bg-black hover:text-white transition duration-200"
           >
             View All Services

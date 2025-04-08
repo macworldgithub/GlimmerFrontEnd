@@ -14,7 +14,7 @@ const AboutSalon = ({ description }: Props) => {
 				</div>
 				<p>
 					{description ||
-						"Full beauty range go high quality services. Russian-speaking masters, cosmetologist, an atmosphere of coziness and comfort. Only premium materials, high-level specialists- We value every guest- sign up and see for yourself."}
+						"No description provided."}
 				</p>
 			</div>
 		</>
