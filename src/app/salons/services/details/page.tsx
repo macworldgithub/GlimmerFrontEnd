@@ -3,7 +3,7 @@ import Card from "@/common/Card";
 import { sampleProducts } from "@/data";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import Link from "next/link";
 import {
@@ -14,11 +14,13 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { createBooking, getServiceById } from "@/api/salon";
+import { createBooking, getAllActiveServices, getServiceById } from "@/api/salon";
 import { useSearchParams } from "next/navigation";
 import { DatePicker, Modal } from "antd";
-import { RootState } from "@/store/reduxStore";
+import { AppDispatch, RootState } from "@/store/reduxStore";
 import dayjs from "dayjs";
+import { motion } from "framer-motion";
+import ServiceCard from "@/common/ServiceCard";
 
 const ServiceDetails = () => {
   const token = useSelector((state: RootState) => state.login.token);
@@ -44,6 +46,39 @@ const ServiceDetails = () => {
     customerPhone: "",
     bookingDate: "",
   });
+
+  const dispatch = useDispatch<AppDispatch>();
+
+  const [data, setData] = useState<any[]>([]);
+  console.log(data);
+  const salonIdFilter = searchParams.get("salonId") ?? "";
+  const page = Number(searchParams.get("page")) || 1;
+
+  const fetchData = async () => {
+    try {
+      if (salonIdFilter) {
+        const result = await dispatch(
+          getAllActiveServices({
+            page_no: page,
+            salonId: salonIdFilter,
+          })
+        );
+        console.log(result)
+        if (result.payload) {
+          setData(result.payload.services);
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching services", error);
+    }
+  };
+
+  useEffect(() => {
+    if (salonIdFilter) {
+      fetchData();
+    }
+  }, [page, salonIdFilter]);
+
 
   useEffect(() => {
     if (!serviceId) return;
@@ -207,40 +242,39 @@ const ServiceDetails = () => {
             <div className="flex gap-2 overflow-hidden">
               {isMobile
                 ? [images[index]].map((image, i) => (
-                    <div
-                      key={i}
-                      className="mx-4 w-[120px] h-[120px] sm:w-[140px] sm:h-[140px] flex items-center justify-center overflow-hidden rounded-md shadow bg-gray-100 border cursor-pointer border-purple-900"
-                    >
-                      <img
-                        src={image}
-                        alt={`Thumbnail ${i + 1}`}
-                        className="w-full h-full object-cover"
-                        onError={(e) =>
-                          (e.currentTarget.src =
-                            "/assets/images/default_image.jpg")
-                        }
-                      />
-                    </div>
-                  ))
+                  <div
+                    key={i}
+                    className="mx-4 w-[120px] h-[120px] sm:w-[140px] sm:h-[140px] flex items-center justify-center overflow-hidden rounded-md shadow bg-gray-100 border cursor-pointer border-purple-900"
+                  >
+                    <img
+                      src={image}
+                      alt={`Thumbnail ${i + 1}`}
+                      className="w-full h-full object-cover"
+                      onError={(e) =>
+                      (e.currentTarget.src =
+                        "/assets/images/default_image.jpg")
+                      }
+                    />
+                  </div>
+                ))
                 : images.map((image, i) => (
-                    <div
-                      key={i}
-                      className={`mx-4 md:w-[90px] md:h-[90px] flex items-center justify-center overflow-hidden rounded-md shadow bg-gray-100 border border-gray-300 cursor-pointer ${
-                        i === index ? "border-purple-900" : ""
+                  <div
+                    key={i}
+                    className={`mx-4 md:w-[90px] md:h-[90px] flex items-center justify-center overflow-hidden rounded-md shadow bg-gray-100 border border-gray-300 cursor-pointer ${i === index ? "border-purple-900" : ""
                       }`}
-                      onClick={() => setIndex(i)}
-                    >
-                      <img
-                        src={image}
-                        alt={`Thumbnail ${i + 1}`}
-                        className="w-full h-full object-cover"
-                        onError={(e) =>
-                          (e.currentTarget.src =
-                            "/assets/images/default_image.jpg")
-                        }
-                      />
-                    </div>
-                  ))}
+                    onClick={() => setIndex(i)}
+                  >
+                    <img
+                      src={image}
+                      alt={`Thumbnail ${i + 1}`}
+                      className="w-full h-full object-cover"
+                      onError={(e) =>
+                      (e.currentTarget.src =
+                        "/assets/images/default_image.jpg")
+                      }
+                    />
+                  </div>
+                ))}
             </div>
 
             {/* Right Arrow Button */}
@@ -259,11 +293,10 @@ const ServiceDetails = () => {
               {[...Array(5)].map((_, index) => (
                 <svg
                   key={index}
-                  className={`w-5 h-5 ms-1 ${
-                    service?.ratings && index < Math.round(service.ratings)
+                  className={`w-5 h-5 ms-1 ${service?.ratings && index < Math.round(service.ratings)
                       ? "text-purple-800"
                       : "text-gray-300"
-                  }`}
+                    }`}
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
@@ -282,9 +315,8 @@ const ServiceDetails = () => {
               return (
                 <div
                   key={star}
-                  className={`flex items-center gap-3 ${
-                    index < 4 ? "mb-4" : ""
-                  }`}
+                  className={`flex items-center gap-3 ${index < 4 ? "mb-4" : ""
+                    }`}
                 >
                   <span className="text-purple-800">{star} ★</span>
                   <div className="w-full bg-gray-200 rounded-md h-3 flex-1">
@@ -540,9 +572,8 @@ const ServiceDetails = () => {
                       name={name}
                       value={(bulkForm as Record<string, string>)[name] || ""}
                       onChange={handleChange}
-                      className={`w-full p-3 border ${
-                        error ? "border-red-500" : "border-gray-300"
-                      } rounded-md focus:ring-2 focus:ring-purple-500 outline-none`}
+                      className={`w-full p-3 border ${error ? "border-red-500" : "border-gray-300"
+                        } rounded-md focus:ring-2 focus:ring-purple-500 outline-none`}
                       required
                     />
                   )}
@@ -598,11 +629,10 @@ const ServiceDetails = () => {
                 <button
                   key={tab.title}
                   onClick={() => setActiveTab(tab.title)}
-                  className={`flex-1 py-2 px-4 font-semibold ${
-                    activeTab === tab.title
+                  className={`flex-1 py-2 px-4 font-semibold ${activeTab === tab.title
                       ? "text-purple-800 border-b-2 border-purple-800"
                       : "text-gray-600"
-                  }`}
+                    }`}
                 >
                   {tab.title}
                 </button>
@@ -625,11 +655,10 @@ const ServiceDetails = () => {
               {[...Array(5)].map((_, index) => (
                 <svg
                   key={index}
-                  className={`w-5 h-5 ms-1 ${
-                    service?.ratings && index < Math.round(service.ratings)
+                  className={`w-5 h-5 ms-1 ${service?.ratings && index < Math.round(service.ratings)
                       ? "text-purple-800"
                       : "text-gray-300"
-                  }`}
+                    }`}
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
@@ -648,9 +677,8 @@ const ServiceDetails = () => {
               return (
                 <div
                   key={star}
-                  className={`flex items-center gap-3 ${
-                    index < 4 ? "mb-4" : ""
-                  }`}
+                  className={`flex items-center gap-3 ${index < 4 ? "mb-4" : ""
+                    }`}
                 >
                   <span className="text-purple-800">{star} ★</span>
                   <div className="w-full bg-gray-200 rounded-md h-3 flex-1">
@@ -668,71 +696,26 @@ const ServiceDetails = () => {
       </div>
 
       <div className="p-10 w-[99vw] justify-center md:mb-5 md:flex-row md:gap-12 ">
-        <h2 className="text-4xl font-semibold">Related Products</h2>
-
-        {/* Grid Layout for larger screens */}
-        <div className="mb-[8rem] hidden sm:grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 lg:gap-6 mt-5 justify-center">
-          {sampleProducts.map((item: any) => (
-            <div className="flex justify-center">
-              <Card key={item.id} item={item} />
-            </div>
-          ))}
-        </div>
-
-        {/* Swiper for mobile */}
-        <div className="sm:hidden w-full max-w-[90%] mx-auto relative mt-5">
-          <Swiper
-            modules={[Navigation]}
-            navigation={{
-              nextEl: ".swiper-button-next",
-              prevEl: ".swiper-button-prev",
-            }}
-            spaceBetween={15}
-            slidesPerView={1}
-          >
-            {sampleProducts.map((item: any) => (
-              <SwiperSlide key={item.id}>
-                <div className="flex justify-center">
-                  <Card item={item} />
+        <h2 className="text-4xl font-semibold">Related Services</h2>
+        <div className="w-full h-max grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-x-8 gap-y-10  p-6 ">
+            {data.length ? (
+              data.map((item) => (
+                <motion.div
+                  key={item._id}
+                  whileHover={{ scale: 1.03 }}
+                  className="flex"
+                >
+                  <ServiceCard item={item} />
+                </motion.div>
+              ))
+            ) : (
+              <div className="col-span-full flex justify-center items-center min-h-[70vh]">
+                <div className="text-center font-bold text-3xl">
+                  Oops! No items to display in this category
                 </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
-
-          {/* Navigation Arrows */}
-          <div className="swiper-button-next absolute top-1/2 right-4 transform -translate-y-1/2 z-10 text-white">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="white"
-              className="w-6 h-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M9 5l7 7-7 7"
-              ></path>
-            </svg>
-          </div>
-          <div className="swiper-button-prev absolute top-1/2 left-4 transform -translate-y-1/2 z-10 text-white">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="white"
-              className="w-6 h-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M15 19l-7-7 7-7"
-              ></path>
-            </svg>
-          </div>
-        </div>
+              </div>
+            )}
+          </div>        
       </div>
     </>
   );

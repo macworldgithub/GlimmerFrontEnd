@@ -9,6 +9,7 @@ import { Rating } from "react-simple-star-rating";
 import { useRouter } from "next/navigation";
 
 const ServiceCard: React.FC<{ item: any }> = ({ item }) => {
+  console.log(item);
   const router = useRouter();
 
   // Calculate discounted price if discount exists
@@ -17,7 +18,7 @@ const ServiceCard: React.FC<{ item: any }> = ({ item }) => {
     : item.adminSetPrice;
 
   const handleClick = () => {
-    router.push(`/salons/services/details?serviceId=${item._id}`);
+    router.push(`/salons/services/details?serviceId=${item._id}&salonId=${item.salonId}`);
   };
   return (
     <div className="w-[280px] xl:w-[380px] h-auto shadow-lg max-md:w-full cursor-pointer rounded-lg mx-auto"
