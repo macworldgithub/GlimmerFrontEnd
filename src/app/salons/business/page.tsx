@@ -12,9 +12,11 @@ import GlimmerAchieves from "../components/glimmer-achieves";
 import GlimmerForBusiness from "../components/glimmer-for-business";
 import Services from "../components/services";
 import Faq from "@/app/selfcare-products/components/Faq";
+import { Button, Form, Input, Modal } from "antd";
 
 const Page = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const openModal = () => {
     setIsOpen(true);
@@ -23,6 +25,20 @@ const Page = () => {
   const closeModal = () => {
     setIsOpen(false);
   };
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleSubmit = (values: any) => {
+    console.log("Form Values: ", values);
+    setIsModalVisible(false);
+  };
+
   return (
     <>
       <div className="w-[99vw] flex flex-col items-center justify-center pt-[6rem] text-center px-4">
@@ -33,12 +49,12 @@ const Page = () => {
           Simple, flexible and powerful booking software for your business.
         </p>
         <div className="mt-4 flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0">
-          <Link
-            href="/signup"
+          <button
+            onClick={showModal}
             className="px-6 py-3 text-white bg-black rounded-3xl transform transition-all duration-300 hover:translate-y-1 w-full sm:w-auto"
           >
             Get started now
-          </Link>
+          </button>
           <button
             onClick={openModal}
             className="px-6 py-3 border border-black rounded-3xl transform transition-all duration-300 hover:translate-y-1 w-full sm:w-auto"
@@ -90,15 +106,73 @@ const Page = () => {
             focus on what you do best.
           </p>
           <div className="mt-4 flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0">
-            <Link
-              href="/signup"
+            <button
+              onClick={showModal}
               className="px-6 py-3 text-white bg-black rounded-3xl transform transition-all duration-300 hover:translate-y-1 w-full sm:w-auto flex items-center justify-center space-x-2"
             >
               <span>Get started now</span>
               <FontAwesomeIcon icon={faArrowRight} className="w-5 h-5" />
-            </Link>
+            </button>
           </div>
         </div>
+        {/* Modal for Form */}
+        <Modal
+          title="Register your Salon"
+          visible={isModalVisible}
+          onCancel={handleCancel}
+          footer={null}
+          width={500}
+        >
+          <Form
+            layout="vertical"
+            onFinish={handleSubmit}
+          >
+            <Form.Item
+              label="Name"
+              name="name"
+              rules={[{ required: true, message: "Please enter your name" }]}
+            >
+              <Input />
+            </Form.Item>
+
+            <Form.Item
+              label="Phone Number"
+              name="phone"
+              rules={[{ required: true, message: "Please enter your phone number" }]}
+            >
+              <Input />
+            </Form.Item>
+
+            <Form.Item
+              label="Salon Name"
+              name="salonName"
+              rules={[{ required: true, message: "Please enter your salon name" }]}
+            >
+              <Input />
+            </Form.Item>
+
+            <Form.Item
+              label="Email (Optional)"
+              name="email"
+            >
+              <Input />
+            </Form.Item>
+
+            <p className="text-center text-sm">
+              Our team will contact you soon!
+            </p>
+
+            <div className="text-center mt-4">
+              <Button
+                type="primary"
+                htmlType="submit"
+                className="w-full"
+              >
+                Send Request
+              </Button>
+            </div>
+          </Form>
+        </Modal>
       </div>
       <div className="pt-[6rem] margin-bottom-unset">
         <NewSaloons />
@@ -149,7 +223,7 @@ const Page = () => {
       <div className="pt-[6rem]">
         <Faq />
       </div>
-     
+
       <div className="pt-[6rem]">
         <GlimmerAchieves />
       </div>

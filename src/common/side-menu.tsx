@@ -12,6 +12,7 @@ import { useDispatch } from "react-redux";
 import { logout } from "@/reduxSlices/loginSlice";
 import { RootState } from "@/store/reduxStore";
 import { usePathname } from "next/navigation";
+import RegisterGymModal from "./RegisterGymModal";
 
 const SideMenu = ({
   isLoggedIn,
@@ -23,11 +24,17 @@ const SideMenu = ({
   const credentials = useSelector((state: RootState) => state.login);
   const dispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(false);
+  const [showGymModal, setShowGymModal] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
     setIsOpen(false);
   }, [pathname]);
+
+  const handleGymSubmit = (values: any) => {
+    console.log("Gym Registration Data:", values);
+    setShowGymModal(false);
+  };
 
   const Menu = ({ className }: { className?: string }) => {
     return (
@@ -56,22 +63,13 @@ const SideMenu = ({
           </Link>
         </li>
         <li>
-          <Link
-            className="text-base"
-            href="/salons/business"
-            onClick={() => setIsOpen(false)}
+          <button
+            onClick={() => setShowGymModal(true)}
+            className="text-base flex items-center space-x-2"
           >
-            <FaArrowRight className="size-4" /> Register your salon
-          </Link>
-        </li>
-        <li>  
-          <Link
-            className="text-base"
-            href="/coming-soon"
-            onClick={() => setIsOpen(false)}
-          >
-            <FaArrowRight className="size-4" /> Register your gym
-          </Link>
+            <FaArrowRight className="size-4" />
+            <span>Register your gym</span>
+          </button>
         </li>
         <li>
           {credentials.token ? (
@@ -150,6 +148,11 @@ const SideMenu = ({
           ></label>
           <Menu className="menu bg-base-200 text-base-content min-h-full w-80 p-4" />
         </div>
+        <RegisterGymModal
+          visible={showGymModal}
+          onCancel={() => setShowGymModal(false)}
+          onSubmit={handleGymSubmit}
+        />
       </div>
     </>
   );
