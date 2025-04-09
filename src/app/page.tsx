@@ -7,18 +7,20 @@ import FakeReviewList from "./components/fake-review-list";
 import { Provider } from "react-redux";
 import store from "@/store/reduxStore";
 import SaloonPictures from "@/common/SaloonPictures";
+import ProductFilter from "@/common/ProductFilter";
 
 export default async function Home() {
   return (
     <>
-    <div className="w-[99vw]">
-      <Hero />
-      <SalonCardList />
-      <SeftcareCardList />
-      {/* <SaloonPictures /> */}
-      <BottomSlider />
-      <GymBanner />
-      <FakeReviewList />
+      <div className="w-[99vw]">
+        <Hero />
+        <SalonCardList />
+        <SeftcareCardList />
+        {/* <SaloonPictures /> */}
+        <BottomSlider />
+        <GymBanner />
+        <ProductFilter />
+        <FakeReviewList />
       </div>
     </>
   );
