@@ -37,7 +37,6 @@ const ServiceDetails = () => {
     customerPhone: "",
     bookingDate: "",
     paymentMethod: "",
-    notes: "",
   });
 
   const [errors, setErrors] = useState({

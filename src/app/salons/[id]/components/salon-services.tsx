@@ -26,7 +26,6 @@ const SalonServices = () => {
     customerPhone: "",
     bookingDate: "",
     paymentMethod: "",
-    notes: "",
   });
 
   const [errors, setErrors] = useState({
@@ -402,21 +401,6 @@ const SalonServices = () => {
                     />
                     Card Payment
                   </label>
-                </div>
-
-                {/* Notes Field */}
-                <div>
-                  <label className="font-semibold text-gray-700 block mb-1">
-                    Additional Notes:
-                  </label>
-                  <textarea
-                    name="notes"
-                    value={bulkForm.notes}
-                    onChange={handleChange}
-                    className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 outline-none"
-                    rows={3}
-                    placeholder="Any additional instructions..."
-                  />
                 </div>
 
                 {/* Confirm Button */}
