@@ -17,12 +17,12 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
 
   return (
     <div
-      className="w-[280px] xl:w-[300px] mx-auto h-auto shadow-lg max-md:w-full cursor-pointer rounded-lg"
+      className="w-[320px] h-[370px] mx-auto shadow-lg max-md:w-full cursor-pointer rounded-lg bg-gray-100"
       onClick={() => {
         router.push(`${path}/${item._id}`);
       }}
     >
-      <div className="relative w-full h-[150px]">
+      <div className="relative w-full h-[50%]">
         <img
           src={item.image1 ? item.image1 : "/assets/images/default_image.jpg"}
           alt="Image 1"
@@ -33,10 +33,10 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
           <button
             onClick={() => {
               router.push(`${path}/${item._id}`);
-            }}  
+            }}
             className=" w-full py-2 max-xl:py-1 xl:gap-2 max-xl:gap-[2px] max-xl:px-1  gap-1 bg-[#583FA8]  flex justify-center items-center 
                  max-md:py-1  rounded-md max-lg:px-2 max-lg:gap-1 max-md:w-fit">
-                  <RiShoppingBag4Line size={20} className="text-white max-lg:h-5 max-lg:w-5 max-md:w-7 max-md:h-7"/>
+            <RiShoppingBag4Line size={20} className="text-white max-lg:h-5 max-lg:w-5 max-md:w-7 max-md:h-7" />
             <p className="text-white text-[12px] mt-1 max-xl:text-[8px] max-lg:text-6px max-sm:text-[9px] max-md:hidden">
               ADD TO BAG
             </p>
@@ -48,23 +48,23 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
           </div>
         </div>
         {item?.base_price > item?.discounted_price && item?.discounted_price > 0 && (
-  <div className="absolute -top-4 -right-3 w-8 h-8 md:w-10 md:h-10 flex items-center justify-center">
-    <img
-      src="/assets/addtoBag/discount.png"
-      alt="Discount"
-      className="w-full h-full"
-    />
-    <span className="absolute text-center text-white  flex flex-col items-center leading-none">
-      <span className="font-bold text-[12px]">{`${Math.round(((item?.base_price - item?.discounted_price) / item?.base_price) * 100)}%`}</span>
-      <span className="font-normal text-[8px]">OFF</span>
-    </span>
-  </div>
-)}
+          <div className="absolute -top-4 -right-3 w-8 h-8 md:w-10 md:h-10 flex items-center justify-center">
+            <img
+              src="/assets/addtoBag/discount.png"
+              alt="Discount"
+              className="w-full h-full"
+            />
+            <span className="absolute text-center text-white  flex flex-col items-center leading-none">
+              <span className="font-bold text-[12px]">{`${Math.round(((item?.base_price - item?.discounted_price) / item?.base_price) * 100)}%`}</span>
+              <span className="font-normal text-[8px]">OFF</span>
+            </span>
+          </div>
+        )}
 
       </div>
 
       <div className="p-1 px-3 mt-2">
-        <div className="flex justify-between mb-2">
+        <div className="flex justify-between">
           <div className="flex flex-col">
             <h2 className={`font-light text-[14px] overflow-hidden line-clamp-1 text-[#636363] ${!item.name && 'h-[24px]'}`}>
               {item.name || " "}
