@@ -7,7 +7,7 @@ import {
 
 const Footer = () => {
   return (
-    <footer className="relative w-[99vw] bg-neutral md:p-10 text-neutral-content mt-5 p-10">
+    <footer className="relative w-[99vw] bg-neutral text-neutral-content mt-5 p-3">
       <div className="container mx-auto flex flex-col md:flex-row justify-between gap-10 lg:mt-[8rem] md:mt-[3rem]">
         <footer className="relative w-[99vw] bg-neutral text-neutral-content mt-5 p-10">
           <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
