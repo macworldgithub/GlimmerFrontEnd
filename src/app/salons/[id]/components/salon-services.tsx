@@ -25,6 +25,7 @@ const SalonServices = () => {
     customerEmail: "",
     customerPhone: "",
     bookingDate: "",
+    bookingTime: "",
     paymentMethod: "",
   });
 
@@ -32,6 +33,7 @@ const SalonServices = () => {
     customerName: "",
     customerPhone: "",
     bookingDate: "",
+    bookingTime: "",
   });
 
   const token = useSelector((state: RootState) => state.login.token);
@@ -99,6 +101,8 @@ const SalonServices = () => {
       newErrors.customerPhone = "Phone number is required!";
     if (!bulkForm.bookingDate.trim())
       newErrors.bookingDate = "Booking date is required!";
+    if (!bulkForm.bookingTime.trim())
+      newErrors.bookingTime = "Booking time is required!";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -186,7 +190,10 @@ const SalonServices = () => {
                 </div>
                 <div className="flex justify-end">
                   <button
-                    onClick={() => addToCart(item)}
+                    onClick={() => {
+                      addToCart(item);
+                      setIsModalOpen(true); // Ensure sidebar stays open
+                    }}
                     className="w-[200px] py-2 text-black border-2 border-black rounded-lg font-medium hover:bg-black hover:text-white transition duration-200"
                   >
                     Add to Cart
@@ -215,6 +222,12 @@ const SalonServices = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            onClick={(e) => {
+              // Close when clicking outside the sidebar
+              if (e.target === e.currentTarget) {
+                setIsModalOpen(false);
+              }
+            }}
           >
             <motion.div
               className="w-[400px] bg-white h-full p-5 shadow-lg relative"
@@ -222,6 +235,7 @@ const SalonServices = () => {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              onClick={(e) => e.stopPropagation()} // Prevent clicks inside from closing
             >
               {/* Close Button */}
               <button
@@ -234,13 +248,12 @@ const SalonServices = () => {
               <h2 className="text-lg font-semibold mb-4">Selected Services</h2>
 
               {/* Selected Services List */}
-              <div className="space-y-4">
+              <div className="space-y-4 max-h-[calc(100%-100px)] overflow-y-auto">
                 {selectedServices.length > 0 ? (
                   selectedServices.map((service) => {
                     const discountedPrice =
                       service.adminSetPrice -
-                      (service.adminSetPrice * service.discountPercentage) /
-                      100;
+                      (service.adminSetPrice * service.discountPercentage) / 100;
 
                     return (
                       <motion.div
@@ -337,6 +350,12 @@ const SalonServices = () => {
                     name: "bookingDate",
                     type: "date",
                     error: errors.bookingDate,
+                  },
+                  {
+                    label: "Booking Time",
+                    name: "bookingTime",
+                    type: "time",
+                    error: errors.bookingTime,
                   },
                 ].map(({ label, name, type, error }) => (
                   <div key={name}>

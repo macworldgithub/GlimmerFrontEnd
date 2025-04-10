@@ -36,6 +36,7 @@ const ServiceDetails = () => {
     customerEmail: "",
     customerPhone: "",
     bookingDate: "",
+    bookingTime: "",
     paymentMethod: "",
   });
 
@@ -44,6 +45,7 @@ const ServiceDetails = () => {
     customerEmail: "",
     customerPhone: "",
     bookingDate: "",
+    bookingTime: "",
   });
 
   const dispatch = useDispatch<AppDispatch>();
@@ -158,6 +160,8 @@ const ServiceDetails = () => {
       newErrors.customerPhone = "Phone number is required!";
     if (!bulkForm.bookingDate.trim())
       newErrors.bookingDate = "Booking date is required!";
+    if (!bulkForm.bookingTime.trim())
+      newErrors.bookingTime = "Booking time is required!";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -547,6 +551,12 @@ const ServiceDetails = () => {
                   name: "bookingDate",
                   type: "date",
                   error: errors.bookingDate,
+                },
+                {
+                  label: "Booking Time",
+                  name: "bookingTime",
+                  type: "time",
+                  error: errors.bookingTime,
                 },
               ].map(({ label, name, type, error }) => (
                 <div key={name}>
