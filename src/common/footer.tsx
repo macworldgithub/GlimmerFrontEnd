@@ -1,102 +1,102 @@
 import React from "react";
-import Logo from "@/assets/images/logo.png";
 import Link from "next/link";
 import {
-  FaInstagram,
-  FaTwitter,
-  FaFacebook,
-  FaTiktok,
-  FaYoutube,
-  FaLinkedin,
   FaWhatsapp,
   FaEnvelope,
 } from "react-icons/fa";
-import img1 from "@/assets/partners/partner 1.png";
-import img2 from "@/assets/partners/partner 2.png";
-import img3 from "@/assets/partners/partner 3.png";
-import img4 from "@/assets/partners/partner 4.png";
 
 const Footer = () => {
   return (
     <footer className="relative w-[99vw] bg-neutral md:p-10 text-neutral-content mt-5 p-10">
       <div className="container mx-auto flex flex-col md:flex-row justify-between gap-10 lg:mt-[8rem] md:mt-[3rem]">
-        {/* Logo and Description */}
-        <aside className="w-full md:w-1/3 text-center md:text-left">
-          <img src={Logo.src} alt="logo" className="h-[50px] mx-auto md:mx-0" />
-          <p className="max-w-md text-sm md:text-base mt-3">
-            Glimmer is a one-stop platform for beauty enthusiasts, offering easy
-            salon bookings and a curated selection of self-care products. We
-            partner with top beauty brands to bring you quality products and
-            services, all in one place. Let your beauty shine with Glimmer!
-          </p>
-        </aside>
+        <footer className="relative w-[99vw] bg-neutral text-neutral-content mt-5 p-10">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
+            {/* Section 1 */}
+            <div>
+              <h3 className="font-bold mb-2 text-white">MY ACCOUNT</h3>
+              <ul className="space-y-1">
+                <li><a className="hover:text-white" href="#">Sign in</a></li>
+                <li><a className="hover:text-white" href="#">New Bag</a></li>
+                <li><a className="hover:text-white" href="#">My Wishlist</a></li>
+                <li><a className="hover:text-white" href="#">Track My Order</a></li>
+                <li><a className="hover:text-white" href="#">Help</a></li>
+              </ul>
+            </div>
 
-        {/* Social Links */}
-        <nav className="w-full md:w-1/3 text-center md:text-left">
-          <h2 className="font-bold text-xl md:text-2xl text-white">Find us</h2>
-          <div className="grid grid-cols-2 gap-4 mt-3">
-            {[
-              { icon: FaInstagram, name: "Instagram" },
-              { icon: FaTwitter, name: "Twitter" },
-              { icon: FaTiktok, name: "Tiktok" },
-              { icon: FaFacebook, name: "Facebook" },
-              { icon: FaLinkedin, name: "LinkedIn" },
-              { icon: FaYoutube, name: "YouTube" },
-            ].map(({ icon: Icon, name }, index) => (
-              <Link
-                key={index}
-                href="/"
-                title={name}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center md:justify-start opacity-90 transition-all duration-150 hover:opacity-100 hover:text-white"
-              >
-                <Icon className="mr-2" />
-                <p>{name}</p>
-              </Link>
-            ))}
-          </div>
+            {/* Section 2 */}
+            <div>
+              <h3 className="font-bold mb-2 text-white">INFORMATION</h3>
+              <ul className="space-y-1">
+                <li><a className="hover:text-white" href="#">Delivery Information</a></li>
+                <li><a className="hover:text-white" href="#">Blog</a></li>
+                <li><a className="hover:text-white" href="#">FAQ</a></li>
+                <li><a className="hover:text-white" href="#">Contact Us</a></li>
+                <li><a className="hover:text-white" href="#">Sitemap</a></li>
+              </ul>
+            </div>
 
-          {/* Contact */}
-          <h2 className="mt-6 font-bold text-xl md:text-2xl text-white">
-            Contact us
-          </h2>
-          <div className="flex flex-col items-center md:items-start mt-3">
-            <Link
-              href="https://wa.me/0331-2062376"
-              target="_blank"
-              className="flex items-center opacity-90 hover:opacity-100 hover:text-white"
-            >
-              <FaWhatsapp className="mr-2" />
-              <p>0331-2062376</p>
-            </Link>
-            <Link
-              href="mailto:info@glimmer.com.pk"
-              target="_blank"
-              className="flex items-center opacity-90 hover:opacity-100 hover:text-white mt-2"
-            >
-              <FaEnvelope className="mr-2" />
-              <p>info@glimmer.com.pk</p>
-            </Link>
-          </div>
-        </nav>
+            {/* Section 3 */}
+            <div>
+              <h3 className="font-bold mb-2 text-white">CUSTOMER SERVICES</h3>
+              <ul className="space-y-1">
+                <li><a className="hover:text-white" href="#">Shipping and Returns</a></li>
+                <li><a className="hover:text-white" href="#">Secure Shopping</a></li>
+                <li><a className="hover:text-white" href="#">International Shipping</a></li>
+                <li><a className="hover:text-white" href="#">Affiliates</a></li>
+                <li><a className="hover:text-white" href="#">Contact</a></li>
+              </ul>
+            </div>
 
-        {/* Partner Logos */}
-        <nav className="w-full md:w-1/3 text-center md:text-left">
-          <h2 className="font-bold text-xl md:text-2xl text-white">
-            Our partners
-          </h2>
-          <div className="grid grid-cols-2 gap-3 mt-3">
-            {[img1, img2, img3, img4].map((img, index) => (
-              <img
-                key={index}
-                src={img.src}
-                alt="partner logo"
-                className="h-[60px] mx-auto md:mx-0"
-              />
-            ))}
+            {/* Section 4 */}
+            <div>
+              <h3 className="font-bold mb-2 text-white">PAYMENT AND SHIPPING</h3>
+              <ul className="space-y-1">
+                <li><a className="hover:text-white" href="#">Terms of Us</a></li>
+                <li><a className="hover:text-white" href="#">Payment Methods</a></li>
+                <li><a className="hover:text-white" href="#">Shipping Guide</a></li>
+                <li><a className="hover:text-white" href="#">Locations We Ship To</a></li>
+                <li><a className="hover:text-white" href="#">Estimated Delivery Time</a></li>
+              </ul>
+            </div>
+
+            {/* Section 5 */}
+            <div>
+              <h3 className="font-bold mb-3 text-white">CONTACT US</h3>
+              <div className="flex flex-col items-center md:items-start mt-3">
+                <Link
+                  href="https://wa.me/0331-2062376"
+                  target="_blank"
+                  className="flex items-center opacity-90 hover:opacity-100 hover:text-white"
+                >
+                  <FaWhatsapp className="mr-2" />
+                  <p>0331-2062376</p>
+                </Link>
+                <Link
+                  href="mailto:info@glimmer.com.pk"
+                  target="_blank"
+                  className="flex items-center opacity-90 hover:opacity-100 hover:text-white"
+                >
+                  <FaEnvelope className="mr-2" />
+                  <p>info@glimmer.com.pk</p>
+                </Link>
+              </div>
+            </div>
           </div>
-        </nav>
+          <hr className="my-6 border-t border-[#FBE8A5]" />
+          <div className="flex flex-col md:flex-row justify-between items-center text-sm gap-3">
+            {/* Left: Links */}
+            <div className="space-x-3">
+              <a href="/privacy-policy" className="hover:underline">Privacy Policy</a>
+              <span>|</span>
+              <a href="/terms-and-conditions" className="hover:underline">Terms and Conditions</a>
+            </div>
+
+            {/* Right: Copyright */}
+            <div className="text-center md:text-right">
+              Copyright © 2025 Glimmer. All Rights Reserved.
+            </div>
+          </div>
+        </footer>
       </div>
     </footer>
   );
