@@ -36,6 +36,16 @@ const SalonDetailsPage = () => {
     }
   }, [id]);
 
+  const formatTime = (timeStr: any) => {
+    const [hourStr, minute = "00"] = timeStr.split(':');
+    let hour = parseInt(hourStr, 10);
+    const isPM = hour >= 12;
+    const formattedHour = hour % 12 === 0 ? 12 : hour % 12;
+    const suffix = isPM ? 'pm' : 'am';
+    return `${formattedHour}:${minute} ${suffix}`;
+  };
+
+
   if (loading) return <p>Loading salon details...</p>;
   if (error) return <p>{error}</p>;
   if (!salonData) return <p>No data available for this salon.</p>;
@@ -64,10 +74,14 @@ const SalonDetailsPage = () => {
             <BsFillCircleFill className="mx-3" size={10} />
             <p className="mr-1">{"Mon-Fri"}</p>
             <p className="mr-1">
-              {`(${salonData.openingHour} am` || "(10:00 am"}
+              {salonData.openingHour
+                ? `(${formatTime(salonData.openingHour)}`
+                : '(10:00 am'}
             </p>
             <p className="mr-1">
-              {` - ${salonData.closingHour} pm)` || "10:00 pm)"}
+              {salonData.closingHour
+                ? ` - ${formatTime(salonData.closingHour)})`
+                : ' - 10:00 pm)'}
             </p>
           </div>
         </div>
