@@ -17,7 +17,7 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
 
   return (
     <div
-      className="w-[320px] h-[370px] mx-auto shadow-lg max-md:w-full cursor-pointer rounded-lg bg-gray-100"
+      className="w-[320px] h-[370px] mx-auto max-md:w-full cursor-pointer rounded-lg bg-gray-100"
       onClick={() => {
         router.push(`${path}/${item._id}`);
       }}
@@ -63,7 +63,7 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
 
       </div>
 
-      <div className="p-1 px-3 mt-2">
+      <div className="p-1 px-7 mt-7">
         <div className="flex justify-between">
           <div className="flex flex-col">
             <h2 className={`font-light text-[14px] overflow-hidden line-clamp-1 text-[#636363] ${!item.name && 'h-[24px]'}`}>
