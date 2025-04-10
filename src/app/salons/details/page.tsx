@@ -43,7 +43,7 @@ const SalonDetailsPage = () => {
   // Display salon details
   return (
     <>
-      <div className=" mb-6 w-[99vw] md:mb-8 p-10">
+      <div className=" mb-6 w-[99vw] md:mb-8 p-10 px-[6rem]">
         <div className="flex flex-col mt-4">
           <div className="flex justify-between items-center">
             <div className="prose">

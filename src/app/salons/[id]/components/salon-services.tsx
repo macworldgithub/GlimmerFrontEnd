@@ -137,7 +137,7 @@ const SalonServices = () => {
 
 
   return (
-    <div className="w-[99vw] p-10 md:mb-8">
+    <div className="w-[99vw] p-10 md:mb-8 px-[6rem]">
       <div className="prose lg:prose-xl">
         <h2 className="mb-2 md:mb-3">Services</h2>
       </div>

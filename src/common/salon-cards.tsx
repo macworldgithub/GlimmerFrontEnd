@@ -181,8 +181,8 @@ const SalonCards: React.FC<{ title?: string; showButton?: boolean }> = ({
   if (error) return <p className="text-center text-red-500">{error}</p>;
 
   return (
-    <div className="relative w-full max-w-7xl mx-auto text-center">
-    <h2 className="text-3xl font-semibold mb-4 text-left pl-6">{title}</h2>
+    <div className="relative mx-auto text-center">
+    <h2 className="text-3xl font-semibold mb-4 text-left pl-[8rem]">{title}</h2>
 
     <div className="relative flex items-center justify-center">
   {/* Left Arrow - Only visible on small and medium screens */}
@@ -198,7 +198,7 @@ const SalonCards: React.FC<{ title?: string; showButton?: boolean }> = ({
   )}
 
   {/* Salon Cards Wrapper */}
-  <div className="flex gap-4 py-4 px-2 max-lg:overflow-hidden justify-center">
+  <div className="flex gap-[8rem] py-4 px-2 max-lg:overflow-hidden justify-center">
     {salons.slice(startIndex, startIndex + cardsToShow).map((salon) => (
       <SalonCard
         key={salon._id}
