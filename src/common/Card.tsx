@@ -1,33 +1,26 @@
 "use client";
 import React from "react";
-import "tailwindcss/tailwind.css";
-import "swiper/css";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import { RealCardItem } from "@/data";
 import { Rating } from "react-simple-star-rating";
-
 import { FaHeart } from "react-icons/fa";
 import { RiShoppingBag4Line } from "react-icons/ri";
 
 const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
   const router = useRouter();
-
   const path = `/${item.category}/${item.sub_category}/${item.item}`;
 
   return (
-    <div
-      className="w-[320px] h-[370px] mx-auto max-md:w-full cursor-pointer rounded-lg bg-gray-100"
-      onClick={() => {
-        router.push(`${path}/${item._id}`);
-      }}
-    >
-      <div className="relative w-full h-[50%]">
+    <div className="w-full max-w-[320px] h-[370px] bg-white rounded-2xl bg-gradient-to-b from-white to-gray-100 shadow-md hover:shadow-lg transition duration-300 cursor-pointer flex flex-col overflow-visible relative">
+      {/* Top 50% Image */}
+      <div className="relative w-full h-1/2">
         <img
-          src={item.image1 ? item.image1 : "/assets/images/default_image.jpg"}
-          alt="Image 1"
-          className="w-full h-full max-lg:object-cover rounded-t-lg"
+          src={item.image1 || "/assets/images/default_image.jpg"}
+          alt={item.name}
+          className="w-full h-full object-cover rounded-t-2xl"
         />
+
+        {/* Discount badge */}
         <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 flex gap-2 w-full 
                justify-center px-2 max-md:justify-between">
           <button
@@ -48,72 +41,51 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
           </div>
         </div>
         {item?.base_price > item?.discounted_price && item?.discounted_price > 0 && (
-          <div className="absolute -top-4 -right-3 w-8 h-8 md:w-10 md:h-10 flex items-center justify-center">
+          <div className="absolute -top-3 -right-3 w-10 h-10 z-10">
             <img
               src="/assets/addtoBag/discount.png"
               alt="Discount"
               className="w-full h-full"
             />
-            <span className="absolute text-center text-white  flex flex-col items-center leading-none">
-              <span className="font-bold text-[12px]">{`${Math.round(((item?.base_price - item?.discounted_price) / item?.base_price) * 100)}%`}</span>
-              <span className="font-normal text-[8px]">OFF</span>
+            <span className="absolute inset-0 flex flex-col items-center justify-center text-white text-xs leading-tight font-bold">
+              <span>{`${Math.round(((item.base_price - item.discounted_price) / item.base_price) * 100)}%`}</span>
+              <span className="text-[8px] font-normal">OFF</span>
             </span>
           </div>
         )}
-
       </div>
 
-      <div className="p-1 px-7 mt-7">
-        <div className="flex justify-between">
-          <div className="flex flex-col">
-            <h2 className={`font-light text-[14px] overflow-hidden line-clamp-1 text-[#636363] ${!item.name && 'h-[24px]'}`}>
-              {item.name || " "}
-            </h2>
-
-            <h2 className={`text-[12px] font-medium text-[#303030] mt-3 mb-3 overflow-hidden line-clamp-1 ${!item.description && 'h-[24px]'}`}>
-              {item.description || "..."}
-            </h2>
-
-          </div>
+      {/* Bottom 50% Content */}
+      <div className="p-4 h-1/2 flex flex-col justify-between">
+        <div>
+          <h2 className="text-sm text-gray-600 font-medium truncate">{item.name}</h2>
+          <p className="text-xs text-gray-700 mt-2 truncate">{item.description}</p>
         </div>
-        {/* <p className="text-gray-700 mb-4">{item.description}</p> */}
 
-        <div className="flex justify-between items-center">
-          <p className="text-gray-800 text-xl font-bold">
-            {/* Base price (optional) */}
-            {/* <span className="line-through text-[12px] font-light text-gray-500">
-      ${item.base_price}
-    </span> */}
-
-            <span className="text-[14px] font-medium">
-              {item?.discounted_price > 0 ? item?.discounted_price : item?.base_price} PKR
+        <div>
+          <div className="flex justify-between items-center mt-4">
+            <span className="text-sm font-bold text-gray-800">
+              {item.discounted_price > 0 ? item.discounted_price : item.base_price} PKR
             </span>
-
-            {item?.discounted_price > 0 && item?.base_price > item?.discounted_price && (
-              <span className="text-gray-500 line-through ml-2 mr-2 text-[14px]">
-                {item?.base_price.toFixed(2)} PKR
+            {item.discounted_price > 0 && item.base_price > item.discounted_price && (
+              <span className="text-gray-400 text-xs line-through">
+                {item.base_price.toFixed(2)} PKR
               </span>
             )}
-
-          </p>
-
-          {/* Discount percentage (optional) */}
-          {/* <p className="text-green-500 font-semibold">
-    {discountPercentage}% off
-  </p> */}
+          </div>
+          <div className="flex mt-2">
+            <Rating
+              size={14}
+              initialValue={3}
+              SVGstyle={{ display: "inline-flex" }}
+              allowHover={false}
+              fillColor="#583FA8"
+            />
+          </div>
         </div>
-        <div className="flex w-max">
-          <Rating
-            size={14}
-            initialValue={3}
-            SVGstyle={{ display: "inline-flex" }}
-            allowHover={false}
-            fillColor="#583FA8"
-          />
-        </div>
-
       </div>
     </div>
+
   );
 };
 

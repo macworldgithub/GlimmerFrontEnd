@@ -5,7 +5,7 @@ import "swiper/swiper-bundle.css";
 import { useDispatch, useSelector } from "react-redux";
 import { createBooking, getAllActiveServices } from "@/api/salon";
 import { AppDispatch, RootState } from "@/store/reduxStore";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion"; // Framer Motion for animations
 import { DatePicker } from "antd";
@@ -15,6 +15,7 @@ import Link from "next/link";
 const SalonServices = () => {
   const dispatch = useDispatch<AppDispatch>();
   const searchParams = useSearchParams();
+  const router = useRouter();
 
   const [data, setData] = useState<any[]>([]);
   const [selectedServices, setSelectedServices] = useState<any[]>([]);
@@ -138,9 +139,8 @@ const SalonServices = () => {
     }
   };
 
-
   return (
-    <div className="w-[99vw] p-10 md:mb-8 px-[6rem]">
+    <div className="w-[99vw] p-10 md:mb-8">
       <div className="prose lg:prose-xl">
         <h2 className="mb-2 md:mb-3">Services</h2>
       </div>
@@ -175,7 +175,10 @@ const SalonServices = () => {
             {data?.map((item) => (
               <div
                 key={item._id}
-                className="bg-white rounded-lg border border-gray-300 shadow-md p-4 space-y-2"
+                className="bg-white rounded-lg border border-gray-200 shadow-sm p-4 space-y-2 cursor-pointer transition-transform transform hover:scale-[1.02] hover:shadow-lg hover:border-gray-300"
+                onClick={() =>
+                  router.push(`/salons/services/details?serviceId=${item._id}&salonId=${item.salonId}`)
+                }
               >
                 <div className="flex flex-row justify-between">
                   <div className="text-lg font-semibold text-gray-800">

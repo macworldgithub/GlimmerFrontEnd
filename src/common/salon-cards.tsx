@@ -21,14 +21,14 @@ interface Salon {
   about: string;
 }
 
-// Helper function to shuffle an array
+// Helper function to shuffle array
 const shuffleArray = <T,>(array: T[]): T[] => {
-  const shuffledArray = [...array];
-  for (let i = shuffledArray.length - 1; i > 0; i--) {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]]; 
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
   }
-  return shuffledArray;
+  return shuffled;
 };
 
 const SalonCard: React.FC<{ salons: Salon; onClick: () => void }> = ({
@@ -36,94 +36,78 @@ const SalonCard: React.FC<{ salons: Salon; onClick: () => void }> = ({
   onClick,
 }) => (
   <div
-    className="w-[320px] h-[370px] bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden cursor-pointer"
+    className="w-full max-w-[320px] h-[370px] bg-white rounded-xl border border-gray-200 shadow hover:shadow-lg transition duration-300 overflow-hidden cursor-pointer"
     onClick={onClick}
   >
-    <div className="h-[50%] w-full relative">
+    <div className="h-[50%] relative">
       {salons.image1 ? (
         <Image
           src={salons.image1}
           alt={salons.salon_name}
           layout="fill"
           objectFit="cover"
+          className="rounded-t-xl"
         />
       ) : (
-        <div className="h-full w-full flex items-center justify-center bg-gray-200 text-gray-500">
-          <Image
-            src={"/assets/saloonPicture/salon_profile.jpg"}
-            alt="salon_profile"
-            layout="fill"
-            objectFit="cover"
-          />
-        </div>
+        <Image
+          src="/assets/saloonPicture/salon_profile.jpg"
+          alt="salon_profile"
+          layout="fill"
+          objectFit="cover"
+        />
       )}
     </div>
-    <div className="h-[50%] px-5 py-4 flex flex-col justify-between bg-gradient-to-b from-white to-gray-100 rounded-b-xl shadow-md">
-      <h3 className="text-lg font-semibold text-gray-900 truncate text-left mb-2">
-        {salons.salon_name}
-      </h3>
-      <div className="flex items-center gap-2 text-left mb-2">
-        <span className="text-yellow-500 flex items-center gap-1 text-sm font-semibold">
-          4 <FaStar size={16} className="drop-shadow-md" />
+
+    <div className="h-[50%] px-5 py-4 flex flex-col justify-between bg-gradient-to-b from-white to-gray-100">
+      <h3 className="text-lg font-semibold truncate mb-1">{salons.salon_name}</h3>
+
+      <div className="flex items-center gap-2 mb-1">
+        <span className="text-yellow-500 text-sm font-semibold flex items-center gap-1">
+          {salons.rating} <FaStar size={14} />
         </span>
-        <span className="text-gray-500 text-sm">(2859 Reviews)</span>
+        <span className="text-sm text-gray-500">({salons.reviews} Reviews)</span>
       </div>
+
       <Tooltip title={salons.address}>
-        <span
-          className="text-sm text-gray-600 font-medium text-left mb-2 truncate cursor-pointer"
-          style={{ maxWidth: "200px", display: "inline-block" }}
-        >
-          {salons.address.length > 30
-            ? `${salons.address.substring(0, 30)}...`
-            : salons.address}
-        </span>
+        <p className="text-sm text-gray-600 truncate mb-1">{salons.address}</p>
       </Tooltip>
+
       {salons.openingHour && salons.closingHour ? (
-        <span className="text-xs bg-green-100 text-green-700 px-4 py-1 rounded-full font-medium shadow-sm border border-green-300 text-left w-fit mb-2">
+        <span className="text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full w-fit border border-green-300">
           {salons.openingHour}am - {salons.closingHour}pm
         </span>
       ) : (
-        <span className="text-xs bg-red-100 text-red-700 px-4 py-1 rounded-full font-medium shadow-sm border border-red-300 text-left w-fit mb-2">
+        <span className="text-xs bg-red-100 text-red-700 px-3 py-1 rounded-full w-fit border border-red-300">
           24/7 Available
         </span>
       )}
+
       <Tooltip title={salons.about}>
-        <span
-          className="text-xs text-gray-500 truncate cursor-pointer mt-2 text-left leading-relaxed"
-          style={{ maxWidth: "200px", display: "inline-block" }}
-        >
-          {salons.about.length > 30
-            ? `${salons.about.substring(0, 30)}...`
-            : salons.about}
-        </span>
+        <p className="text-xs text-gray-500 truncate mt-2">{salons.about}</p>
       </Tooltip>
     </div>
   </div>
 );
 
 const SalonCards: React.FC<{ title?: string; showButton?: boolean }> = ({
-  title,
+  title = "Featured Salons",
   showButton = false,
 }) => {
   const dispatch = useDispatch<AppDispatch>();
   const [salons, setSalons] = useState<Salon[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
-
-  // Index for carousel navigation
   const [startIndex, setStartIndex] = useState(0);
   const [cardsToShow, setCardsToShow] = useState(4);
-  const [showArrows, setShowArrows] = useState(false);
   const [isSmallScreen, setIsSmallScreen] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchSalons = async () => {
       try {
         const result = await dispatch(getAllSalons(1)).unwrap();
-        const shuffledSalons = shuffleArray(result.salons);
-        setSalons(shuffledSalons);
-      } catch (err) {
+        setSalons(shuffleArray(result.salons));
+      } catch {
         setError("Failed to load salons");
       } finally {
         setLoading(false);
@@ -134,7 +118,7 @@ const SalonCards: React.FC<{ title?: string; showButton?: boolean }> = ({
   }, []);
 
   useEffect(() => {
-    const updateScreenSize = () => {
+    const handleResize = () => {
       const width = window.innerWidth;
       if (width <= 640) {
         setCardsToShow(1);
@@ -144,93 +128,83 @@ const SalonCards: React.FC<{ title?: string; showButton?: boolean }> = ({
         setIsSmallScreen(false);
       } else if (width <= 1024) {
         setCardsToShow(3);
-        setShowArrows(true);
+        setIsSmallScreen(false);
       } else {
         setCardsToShow(4);
-        setShowArrows(false);
+        setIsSmallScreen(false);
       }
     };
 
-    updateScreenSize();
-    window.addEventListener("resize", updateScreenSize);
-    return () => window.removeEventListener("resize", updateScreenSize);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const handleNext = () => {
-    if (startIndex + cardsToShow < salons.length) {
-      setStartIndex(startIndex + 1);
-    }
+  const handlePrev = () => {
+    if (startIndex > 0) setStartIndex(startIndex - 1);
   };
 
-  const handlePrev = () => {
-    if (startIndex > 0) {
-      setStartIndex(startIndex - 1);
-    }
+  const handleNext = () => {
+    if (startIndex + cardsToShow < salons.length) setStartIndex(startIndex + 1);
   };
 
   const handleViewMore = () => router.push("/salons/all_salons");
 
-  const handleSalonClick = (salonId: number) => {
-    router.push(`/salons/details/?salonId=${salonId}`);
-  };
+  const handleSalonClick = (id: number) => router.push(`/salons/details/?salonId=${id}`);
 
-
-
-  if (loading)
-    return <p className="text-center text-gray-500">Loading salons...</p>;
+  if (loading) return <p className="text-center text-gray-500">Loading salons...</p>;
   if (error) return <p className="text-center text-red-500">{error}</p>;
 
   return (
-    <div className="relative mx-auto text-center">
-    <h2 className="text-3xl font-semibold mb-4 text-left pl-[8rem]">{title}</h2>
+    <div className="w-full px-4 md:px-10 py-10">
+      <h2 className="text-3xl font-semibold mb-8">{title}</h2>
 
-    <div className="relative flex items-center justify-center">
-  {/* Left Arrow - Only visible on small and medium screens */}
-  {isSmallScreen && (
-    <button
-      className="absolute left-2 sm:-left-6 z-10 bg-white p-3 rounded-full shadow-lg text-2xl font-bold stroke-2 text-gray-900 shadow-gray-700 
-      top-1/2 transform -translate-y-1/2"
-      onClick={handlePrev}
-      disabled={startIndex === 0}
-    >
-      <FaArrowLeft />
-    </button>
-  )}
+      {isSmallScreen && (
+        <div className="flex justify-between items-center mb-4">
+          <button
+            className="p-2 bg-gray-200 rounded-full hover:bg-gray-300 disabled:opacity-50"
+            onClick={handlePrev}
+            disabled={startIndex === 0}
+          >
+            <FaArrowLeft />
+          </button>
+          <button
+            className="p-2 bg-gray-200 rounded-full hover:bg-gray-300 disabled:opacity-50"
+            onClick={handleNext}
+            disabled={startIndex + cardsToShow >= salons.length}
+          >
+            <FaArrowRight />
+          </button>
+        </div>
+      )}
 
-  {/* Salon Cards Wrapper */}
-  <div className="flex gap-[8rem] py-4 px-2 max-lg:overflow-hidden justify-center">
-    {salons.slice(startIndex, startIndex + cardsToShow).map((salon) => (
-      <SalonCard
-        key={salon._id}
-        salons={salon}
-        onClick={() => handleSalonClick(salon._id)}
-      />
-    ))}
-  </div>
-
-  {/* Right Arrow - Only visible on small and medium screens */}
-  {isSmallScreen && (
-    <button
-      className="absolute right-2 sm:-right-6 z-10 bg-white p-3 rounded-full shadow-lg text-2xl font-bold stroke-2 text-gray-900 shadow-gray-700 
-      top-1/2 transform -translate-y-1/2"
-      onClick={handleNext}
-      disabled={startIndex + cardsToShow >= salons.length}
-    >
-      <FaArrowRight />
-    </button>
-  )}
-</div>
-
-
-    {showButton && (
-      <button
-        className="mt-4 bg-[#583FA8] text-white py-2 px-6 rounded-lg mb-6"
-        onClick={handleViewMore}
+      <div
+        className={`${
+          isSmallScreen ? "flex overflow-x-auto gap-4 pb-4" : "grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+        }`}
       >
-        View More
-      </button>
-    )}
-  </div>
+        {salons
+          .slice(startIndex, startIndex + cardsToShow)
+          .map((salon) => (
+            <SalonCard
+              key={salon._id}
+              salons={salon}
+              onClick={() => handleSalonClick(salon._id)}
+            />
+          ))}
+      </div>
+
+      {showButton && (
+        <div className="mt-8 text-center">
+          <button
+            className="bg-[#583FA8] text-white px-6 py-2 rounded-lg hover:bg-[#472c9f] transition"
+            onClick={handleViewMore}
+          >
+            View More
+          </button>
+        </div>
+      )}
+    </div>
   );
 };
 
