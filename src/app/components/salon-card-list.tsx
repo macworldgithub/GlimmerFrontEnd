@@ -14,8 +14,8 @@ import SalonCards from "@/common/salon-cards";
 
 const SalonCardList = () => {
   return (
-    <div className="w-[99vw] ">
-            <SalonCards title="Salons" showButton={true} />
+    <div>
+      <SalonCards title="Salons" showButton={true} />
     </div>
   );
 };

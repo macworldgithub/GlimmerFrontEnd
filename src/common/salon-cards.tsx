@@ -36,7 +36,7 @@ const SalonCard: React.FC<{ salons: Salon; onClick: () => void }> = ({
   onClick,
 }) => (
   <div
-    className="w-full max-w-[320px] h-[370px] bg-white rounded-xl border border-gray-200 shadow hover:shadow-lg transition duration-300 overflow-hidden cursor-pointer"
+    className="max-w-[320px] h-[370px] bg-white rounded-xl border border-gray-200 shadow hover:shadow-lg transition duration-300 overflow-hidden cursor-pointer"
     onClick={onClick}
   >
     <div className="h-[50%] relative">
@@ -89,9 +89,10 @@ const SalonCard: React.FC<{ salons: Salon; onClick: () => void }> = ({
   </div>
 );
 
-const SalonCards: React.FC<{ title?: string; showButton?: boolean }> = ({
+const SalonCards: React.FC<{ title?: string; showButton?: boolean; className?: string }> = ({
   title = "Featured Salons",
   showButton = false,
+  className = "",
 }) => {
   const dispatch = useDispatch<AppDispatch>();
   const [salons, setSalons] = useState<Salon[]>([]);
@@ -156,7 +157,7 @@ const SalonCards: React.FC<{ title?: string; showButton?: boolean }> = ({
   if (error) return <p className="text-center text-red-500">{error}</p>;
 
   return (
-    <div className="w-full px-4 md:px-10 py-10">
+    <div className={`w-full max-w-[82rem] px-4 md:px-1 mx-auto py-10 ${className}`}>
       <h2 className="text-3xl font-semibold mb-8">{title}</h2>
 
       {isSmallScreen && (
