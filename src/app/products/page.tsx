@@ -321,7 +321,7 @@ const ProductsList = () => {
               )}
             </div>
 
-            <div className="relative">
+            {/* <div className="relative">
               <button
                 onClick={() => setShowRatingDropdown(!showRatingDropdown)}
                 className="flex items-center gap-2 border px-6 py-2 rounded-md text-lg font-medium transition duration-300 ease-in-out border-gray-400 text-gray-700 hover:bg-[#FDF3D2]"
@@ -351,7 +351,7 @@ const ProductsList = () => {
                   )}
                 </div>
               )}
-            </div>
+            </div> */}
           </div>
 
           <div className=" w-full h-max grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-x-8 gap-y-10 p-6">
