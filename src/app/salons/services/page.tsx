@@ -249,7 +249,7 @@ const ServiceList = () => {
               data.map((item) => (
                 <motion.div
                   key={item._id}
-                  whileHover={{ scale: 1.03 }}
+                  whileHover={{ scale: 1.02 }}
                   className="flex"
                 >
                   <ServiceCard item={item} />

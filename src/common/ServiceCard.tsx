@@ -21,7 +21,7 @@ const ServiceCard: React.FC<{ item: any }> = ({ item }) => {
     router.push(`/salons/services/details?serviceId=${item._id}&salonId=${item.salonId}`);
   };
   return (
-    <div className="w-[280px] xl:w-[380px] h-auto shadow-lg max-md:w-full cursor-pointer rounded-lg mx-auto"
+    <div className="w-[280px] shadow-lg cursor-pointer rounded-lg"
       onClick={handleClick}
     >
       <div className="relative w-full h-[150px]">
