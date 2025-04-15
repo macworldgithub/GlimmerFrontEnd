@@ -158,7 +158,8 @@ const ProductsList = () => {
   const handlePageChange = (newPage: number) => {
     const params = new URLSearchParams(searchParams);
     params.set("page", newPage.toString());
-    router.push(`${pathname}?${params.toString()}`);
+    router.push(`${pathname}?${params.toString()}`, { scroll: false });
+
   };
 
   const handleFilterChange = (newFilters: {
@@ -197,7 +198,8 @@ const ProductsList = () => {
     // Reset the page to 1 whenever a filter changes
     params.set("page", "1");
 
-    router.push(`${pathname}?${params.toString()}`);
+    router.push(`${pathname}?${params.toString()}`, { scroll: false });
+
   };
 
   return (
