@@ -84,7 +84,7 @@ const SelfcareCardList = () => {
   const handleViewMore = () => router.push("/products");
 
   return (
-    <div className="w-full max-w-[82rem] px-4 md:px-10 mx-auto py-10">
+    <div className="w-full max-w-[82rem] px-4 md:px-1 mx-auto py-10">
       {/* Title */}
       <Link href="/selfcare-products" className="block">
         <h2 className="text-3xl font-semibold mb-8">

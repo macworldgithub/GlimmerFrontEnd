@@ -17,8 +17,8 @@ const SalonsNearby = ({ currentSalonAddress }: SalonsNearbyProps) => {
 	});
 
 	return (
-		<div className="px-2 w-[99vw] ">
-            <SalonCards title="Nearby Salons" showButton={true} />
+		<div className="">
+            <SalonCards title="Nearby Salons" showButton={true} className="lg:!mx-10 xl:!mx-10" />
 		</div>
 	);
 };

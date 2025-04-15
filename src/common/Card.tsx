@@ -11,7 +11,10 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
   const path = `/${item.category}/${item.sub_category}/${item.item}`;
 
   return (
-    <div className="w-full max-w-[320px] h-[370px] bg-white rounded-2xl bg-gradient-to-b from-white to-gray-100 shadow-md hover:shadow-lg transition duration-300 cursor-pointer flex flex-col overflow-visible relative">
+    <div className="w-full max-w-[320px] h-[370px] bg-white rounded-2xl bg-gradient-to-b from-white to-gray-100 shadow-md hover:shadow-lg transition duration-300 cursor-pointer flex flex-col overflow-visible relative"
+      onClick={() => {
+        router.push(`${path}/${item._id}`);
+      }}>
       {/* Top 50% Image */}
       <div className="relative w-full h-1/2">
         <img

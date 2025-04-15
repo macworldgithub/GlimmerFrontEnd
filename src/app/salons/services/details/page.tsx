@@ -704,14 +704,14 @@ const ServiceDetails = () => {
         </div>
       </div>
 
-      <div className="p-10 w-[99vw] justify-center md:mb-5 md:flex-row md:gap-12 ">
+      <div className="p-10 justify-center md:mb-5 md:flex-row md:gap-1">
         <h2 className="text-4xl font-semibold">Related Services</h2>
-        <div className="w-full h-max grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-x-8 gap-y-10  p-6 ">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 pt-10">
             {data.length ? (
               data.map((item) => (
                 <motion.div
                   key={item._id}
-                  whileHover={{ scale: 1.03 }}
+                  whileHover={{ scale: 1.02 }}
                   className="flex"
                 >
                   <ServiceCard item={item} />
