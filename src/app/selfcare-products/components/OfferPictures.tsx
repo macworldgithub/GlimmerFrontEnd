@@ -22,12 +22,12 @@ const OfferPictures = () => {
         {picture.map((item) => (
           <div
             key={item.id}
-            className="w-[850px] h-[335px] max-w-full flex justify-center overflow-hidden rounded-lg"
+            className="w-[50%] max-lg:w-[100%]  h-[100%] max-w-full flex justify-center overflow-hidden rounded-lg"
           >
             <div className="w-full h-full rounded-lg ">
               <img
                 src={item.image1}
-                className=" w-full h-full "
+                className=" w-full h-full  lg:object-cover"
                 alt={item.name}
               />
             </div>
