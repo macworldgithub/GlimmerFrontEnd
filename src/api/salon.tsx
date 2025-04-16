@@ -136,3 +136,17 @@ export const getAllActiveServices = createAsyncThunk(
       throw error;
     }
   };
+
+  export const getRecommendedProductsOfSalon = async (salonId: string) => {
+    try {
+      const url = `${BACKEND_URL}/admin/get-recommended-products-of-salon/${salonId}`;
+  
+      const res = await axios.get(url);
+  
+      return res.data; // Return the response data
+    } catch (error) {
+      console.error("Error fetching recommended products for salon:", error);
+      throw error; // Propagate error for handling in the calling function
+    }
+  };
+  

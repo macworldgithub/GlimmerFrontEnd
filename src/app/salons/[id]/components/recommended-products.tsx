@@ -4,39 +4,28 @@ import Link from "next/link";
 import { RealCardItem } from "@/data";
 import { getAllProducts } from "@/api/product";
 import Card from "@/common/Card";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import { getRecommendedProductsOfSalon } from "@/api/salon";
 
 const RecommendedProducts = () => {
 	const router = useRouter();
+	const searchParams = useSearchParams();
 	const [products, setProducts] = useState<RealCardItem[]>([]);
-	const [loading, setLoading] = useState<boolean>(false);
-	const [error, setError] = useState<string | null>(null);
 
 	const [startIndex, setStartIndex] = useState(0);
 	const [cardsToShow, setCardsToShow] = useState(4);
 	const [isSmallScreen, setIsSmallScreen] = useState(false);
 
-	useEffect(() => {
-		const fetchProducts = async () => {
-			setLoading(true);
-			try {
-				const response = await getAllProducts();
+	const salonId = searchParams.get("salonId") ?? "";
 
-				if (response && Array.isArray(response.products)) {
-					const randomProducts = getRandomProducts(response.products, 4);
-					setProducts(randomProducts);
-				} else {
-					setError("Failed to load products, unexpected response format.");
-				}
-			} catch (err) {
-				setError("Failed to load products");
-			} finally {
-				setLoading(false);
-			}
+	useEffect(() => {
+		const fetchProductsOfSalon = async () => {
+			const response = await getRecommendedProductsOfSalon(salonId);
+			setProducts(response);
 		};
 
-		fetchProducts();
+		fetchProductsOfSalon();
 	}, []);
 
 	// Resize Logic
@@ -72,13 +61,6 @@ const RecommendedProducts = () => {
 			setStartIndex(startIndex + 1);
 		}
 	};
-	const getRandomProducts = (
-		products: RealCardItem[],
-		count: number
-	): RealCardItem[] => {
-		const shuffled = [...products].sort(() => 0.5 - Math.random());
-		return shuffled.slice(0, count);
-	};
 
 	const handleViewMore = () => router.push("/products");
 
@@ -90,10 +72,6 @@ const RecommendedProducts = () => {
 					Recommended Products
 				</h2>
 			</Link>
-
-			{/* Loading & Error */}
-			{loading && <p className="text-center text-gray-500">Loading products...</p>}
-			{error && <p className="text-center text-red-500">{error}</p>}
 
 			{/* Arrows for small screens */}
 			{isSmallScreen && (
