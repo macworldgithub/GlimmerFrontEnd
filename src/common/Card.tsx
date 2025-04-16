@@ -8,13 +8,17 @@ import { RiShoppingBag4Line } from "react-icons/ri";
 
 const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
   const router = useRouter();
-  const path = `/${item.category}/${item.sub_category}/${item.item}`;
+  let queryParams = new URLSearchParams();
+
+  if (item.rate_of_salon) queryParams.append("rate", item.rate_of_salon.toString());
+  if (item.ref_of_salon) queryParams.append("ref", item.ref_of_salon);
+
+  const path = `/${item.category}/${item.sub_category}/${item.item}/${item._id}`;
+  const finalPath = queryParams.toString() ? `${path}?${queryParams.toString()}` : path;
 
   return (
     <div className="w-full max-w-[320px] h-[370px] bg-white rounded-2xl bg-gradient-to-b from-white to-gray-100 shadow-md hover:shadow-lg transition duration-300 cursor-pointer flex flex-col overflow-visible relative"
-      onClick={() => {
-        router.push(`${path}/${item._id}`);
-      }}>
+      onClick={() => router.push(finalPath)}>
       {/* Top 50% Image */}
       <div className="relative w-full h-1/2">
         <img
@@ -27,9 +31,7 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
         <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 flex gap-2 w-full 
                justify-center px-2 max-md:justify-between">
           <button
-            onClick={() => {
-              router.push(`${path}/${item._id}`);
-            }}
+            onClick={() => router.push(finalPath)}
             className=" w-full py-2 max-xl:py-1 xl:gap-2 max-xl:gap-[2px] max-xl:px-1  gap-1 bg-[#583FA8]  flex justify-center items-center 
                  max-md:py-1  rounded-md max-lg:px-2 max-lg:gap-1 max-md:w-fit">
             <RiShoppingBag4Line size={20} className="text-white max-lg:h-5 max-lg:w-5 max-md:w-7 max-md:h-7" />

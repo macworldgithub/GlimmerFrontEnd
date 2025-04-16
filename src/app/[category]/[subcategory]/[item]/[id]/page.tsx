@@ -11,7 +11,7 @@ import {
 } from "@/reduxSlices/cartSlice";
 import { RootState } from "@/store/reduxStore";
 import Image from "next/image";
-import { useParams, usePathname } from "next/navigation";
+import { useParams, usePathname, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -26,6 +26,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 const ProductDisplay = () => {
   const Cart = useSelector((state: RootState) => state.cart);
   const dispatch = useDispatch();
+  const searchParams = useSearchParams();
   const [quantity, setQuantityState] = React.useState(1);
   const [product, setProduct] = useState<any>();
   const [copied, setCopied] = useState("");
@@ -35,6 +36,9 @@ const ProductDisplay = () => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [isBulkModalOpen, setIsBulkModalOpen] = useState(false);
   const [bulkForm, setBulkForm] = useState({ name: "", phone: "", email: "" });
+
+  const ref = searchParams.get("ref") ?? "";
+  const rate = searchParams.get("rate") ?? "";
 
   const size = useSelector(
     (state: RootState) =>
@@ -97,7 +101,12 @@ const ProductDisplay = () => {
     setIsButtonDisabled(true);
     setIsModalOpen(true);
     setTimeout(() => setIsModalOpen(false), 2000);
-    dispatch(addItem({ product: { ...product }, quantity: 1 }));
+    const productWithSalonInfo = {
+      ...product,
+      ref_of_salon: ref,
+      rate_of_salon: parseFloat(rate),
+    };
+    dispatch(addItem({ product: productWithSalonInfo, quantity: 1 }));
   };
 
   const updateQuantity = (newQuantity: any) => {

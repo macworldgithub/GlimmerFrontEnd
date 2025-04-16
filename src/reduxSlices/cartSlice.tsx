@@ -25,6 +25,8 @@ interface Product {
   store: string;
   size: Size[];
   type: Type[];
+  rate_of_salon: number;
+  ref_of_salon: string;
 }
 
 interface CompleteOrder {
