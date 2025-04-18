@@ -193,7 +193,8 @@ const SalonServices = () => {
                 </div>
                 <div className="flex justify-end">
                   <button
-                    onClick={() => {
+                    onClick={(e) => {
+                      e.stopPropagation(); 
                       addToCart(item);
                       setIsModalOpen(true); // Ensure sidebar stays open
                     }}
