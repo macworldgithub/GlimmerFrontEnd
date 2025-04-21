@@ -96,6 +96,7 @@ const ProductsList = () => {
         nameFilter,
         page
       );
+      console.log('Response:',res);
       // Filter products by name if nameFilter is provided
       let filteredProducts = res.products.filter((product: any) => {
         const productName = product.name?.toLowerCase() || "";

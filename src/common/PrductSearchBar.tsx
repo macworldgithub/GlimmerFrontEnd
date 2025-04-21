@@ -27,6 +27,7 @@ const PrductSearchBar = ({
   products: any[];
   className?: string;
 }) => {
+  console.log(selections);
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -88,6 +89,7 @@ const PrductSearchBar = ({
               // Check items if subcategory didn't match
               if (!matchedSubCategory && !matchedItem) {
                 subCategory.items.forEach((item) => {
+                  console.log("item", item)
                   if (
                     item.name.toLowerCase().includes(searchQuery.toLowerCase())
                   ) {
