@@ -6,17 +6,13 @@ import { Rating } from "react-simple-star-rating";
 import { FaHeart } from "react-icons/fa";
 import { RiShoppingBag4Line } from "react-icons/ri";
 
-const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
+const ProductCard: React.FC<{ item: RealCardItem }> = ({ item }) => {
   const router = useRouter();
   let queryParams = new URLSearchParams();
 
   if (item.rate_of_salon) queryParams.append("rate", item.rate_of_salon.toString());
   if (item.ref_of_salon) queryParams.append("ref", item.ref_of_salon);
-  
-  //@ts-ignore
-  if(item.store) queryParams.append("storeId", item.store);
 
-  //@ts-ignore
   const path = `/${item.category}/${item.sub_category}/${item.item}/${item._id}`;
   const finalPath = queryParams.toString() ? `${path}?${queryParams.toString()}` : path;
 
@@ -98,4 +94,4 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
   );
 };
 
-export default Card;
+export default ProductCard;

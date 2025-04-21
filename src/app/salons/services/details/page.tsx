@@ -704,9 +704,9 @@ const ServiceDetails = () => {
         </div>
       </div>
 
-      <div className="p-10 justify-center md:mb-5 md:flex-row md:gap-1">
+      <div className="w-[99vw] p-10 justify-center md:mb-5 md:flex-row md:gap-1">
         <h2 className="text-4xl font-semibold">Related Services</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 pt-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 pt-10">
             {data.length ? (
               data.map((item) => (
                 <motion.div
