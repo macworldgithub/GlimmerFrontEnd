@@ -20,7 +20,7 @@ const Page = async ({ params }: { params: Promise<Params> }) => {
       <SalonServices />
       <AboutSalon />
       <RecommendedProducts />
-      <SalonsNearby currentSalonAddress="Address 1" />
+      <SalonsNearby />
       <GlimmerBanner />
     </>
   );

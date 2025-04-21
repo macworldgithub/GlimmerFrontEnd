@@ -94,8 +94,6 @@ const ProductsList = () => {
         subCategoryFilter,
         itemFilter,
         nameFilter,
-        0,
-        0,
         page
       );
       // Filter products by name if nameFilter is provided
@@ -171,35 +169,61 @@ const ProductsList = () => {
     max_price?: string;
   }) => {
     const params = new URLSearchParams(searchParams);
-
-    if (
-      newFilters.category &&
-      !newFilters.sub_category &&
-      !newFilters.item &&
-      !newFilters.name &&
-      !newFilters.min_price &&
-      !newFilters.max_price
-    ) {
-      params.set("category", newFilters.category);
-      params.delete("sub_category");
-      params.delete("item");
-      params.delete("name");
-      params.delete("min_price");
-      params.delete("max_price");
-    } else {
-      if (newFilters.category) params.set("category", newFilters.category);
-      if (newFilters.sub_category)
-        params.set("sub_category", newFilters.sub_category);
-      if (newFilters.item) params.set("item", newFilters.item);
-      if (newFilters.name) params.set("name", newFilters.name);
-      if (newFilters.min_price) params.set("min_price", newFilters.min_price);
-      if (newFilters.max_price) params.set("max_price", newFilters.max_price);
-    }
-    // Reset the page to 1 whenever a filter changes
+  
     params.set("page", "1");
-
+  
+    if (newFilters.category) {
+      params.set("category", newFilters.category);
+      if (newFilters.category !== searchParams.get("category")) {
+        params.delete("sub_category");
+        params.delete("item");
+      }
+    }
+  
+    // Handle subcategory changes
+    if (newFilters.sub_category !== undefined) {
+      if (newFilters.sub_category) {
+        params.set("sub_category", newFilters.sub_category);
+      } else {
+        params.delete("sub_category");
+      }
+      // When subcategory changes, remove item
+      params.delete("item");
+    }
+  
+    // Handle item changes
+    if (newFilters.item !== undefined) {
+      if (newFilters.item) {
+        params.set("item", newFilters.item);
+      } else {
+        params.delete("item");
+      }
+    }
+  
+    // Handle other filters
+    if (newFilters.name !== undefined) {
+      if (newFilters.name) {
+        params.set("name", newFilters.name);
+      } else {
+        params.delete("name");
+      }
+    }
+    if (newFilters.min_price !== undefined) {
+      if (newFilters.min_price) {
+        params.set("min_price", newFilters.min_price);
+      } else {
+        params.delete("min_price");
+      }
+    }
+    if (newFilters.max_price !== undefined) {
+      if (newFilters.max_price) {
+        params.set("max_price", newFilters.max_price);
+      } else {
+        params.delete("max_price");
+      }
+    }
+  
     router.push(`${pathname}?${params.toString()}`, { scroll: false });
-
   };
 
   return (
