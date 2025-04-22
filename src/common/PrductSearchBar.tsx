@@ -27,7 +27,6 @@ const PrductSearchBar = ({
   products: any[];
   className?: string;
 }) => {
-  console.log(selections);
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -130,6 +129,7 @@ const PrductSearchBar = ({
     if (matchedItem) params.set("item", matchedItem);
     if (matchedName) params.set("name", matchedName);
 
+    console.log(params);
     params.set("page", "1"); // Reset to page 1
     router.push(`/products?${params.toString()}`);
   };

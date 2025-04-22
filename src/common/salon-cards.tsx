@@ -36,7 +36,7 @@ const SalonCard: React.FC<{ salons: Salon; onClick: () => void }> = ({
   onClick,
 }) => (
   <div
-    className="max-w-[320px] h-[370px] bg-white rounded-xl border border-gray-200 shadow hover:shadow-lg transition duration-300 overflow-hidden cursor-pointer"
+    className="w-[280px] h-[320px] sm:w-[300px] sm:h-[350px] md:max-w-[320px] md:h-[370px] bg-white rounded-xl border border-gray-200 shadow hover:shadow-lg transition duration-300 overflow-hidden cursor-pointer"
     onClick={onClick}
   >
     <div className="h-[50%] relative">
@@ -60,13 +60,6 @@ const SalonCard: React.FC<{ salons: Salon; onClick: () => void }> = ({
 
     <div className="h-[50%] px-5 py-4 flex flex-col justify-between bg-gradient-to-b from-white to-gray-100">
       <h3 className="text-lg font-semibold truncate mb-1">{salons.salon_name}</h3>
-
-      <div className="flex items-center gap-2 mb-1">
-        <span className="text-yellow-500 text-sm font-semibold flex items-center gap-1">
-          {salons.rating} <FaStar size={14} />
-        </span>
-        <span className="text-sm text-gray-500">({salons.reviews} Reviews)</span>
-      </div>
 
       <Tooltip title={salons.address}>
         <p className="text-sm text-gray-600 truncate mb-1">{salons.address}</p>
@@ -158,7 +151,7 @@ const SalonCards: React.FC<{ title?: string; showButton?: boolean; className?: s
 
   return (
     <div className={`w-full max-w-[82rem] px-4 md:px-1 mx-auto py-10 ${className}`}>
-      <h2 className="text-3xl font-semibold mb-8">{title}</h2>
+      <h2 className="text-2xl sm:text-2xl md:text-3xl font-semibold mb-8">{title}</h2>
 
       {isSmallScreen && (
         <div className="flex justify-between items-center mb-4">
@@ -180,9 +173,8 @@ const SalonCards: React.FC<{ title?: string; showButton?: boolean; className?: s
       )}
 
       <div
-        className={`${
-          isSmallScreen ? "flex overflow-x-auto gap-4 pb-4" : "grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
-        }`}
+        className={`${isSmallScreen ? "flex overflow-x-auto justify-center gap-4 pb-4" : "grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+          }`}
       >
         {salons
           .slice(startIndex, startIndex + cardsToShow)

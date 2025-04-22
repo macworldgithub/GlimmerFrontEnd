@@ -42,7 +42,7 @@ const RecommendedProducts = () => {
 		<div className="w-[99vw] px-4 md:px-10 py-10">
 			{/* Title */}
 			<Link href="/selfcare-products" className="block">
-				<h2 className="text-3xl font-semibold mb-8">Recommended Products</h2>
+				<h2 className="text-2xl sm:text-2xl md:text-3xl font-semibold mb-8">Recommended Products</h2>
 			</Link>
 
 			{/* Swiper Controls */}

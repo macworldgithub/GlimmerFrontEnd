@@ -140,7 +140,7 @@ const SalonServices = () => {
   };
 
   return (
-    <div className="w-[99vw] p-10 md:mb-8">
+    <div className="w-[99vw] p-4 sm:p-6 md:p-10 my-4 md:my-8">
       <div className="prose lg:prose-xl">
         <h2 className="mb-2 md:mb-3">Services</h2>
       </div>

@@ -12,16 +12,16 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
 
   if (item.rate_of_salon) queryParams.append("rate", item.rate_of_salon.toString());
   if (item.ref_of_salon) queryParams.append("ref", item.ref_of_salon);
-  
+
   //@ts-ignore
-  if(item.store) queryParams.append("storeId", item.store);
+  if (item.store) queryParams.append("storeId", item.store);
 
   //@ts-ignore
   const path = `/${item.category}/${item.sub_category}/${item.item}/${item._id}`;
   const finalPath = queryParams.toString() ? `${path}?${queryParams.toString()}` : path;
 
   return (
-    <div className="w-full max-w-[320px] h-[370px] bg-white rounded-2xl bg-gradient-to-b from-white to-gray-100 shadow-md hover:shadow-lg transition duration-300 cursor-pointer flex flex-col overflow-visible relative"
+    <div className="w-[280px] h-[320px] sm:w-[300px] sm:h-[350px] md:max-w-[320px] md:h-[370px] mx-auto bg-white rounded-2xl bg-gradient-to-b from-white to-gray-100 shadow-md hover:shadow-lg transition duration-300 cursor-pointer flex flex-col overflow-visible relative"
       onClick={() => router.push(finalPath)}>
       {/* Top 50% Image */}
       <div className="relative w-full h-1/2">
