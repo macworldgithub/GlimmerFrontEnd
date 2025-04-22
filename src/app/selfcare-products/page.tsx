@@ -15,6 +15,7 @@ import SaloonPictures from "@/common/SaloonPictures";
 import { Suspense } from "react";
 import Breadcrumbs from "@/common/breadcrumb";
 import Faq from "./components/Faq";
+
 import Banner from "./components/Banner";
 import DynamicBanner from "./components/Banner";
 import ProductFilter from "@/common/ProductFilter";

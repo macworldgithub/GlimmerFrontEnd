@@ -8,7 +8,8 @@ import QrCodeSection from "./components/qr-code-section-img";
 import BrowseByAreaList from "./components/browse-by-area-list";
 import GlimmerAchieves from "./components/glimmer-achieves";
 import GlimmerForBusiness from "./components/glimmer-for-business";
- 
+import SalonFaq from "./components/Salon-Faq"; 
+
 export default async function Page() {
   return (
     <>
@@ -18,8 +19,9 @@ export default async function Page() {
       <NewSaloons />
       <TrendingSaloons />
       <QrCodeSection />
-      <GlimmerAchieves />
+      {/* <GlimmerAchieves /> */}
       <GlimmerForBusiness />
+      <SalonFaq />
       {/* <BrowseByAreaList /> */}
     </>
   );

@@ -5,7 +5,6 @@ import { RealCardItem } from "@/data";
 import { getAllProducts } from "@/api/product";
 import Card from "@/common/Card";
 import { useRouter } from "next/navigation";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 
 const SelfcareCardList = () => {
   const router = useRouter();
@@ -63,16 +62,6 @@ const SelfcareCardList = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const handlePrev = () => {
-    if (startIndex > 0) setStartIndex(startIndex - 1);
-  };
-
-  const handleNext = () => {
-    if (startIndex + cardsToShow < products.length) {
-      setStartIndex(startIndex + 1);
-    }
-  };
-
   const getRandomProducts = (
     products: RealCardItem[],
     count: number
@@ -87,7 +76,7 @@ const SelfcareCardList = () => {
     <div className="w-full max-w-[82rem] px-4 md:px-1 mx-auto py-10">
       {/* Title */}
       <Link href="/selfcare-products" className="block">
-        <h2 className="text-3xl font-semibold mb-8">
+        <h2 className="text-2xl sm:text-2xl md:text-3xl font-semibold mb-8">
           Self-Care Items
         </h2>
       </Link>
@@ -96,43 +85,32 @@ const SelfcareCardList = () => {
       {loading && <p className="text-center text-gray-500">Loading products...</p>}
       {error && <p className="text-center text-red-500">{error}</p>}
 
-      {/* Arrows for small screens */}
-      {isSmallScreen && (
-        <div className="flex justify-between items-center mb-4">
-          <button
-            onClick={handlePrev}
-            disabled={startIndex === 0}
-            className="p-2 bg-gray-200 rounded-full hover:bg-gray-300 disabled:opacity-50"
-          >
-            <FaArrowLeft />
-          </button>
-          <button
-            onClick={handleNext}
-            disabled={startIndex + cardsToShow >= products.length}
-            className="p-2 bg-gray-200 rounded-full hover:bg-gray-300 disabled:opacity-50"
-          >
-            <FaArrowRight />
-          </button>
+      {/* Product Grid / Carousel */}
+      {isSmallScreen ? (
+        // Horizontal scroll for mobile
+        <div className="flex gap-8 overflow-x-auto snap-x snap-mandatory pb-4 px-4 scroll-smooth scrollbar-hide">
+          {products.length > 0 ? (
+            products.map((product) => (
+              <div key={product._id} className="shrink-0 w-[270px] snap-start">
+                <Card item={product} />
+              </div>
+            ))
+          ) : (
+            <p className="text-center text-gray-500 w-full">No products available</p>
+          )}
+        </div>
+      ) : (
+        // Grid for desktop
+        <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          {products.length > 0 ? (
+            products.slice(startIndex, startIndex + cardsToShow).map((product) => (
+              <Card key={product._id} item={product} />
+            ))
+          ) : (
+            <p className="text-center text-gray-500">No products available</p>
+          )}
         </div>
       )}
-
-      {/* Product Grid / Carousel */}
-      <div
-        className={`${isSmallScreen
-            ? "flex overflow-x-auto gap-4 pb-4"
-            : "grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
-          }`}
-      >
-        {products.length > 0 ? (
-          products
-            .slice(startIndex, startIndex + cardsToShow)
-            .map((product) => (
-              <Card key={product._id} item={product}/>
-            ))
-        ) : (
-          <p className="text-center text-gray-500">No products available</p>
-        )}
-      </div>
 
       {/* View More Button */}
       <div className="text-center mt-6">
@@ -144,7 +122,6 @@ const SelfcareCardList = () => {
         </button>
       </div>
     </div>
-
   );
 };
 

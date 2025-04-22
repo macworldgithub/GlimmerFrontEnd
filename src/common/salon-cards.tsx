@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { FaArrowLeft, FaArrowRight, FaStar } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { getAllSalons } from "@/api/salon";
 import { Tooltip } from "antd";
@@ -36,7 +35,7 @@ const SalonCard: React.FC<{ salons: Salon; onClick: () => void }> = ({
   onClick,
 }) => (
   <div
-    className="w-[280px] h-[320px] sm:w-[300px] sm:h-[350px] md:max-w-[320px] md:h-[370px] bg-white rounded-xl border border-gray-200 shadow hover:shadow-lg transition duration-300 overflow-hidden cursor-pointer"
+    className="w-[280px] h-[320px] sm:w-[300px] sm:h-[350px] md:max-w-[320px] md:h-[370px] bg-white rounded-xl border border-gray-200 shadow hover:shadow-lg transition duration-300 overflow-hidden cursor-pointer snap-start shrink-0"
     onClick={onClick}
   >
     <div className="h-[50%] relative">
@@ -91,7 +90,6 @@ const SalonCards: React.FC<{ title?: string; showButton?: boolean; className?: s
   const [salons, setSalons] = useState<Salon[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [startIndex, setStartIndex] = useState(0);
   const [cardsToShow, setCardsToShow] = useState(4);
   const [isSmallScreen, setIsSmallScreen] = useState(false);
   const router = useRouter();
@@ -134,16 +132,7 @@ const SalonCards: React.FC<{ title?: string; showButton?: boolean; className?: s
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const handlePrev = () => {
-    if (startIndex > 0) setStartIndex(startIndex - 1);
-  };
-
-  const handleNext = () => {
-    if (startIndex + cardsToShow < salons.length) setStartIndex(startIndex + 1);
-  };
-
   const handleViewMore = () => router.push("/salons/all_salons");
-
   const handleSalonClick = (id: number) => router.push(`/salons/details/?salonId=${id}`);
 
   if (loading) return <p className="text-center text-gray-500">Loading salons...</p>;
@@ -153,31 +142,15 @@ const SalonCards: React.FC<{ title?: string; showButton?: boolean; className?: s
     <div className={`w-full max-w-[82rem] px-4 md:px-1 mx-auto py-10 ${className}`}>
       <h2 className="text-2xl sm:text-2xl md:text-3xl font-semibold mb-8">{title}</h2>
 
-      {isSmallScreen && (
-        <div className="flex justify-between items-center mb-4">
-          <button
-            className="p-2 bg-gray-200 rounded-full hover:bg-gray-300 disabled:opacity-50"
-            onClick={handlePrev}
-            disabled={startIndex === 0}
-          >
-            <FaArrowLeft />
-          </button>
-          <button
-            className="p-2 bg-gray-200 rounded-full hover:bg-gray-300 disabled:opacity-50"
-            onClick={handleNext}
-            disabled={startIndex + cardsToShow >= salons.length}
-          >
-            <FaArrowRight />
-          </button>
-        </div>
-      )}
-
       <div
-        className={`${isSmallScreen ? "flex overflow-x-auto justify-center gap-4 pb-4" : "grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
-          }`}
+        className={`${
+          isSmallScreen
+            ? "flex overflow-x-auto gap-6 pb-4 px-4 snap-x snap-mandatory scroll-smooth scrollbar-hide"
+            : "grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+        }`}
       >
         {salons
-          .slice(startIndex, startIndex + cardsToShow)
+          .slice(0, isSmallScreen ? salons.length : cardsToShow)
           .map((salon) => (
             <SalonCard
               key={salon._id}

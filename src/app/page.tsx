@@ -9,6 +9,7 @@ import FakeReviewList from "./components/fake-review-list";
 import BoxContainer from "@/common/box-container";
 import Footer from "@/common/footer";
 import ProductFilter from "@/common/ProductFilter";
+import HairBanner from "./components/hair-banner";
 
 export default function Home() {
   return (
@@ -20,9 +21,10 @@ export default function Home() {
         <BottomSlider />
         <GymBanner />
         <ProductFilter />
-        <FakeReviewList />
-        </div>
-       
+        <HairBanner />
+        {/* <FakeReviewList /> */}
+      </div>
+
     </>
   );
 }
