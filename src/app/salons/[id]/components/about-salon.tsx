@@ -12,7 +12,7 @@ const AboutSalon = ({ description }: Props) => {
 				<div className="prose lg:prose-lg">
 					<h2 className="mb-2 md:mb-3">About Salon</h2>
 				</div>
-				<p className="text-2xl">
+				<p className="text-2xl break-words max-w-[50%]">
 					{description ||
 						"No description provided."}
 				</p>

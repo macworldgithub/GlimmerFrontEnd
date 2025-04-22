@@ -31,6 +31,16 @@ const SalonsList = () => {
   const page = Number(searchParams.get("page_no")) || 1;
   const pageSize = 8;
 
+const formatTime = (timeStr: any) => {
+  const [hourStr, minute = "00"] = timeStr.split(':');
+  let hour = parseInt(hourStr, 10);
+  const isPM = hour >= 12;
+  const formattedHour = hour % 12 === 0 ? 12 : hour % 12;
+  const suffix = isPM ? 'pm' : 'am';
+  return `${formattedHour}:${minute} ${suffix}`;
+};
+
+
   const fetchData = async () => {
     try {
       const params = { page_no: page };
@@ -55,8 +65,10 @@ const SalonsList = () => {
     router.push(`${pathname}?${params.toString()}`);
   };
 
-  const handleSalonClick = (salonId: number) => {
-    router.push(`/salons/details/?salonId=${salonId}`);
+  const handleSalonClick = (salonId: number, openingHour: string, closingHour: string) => {
+    console.log(openingHour)
+    console.log(closingHour)
+    router.push(`/salons/details/?salonId=${salonId}&openingHour=${openingHour}&closingHour=${closingHour}`);
   };
 
   return (
@@ -125,7 +137,7 @@ const SalonsList = () => {
                   key={salon._id}
                   whileHover={{ scale: 1.03 }}
                   className="flex flex-col rounded-xl border border-gray-200 shadow-sm overflow-hidden bg-gray-100"
-                  onClick={() => handleSalonClick(salon._id)}
+                  onClick={() => handleSalonClick(salon._id, formatTime(salon.openingHour), formatTime(salon.closingHour))}
                   style={{ cursor: "pointer" }}
                 >
                   <div className="h-[200px] w-full relative">
@@ -172,7 +184,7 @@ const SalonsList = () => {
                     {/* Availability Badge */}
                     {salon.openingHour && salon.closingHour ? (
                       <div className="text-xs bg-green-100 text-green-700 px-4 py-1 rounded-full font-medium shadow-sm border border-green-300 text-left w-fit mb-2">
-                        {salon.openingHour}am - {salon.closingHour}pm
+                        {formatTime(salon.openingHour)} - {formatTime(salon.closingHour)}
                       </div>
                     ) : (
                       <div className="text-xs bg-red-100 text-red-700 px-4 py-1 rounded-full font-medium shadow-sm border border-red-300 text-left w-fit mb-2">

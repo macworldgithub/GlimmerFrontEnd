@@ -39,6 +39,8 @@ const SalonServices = () => {
 
   const token = useSelector((state: RootState) => state.login.token);
   const salonIdFilter = searchParams.get("salonId") ?? "";
+  const openingHour = searchParams.get("openingHour") ?? "";
+  const closingHour = searchParams.get("closingHour") ?? "";
   const page = Number(searchParams.get("page")) || 1;
 
   const fetchData = async () => {
@@ -177,7 +179,7 @@ const SalonServices = () => {
                 key={item._id}
                 className="bg-white rounded-lg border border-gray-200 shadow-sm p-4 space-y-2 cursor-pointer transition-transform transform hover:scale-[1.02] hover:shadow-lg hover:border-gray-300"
                 onClick={() =>
-                  router.push(`/salons/services/details?serviceId=${item._id}&salonId=${item.salonId}`)
+                  router.push(`/salons/services/details?serviceId=${item._id}&salonId=${item.salonId}&openingHour=${openingHour}&closingHour=${closingHour}`)
                 }
               >
                 <div className="flex flex-row justify-between">

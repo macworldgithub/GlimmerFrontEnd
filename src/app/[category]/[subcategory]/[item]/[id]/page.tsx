@@ -434,7 +434,7 @@ const ProductDisplay = () => {
             </div>
           </div>
 
-          {/* Voucher Promo */}
+          {/* Voucher Promo
           <div className="mt-4 bg-white shadow-lg dark:text-white px-6 py-2 pl-8 rounded-lg">
             <div className="mb-4">
               <h4 className="font-semibold text-lg text-gray-800">
@@ -487,7 +487,7 @@ const ProductDisplay = () => {
                 </div>
               ))}
             </div>
-          </div>
+          </div> */}
 
           {/* Buttons Section */}
           <div className="flex items-center gap-4 mt-4">
