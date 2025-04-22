@@ -82,7 +82,7 @@ const ServiceList = () => {
   return (
     <div className="flex flex-col w-[99vw] pb-[8rem]">
       {/* Category Navigation Menu */}
-      <div className="hero-content px-10 bg-[#FBE8A5] mb-4 z-10">
+      <div className="px-10 py-10 bg-[#FBE8A5] mb-4 z-10">
         <Salonfilter />
       </div>
       {/* Breadcrumbs */}

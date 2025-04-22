@@ -16,7 +16,7 @@ import { Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { createBooking, getAllActiveServices, getServiceById } from "@/api/salon";
 import { useSearchParams } from "next/navigation";
-import { DatePicker, Modal } from "antd";
+import { DatePicker, Modal, TimePicker } from "antd";
 import { AppDispatch, RootState } from "@/store/reduxStore";
 import dayjs from "dayjs";
 import { motion } from "framer-motion";
@@ -53,7 +53,30 @@ const ServiceDetails = () => {
   const [data, setData] = useState<any[]>([]);
   console.log(data);
   const salonIdFilter = searchParams.get("salonId") ?? "";
+  const openingHour = searchParams.get("openingHour") ?? "";
+  const closingHour = searchParams.get("closingHour") ?? "";
   const page = Number(searchParams.get("page")) || 1;
+
+  // Parse those into dayjs
+  const opening = dayjs(openingHour, "h:mm a");
+  const closing = dayjs(closingHour, "h:mm a");
+
+
+  // Helper to disable hours outside opening-closing
+  const disabledHours = () => {
+    const openingHourNum = opening.hour(); // 24-hour format (e.g., 11)
+    const closingHourNum = closing.hour(); // e.g., 21
+
+    const allHours = Array.from({ length: 12 }, (_, i) => i + 1); // 1 to 12
+
+    const allowedHours: number[] = [];
+    for (let h = openingHourNum; h <= closingHourNum; h++) {
+      const hr12 = h % 12 === 0 ? 12 : h % 12;
+      allowedHours.push(hr12);
+    }
+
+    return allHours.filter((hr) => !allowedHours.includes(hr));
+  };
 
   const fetchData = async () => {
     try {
@@ -430,7 +453,7 @@ const ServiceDetails = () => {
           </div>
 
           {/* Voucher Promo */}
-          <div className="mt-4 bg-white shadow-lg dark:text-white px-6 py-2 pl-8 rounded-lg">
+          {/* <div className="mt-4 bg-white shadow-lg dark:text-white px-6 py-2 pl-8 rounded-lg">
             <div className="mb-4">
               <h4 className="font-semibold text-lg text-gray-800">
                 Voucher Promo
@@ -482,7 +505,7 @@ const ServiceDetails = () => {
                 </div>
               ))}
             </div>
-          </div>
+          </div> */}
 
           {/* Buttons Section */}
           <div className="flex items-center gap-4 mt-4">
@@ -574,6 +597,26 @@ const ServiceDetails = () => {
                         setBulkForm((prev) => ({ ...prev, [name]: dateString }))
                       }
                       className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 outline-none"
+                    />
+                  ) : name === "bookingTime" ? (
+                    <TimePicker
+                      use12Hours
+                      format="h:mm A"
+                      minuteStep={30}
+                      disabledHours={disabledHours}
+                      disabledMinutes={() =>
+                        Array.from({ length: 60 }, (_, i) => i).filter((min) => min !== 0 && min !== 30)
+                      }
+                      disabledSeconds={() => Array.from({ length: 60 }, (_, i) => i)}
+                      hideDisabledOptions
+                      showNow={false}
+                      onChange={(time) =>
+                        setBulkForm((prev) => ({
+                          ...prev,
+                          bookingTime: time ? time.format("h:mm A") : "",
+                        }))
+                      }
+                      className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 outline-none"
                     />
                   ) : (
                     <input
@@ -704,9 +747,9 @@ const ServiceDetails = () => {
         </div>
       </div>
 
-      <div className="p-10 justify-center md:mb-5 md:flex-row md:gap-1">
+      <div className="w-[99vw] p-10 justify-center md:mb-5 md:flex-row md:gap-1">
         <h2 className="text-4xl font-semibold">Related Services</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 pt-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 pt-10">
             {data.length ? (
               data.map((item) => (
                 <motion.div

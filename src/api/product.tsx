@@ -8,8 +8,6 @@ export const getAllProducts = async (
   subcategory?: string,
   item?: string,
   name?: string,
-  maxPrice?: number,
-  minPrice?: number,
   page?: number
 ) => {
   try {
@@ -21,8 +19,6 @@ export const getAllProducts = async (
     if (subcategory) url += `&sub_category=${subcategory}`;
     if (item) url += `&item=${item}`;
     if (name) url += `&name=${name}`;
-    if (maxPrice) url += `&max_price=${maxPrice}`;
-    if (minPrice) url += `&min_price=${minPrice}`;
 
     // Make the API request with the dynamically constructed URL
     const res = await axios.get(url);

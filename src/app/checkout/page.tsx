@@ -127,32 +127,36 @@ export default function Checkout() {
         customerName: formData.fullName,
         customerEmail: formData.email,
         // ...cart,
-        productList: cart.ProductList.map((productItem) => ({
-          product: {
-            _id: productItem.product._id,
-            name: productItem.product.name,
-            base_price: productItem.product.base_price,
-            discounted_price: productItem.product.discounted_price,
-            description: productItem.product.description,
-            image1: productItem.product.image1,
-            image2: productItem.product.image2 || "",
-            image3: productItem.product.image3 || "",
-            status: productItem.product.status,
-            type: productItem.product.type.map((t) => ({
-              id: t.id || "",
-              value: t.value || "-",
-            })),
-            size: productItem.product.size.map((s) => ({
-              id: s.id || "",
-              value: s.value || "-",
-              unit: s.unit || "-",
-            })),
-          },
-          storeId: productItem.product.store,
-          quantity: productItem.quantity,
-          total_price:
-            productItem.quantity * productItem.product.discounted_price,
-        })),
+        productList: cart.ProductList.map((productItem) => {
+          return {
+            product: {
+              _id: productItem.product._id,
+              name: productItem.product.name,
+              base_price: productItem.product.base_price,
+              discounted_price: productItem.product.discounted_price,
+              description: productItem.product.description,
+              image1: productItem.product.image1,
+              image2: productItem.product.image2 || "",
+              image3: productItem.product.image3 || "",
+              status: productItem.product.status,
+              type: productItem.product.type.map((t) => ({
+                id: t.id || "",
+                value: t.value || "-",
+              })),
+              size: productItem.product.size.map((s) => ({
+                id: s.id || "",
+                value: s.value || "-",
+                unit: s.unit || "-",
+              })),
+              rate_of_salon: productItem.product.rate_of_salon,
+              ref_of_salon: productItem.product.ref_of_salon,
+            },
+            storeId: productItem.product.store,
+            quantity: productItem.quantity,
+            total_price:
+              productItem.quantity * productItem.product.discounted_price,
+          };
+        }),
         total: cart.total,
         discountedTotal: cart.discountedTotal,
         paymentMethod: "COD",
@@ -367,20 +371,20 @@ export default function Checkout() {
               </div>
               <div className="border-t pt-4 space-y-2">
                 <div className="flex justify-between">
-                  <span>Subtotal</span>
-                  <span>PKR {cart.total}</span>
+                  <span>Price</span>
+                  <span>{cart.total} PKR</span>
                 </div>
-                {/* <div className="flex justify-between">
-              <span>Shipping</span>
-              <span>$5.00</span>
-            </div> */}
                 <div className="flex justify-between">
                   <span>Discount</span>
-                  <span>-PKR {cart.discountedTotal}</span>
+                  <span>-{cart.total - cart.discountedTotal} PKR</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Delivery Charges</span>
+                  <span>{100} PKR</span>
                 </div>
                 <div className="flex justify-between font-semibold">
-                  <span>Total</span>
-                  <span>PKR {cart.total}</span>
+                  <span>SubTotal</span>
+                  <span>{cart.discountedTotal + 100} PKR</span>
                 </div>
               </div>
               <button

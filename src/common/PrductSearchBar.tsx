@@ -42,50 +42,66 @@ const PrductSearchBar = ({
     let matchedItem: string | null = null;
     let matchedName: string | null = null;
 
+    // First try to match a product name exactly
     const matchedProduct = products.find((product) =>
       product.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
-    console.log("match Product", matchedProduct);
+    
     if (matchedProduct) {
       matchedName = matchedProduct.name;
       matchedCategory = matchedProduct.category_id;
       matchedSubCategory = matchedProduct.sub_category_id;
+      matchedItem = matchedProduct.item_id;
     }
-    // Special case: If the search query is "Makeup", set category ID directly
-    if (searchQuery.toLowerCase() === "makeup") {
-      matchedCategory = "6790d2749a0b078319c69e9d";
-    } else {
-      selections.forEach((category) => {
-        if (
-          !matchedCategory &&
-          category.category_name
-            .toLowerCase()
-            .includes(searchQuery.toLowerCase())
-        ) {
-          matchedCategory = category.category_id;
-        }
 
-        category.sub_categories.forEach((subCategory) => {
+    // If no product match, try to match categories, subcategories, and items
+    if (!matchedCategory && !matchedSubCategory && !matchedItem) {
+      // Check for special category cases
+      if (searchQuery.toLowerCase() === "makeup") {
+        matchedCategory = "6790d2749a0b078319c69e9d";
+      } else if (searchQuery.toLowerCase() === "fragrance") {
+        matchedCategory = "6790d27d9a0b078319c69e9f";
+      } else {
+        // Search through all categories, subcategories, and items
+        selections.forEach((category) => {
+          // Check category name
           if (
-            !matchedSubCategory &&
-            subCategory.name.toLowerCase().includes(searchQuery.toLowerCase())
+            category.category_name
+              .toLowerCase()
+              .includes(searchQuery.toLowerCase())
           ) {
-            matchedSubCategory = subCategory.sub_category_id;
             matchedCategory = category.category_id;
           }
 
-          subCategory.items.forEach((item) => {
-            if (
-              !matchedItem &&
-              item.name.toLowerCase().includes(searchQuery.toLowerCase())
-            ) {
-              matchedItem = item.item_id;
-              matchedSubCategory = subCategory.sub_category_id;
-              matchedCategory = category.category_id;
-            }
-          });
+          // Check subcategories if category didn't match
+          if (!matchedCategory && !matchedSubCategory) {
+            category.sub_categories.forEach((subCategory) => {
+              if (
+                subCategory.name
+                  .toLowerCase()
+                  .includes(searchQuery.toLowerCase())
+              ) {
+                matchedCategory = category.category_id;
+                matchedSubCategory = subCategory.sub_category_id;
+              }
+
+              // Check items if subcategory didn't match
+              if (!matchedSubCategory && !matchedItem) {
+                subCategory.items.forEach((item) => {
+                  console.log("item", item)
+                  if (
+                    item.name.toLowerCase().includes(searchQuery.toLowerCase())
+                  ) {
+                    matchedCategory = category.category_id;
+                    matchedSubCategory = subCategory.sub_category_id;
+                    matchedItem = item.item_id;
+                  }
+                });
+              }
+            });
+          }
         });
-      });
+      }
     }
 
     if (
@@ -99,35 +115,22 @@ const PrductSearchBar = ({
       return;
     }
 
-    // Create URL search params
     const params = new URLSearchParams(searchParams);
-    if (matchedCategory) {
-      params.set("category", matchedCategory);
-    } else {
-      params.delete("category");
-    }
+    
+    // Clear all filters first
+    params.delete("category");
+    params.delete("sub_category");
+    params.delete("item");
+    params.delete("name");
 
-    if (matchedSubCategory) {
-      params.set("sub_category", matchedSubCategory);
-    } else {
-      params.delete("sub_category");
-    }
+    // Set the matched filters
+    if (matchedCategory) params.set("category", matchedCategory);
+    if (matchedSubCategory) params.set("sub_category", matchedSubCategory);
+    if (matchedItem) params.set("item", matchedItem);
+    if (matchedName) params.set("name", matchedName);
 
-    if (matchedItem) {
-      params.set("item", matchedItem);
-    } else {
-      params.delete("item");
-    }
-
-    if (matchedName) {
-      params.set("name", matchedName);
-    } else {
-      params.delete("name");
-    }
-
-    params.set("page", "1"); // Reset page to 1 when filtering
-
-    // Navigate to the updated URL
+    console.log(params);
+    params.set("page", "1"); // Reset to page 1
     router.push(`/products?${params.toString()}`);
   };
 

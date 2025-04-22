@@ -397,6 +397,8 @@ export interface RealCardItem {
   category:string;
   sub_category:string;
   item:string;
+  rate_of_salon: number;
+  ref_of_salon: string;
 }
 
 export interface ServicesItems {

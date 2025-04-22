@@ -1,5 +1,5 @@
 "use client";
-import { getProductById } from "@/api/product";
+import { getAllProducts, getProductById } from "@/api/product";
 import Card from "@/common/Card";
 import CategoryNavMenu from "@/common/category-nav-menu";
 import { sampleProducts } from "@/data";
@@ -11,7 +11,7 @@ import {
 } from "@/reduxSlices/cartSlice";
 import { RootState } from "@/store/reduxStore";
 import Image from "next/image";
-import { useParams, usePathname } from "next/navigation";
+import { useParams, usePathname, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -22,10 +22,13 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
+import ProductCard from "@/common/ProductCard";
+import { message } from "antd";
 
 const ProductDisplay = () => {
   const Cart = useSelector((state: RootState) => state.cart);
   const dispatch = useDispatch();
+  const searchParams = useSearchParams();
   const [quantity, setQuantityState] = React.useState(1);
   const [product, setProduct] = useState<any>();
   const [copied, setCopied] = useState("");
@@ -35,6 +38,11 @@ const ProductDisplay = () => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [isBulkModalOpen, setIsBulkModalOpen] = useState(false);
   const [bulkForm, setBulkForm] = useState({ name: "", phone: "", email: "" });
+
+  const ref = searchParams.get("ref") ?? "";
+  const rate = searchParams.get("rate") ?? "";
+  const storeId = searchParams.get("storeId") ?? "";
+  const [data, setData] = useState<any[]>([]);
 
   const size = useSelector(
     (state: RootState) =>
@@ -97,7 +105,12 @@ const ProductDisplay = () => {
     setIsButtonDisabled(true);
     setIsModalOpen(true);
     setTimeout(() => setIsModalOpen(false), 2000);
-    dispatch(addItem({ product: { ...product }, quantity: 1 }));
+    const productWithSalonInfo = {
+      ...product,
+      ref_of_salon: ref,
+      rate_of_salon: parseFloat(rate),
+    };
+    dispatch(addItem({ product: productWithSalonInfo, quantity: 1 }));
   };
 
   const updateQuantity = (newQuantity: any) => {
@@ -165,6 +178,22 @@ const ProductDisplay = () => {
   const handlePrev = () => {
     setIndex((prev) => (prev - 1 + images.length) % images.length);
   };
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await getAllProducts();
+        const filteredProducts = response.products.filter(
+          (product: any) => product.store === storeId
+        );
+        setData(filteredProducts);
+      } catch (err) {
+        message.error("Failed to load products");
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   return (
     <>
@@ -405,7 +434,7 @@ const ProductDisplay = () => {
             </div>
           </div>
 
-          {/* Voucher Promo */}
+          {/* Voucher Promo
           <div className="mt-4 bg-white shadow-lg dark:text-white px-6 py-2 pl-8 rounded-lg">
             <div className="mb-4">
               <h4 className="font-semibold text-lg text-gray-800">
@@ -458,7 +487,7 @@ const ProductDisplay = () => {
                 </div>
               ))}
             </div>
-          </div>
+          </div> */}
 
           {/* Buttons Section */}
           <div className="flex items-center gap-4 mt-4">
@@ -645,71 +674,26 @@ const ProductDisplay = () => {
         </div>
       </div>
 
-      <div className="p-10 w-[99vw] justify-center md:mb-5 md:flex-row md:gap-12 ">
+      <div className="w-[99vw] p-10 justify-center md:mb-5 md:flex-row md:gap-1">
         <h2 className="text-4xl font-semibold">Related Products</h2>
-
-        {/* Grid Layout for larger screens */}
-        <div className="mb-[8rem] hidden sm:grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 lg:gap-6 mt-5 justify-center">
-          {sampleProducts.map((item: any) => (
-            <div className="flex justify-center">
-              <Card key={item.id} item={item} />
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 pt-10">
+          {data.length ? (
+            data.map((item) => (
+              <motion.div
+                key={item._id}
+                whileHover={{ scale: 1.02 }}
+                className="flex"
+              >
+                <ProductCard item={item} />
+              </motion.div>
+            ))
+          ) : (
+            <div className="col-span-full flex justify-center items-center min-h-[70vh]">
+              <div className="text-center font-bold text-3xl">
+                Oops! No items to display in this category
+              </div>
             </div>
-          ))}
-        </div>
-
-        {/* Swiper for mobile */}
-        <div className="sm:hidden w-full max-w-[90%] mx-auto relative mt-5">
-          <Swiper
-            modules={[Navigation]}
-            navigation={{
-              nextEl: ".swiper-button-next",
-              prevEl: ".swiper-button-prev",
-            }}
-            spaceBetween={15}
-            slidesPerView={1}
-          >
-            {sampleProducts.map((item: any) => (
-              <SwiperSlide key={item.id}>
-                <div className="flex justify-center">
-                  <Card item={item} />
-                </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
-
-          {/* Navigation Arrows */}
-          <div className="swiper-button-next absolute top-1/2 right-4 transform -translate-y-1/2 z-10 text-white">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="white"
-              className="w-6 h-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M9 5l7 7-7 7"
-              ></path>
-            </svg>
-          </div>
-          <div className="swiper-button-prev absolute top-1/2 left-4 transform -translate-y-1/2 z-10 text-white">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="white"
-              className="w-6 h-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M15 19l-7-7 7-7"
-              ></path>
-            </svg>
-          </div>
+          )}
         </div>
       </div>
     </>

@@ -31,7 +31,6 @@ const NavbarClient = ({
   session: any;
   handleLogout: () => void;
 }) => {
-  const router = useRouter();
   const pathname = usePathname();
   // const router = useRouter();
   const searchParams = useSearchParams();
@@ -84,11 +83,8 @@ const NavbarClient = ({
         subCategoryFilter,
         itemFilter,
         nameFilter,
-        0,
-        0,
         page
       );
-      console.log("Hello World....", res.products);
       setProducts(res.products || products);
       setTotal(res.total || res.products.length || total);
     } catch (error) {

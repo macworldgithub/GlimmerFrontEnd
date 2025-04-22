@@ -57,7 +57,7 @@ const SalonDetailsPage = () => {
         <div className="flex flex-col mt-4">
           <div className="flex justify-between items-center">
             <div className="prose">
-              <h2 className="text-4xl">{salonData.salon_name || "Glimmer's Saloon"}</h2>
+              <h2 className="text-5xl">{salonData.salon_name || "Glimmer's Saloon"}</h2>
             </div>
             <div>
               <MdOutlineIosShare size={30} />
@@ -65,13 +65,6 @@ const SalonDetailsPage = () => {
           </div>
 
           <div className="flex flex-row items-center mb-3 text-2xl">
-            <p className="mr-1">5.0</p>
-            <div className="flex flex-row mr-1">
-              {Array.from({ length: 5 }, (_, index) => (
-                <FaStar key={index} className="p-0 m-0" />
-              ))}
-            </div>
-            <BsFillCircleFill className="mx-3" size={10} />
             <p className="mr-1">{"Mon-Fri"}</p>
             <p className="mr-1">
               {salonData.openingHour
@@ -86,47 +79,23 @@ const SalonDetailsPage = () => {
           </div>
         </div>
 
-        {/* Grid for larger screens */}
-        <div className="hidden md:grid grid-cols-10 gap-4">
-          {/* Left Column */}
-          <div className={`col-span-4 grid gap-2 ${[salonData.image1, salonData.image2].filter(Boolean).length === 2 ? 'grid-rows-2' : 'grid-rows-1'}`}>
-            {salonData.image1 && (
+        {/* Image Grid - Responsive, 2 per row */}
+        <div className="hidden md:grid grid-cols-2 gap-2 mt-4">
+          {[salonData.image1, salonData.image2, salonData.image3, salonData.image4]
+            .filter(Boolean)
+            .map((src, index) => (
               <img
-                src={salonData.image1}
-                className="w-full h-[100px] md:h-full object-cover rounded-none"
-                alt="left img 1"
+                key={index}
+                src={src}
+                className="w-full h-[275px] object-cover rounded"
+                alt={`salon image ${index + 1}`}
               />
-            )}
-            {salonData.image2 && (
-              <img
-                src={salonData.image2}
-                className="w-full h-[175px] md:h-full object-cover rounded-none"
-                alt="left img 2"
-              />
-            )}
-          </div>
-
-          {/* Right Column */}
-          <div className={`col-span-4 grid gap-2 ${[salonData.image3, salonData.image4].filter(Boolean).length === 2 ? 'grid-rows-2' : 'grid-rows-1'}`}>
-            {salonData.image3 && (
-              <img
-                src={salonData.image3}
-                className="w-full h-[175px] md:h-full object-cover rounded-none"
-                alt="right img 3"
-              />
-            )}
-            {salonData.image4 && (
-              <img
-                src={salonData.image4}
-                className="w-full h-[175px] md:h-full object-cover rounded-none"
-                alt="right img 4"
-              />
-            )}
-          </div>
+            ))}
         </div>
+
       </div>
-      <SalonServices />
       <AboutSalon description={salonData?.about} />
+      <SalonServices />
       <RecommendedProducts />
       <SalonsNearby />
       <GlimmerBanner />
