@@ -71,6 +71,7 @@ const Cart = () => {
                 <tr>
                   <th>Product</th>
                   <th>Price</th>
+                  <th>Price after Discount</th>
                   <th className="pl-6">Quantity</th>
                   <th>Remove</th>
                 </tr>
@@ -91,6 +92,10 @@ const Cart = () => {
                         <div>
                           <p className="font-semibold flex-none">{item.product.name}</p>
                         </div>
+                      </td>
+                      <td className="text-nowrap">
+                        {item.product.base_price * item.quantity}{" "}
+                        PKR
                       </td>
                       <td className="text-nowrap">
                         {item.product.discounted_price === 0
@@ -169,17 +174,23 @@ const Cart = () => {
           <div className="rounded-lg bg-gray-100 p-4">
             <h3 className="mb-4 font-semibold text-lg">Total</h3>
             <div className="flex justify-between">
-              <span>Total</span>
+              <span>Price</span>
+              <span>{Cart?.total} PKR</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Final Price after discount</span>
               <span>{Cart?.discountedTotal} PKR</span>
             </div>
             <div className="flex justify-between">
-              {/* <span>Delivery</span>
-              <span> {deliveryCharges} PKR</span> */}
+              <span>Delivery Charges</span>
+              <span>{100} PKR</span>
+            </div>
+            <div className="flex justify-between">
             </div>
             <hr className="my-2" />
             <div className="flex justify-between font-semibold">
               <span>Subtotal</span>
-              <span>{Cart.discountedTotal} PKR</span>
+              <span>{Cart.discountedTotal + 100} PKR</span>
             </div>
             <Link href={"/checkout"}>
               <button className="btn btn-secondary mt-4 w-full">Checkout</button>

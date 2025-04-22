@@ -371,20 +371,20 @@ export default function Checkout() {
               </div>
               <div className="border-t pt-4 space-y-2">
                 <div className="flex justify-between">
-                  <span>Subtotal</span>
-                  <span>PKR {cart.total}</span>
+                  <span>Price</span>
+                  <span>{cart.total} PKR</span>
                 </div>
-                {/* <div className="flex justify-between">
-              <span>Shipping</span>
-              <span>$5.00</span>
-            </div> */}
                 <div className="flex justify-between">
                   <span>Discount</span>
-                  <span>-PKR {cart.discountedTotal}</span>
+                  <span>-{cart.total - cart.discountedTotal} PKR</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Delivery Charges</span>
+                  <span>{100} PKR</span>
                 </div>
                 <div className="flex justify-between font-semibold">
-                  <span>Total</span>
-                  <span>PKR {cart.total}</span>
+                  <span>SubTotal</span>
+                  <span>{cart.discountedTotal + 100} PKR</span>
                 </div>
               </div>
               <button
