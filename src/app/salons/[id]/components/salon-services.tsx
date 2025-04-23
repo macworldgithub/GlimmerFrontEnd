@@ -10,15 +10,16 @@ import { AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import CheckoutModal from "./checkoutModal";
 import CartModal from "./cartModal";
+import { addService, clearServiceCart } from "@/reduxSlices/serviceCartSlice";
 
 const SalonServices = () => {
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
   const searchParams = useSearchParams();
   const token = useSelector((state: RootState) => state.login.token);
+  const { services: selectedServices } = useSelector((state: RootState) => state.serviceCart);
 
   const [services, setServices] = useState<any[]>([]);
-  const [selectedServices, setSelectedServices] = useState<any[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
   const [bulkForm, setBulkForm] = useState({
@@ -44,14 +45,32 @@ const SalonServices = () => {
   }, [page, salonId]);
 
   const addToCart = (service: any) => {
-    if (!selectedServices.some((s) => s._id === service._id)) {
-      setSelectedServices((prev) => [...prev, service]);
-      setIsModalOpen(true);
-    }
-  };
+    const alreadyInCart = selectedServices.some((s) => s.service._id === service._id);
+    if (!alreadyInCart) {
+      const discountedPrice = service.adminSetPrice - (service.adminSetPrice * service.discountPercentage) / 100;
+      const serviceWithDiscount = {
+        service: {
+          ...service,
+          discounted_price: discountedPrice,
+        },
+      };
+      dispatch(addService({
+        service: {
+          ...service,
+          discounted_price: discountedPrice,
+        },
+        bookingInfo: {
+          customerName: "",
+          customerEmail: "",
+          customerPhone: "",
+          bookingDate: "",
+          bookingTime: "",
+          paymentMethod: "",
+        },
+      }));
 
-  const removeFromCart = (id: string) => {
-    setSelectedServices((prev) => prev.filter((s) => s._id !== id));
+    }
+    setIsModalOpen(true);
   };
 
   const validateForm = () => {
@@ -74,12 +93,20 @@ const SalonServices = () => {
     if (!validateForm()) return;
 
     try {
-      const bookings = await Promise.all(
-        selectedServices.map((service) => {
-          const finalPrice = service.adminSetPrice - (service.adminSetPrice * service.discountPercentage) / 100;
-          return createBooking({ ...bulkForm, serviceId: service._id, finalPrice }, token);
-        })
-      );
+      for (const { service } of selectedServices) {
+        try {
+          await createBooking({
+            ...bulkForm,
+            serviceId: service._id,
+            finalPrice: service.discounted_price,
+          }, token);
+        } catch (error) {
+          console.error("Booking failed for service:", service._id, error);
+        }
+      }
+      dispatch(clearServiceCart());
+      localStorage.removeItem('serviceCart');
+
       alert("Booking confirmed!");
       setIsCheckoutModalOpen(false);
       window.location.reload();
@@ -153,9 +180,7 @@ const SalonServices = () => {
       <AnimatePresence>
         {isModalOpen && (
           <CartModal
-            selectedServices={selectedServices}
             onClose={() => setIsModalOpen(false)}
-            onRemove={removeFromCart}
             onProceed={() => {
               setIsModalOpen(false);
               setIsCheckoutModalOpen(true);

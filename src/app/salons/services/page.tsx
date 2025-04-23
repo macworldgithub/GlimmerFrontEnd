@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { Suspense, useEffect, useState } from "react";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
@@ -6,13 +6,15 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import Salonfilter from "../components/salonFIlter";
 import ServiceSidebar from "@/common/ServiceSidebar";
-import { getAllActiveServices } from "@/api/salon";
+import { createBooking, getAllActiveServices } from "@/api/salon";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch } from "@/store/reduxStore";
+import { AppDispatch, RootState } from "@/store/reduxStore";
 import ServiceCard from "@/common/ServiceCard";
 import { BiChevronDown } from "react-icons/bi";
+import CartModal from "../[id]/components/cartModal";
+import CheckoutModal from "../[id]/components/checkoutModal";
+import { addService, clearServiceCart } from "@/reduxSlices/serviceCartSlice";
 
-// A loading component for suspense fallback
 const Loading = () => (
   <div className="justify-center flex min-h-[70vh] w-full items-center">
     <div className="text-center font-bold text-3xl">Loading...</div>
@@ -21,19 +23,32 @@ const Loading = () => (
 
 const ServiceList = () => {
   const [activeSort, setActiveSort] = useState("Date");
-  const [showRatingDropdown, setShowRatingDropdown] = useState(false);
   const [showPriceDropdown, setShowPriceDropdown] = useState(false);
   const [sortOrder, setSortOrder] = useState("desc");
-  const [ratingFilter, setRatingFilter] = useState<number | null>(null);
+  const [data, setData] = useState<any[]>([]);
+  const [total, setTotal] = useState(0);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<any | null>(null);
+  const [modalType, setModalType] = useState<'cart' | 'checkout'>('cart');
+  const [bulkForm, setBulkForm] = useState({
+    customerName: "",
+    customerEmail: "",
+    customerPhone: "",
+    bookingDate: "",
+    bookingTime: "",
+    paymentMethod: "",
+  });
+  const [errors, setErrors] = useState<any>({});
 
   const pageSize = 8;
-  const [data, setData] = useState<any[]>([]); // Store services
-  const [total, setTotal] = useState(0); // Store total services
-  
+
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
+  const token = useSelector((state: RootState) => state.login.token);
+  const { services: selectedServices } = useSelector((state: RootState) => state.serviceCart);
 
   const categoryIdFilter = searchParams.get("categoryId") ?? "";
   const salonIdFilter = searchParams.get("salonId") ?? "";
@@ -53,8 +68,8 @@ const ServiceList = () => {
         })
       );
       if (result.payload) {
-        setData(result.payload.services);  // Assuming services are in result.payload.services
-        setTotal(result.payload.total);  // Assuming total count is in result.payload.total
+        setData(result.payload.services);
+        setTotal(result.payload.total);
       }
     } catch (error) {
       console.error("Error fetching services", error);
@@ -79,13 +94,96 @@ const ServiceList = () => {
     router.push(`${pathname}?${params.toString()}`);
   };
 
+  const handleAddToCart = (item: any) => {
+    dispatch(
+      addService({
+        service: {
+          _id: item._id,
+          name: item.name,
+          description: item.description,
+          image1: item.image1,
+          base_price: item.adminSetPrice,
+          discounted_price: item.hasDiscount
+            ? item.adminSetPrice - (item.adminSetPrice * item.discountPercentage) / 100
+            : item.adminSetPrice,
+          rate_of_salon: item.rate_of_salon,
+          ref_of_salon: item.ref_of_salon,
+          salonId: item.salonId,
+          status: "Active",
+          duration: item.duration,
+        },
+        bookingInfo: {
+          bookingDate: "",
+          bookingTime: "",
+          paymentMethod: "",
+          customerName: "",
+          customerEmail: "",
+          customerPhone: "",
+        },
+      })
+    );
+    setSelectedItem(item); // Set the selected item when added to cart
+    setModalType('cart');  // Open Cart Modal
+    setIsModalOpen(true);  // Open the modal
+  };
+
+  const handleProceedToCheckout = () => {
+    setModalType('checkout'); // Switch to CheckoutModal
+  };
+
+  const closeModal = () => {
+    setSelectedItem(null);
+    setIsModalOpen(false); // Close modal
+  };
+
+  const validateForm = () => {
+    const errs: any = {};
+    if (!bulkForm.customerName.trim()) errs.customerName = "Required!";
+    if (!bulkForm.customerPhone.trim()) errs.customerPhone = "Required!";
+    if (!bulkForm.bookingDate) errs.bookingDate = "Required!";
+    if (!bulkForm.bookingTime) errs.bookingTime = "Required!";
+    setErrors(errs);
+    return Object.keys(errs).length === 0;
+  };
+
+  const handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setBulkForm({ ...bulkForm, [e.target.name]: e.target.value });
+    setErrors({ ...errors, [e.target.name]: "" });
+  };
+
+  const handleBooking = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+
+    try {
+      for (const { service } of selectedServices) {
+        try {
+          await createBooking({
+            ...bulkForm,
+            serviceId: service._id,
+            finalPrice: service.discounted_price,
+          }, token);
+        } catch (error) {
+          console.error("Booking failed for service:", service._id, error);
+        }
+      }
+      dispatch(clearServiceCart());
+      localStorage.removeItem('serviceCart');
+      alert("Booking confirmed!");
+      setIsModalOpen(false);
+      window.location.reload();
+    } catch (error) {
+      console.error("Booking failed:", error);
+      alert("Booking failed.");
+    }
+  };
+
   return (
     <div className="flex flex-col w-[99vw] pb-[8rem]">
-      {/* Category Navigation Menu */}
       <div className="px-10 py-10 bg-[#FBE8A5] mb-4 z-10">
         <Salonfilter />
       </div>
-      {/* Breadcrumbs */}
+
       <div className="breadcrumbs mb-4 text-xl lg:text-xl px-10">
         <Link
           href="/salons"
@@ -104,9 +202,8 @@ const ServiceList = () => {
         </Link>
       </div>
 
-      {/* Banner Image */}
       <div className="hidden md:block pt-[3rem] px-[1rem] sm:px-[2rem] md:px-[4rem] lg:px-[6rem] xl:px-[12rem]">
-        <div className="w-full h-[50vh] sm:h-[50vh] md:h-[50vh] lg:h-[50vh] xl:h-[50vh] rounded-lg overflow-hidden relative group">
+        <div className="w-full h-[50vh] rounded-lg overflow-hidden relative group">
           <img
             src="/assets/images/banner.png"
             alt="Banner"
@@ -120,28 +217,24 @@ const ServiceList = () => {
         </div>
       </div>
 
-      {/* Content Area: Sidebar & Items Grid */}
-      <div className="flex flex-col md:flex-row md:gap-x-8 xl:gap-x-0 px-[1rem] sm:px-[2rem] md:px-[4rem] lg:px-[5rem] xl:px-[10rem] lg:py-[2rem]">
-        {/* Sidebar */}
+      <div className="flex flex-col md:flex-row md:gap-x-8 px-[1rem] sm:px-[2rem] md:px-[4rem] lg:px-[5rem] xl:px-[10rem] lg:py-[2rem]">
         <motion.aside
           initial={{ x: -100, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           transition={{ duration: 1 }}
-          className="w-full md:w-[30%] lg:w-[30%] p-6"
+          className="w-full md:w-[30%] p-6"
         >
           <ServiceSidebar />
         </motion.aside>
 
-        {/* Main Content */}
         <motion.main
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
           className="w-full"
         >
-          {/* Sort and Filter UI */}
-         {/* SORT BY*/}
-         <div className="flex flex-wrap md:flex-row sm:flex-col items-center gap-4 sm:gap-6 px-4 sm:px-6 md:px-8 pt-4 sm:pt-6 md:pt-8 pb-4 sm:pb-6 md:pb-8">
+          {/* Sort UI */}
+          <div className="flex flex-wrap items-center gap-4 px-4 pt-4 pb-6">
             <span className="text-gray-700 text-[20px]">Sort by</span>
 
             <button
@@ -149,31 +242,24 @@ const ServiceList = () => {
                 setActiveSort("Date");
                 setSortOrder(sortOrder === "desc" ? "asc" : "desc");
               }}
-              className={`border px-6 py-2 rounded-md text-lg font-medium transition duration-300 ease-in-out ${
-                activeSort === "Date"
-                  ? "border-purple-800 text-purple-800 bg-purple-100"
-                  : "border-gray-400 text-gray-700 hover:bg-[#FDF3D2]"
-              }`}
+              className={`border px-6 py-2 rounded-md text-lg font-medium transition ${activeSort === "Date"
+                ? "border-purple-800 text-purple-800 bg-purple-100"
+                : "border-gray-400 text-gray-700 hover:bg-[#FDF3D2]"
+                }`}
             >
-              Date{" "}
-              {activeSort === "Date" ? (sortOrder === "desc" ? "↓" : "↑") : ""}
+              Date {activeSort === "Date" ? (sortOrder === "desc" ? "↓" : "↑") : ""}
             </button>
 
             <div className="relative">
               <button
                 onClick={() => setShowPriceDropdown(!showPriceDropdown)}
-                className={`flex items-center gap-2 border px-6 py-2 rounded-md text-lg font-medium transition duration-300 ease-in-out ${
-                  activeSort === "Price"
-                    ? "border-purple-800 text-purple-800 bg-purple-100"
-                    : "border-gray-400 text-gray-700 hover:bg-[#FDF3D2]"
-                }`}
+                className={`flex items-center gap-2 border px-6 py-2 rounded-md text-lg font-medium transition ${activeSort === "Price"
+                  ? "border-purple-800 text-purple-800 bg-purple-100"
+                  : "border-gray-400 text-gray-700 hover:bg-[#FDF3D2]"
+                  }`}
               >
                 Price{" "}
-                {activeSort === "Price"
-                  ? sortOrder === "desc"
-                    ? "↓"
-                    : "↑"
-                  : ""}{" "}
+                {activeSort === "Price" ? (sortOrder === "desc" ? "↓" : "↑") : ""}{" "}
                 <BiChevronDown size={20} />
               </button>
 
@@ -202,57 +288,14 @@ const ServiceList = () => {
                 </div>
               )}
             </div>
-
-            {/* <div className="relative">
-              <button
-                onClick={() => setShowRatingDropdown(!showRatingDropdown)}
-                className="flex items-center gap-2 border px-6 py-2 rounded-md text-lg font-medium transition duration-300 ease-in-out border-gray-400 text-gray-700 hover:bg-[#FDF3D2]"
-              >
-                Ratings {ratingFilter ? `${ratingFilter} ★` : ""}{" "}
-                <BiChevronDown size={20} />
-              </button>
-
-              {showRatingDropdown && (
-                <div className="absolute z-50 left-0 mt-2 w-44 bg-white rounded-lg shadow-lg">
-                  {showRatingDropdown && (
-                    <div className="absolute z-50 left-0 mt-2 w-44 bg-white border border-gray-300 rounded-lg shadow-lg">
-                      {[1, 2, 3, 4, 5].map((star) => (
-                        <button
-                          key={star}
-                          onClick={() => {
-                            setRatingFilter(star);
-                            setShowRatingDropdown(false);
-                          }}
-                          className="block w-full text-left px-5 py-3 text-lg font-medium hover:bg-gray-200 items-center"
-                        >
-                          {[...Array(5)].map((_, i) => (
-                            <span
-                              key={i}
-                              className={
-                                i < star ? "text-purple-800" : "text-gray-300"
-                              }
-                            >
-                              ★
-                            </span>
-                          ))}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              )}
-            </div> */}
           </div>
 
-          <div className="w-full h-max grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-x-8 gap-y-10  p-6 ">
+          {/* Service Grid */}
+          <div className="w-full h-max grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-x-8 gap-y-10 p-6">
             {data.length ? (
               data.map((item) => (
-                <motion.div
-                  key={item._id}
-                  whileHover={{ scale: 1.02 }}
-                  className="flex"
-                >
-                  <ServiceCard item={item} />
+                <motion.div key={item._id} whileHover={{ scale: 1.02 }} className="flex">
+                  <ServiceCard item={item} onAddToCart={handleAddToCart} />
                 </motion.div>
               ))
             ) : (
@@ -288,16 +331,36 @@ const ServiceList = () => {
           )}
         </motion.main>
       </div>
+
+      {isModalOpen && selectedItem && (
+        <div className="fixed inset-0 bg-black/40 z-[999] flex justify-end">
+          <div className="w-[400px] h-full bg-white shadow-lg overflow-y-auto">
+            {modalType === 'cart' ? (
+              <CartModal
+                onClose={closeModal}
+                onProceed={handleProceedToCheckout}  // Pass the proceed function to CartModal
+              />
+            ) : (
+              <CheckoutModal
+                form={bulkForm}
+                errors={errors}
+                onChange={handleFormChange}
+                onDateChange={(name: any, value: any) => setBulkForm((prev) => ({ ...prev, [name]: value }))}
+                onClose={closeModal}
+                onSubmit={handleBooking}
+              />
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
-const Temp = () => {
-  return (
-    <Suspense fallback={<Loading />} >
-      <ServiceList />
-    </Suspense>
-  );
-};
+const Temp = () => (
+  <Suspense fallback={<Loading />}>
+    <ServiceList />
+  </Suspense>
+);
 
 export default Temp;

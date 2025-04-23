@@ -1,6 +1,4 @@
 "use client";
-import Card from "@/common/Card";
-import { sampleProducts } from "@/data";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,8 +10,6 @@ import {
 } from "react-icons/md";
 import "swiper/css";
 import "swiper/css/navigation";
-import { Navigation } from "swiper/modules";
-import { Swiper, SwiperSlide } from "swiper/react";
 import { createBooking, getAllActiveServices, getServiceById } from "@/api/salon";
 import { useSearchParams } from "next/navigation";
 import { DatePicker, Modal, TimePicker } from "antd";
@@ -21,16 +17,19 @@ import { AppDispatch, RootState } from "@/store/reduxStore";
 import dayjs from "dayjs";
 import { motion } from "framer-motion";
 import ServiceCard from "@/common/ServiceCard";
+import { addService, clearServiceCart } from "@/reduxSlices/serviceCartSlice";
+import CartModal from "../../[id]/components/cartModal";
+import CheckoutModal from "../../[id]/components/checkoutModal";
 
 const ServiceDetails = () => {
-  const token = useSelector((state: RootState) => state.login.token);
-  const searchParams = useSearchParams();
-  const serviceId = searchParams.get("serviceId");
+  const [activeTab, setActiveTab] = useState("Description");
   const [service, setService] = useState<any>();
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [copied, setCopied] = useState("");
   const [isWishlisted, setIsWishlisted] = useState(false);
-  const [activeTab, setActiveTab] = useState("Description");
+  const [data, setData] = useState<any[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<any | null>(null);
+  const [modalType, setModalType] = useState<'cart' | 'checkout'>('cart');
   const [bulkForm, setBulkForm] = useState({
     customerName: "",
     customerEmail: "",
@@ -40,18 +39,14 @@ const ServiceDetails = () => {
     paymentMethod: "",
   });
 
-  const [errors, setErrors] = useState({
-    customerName: "",
-    customerEmail: "",
-    customerPhone: "",
-    bookingDate: "",
-    bookingTime: "",
-  });
+  const [errors, setErrors] = useState<any>({});
 
+  const searchParams = useSearchParams();
   const dispatch = useDispatch<AppDispatch>();
+  const token = useSelector((state: RootState) => state.login.token);
+  const { services: selectedServices } = useSelector((state: RootState) => state.serviceCart);
 
-  const [data, setData] = useState<any[]>([]);
-  console.log(data);
+  const serviceId = searchParams.get("serviceId");
   const salonIdFilter = searchParams.get("salonId") ?? "";
   const openingHour = searchParams.get("openingHour") ?? "";
   const closingHour = searchParams.get("closingHour") ?? "";
@@ -216,6 +211,80 @@ const ServiceDetails = () => {
     }
   };
 
+  const handleAddToCart = (item: any) => {
+    dispatch(
+      addService({
+        service: {
+          _id: item._id,
+          name: item.name,
+          description: item.description,
+          image1: item.image1,
+          base_price: item.adminSetPrice,
+          discounted_price: item.hasDiscount
+            ? item.adminSetPrice - (item.adminSetPrice * item.discountPercentage) / 100
+            : item.adminSetPrice,
+          rate_of_salon: item.rate_of_salon,
+          ref_of_salon: item.ref_of_salon,
+          salonId: item.salonId,
+          status: "Active",
+          duration: item.duration,
+        },
+        bookingInfo: {
+          bookingDate: "",
+          bookingTime: "",
+          paymentMethod: "",
+          customerName: "",
+          customerEmail: "",
+          customerPhone: "",
+        },
+      })
+    );
+    setSelectedItem(item); // Set the selected item when added to cart
+    setModalType('cart');
+    setIsModalOpen(true);  // Open the modal
+  };
+
+  const handleProceedToCheckout = () => {
+    setModalType('checkout'); // Switch to CheckoutModal
+  };
+
+  const closeModal = () => {
+    setSelectedItem(null);
+    setIsModalOpen(false); // Close modal
+  };
+
+  const handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setBulkForm({ ...bulkForm, [e.target.name]: e.target.value });
+    setErrors({ ...errors, [e.target.name]: "" });
+  };
+
+  const handleBooking = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+
+    try {
+      for (const { service } of selectedServices) {
+        try {
+          await createBooking({
+            ...bulkForm,
+            serviceId: service._id,
+            finalPrice: service.discounted_price,
+          }, token);
+        } catch (error) {
+          console.error("Booking failed for service:", service._id, error);
+        }
+      }
+      dispatch(clearServiceCart());
+      localStorage.removeItem('serviceCart');
+      alert("Booking confirmed!");
+      setIsModalOpen(false);
+      window.location.reload();
+    } catch (error) {
+      console.error("Booking failed:", error);
+      alert("Booking failed.");
+    }
+  };
+
   return (
     <>
       {/* Breadcrumbs */}
@@ -320,8 +389,8 @@ const ServiceDetails = () => {
                 <svg
                   key={index}
                   className={`w-5 h-5 ms-1 ${service?.ratings && index < Math.round(service.ratings)
-                      ? "text-purple-800"
-                      : "text-gray-300"
+                    ? "text-purple-800"
+                    : "text-gray-300"
                     }`}
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
@@ -682,8 +751,8 @@ const ServiceDetails = () => {
                   key={tab.title}
                   onClick={() => setActiveTab(tab.title)}
                   className={`flex-1 py-2 px-4 font-semibold ${activeTab === tab.title
-                      ? "text-purple-800 border-b-2 border-purple-800"
-                      : "text-gray-600"
+                    ? "text-purple-800 border-b-2 border-purple-800"
+                    : "text-gray-600"
                     }`}
                 >
                   {tab.title}
@@ -708,8 +777,8 @@ const ServiceDetails = () => {
                 <svg
                   key={index}
                   className={`w-5 h-5 ms-1 ${service?.ratings && index < Math.round(service.ratings)
-                      ? "text-purple-800"
-                      : "text-gray-300"
+                    ? "text-purple-800"
+                    : "text-gray-300"
                     }`}
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
@@ -749,25 +818,50 @@ const ServiceDetails = () => {
 
       <div className="w-[99vw] p-10 justify-center md:mb-5 md:flex-row md:gap-1">
         <h2 className="text-4xl font-semibold">Related Services</h2>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 pt-10">
-            {data.length ? (
-              data.map((item) => (
-                <motion.div
-                  key={item._id}
-                  whileHover={{ scale: 1.02 }}
-                  className="flex"
-                >
-                  <ServiceCard item={item} />
-                </motion.div>
-              ))
-            ) : (
-              <div className="col-span-full flex justify-center items-center min-h-[70vh]">
-                <div className="text-center font-bold text-3xl">
-                  Oops! No items to display in this category
-                </div>
+          {data.length ? (
+            data.map((item) => (
+              <motion.div
+                key={item._id}
+                whileHover={{ scale: 1.02 }}
+                className="flex"
+              >
+                <ServiceCard item={item} onAddToCart={handleAddToCart} />
+              </motion.div>
+            ))
+          ) : (
+            <div className="col-span-full flex justify-center items-center min-h-[70vh]">
+              <div className="text-center font-bold text-3xl">
+                Oops! No items to display in this category
               </div>
-            )}
-          </div>        
+            </div>
+          )}
+        </div>
+
+        {isModalOpen && selectedItem && (
+          <div className="fixed inset-0 bg-black/40 z-[999] flex justify-end">
+            <div className="w-[400px] h-full bg-white shadow-lg overflow-y-auto">
+              {modalType === 'cart' && (
+                <CartModal
+                  onClose={closeModal}
+                  onProceed={handleProceedToCheckout}  // Pass the proceed function to CartModal
+                />
+              )}
+
+              {modalType === 'checkout' && (
+                <CheckoutModal
+                  form={bulkForm}
+                  errors={errors}
+                  onChange={handleFormChange}
+                  onDateChange={(name: any, value: any) => setBulkForm((prev) => ({ ...prev, [name]: value }))}
+                  onClose={closeModal}
+                  onSubmit={handleBooking}
+                />
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </>
   );
