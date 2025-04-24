@@ -70,6 +70,11 @@ const serviceCartSlice = createSlice({
         state.services.push({ service, bookingInfo });
       }
 
+      state.services.forEach((item) => {
+        item.service.discounted_price =
+          item.service.discounted_price || item.service.base_price;
+      });
+
       const { sum, discountSum } = calculateTotals(state.services);
       state.total = sum;
       state.discountedTotal = discountSum;

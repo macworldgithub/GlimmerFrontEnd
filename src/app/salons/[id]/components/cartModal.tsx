@@ -52,7 +52,7 @@ const CartModal: React.FC<CartModalProps> = ({ onClose, onProceed }) => {
                                 <div>
                                     <p className="font-medium">{service.name}</p>
                                     <p className="text-sm text-gray-600">
-                                        {service.discounted_price.toFixed(2)} PKR
+                                        {(service.discounted_price || 0).toFixed(2)} PKR
                                     </p>
                                 </div>
                                 <button

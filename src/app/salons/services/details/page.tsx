@@ -15,7 +15,7 @@ import { useSearchParams } from "next/navigation";
 import { DatePicker, Modal, TimePicker } from "antd";
 import { AppDispatch, RootState } from "@/store/reduxStore";
 import dayjs from "dayjs";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import ServiceCard from "@/common/ServiceCard";
 import { addService, clearServiceCart } from "@/reduxSlices/serviceCartSlice";
 import CartModal from "../../[id]/components/cartModal";
@@ -24,12 +24,11 @@ import CheckoutModal from "../../[id]/components/checkoutModal";
 const ServiceDetails = () => {
   const [activeTab, setActiveTab] = useState("Description");
   const [service, setService] = useState<any>();
-  const [copied, setCopied] = useState("");
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [data, setData] = useState<any[]>([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isCartModalOpen, setIsCartModalOpen] = useState(false);
+  const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<any | null>(null);
-  const [modalType, setModalType] = useState<'cart' | 'checkout'>('cart');
   const [bulkForm, setBulkForm] = useState({
     customerName: "",
     customerEmail: "",
@@ -114,13 +113,6 @@ const ServiceDetails = () => {
     service?.adminSetPrice -
     (service?.adminSetPrice * service?.discountPercentage) / 100;
 
-  const handleCopy = (text: string, type: string) => {
-    navigator.clipboard.writeText(text).then(() => {
-      setCopied(type);
-      setTimeout(() => setCopied(""), 2000);
-    });
-  };
-
   const tabs = [
     {
       title: "Description",
@@ -159,8 +151,7 @@ const ServiceDetails = () => {
   };
 
   const handleBuy = () => {
-    console.log("Opening modal...");
-    setIsModalOpen(true);
+    setIsCheckoutModalOpen(true);
   };
 
   const handleChange = (
@@ -204,7 +195,7 @@ const ServiceDetails = () => {
       console.log("Booking Successful:", response);
       alert("Booking Confirmed!");
 
-      setIsModalOpen(false); // Close modal only on success
+      setIsCheckoutModalOpen(false); // Close modal only on success
     } catch (error) {
       console.error("Booking Failed:", error);
       alert("Failed to book service. Please try again.");
@@ -212,6 +203,9 @@ const ServiceDetails = () => {
   };
 
   const handleAddToCart = (item: any) => {
+    const discountedPrice = item.hasDiscount
+      ? item.adminSetPrice - (item.adminSetPrice * (item.discountPercentage || 0)) / 100
+      : item.adminSetPrice;
     dispatch(
       addService({
         service: {
@@ -220,9 +214,7 @@ const ServiceDetails = () => {
           description: item.description,
           image1: item.image1,
           base_price: item.adminSetPrice,
-          discounted_price: item.hasDiscount
-            ? item.adminSetPrice - (item.adminSetPrice * item.discountPercentage) / 100
-            : item.adminSetPrice,
+          discounted_price: discountedPrice,
           rate_of_salon: item.rate_of_salon,
           ref_of_salon: item.ref_of_salon,
           salonId: item.salonId,
@@ -240,18 +232,9 @@ const ServiceDetails = () => {
       })
     );
     setSelectedItem(item); // Set the selected item when added to cart
-    setModalType('cart');
-    setIsModalOpen(true);  // Open the modal
+    setIsCartModalOpen(true);  // Open the modal
   };
 
-  const handleProceedToCheckout = () => {
-    setModalType('checkout'); // Switch to CheckoutModal
-  };
-
-  const closeModal = () => {
-    setSelectedItem(null);
-    setIsModalOpen(false); // Close modal
-  };
 
   const handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setBulkForm({ ...bulkForm, [e.target.name]: e.target.value });
@@ -277,7 +260,7 @@ const ServiceDetails = () => {
       dispatch(clearServiceCart());
       localStorage.removeItem('serviceCart');
       alert("Booking confirmed!");
-      setIsModalOpen(false);
+      setIsCheckoutModalOpen(false);
       window.location.reload();
     } catch (error) {
       console.error("Booking failed:", error);
@@ -521,66 +504,20 @@ const ServiceDetails = () => {
             </div>
           </div>
 
-          {/* Voucher Promo */}
-          {/* <div className="mt-4 bg-white shadow-lg dark:text-white px-6 py-2 pl-8 rounded-lg">
-            <div className="mb-4">
-              <h4 className="font-semibold text-lg text-gray-800">
-                Voucher Promo
-              </h4>
-              <p className="text-gray-700 dark:text-gray-700">
-                {service?.promoCode
-                  ? `there are ${service.promoCode} promo codes for you`
-                  : "there are 3 promo codes for you"}
-              </p>
-            </div>
-
-            <div>
-              {[
-                {
-                  title: "Service 1",
-                  value: service?.percentOff
-                    ? `${service.percentOff}% off for your entire purchase`
-                    : "No discount",
-                },
-                {
-                  title: "Service 2",
-                  value: service?.skinCare
-                    ? `${service.skinCare}% off skincare essentials`
-                    : "No discount on this service",
-                },
-              ].map((item, index) => (
-                <div key={index} className="mb-4 flex items-center">
-                  <div>
-                    <h4 className="font-semibold text-md text-[#583FA8] ">
-                      {item.title}
-                    </h4>
-                    <p className="text-gray-700 dark:text-gray-700">
-                      {item.value}
-                    </p>
-                  </div>
-                  <div className="ml-auto flex items-center">
-                    <button onClick={() => handleCopy(item.value, item.title)}>
-                      <Image
-                        src={"/assets/assurity/copy.png"}
-                        alt="copy"
-                        width={20}
-                        height={20}
-                      />
-                    </button>
-                    {copied === item.title && (
-                      <span className="text-green-500 ml-2">Copied!</span>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div> */}
-
           {/* Buttons Section */}
           <div className="flex items-center gap-4 mt-4">
             <button
               className={`flex-1 w-full flex items-center text-xs justify-center gap-2 py-3 xl:px-6 px-4 border text-purple-800 font-semibold rounded-md`}
               onClick={handleBuy}
+            >
+              BOOK NOW
+            </button>
+            <button
+              className={`flex-1 w-full flex items-center text-xs justify-center gap-2 py-3 xl:px-6 px-4 border bg-[#583FA8] text-white font-semibold rounded-md`}
+              onClick={() => {
+                if (!service) return;
+                handleAddToCart(service);
+              }}
             >
               <Image
                 alt="cart-icon"
@@ -588,7 +525,7 @@ const ServiceDetails = () => {
                 height={15}
                 src={"/assets/addtoBag/cart-icon.png"}
               />
-              BOOK NOW
+              ADD TO BAG
             </button>
             <button
               onClick={() => setIsWishlisted(!isWishlisted)}
@@ -612,11 +549,11 @@ const ServiceDetails = () => {
                 Complete Your Booking
               </h2>
             }
-            open={isModalOpen}
-            onCancel={() => setIsModalOpen(false)}
+            open={isCheckoutModalOpen}
+            onCancel={() => setIsCheckoutModalOpen(false)}
             footer={null}
             centered
-            className="rounded-lg"
+            className="rounded-lg mb-[15rem]"
           >
             <form onSubmit={handleSubmit} className="space-y-4">
               {/* Input Fields */}
@@ -673,10 +610,10 @@ const ServiceDetails = () => {
                       format="h:mm A"
                       minuteStep={30}
                       disabledHours={disabledHours}
-                      disabledMinutes={() =>
-                        Array.from({ length: 60 }, (_, i) => i).filter((min) => min !== 0 && min !== 30)
-                      }
-                      disabledSeconds={() => Array.from({ length: 60 }, (_, i) => i)}
+                      disabledMinutes={() => {
+                        const allowed = [0, 30];
+                        return Array.from({ length: 60 }, (_, i) => i).filter((min) => !allowed.includes(min));
+                      }}
                       hideDisabledOptions
                       showNow={false}
                       onChange={(time) =>
@@ -839,29 +776,27 @@ const ServiceDetails = () => {
           )}
         </div>
 
-        {isModalOpen && selectedItem && (
-          <div className="fixed inset-0 bg-black/40 z-[999] flex justify-end">
-            <div className="w-[400px] h-full bg-white shadow-lg overflow-y-auto">
-              {modalType === 'cart' && (
-                <CartModal
-                  onClose={closeModal}
-                  onProceed={handleProceedToCheckout}  // Pass the proceed function to CartModal
-                />
-              )}
-
-              {modalType === 'checkout' && (
-                <CheckoutModal
-                  form={bulkForm}
-                  errors={errors}
-                  onChange={handleFormChange}
-                  onDateChange={(name: any, value: any) => setBulkForm((prev) => ({ ...prev, [name]: value }))}
-                  onClose={closeModal}
-                  onSubmit={handleBooking}
-                />
-              )}
-            </div>
-          </div>
-        )}
+        <AnimatePresence>
+          {isCartModalOpen && (
+            <CartModal
+              onClose={() => setIsCartModalOpen(false)}
+              onProceed={() => {
+                setIsCartModalOpen(false);
+                setIsCheckoutModalOpen(true);
+              }}
+            />
+          )}
+          {isCheckoutModalOpen && selectedItem && (
+            <CheckoutModal
+              form={bulkForm}
+              errors={errors}
+              onChange={handleFormChange}
+              onDateChange={(name: any, value: any) => setBulkForm((prev) => ({ ...prev, [name]: value }))}
+              onClose={() => setIsCheckoutModalOpen(false)}
+              onSubmit={handleBooking}
+            />
+          )}
+        </AnimatePresence>
       </div>
     </>
   );

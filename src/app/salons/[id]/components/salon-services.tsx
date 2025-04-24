@@ -106,7 +106,6 @@ const SalonServices = () => {
       }
       dispatch(clearServiceCart());
       localStorage.removeItem('serviceCart');
-
       alert("Booking confirmed!");
       setIsCheckoutModalOpen(false);
       window.location.reload();

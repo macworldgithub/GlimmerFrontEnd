@@ -2,7 +2,7 @@
 
 import React, { Suspense, useEffect, useState } from "react";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import Salonfilter from "../components/salonFIlter";
 import ServiceSidebar from "@/common/ServiceSidebar";
@@ -28,9 +28,9 @@ const ServiceList = () => {
   const [data, setData] = useState<any[]>([]);
   const [total, setTotal] = useState(0);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isCartModalOpen, setIsCartModalOpen] = useState(false);
+  const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<any | null>(null);
-  const [modalType, setModalType] = useState<'cart' | 'checkout'>('cart');
   const [bulkForm, setBulkForm] = useState({
     customerName: "",
     customerEmail: "",
@@ -123,17 +123,7 @@ const ServiceList = () => {
       })
     );
     setSelectedItem(item); // Set the selected item when added to cart
-    setModalType('cart');  // Open Cart Modal
-    setIsModalOpen(true);  // Open the modal
-  };
-
-  const handleProceedToCheckout = () => {
-    setModalType('checkout'); // Switch to CheckoutModal
-  };
-
-  const closeModal = () => {
-    setSelectedItem(null);
-    setIsModalOpen(false); // Close modal
+    setIsCartModalOpen(true);  // Open the modal
   };
 
   const validateForm = () => {
@@ -170,7 +160,7 @@ const ServiceList = () => {
       dispatch(clearServiceCart());
       localStorage.removeItem('serviceCart');
       alert("Booking confirmed!");
-      setIsModalOpen(false);
+      setIsCheckoutModalOpen(false);
       window.location.reload();
     } catch (error) {
       console.error("Booking failed:", error);
@@ -332,27 +322,27 @@ const ServiceList = () => {
         </motion.main>
       </div>
 
-      {isModalOpen && selectedItem && (
-        <div className="fixed inset-0 bg-black/40 z-[999] flex justify-end">
-          <div className="w-[400px] h-full bg-white shadow-lg overflow-y-auto">
-            {modalType === 'cart' ? (
-              <CartModal
-                onClose={closeModal}
-                onProceed={handleProceedToCheckout}  // Pass the proceed function to CartModal
-              />
-            ) : (
-              <CheckoutModal
-                form={bulkForm}
-                errors={errors}
-                onChange={handleFormChange}
-                onDateChange={(name: any, value: any) => setBulkForm((prev) => ({ ...prev, [name]: value }))}
-                onClose={closeModal}
-                onSubmit={handleBooking}
-              />
-            )}
-          </div>
-        </div>
-      )}
+      <AnimatePresence>
+        {isCartModalOpen && (
+          <CartModal
+            onClose={() => setIsCartModalOpen(false)}
+            onProceed={() => {
+              setIsCartModalOpen(false);
+              setIsCheckoutModalOpen(true);
+            }}
+          />
+        )}
+        {isCheckoutModalOpen && (
+          <CheckoutModal
+            form={bulkForm}
+            errors={errors}
+            onChange={handleFormChange}
+            onDateChange={(name: any, value: any) => setBulkForm((prev) => ({ ...prev, [name]: value }))}
+            onClose={() => setIsCheckoutModalOpen(false)}
+            onSubmit={handleBooking}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 };
