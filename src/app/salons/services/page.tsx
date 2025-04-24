@@ -95,6 +95,16 @@ const ServiceList = () => {
   };
 
   const handleAddToCart = (item: any) => {
+    const newSalonId = item.salonId;
+
+    if (
+      selectedServices.length > 0 &&
+      selectedServices[0].service.salonId !== newSalonId
+    ) {
+      alert("You cannot add services from different salons in the same booking.");
+      return;
+    }
+    
     dispatch(
       addService({
         service: {

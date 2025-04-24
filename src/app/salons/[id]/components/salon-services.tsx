@@ -45,6 +45,15 @@ const SalonServices = () => {
   }, [page, salonId]);
 
   const addToCart = (service: any) => {
+    const newSalonId = service.salonId;
+
+    if (
+      selectedServices.length > 0 &&
+      selectedServices[0].service.salonId !== newSalonId
+    ) {
+      alert("You cannot add services from different salons in the same booking.");
+      return;
+    }
     const alreadyInCart = selectedServices.some((s) => s.service._id === service._id);
     if (!alreadyInCart) {
       const discountedPrice = service.adminSetPrice - (service.adminSetPrice * service.discountPercentage) / 100;
