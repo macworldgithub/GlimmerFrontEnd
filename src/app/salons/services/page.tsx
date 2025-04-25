@@ -77,6 +77,7 @@ const ServiceList = () => {
   };
 
   useEffect(() => {
+    if (!salonIdFilter || salonIdFilter === "") return;
     fetchData();
   }, [
     page,
