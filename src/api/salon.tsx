@@ -150,3 +150,15 @@ export const getAllActiveServices = createAsyncThunk(
     }
   };
   
+  export const getAllSalonsHighlights = createAsyncThunk<any, { filter?: string }>(
+    "salons/getAllSalonsHighlights",
+    async ({ filter }, { rejectWithValue }) => {
+      try {
+        const query = filter ? `?filter=${filter}` : "";
+        const response = await axios.get(`${BACKEND_URL}/admin/salon-highlights${query}`);
+        return response.data;
+      } catch (error: any) {
+        return rejectWithValue(error.response?.data || "Failed to fetch salons");
+      }
+    }
+  );

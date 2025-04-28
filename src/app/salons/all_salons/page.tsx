@@ -6,22 +6,17 @@ import Link from "next/link";
 import { message } from "antd";
 import Salonfilter from "../components/salonFIlter";
 import { useDispatch } from "react-redux";
-import { getAllSalons } from "@/api/salon"; // API action
+import { getAllSalons, getAllSalonsHighlights } from "@/api/salon";
 import { FaStar } from "react-icons/fa";
 
 import Image from "next/image";
 import type { AppDispatch } from "@/store/reduxStore";
 import SalonSidebar from "@/common/SalonSideBar";
-// A loading component for suspense fallback
-const Loading = () => (
-  <div className="justify-center flex min-h-[70vh] w-full items-center">
-    <div className="text-center font-bold text-3xl">Loading...</div>
-  </div>
-);
 
 const SalonsList = () => {
   const [data, setData] = useState<any[]>([]);
   const [total, setTotal] = useState(0);
+  const [selectedFilter, setSelectedFilter] = useState<string>("all");
 
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -43,12 +38,17 @@ const formatTime = (timeStr: any) => {
 
   const fetchData = async () => {
     try {
-      const params = { page_no: page };
-      //@ts-ignore
-      const result = await dispatch(getAllSalons(params.page_no)).unwrap();
+      const result = selectedFilter === "all"
+        ? await dispatch(getAllSalons(page)).unwrap()
+        : await dispatch(getAllSalonsHighlights({ filter: selectedFilter })).unwrap();
 
-      setData(result.salons);
-      setTotal(result.total);
+      if (selectedFilter === "all") {
+        setData(result.salons);
+        setTotal(result.total);
+      } else {
+        setData(result);
+        setTotal(result.length);
+      }
     } catch (error) {
       message.error("Failed to fetch salons");
     }
@@ -56,18 +56,21 @@ const formatTime = (timeStr: any) => {
 
   useEffect(() => {
     fetchData();
-  }, [page]);
-
+  }, [page, selectedFilter]);
 
   const handlePageChange = (newPage: number) => {
     const params = new URLSearchParams(searchParams);
     params.set("page_no", newPage.toString());
-    router.push(`${pathname}?${params.toString()}`);
+    router.push(`${pathname}?${params.toString()}`, { scroll: false });
+  };
+
+  const handleFilterChange = (filterId: string) => {
+    console.log(filterId)
+    setSelectedFilter(filterId);
+    router.push(`${pathname}`, { scroll: false });
   };
 
   const handleSalonClick = (salonId: number, openingHour: string, closingHour: string) => {
-    console.log(openingHour)
-    console.log(closingHour)
     router.push(`/salons/details/?salonId=${salonId}&openingHour=${openingHour}&closingHour=${closingHour}`);
   };
 
@@ -128,7 +131,7 @@ const formatTime = (timeStr: any) => {
             transition={{ duration: 1 }}
             className="w-full md:w-[20%] lg:w-[20%] p-6"
           >
-            <SalonSidebar />
+            <SalonSidebar onFilterChange={handleFilterChange} />
           </motion.aside>
           <div className="w-full max-w-[1200px] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 mt-6 gap-12">
             {data.length > 0 ? (
@@ -143,7 +146,7 @@ const formatTime = (timeStr: any) => {
                   <div className="h-[200px] w-full relative">
                     {salon.image1 ? (
                       <Image
-                        src={salon.image1}
+                        src={salon.image1.startsWith("http") ? salon.image1 : `/${salon.image1}`}
                         alt={salon.salon_name}
                         layout="fill"
                         objectFit="cover"

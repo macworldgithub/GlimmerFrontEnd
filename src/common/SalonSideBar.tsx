@@ -1,20 +1,23 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 
-const SalonSidebar = () => {
+interface SalonSidebarProps {
+  onFilterChange: (filterId: string) => void;
+}
+
+const SalonSidebar = ({ onFilterChange }: SalonSidebarProps) => {
   const [selectedFilter, setSelectedFilter] = useState("all");
 
   const filters = [
     { id: "all", label: "All Salons" },
-    { id: "recommended", label: "Recommended" },
-    { id: "new", label: "New to Glimmer" },
-    { id: "trending", label: "Trending" },
+    { id: "recommended-salon", label: "Recommended" },
+    { id: "new-to-glimmer", label: "New to Glimmer" },
+    { id: "trending-salon", label: "Trending" },
   ];
 
   const handleFilterChange = (id: string) => {
     setSelectedFilter(id);
-    // Optionally trigger salon filtering logic here
-    // e.g., props.onFilterChange(id) or dispatch action
+    onFilterChange(id);
   };
 
   return (

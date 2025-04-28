@@ -20,16 +20,6 @@ interface Salon {
   about: string;
 }
 
-// Helper function to shuffle array
-const shuffleArray = <T,>(array: T[]): T[] => {
-  const shuffled = [...array];
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-  }
-  return shuffled;
-};
-
 const SalonCard: React.FC<{ salons: Salon; onClick: () => void }> = ({
   salons,
   onClick,
@@ -38,21 +28,22 @@ const SalonCard: React.FC<{ salons: Salon; onClick: () => void }> = ({
     className="w-[280px] h-[320px] sm:w-[300px] sm:h-[350px] md:max-w-[320px] md:h-[370px] bg-white rounded-xl border border-gray-200 shadow hover:shadow-lg transition duration-300 overflow-hidden cursor-pointer snap-start shrink-0"
     onClick={onClick}
   >
-    <div className="h-[50%] relative">
+    <div className="h-[50%] relative rounded-t-xl overflow-hidden">
       {salons.image1 ? (
         <Image
-          src={salons.image1}
+          src={salons.image1.startsWith("http") ? salons.image1 : `/${salons.image1}`}
           alt={salons.salon_name}
-          layout="fill"
-          objectFit="cover"
-          className="rounded-t-xl"
+          fill
+          className="object-cover rounded-t-xl"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
       ) : (
         <Image
           src="/assets/saloonPicture/salon_profile.jpg"
           alt="salon_profile"
-          layout="fill"
-          objectFit="cover"
+          fill
+          className="object-cover rounded-t-xl"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
       )}
     </div>
@@ -81,13 +72,21 @@ const SalonCard: React.FC<{ salons: Salon; onClick: () => void }> = ({
   </div>
 );
 
-const SalonCards: React.FC<{ title?: string; showButton?: boolean; className?: string }> = ({
+interface SalonCardsProps {
+  title?: string;
+  showButton?: boolean;
+  className?: string;
+  salonsProp?: Salon[]; 
+}
+
+const SalonCards: React.FC<SalonCardsProps> = ({
   title = "Featured Salons",
   showButton = false,
   className = "",
+  salonsProp,
 }) => {
   const dispatch = useDispatch<AppDispatch>();
-  const [salons, setSalons] = useState<Salon[]>([]);
+  const [salons, setSalons] = useState<Salon[]>(salonsProp || []);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [cardsToShow, setCardsToShow] = useState(4);
@@ -95,10 +94,15 @@ const SalonCards: React.FC<{ title?: string; showButton?: boolean; className?: s
   const router = useRouter();
 
   useEffect(() => {
+    if (salonsProp && salonsProp.length > 0) {
+      setLoading(false);
+      return;
+    }
+
     const fetchSalons = async () => {
       try {
         const result = await dispatch(getAllSalons(1)).unwrap();
-        setSalons(shuffleArray(result.salons));
+        setSalons((result.salons));
       } catch {
         setError("Failed to load salons");
       } finally {
@@ -107,7 +111,7 @@ const SalonCards: React.FC<{ title?: string; showButton?: boolean; className?: s
     };
 
     fetchSalons();
-  }, []);
+  }, [dispatch, salonsProp]);
 
   useEffect(() => {
     const handleResize = () => {
