@@ -30,7 +30,7 @@ const MustItems = () => {
 
   return (
 	<div className="px-2 w-[99vw]">
-	  <ProductCard title="You Must Have See This" productProp={products} filter="you_must_have_this"/>
+	  <ProductCard title="YOU MUST HAVE SEE THIS" productProp={products} filter="you_must_have_this"/>
 	</div>
   );
 };

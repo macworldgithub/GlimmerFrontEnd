@@ -30,7 +30,7 @@ const BestSellers = () => {
 
   return (
   <div className="px-2 w-[99vw]">
-    <ProductCard title="Best Seller" productProp={products} filter="best_seller"/>
+    <ProductCard title="BEST SELLER" productProp={products} filter="best_seller"/>
   </div>
   );
 };

@@ -29,8 +29,8 @@ const TrendingProducts = () => {
   }
 
   return (
-	<div className="px-2 w-[99vw]">
-	  <ProductCards title="Trending" productProp={products} filter="trending_product"/>
+	<div className="px-2 w-[99vw] flex justify-center">
+	  <ProductCards title="TRENDING" productProp={products} filter="trending_product"/>
 	</div>
   );
 };

@@ -172,8 +172,7 @@ const ProductCards: React.FC<ProductCardsProps> = ({
 
   return (
     <div className={`w-full max-w-[82rem] px-4 md:px-1 mx-auto py-10 ${className}`}>
-      <h2 className="text-2xl sm:text-2xl md:text-3xl font-semibold mb-8">{title}</h2>
-
+      <h1 className="flex justify-center text-[24px] md:text-[34px] max-md:text-center mb-8">{title}</h1>
       <div className="flex overflow-x-auto gap-6 pb-4 px-4 snap-x snap-mandatory scroll-smooth scrollbar-hide">
         {products.map((product) => (
           <ProductCard key={product._id} products={product} />
