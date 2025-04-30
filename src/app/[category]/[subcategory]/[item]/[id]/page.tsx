@@ -22,7 +22,6 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-import ProductCard from "@/common/ProductCard";
 import { message } from "antd";
 
 const ProductDisplay = () => {
@@ -684,7 +683,7 @@ const ProductDisplay = () => {
                 whileHover={{ scale: 1.02 }}
                 className="flex"
               >
-                <ProductCard item={item} />
+                <Card item={item} />
               </motion.div>
             ))
           ) : (

@@ -1,87 +1,37 @@
-import CardSlider from "@/common/CardSlider";
-import React from "react";
+"use client";
 
-const List1 = [
-  {
-    id: 1,
-    name: "Hydrating Face Cream",
-    image1:
-      "https://plus.unsplash.com/premium_photo-1683910767532-3a25b821f7ae?q=80&w=1708&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    discounted_price: 29.99,
-  },
-  {
-    id: 2,
-    name: "Glow Boost Serum",
-    image1:
-      "https://images.unsplash.com/photo-1626808642875-0aa545482dfb?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    discounted_price: 39.99,
-  },
-  {
-    id: 3,
-    name: "Daily Moisturizer",
-    image1:
-      "https://images.unsplash.com/photo-1620464003286-a5b0d79f32c2?q=80&w=1936&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    discounted_price: 24.99,
-  },
-  {
-    id: 4,
-    name: "Daily Moisturizer",
-    image1:
-      "https://images.unsplash.com/photo-1596704017254-9b121068fb31?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    discounted_price: 24.99,
-  },
-  {
-    id: 5,
-    name: "Daily Moisturizer",
-    image1:
-      "https://images.unsplash.com/photo-1596704017254-9b121068fb31?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    discounted_price: 24.99,
-  },
-  {
-    id: 6,
-    name: "Daily Moisturizer",
-    image1:
-      "https://images.unsplash.com/photo-1596704017254-9b121068fb31?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    discounted_price: 24.99,
-  },
-  {
-    id: 7,
-    name: "Daily Moisturizer",
-    image1:
-      "https://images.unsplash.com/photo-1596704017254-9b121068fb31?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    discounted_price: 24.99,
-  },
-  {
-    id: 8,
-    name: "Daily Moisturizer",
-    image1:
-      "https://images.unsplash.com/photo-1596704017254-9b121068fb31?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    discounted_price: 24.99,
-  },
-  {
-    id: 9,
-    name: "Daily Moisturizer",
-    image1:
-      "https://images.unsplash.com/photo-1596704017254-9b121068fb31?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    discounted_price: 24.99,
-  },
-  {
-    id: 10,
-    name: "Daily Moisturizer",
-    image1:
-      "https://images.unsplash.com/photo-1596704017254-9b121068fb31?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    discounted_price: 24.99,
-  },
-];
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { BACKEND_URL } from "@/api/config";
+import ProductCard from "@/common/ProductCard";
 
 const MustItems = () => {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchYouMustHaveThisProducts = async () => {
+	try {
+	  const response = await axios.get(`${BACKEND_URL}/admin/product-highlights?filter=you_must_have_this`);
+	  setProducts(response.data); 
+	} catch (error) {
+	  console.error("Failed to fetch products:", error);
+	} finally {
+	  setLoading(false);
+	}
+  };
+
+  useEffect(() => {
+    fetchYouMustHaveThisProducts();
+  }, []);
+
+  if (loading) {
+	return <div>Loading...</div>; 
+  }
+
   return (
-    <div className="w-[99vw] h-max p-5 md:px-[4rem] flex flex-col text-center">
-      <h1 className="font-semibold text-[24px] md:text-[34px] py-5 ">
-        YOU MUST HAVE THIS
-      </h1>
-      <CardSlider ProductList={List1} />
-    </div>
+	<div className="px-2 w-[99vw]">
+	  <ProductCard title="You Must Have See This" productProp={products} filter="you_must_have_this"/>
+	</div>
   );
 };
 

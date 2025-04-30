@@ -1,3 +1,4 @@
+import { createAsyncThunk } from "@reduxjs/toolkit";
 import { development, production, BACKEND_URL } from "./config";
 
 const server = null;
@@ -55,3 +56,16 @@ export const getAllProductItem = async () => {
     throw error;
   }
 };
+
+export const getAllProductsHighlights = createAsyncThunk<any, { filter?: string }>(
+  "salons/getAllProductsHighlights",
+  async ({ filter }, { rejectWithValue }) => {
+    try {
+      const query = filter ? `?filter=${filter}` : "";
+      const response = await axios.get(`${BACKEND_URL}/admin/product-highlights${query}`);
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data || "Failed to fetch product");
+    }
+  }
+);
