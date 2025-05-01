@@ -63,6 +63,15 @@ const SideMenu = ({
           </Link>
         </li>
         <li>
+          <Link
+            className="text-base"
+            href="/salons/business"
+            onClick={() => setIsOpen(false)}
+          >
+            <FaArrowRight className="size-4" /> Register your salon
+          </Link>
+        </li>
+        <li>
           <button
             onClick={() => setShowGymModal(true)}
             className="text-base flex items-center space-x-2"
