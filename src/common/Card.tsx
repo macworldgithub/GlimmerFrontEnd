@@ -67,24 +67,24 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
       {/* Bottom 50% Content */}
       <div className="p-4 h-1/2 flex flex-col justify-between">
         <div>
-          <h2 className="text-sm text-gray-600 font-medium truncate">{item.name}</h2>
-          <p className="text-xs text-gray-700 mt-2 truncate">{item.description}</p>
+          <h2 className="text-lg font-semibold truncate mb-1">{item.name}</h2>
+          <p className="text-sm text-gray-600 truncate mb-1">{item.description}</p>
         </div>
 
         <div>
           <div className="flex justify-between items-center mt-4">
-            <span className="text-sm font-bold text-gray-800">
+            <span className="text-md font-bold text-gray-800">
               {item.discounted_price > 0 ? item.discounted_price : item.base_price} PKR
             </span>
             {item.discounted_price > 0 && item.base_price > item.discounted_price && (
-              <span className="text-gray-400 text-xs line-through">
+              <span className="text-gray-400 text-md line-through">
                 {item.base_price.toFixed(2)} PKR
               </span>
             )}
           </div>
           <div className="flex mt-2">
             <Rating
-              size={14}
+              size={20}
               initialValue={3}
               SVGstyle={{ display: "inline-flex" }}
               allowHover={false}

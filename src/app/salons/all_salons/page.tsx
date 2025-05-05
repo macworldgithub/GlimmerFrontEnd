@@ -75,168 +75,166 @@ const formatTime = (timeStr: any) => {
   };
 
   return (
-    <div className="flex flex-col w-[99vw] pb-[8rem]">
-      <div className="px-10 py-10 bg-[#FBE8A5] mb-4 z-10">
+    <div className="flex flex-col w-[99vw] overflow-x-hidden pb-32">
+      {/* Filter Section */}
+      <div className="px-4 sm:px-6 lg:px-10 py-8 bg-[#FBE8A5] mb-4 z-10">
         <Salonfilter />
       </div>
+  
       {/* Breadcrumbs */}
-      <div className="breadcrumbs mb-4 text-xl lg:text-xl px-10">
-        <Link
-          href="/salons"
-          className="text-gray-500 font-medium text-base lg:text-xl"
-        >
+      <div className="breadcrumbs mb-4 text-base sm:text-lg md:text-xl px-4 sm:px-6 lg:px-10">
+        <Link href="/salons" className="text-gray-500 font-medium">
           Salons
         </Link>
-        <span className="mx-2 text-gray-500 font-medium text-base lg:text-xl">
-          /
-        </span>
-        <Link
-          href="/salons/all_salons"
-          className="text-purple-800 font-medium text-base lg:text-xl"
-        >
+        <span className="mx-2 text-gray-500 font-medium">/</span>
+        <Link href="/salons/all_salons" className="text-purple-800 font-medium">
           All Salons
         </Link>
       </div>
+  
       {/* Banner Image */}
-      <div className="hidden md:block pt-[3rem] px-[1rem] sm:px-[2rem] md:px-[4rem] lg:px-[6rem] xl:px-[12rem]">
-        <div className="w-full h-[50vh] sm:h-[50vh] md:h-[50vh] lg:h-[50vh] xl:h-[50vh] rounded-lg overflow-hidden relative group">
+      <div className="hidden md:block pt-12 px-4 sm:px-6 md:px-10 xl:px-32">
+        <div className="w-full h-[40vh] rounded-lg overflow-hidden relative group">
           <img
             src="/assets/images/banner.png"
             alt="Banner"
-            className="w-full h-full transition-transform duration-500"
+            className="w-full h-full object-cover transition-transform duration-500"
           />
-          <div className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/20 transition-all duration-500 px-4 lg:p-[8rem]">
-            <h1 className="text-white text-2xl sm:text-3xl md:text-4xl font-bold text-center">
+          <div className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/20 transition-all duration-500 px-4 md:px-12 lg:px-32">
+            <h1 className="text-white text-xl sm:text-3xl md:text-4xl font-bold text-center">
               Explore Our Best Collection
             </h1>
           </div>
         </div>
       </div>
-
-
-      <motion.main
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
-        className="w-full"
-      >
-
-        {/* Sort and Filter UI */}
-        {/* SORT BY*/}
-        <div className="flex flex-col md:flex-row gap-6 px-4 sm:px-6 md:px-8 pt-4 sm:pt-6 md:pt-8 pb-4 sm:pb-6 md:pb-8">
-          {/* Sidebar */}
-          <motion.aside
-            initial={{ x: -100, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ duration: 1 }}
-            className="w-full md:w-[20%] lg:w-[20%] p-6"
-          >
-            <SalonSidebar onFilterChange={handleFilterChange} />
-          </motion.aside>
-          <div className="w-full max-w-[1200px] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 mt-6 gap-12">
+  
+      {/* Main Content */}
+      <div className="flex flex-col md:flex-row px-4 sm:px-6 md:px-8 lg:px-12 xl:px-32 py-6 lg:py-10">
+        {/* Sidebar */}
+        <motion.aside
+          initial={{ x: -100, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 1 }}
+          className="w-full md:w-1/3 lg:w-1/4 p-4"
+        >
+          <SalonSidebar onFilterChange={handleFilterChange} />
+        </motion.aside>
+  
+        {/* Salon Grid */}
+        <motion.main
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          className="w-full"
+        >
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-16 p-4">
             {data.length > 0 ? (
               data.map((salon) => (
                 <motion.div
                   key={salon._id}
                   whileHover={{ scale: 1.03 }}
-                  className="flex flex-col rounded-xl border border-gray-200 shadow-sm overflow-hidden bg-gray-100"
-                  onClick={() => handleSalonClick(salon._id, formatTime(salon.openingHour), formatTime(salon.closingHour))}
-                  style={{ cursor: "pointer" }}
+                  className="bg-gray-100 rounded-2xl shadow-md hover:shadow-lg transition duration-300 cursor-pointer flex flex-col overflow-hidden"
+                  onClick={() =>
+                    handleSalonClick(
+                      salon._id,
+                      formatTime(salon.openingHour),
+                      formatTime(salon.closingHour)
+                    )
+                  }
                 >
-                  <div className="h-[200px] w-full relative">
+                  {/* Image */}
+                  <div className="relative w-full h-48 sm:h-52 md:h-56">
                     {salon.image1 ? (
                       <Image
-                        src={salon.image1.startsWith("http") ? salon.image1 : `/${salon.image1}`}
+                        src={
+                          salon.image1.startsWith("http")
+                            ? salon.image1
+                            : `/${salon.image1}`
+                        }
                         alt={salon.salon_name}
                         layout="fill"
                         objectFit="cover"
+                        className="rounded-t-2xl"
                       />
                     ) : (
-                      <div className="h-full w-full flex items-center justify-center bg-gray-200 text-gray-500">
-                        <Image
-                          src={"/assets/saloonPicture/salon_profile.jpg"}
-                          alt="salon_profile"
-                          layout="fill"
-                          objectFit="cover"
-                        />
-                      </div>
+                      <Image
+                        src="/assets/saloonPicture/salon_profile.jpg"
+                        alt="salon_profile"
+                        layout="fill"
+                        objectFit="cover"
+                        className="rounded-t-2xl"
+                      />
                     )}
                   </div>
-
-                  <div className="mt-4 px-2">
-                    <h2 className="text-lg font-semibold text-gray-900 truncate text-left mb-2">{salon.salon_name || "No Name"}</h2>
-                    {/* Rating */}
-                    <div className="flex items-center gap-2 text-left mb-2">
-                      <span className="text-yellow-500 flex items-center gap-1 text-sm font-semibold">
-                        4 <FaStar size={16} className="drop-shadow-md" />
-                      </span>
-                      <span className="text-gray-500 text-sm">(2859 Reviews)</span>
+  
+                  {/* Content */}
+                  <div className="p-4 flex flex-col justify-between h-[180px]">
+                    <div>
+                      <h2 className="text-lg font-semibold truncate">
+                        {salon.salon_name || "No Name"}
+                      </h2>
+                      <p className="text-sm text-gray-600 truncate">
+                        {salon.address.length > 30
+                          ? `${salon.address.substring(0, 30)}...`
+                          : salon.address}
+                      </p>
                     </div>
-
-                    <span
-                      className="text-sm text-gray-600 font-medium text-left mb-2 truncate cursor-pointer"
-                      style={{ maxWidth: "200px", display: "inline-block" }}
-                    >
-                      {salon.address.length > 30
-                        ? `${salon.address.substring(0, 30)}...`
-                        : salon.address}
-                    </span>
-
-
-
-                    {/* Availability Badge */}
-                    {salon.openingHour && salon.closingHour ? (
-                      <div className="text-xs bg-green-100 text-green-700 px-4 py-1 rounded-full font-medium shadow-sm border border-green-300 text-left w-fit mb-2">
-                        {formatTime(salon.openingHour)} - {formatTime(salon.closingHour)}
-                      </div>
-                    ) : (
-                      <div className="text-xs bg-red-100 text-red-700 px-4 py-1 rounded-full font-medium shadow-sm border border-red-300 text-left w-fit mb-2">
-                        24/7 Available
-                      </div>
-                    )}
-
-                    <span
-                      className="text-xs text-gray-500 truncate cursor-pointer mt-2 text-left leading-relaxed"
-                      style={{ maxWidth: "200px", display: "inline-block" }}
-                    >
-                      {salon.about.length > 30
-                        ? `${salon.about.substring(0, 30)}...`
-                        : salon.about}
-                    </span>
+                    <div>
+                      {salon.openingHour && salon.closingHour ? (
+                        <div className="text-xs bg-green-100 text-green-700 px-4 py-1 rounded-full w-fit mb-1 border border-green-300">
+                          {formatTime(salon.openingHour)} -{" "}
+                          {formatTime(salon.closingHour)}
+                        </div>
+                      ) : (
+                        <div className="text-xs bg-red-100 text-red-700 px-4 py-1 rounded-full w-fit mb-1 border border-red-300">
+                          24/7 Available
+                        </div>
+                      )}
+                      <p className="text-xs text-gray-500 truncate">
+                        {salon.about.length > 30
+                          ? `${salon.about.substring(0, 30)}...`
+                          : salon.about}
+                      </p>
+                    </div>
                   </div>
                 </motion.div>
               ))
             ) : (
-              <p className="text-center col-span-full">No Salons Available</p>
+              <div className="col-span-full flex justify-center items-center min-h-[60vh]">
+                <div className="text-center font-bold text-2xl">
+                  No Salons Available
+                </div>
+              </div>
             )}
           </div>
-        </div>
-
-        {/* Pagination */}
-        {total > 0 && (
-          <div className="w-full flex justify-center items-center space-x-2 py-4">
-            <button
-              onClick={() => handlePageChange(page - 1)}
-              disabled={page === 1}
-              className="px-4 py-2 bg-gray-200 text-gray-500 rounded-md hover:bg-gray-300 disabled:opacity-50"
-            >
-              Previous
-            </button>
-            <span className="text-lg text-gray-600">
-              Page {page} of {Math.ceil(total / pageSize)}
-            </span>
-            <button
-              onClick={() => handlePageChange(page + 1)}
-              disabled={page === Math.ceil(total / pageSize)}
-              className="px-4 py-2 bg-gray-200 text-gray-500 rounded-md hover:bg-gray-300 disabled:opacity-50"
-            >
-              Next
-            </button>
-          </div>
-        )}
-      </motion.main>
+  
+          {/* Pagination */}
+          {total > 0 && (
+            <div className="flex justify-center items-center gap-2 py-6">
+              <button
+                onClick={() => handlePageChange(page - 1)}
+                disabled={page === 1}
+                className="px-4 py-2 bg-gray-200 text-gray-600 rounded hover:bg-gray-300 disabled:opacity-50"
+              >
+                Previous
+              </button>
+              <span className="text-lg text-gray-600">
+                Page {page} of {Math.ceil(total / pageSize)}
+              </span>
+              <button
+                onClick={() => handlePageChange(page + 1)}
+                disabled={page === Math.ceil(total / pageSize)}
+                className="px-4 py-2 bg-gray-200 text-gray-600 rounded hover:bg-gray-300 disabled:opacity-50"
+              >
+                Next
+              </button>
+            </div>
+          )}
+        </motion.main>
+      </div>
     </div>
   );
+  
 };
 
 export default SalonsList;

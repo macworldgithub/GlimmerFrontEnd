@@ -85,24 +85,24 @@ const ProductCard: React.FC<{ products: RealCardItem; }> = ({ products }) => {
       {/* Bottom 50% Content */}
       <div className="p-4 h-1/2 flex flex-col justify-between">
         <div>
-          <h2 className="text-sm text-gray-600 font-medium truncate">{products.name}</h2>
-          <p className="text-xs text-gray-700 mt-2 truncate">{products.description}</p>
+          <h3 className="text-lg font-semibold truncate mb-1">{products.name}</h3>
+          <p className="text-sm text-gray-600 truncate mb-1">{products.description}</p>
         </div>
 
         <div>
           <div className="flex justify-between items-center mt-4">
-            <span className="text-sm font-bold text-gray-800">
+            <span className="text-md font-bold text-gray-800">
               {products.discounted_price > 0 ? products.discounted_price : products.base_price} PKR
             </span>
             {products.discounted_price > 0 && products.base_price > products.discounted_price && (
-              <span className="text-gray-400 text-xs line-through">
+              <span className="text-gray-400 text-md line-through">
                 {products.base_price.toFixed(2)} PKR
               </span>
             )}
           </div>
           <div className="flex mt-2">
             <Rating
-              size={14}
+              size={20}
               initialValue={3}
               SVGstyle={{ display: "inline-flex" }}
               allowHover={false}
