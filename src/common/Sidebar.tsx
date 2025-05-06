@@ -34,18 +34,18 @@ const Sidebar = ({
     setSelectedCategory(categoryId);
     setSelectedSubCategory("");
     setSelectedItem("");
-    onFilterChange({ category: categoryId, sub_category: "", item: "", name: itemName, min_price: "", max_price: "" });
+    onFilterChange({ category: categoryId, sub_category: "", item: "", name: itemName, minPrice: "", maxPrice: "" });
   };
 
   const handleSubCategoryChange = (subCategoryId: string) => {
     setSelectedSubCategory(subCategoryId);
     setSelectedItem("");
-    onFilterChange({ category: selectedCategory, sub_category: subCategoryId, item: "", name: itemName, min_price: minPrice, max_price: maxPrice });
+    onFilterChange({ category: selectedCategory, sub_category: subCategoryId, item: "", name: itemName, minPrice: minPrice, maxPrice: maxPrice });
   };
 
   const handleItemChange = (itemId: string) => {
     setSelectedItem(itemId);
-    onFilterChange({ category: selectedCategory, sub_category: selectedSubCategory, item: itemId, name: itemName, min_price: minPrice, max_price: maxPrice });
+    onFilterChange({ category: selectedCategory, sub_category: selectedSubCategory, item: itemId, name: itemName, minPrice: minPrice, maxPrice: maxPrice });
   };
 
   const handlePriceChange = () => {
@@ -56,8 +56,8 @@ const Sidebar = ({
       sub_category: selectedSubCategory,
       item: selectedItem,
       name: itemName,
-      min_price: min,
-      max_price: max,
+      minPrice: min,
+      maxPrice: max,
     });
   };
 

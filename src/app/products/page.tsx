@@ -53,8 +53,8 @@ const ProductsList = () => {
   const subCategoryFilter = searchParams.get("sub_category") ?? "";
   const itemFilter = searchParams.get("item") ?? "";
   const nameFilter = searchParams.get("name") ?? "";
-  const minPriceFilter = Number(searchParams.get("min_price")) ?? 0;
-  const maxPriceFilter = Number(searchParams.get("max_price")) ?? 0;
+  const minPriceFilter = Number(searchParams.get("minPrice")) ?? 0;
+  const maxPriceFilter = Number(searchParams.get("maxPrice")) ?? 0;
   const createdAtFilter = searchParams.get("created_at");
   const page = Number(searchParams.get("page")) || 1;
 
@@ -94,29 +94,33 @@ const ProductsList = () => {
         subCategoryFilter,
         itemFilter,
         nameFilter,
+        minPriceFilter,
+        maxPriceFilter,
         page
       );
-      console.log('Response:',res);
       // Filter products by name if nameFilter is provided
       let filteredProducts = res.products.filter((product: any) => {
         const productName = product.name?.toLowerCase() || "";
-        const productPrice = product.base_price || 0;
+        const productPrice = Number(product.discounted_price ?? product.base_price) || 0;
         const productCreatedAt = new Date(product.created_at);
-
+        
+        const min = minPriceFilter ? Number(minPriceFilter) : undefined;
+        const max = maxPriceFilter ? Number(maxPriceFilter) : undefined;
         // Apply price filter
         const matchesPrice =
-          (minPriceFilter ? productPrice >= minPriceFilter : true) &&
-          (maxPriceFilter ? productPrice <= maxPriceFilter : true);
-
-        // Apply name filter if it's present
+          (min !== undefined ? productPrice >= min : true) &&
+          (max !== undefined ? productPrice <= max : true);
+        console.log("Price match:", matchesPrice, "Product price:", productPrice, "Min:", min, "Max:", max);
+        
+        // Apply name filter
         const matchesName = nameFilter
           ? productName.includes(nameFilter.toLowerCase())
           : true;
-
+        
+          // Apply createdAt filter
         const matchesCreatedAt = createdAtFilter
           ? productCreatedAt >= new Date(createdAtFilter)
           : true;
-
         return matchesPrice && matchesName && matchesCreatedAt;
       });
 
@@ -166,13 +170,13 @@ const ProductsList = () => {
     sub_category?: string;
     item?: string;
     name?: string;
-    min_price?: string;
-    max_price?: string;
+    minPrice?: string;
+    maxPrice?: string;
   }) => {
     const params = new URLSearchParams(searchParams);
-  
+
     params.set("page", "1");
-  
+
     if (newFilters.category) {
       params.set("category", newFilters.category);
       if (newFilters.category !== searchParams.get("category")) {
@@ -180,7 +184,7 @@ const ProductsList = () => {
         params.delete("item");
       }
     }
-  
+
     // Handle subcategory changes
     if (newFilters.sub_category !== undefined) {
       if (newFilters.sub_category) {
@@ -191,7 +195,7 @@ const ProductsList = () => {
       // When subcategory changes, remove item
       params.delete("item");
     }
-  
+
     // Handle item changes
     if (newFilters.item !== undefined) {
       if (newFilters.item) {
@@ -200,7 +204,7 @@ const ProductsList = () => {
         params.delete("item");
       }
     }
-  
+
     // Handle other filters
     if (newFilters.name !== undefined) {
       if (newFilters.name) {
@@ -209,21 +213,21 @@ const ProductsList = () => {
         params.delete("name");
       }
     }
-    if (newFilters.min_price !== undefined) {
-      if (newFilters.min_price) {
-        params.set("min_price", newFilters.min_price);
+    if (newFilters.minPrice !== undefined) {
+      if (newFilters.minPrice) {
+        params.set("minPrice", newFilters.minPrice);
       } else {
-        params.delete("min_price");
+        params.delete("minPrice");
       }
     }
-    if (newFilters.max_price !== undefined) {
-      if (newFilters.max_price) {
-        params.set("max_price", newFilters.max_price);
+    if (newFilters.maxPrice !== undefined) {
+      if (newFilters.maxPrice) {
+        params.set("maxPrice", newFilters.maxPrice);
       } else {
-        params.delete("max_price");
+        params.delete("maxPrice");
       }
     }
-  
+
     router.push(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
