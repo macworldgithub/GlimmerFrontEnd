@@ -110,8 +110,6 @@ const NavbarClient = ({
               })}
             >
               <ProductSearchBar
-                selections={selections}
-                products={products}
                 className="max-md:hidden"
               />
             </div>
@@ -130,8 +128,6 @@ const NavbarClient = ({
    
         <div className="flex justify-center mb-5">
           <ProductSearchBar
-            selections={selections}
-            products={products}
             className="md:hidden"
           />
         </div>
