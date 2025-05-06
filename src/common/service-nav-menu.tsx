@@ -105,7 +105,7 @@ const ServiceNavMenu = ({ className, onSubCategorySelect, onSubSubCategorySelect
             <FontAwesomeIcon icon={faSearch} className="text-gray-500" />
             <input
               type="text"
-              placeholder="Search salons and filter"
+              placeholder="Search salons and services"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full p-2 border-none outline-none"

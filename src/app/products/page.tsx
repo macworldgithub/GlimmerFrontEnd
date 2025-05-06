@@ -41,7 +41,7 @@ const ProductsList = () => {
   const [activeSort, setActiveSort] = useState("Date");
   const [showPriceDropdown, setShowPriceDropdown] = useState(false);
   const [showRatingDropdown, setShowRatingDropdown] = useState(false);
-  const [sortOrder, setSortOrder] = useState("desc");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [ratingFilter, setRatingFilter] = useState<number | null>(null);
   const pageSize = 8;
 
@@ -89,6 +89,7 @@ const ProductsList = () => {
 
   const fetchData = async () => {
     try {
+      const sort_by = activeSort === "Price" ? "price" : undefined;
       const res = await getAllProducts(
         categoryFilter,
         subCategoryFilter,
@@ -96,46 +97,35 @@ const ProductsList = () => {
         nameFilter,
         minPriceFilter,
         maxPriceFilter,
-        page
+        page,
+        sort_by,
+        sortOrder
       );
-      // Filter products by name if nameFilter is provided
+
       let filteredProducts = res.products.filter((product: any) => {
         const productName = product.name?.toLowerCase() || "";
         const productPrice = Number(product.discounted_price ?? product.base_price) || 0;
         const productCreatedAt = new Date(product.created_at);
-        
         const min = minPriceFilter ? Number(minPriceFilter) : undefined;
         const max = maxPriceFilter ? Number(maxPriceFilter) : undefined;
-        // Apply price filter
-        const matchesPrice =
-          (min !== undefined ? productPrice >= min : true) &&
+        const matchesPrice = (min !== undefined ? productPrice >= min : true) &&
           (max !== undefined ? productPrice <= max : true);
-        console.log("Price match:", matchesPrice, "Product price:", productPrice, "Min:", min, "Max:", max);
-        
-        // Apply name filter
         const matchesName = nameFilter
           ? productName.includes(nameFilter.toLowerCase())
           : true;
-        
-          // Apply createdAt filter
         const matchesCreatedAt = createdAtFilter
           ? productCreatedAt >= new Date(createdAtFilter)
           : true;
         return matchesPrice && matchesName && matchesCreatedAt;
       });
 
-      filteredProducts = filteredProducts.sort((a: any, b: any) => {
-        if (activeSort === "Date") {
+      if (activeSort === "Date") {
+        filteredProducts.sort((a: any, b: any) => {
           return sortOrder === "desc"
             ? new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
             : new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
-        } else if (activeSort === "Price") {
-          return sortOrder === "desc"
-            ? (b.discounted_price || b.base_price) - (a.discounted_price || a.base_price)
-            : (a.discounted_price || a.base_price) - (b.discounted_price || b.base_price);
-        }
-        return 0;
-      });
+        });
+      }
 
       setData(filteredProducts);
       setTotal(res.total || filteredProducts.length);

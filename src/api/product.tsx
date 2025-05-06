@@ -11,7 +11,9 @@ export const getAllProducts = async (
   name?: string,
   minPrice?: number,
   maxPrice?: number,
-  page?: number
+  page?: number,
+  sortBy?: string,
+  order?: 'asc' | 'desc'
 ) => {
   try {
     // Start building the URL with the base endpoint
@@ -24,6 +26,8 @@ export const getAllProducts = async (
     if (name) url += `&name=${name}`;
     if (minPrice) url += `&minPrice=${minPrice}`;
     if (maxPrice) url += `&maxPrice=${maxPrice}`;
+    if (sortBy) url += `&sortBy=${sortBy}`;
+    if (order) url += `&order=${order}`;
 
     // Make the API request with the dynamically constructed URL
     const res = await axios.get(url);
