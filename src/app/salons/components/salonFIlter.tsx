@@ -51,10 +51,6 @@ const Salonfilter: React.FC = () => {
         onSubCategorySelect={setSubCategoryName}
         onSubSubCategorySelect={setSubSubCategoryName}
         />
-        <SearchFilterSection
-          placeholder="Location"
-          icon={<IoLocationSharp className="size-5" />}
-        />
         <div className="flex gap-2">
           <SearchFilterSection
             placeholder="Price"
@@ -77,10 +73,7 @@ const Salonfilter: React.FC = () => {
         onSubSubCategorySelect={setSubSubCategoryName}
         />
         <HorizontalDivider className="hidden lg:block" />
-        <SearchFilterSection
-          placeholder="Location"
-          icon={<IoLocationSharp className="size-5" />}
-        />
+        
         <HorizontalDivider className="hidden lg:block" />
 
         <SearchFilterSection
@@ -92,7 +85,7 @@ const Salonfilter: React.FC = () => {
           placeholder="Gender"
           icon={<FaPerson className="size-5" />}
         />
-        <button className="btn btn-neutral rounded-full w-[150px] mr-[-36px]"
+        <button className="btn btn-neutral rounded-full w-[150px] h-[70px] mr-[-36px]"
         onClick={handleSearch}
         >
           Search

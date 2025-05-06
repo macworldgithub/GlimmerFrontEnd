@@ -6,7 +6,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import Salonfilter from "../components/salonFIlter";
 import ServiceSidebar from "@/common/ServiceSidebar";
-import { createBooking, getAllActiveServices } from "@/api/salon";
+import { createBooking, getAllActiveServices, getSalonById } from "@/api/salon";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/reduxStore";
 import ServiceCard from "@/common/ServiceCard";
@@ -14,6 +14,7 @@ import { BiChevronDown } from "react-icons/bi";
 import CartModal from "../[id]/components/cartModal";
 import CheckoutModal from "../[id]/components/checkoutModal";
 import { addService, clearServiceCart } from "@/reduxSlices/serviceCartSlice";
+import { message } from "antd";
 
 const Loading = () => (
   <div className="justify-center flex min-h-[70vh] w-full items-center">
@@ -25,6 +26,9 @@ const ServiceList = () => {
   const [activeSort, setActiveSort] = useState("Date");
   const [showPriceDropdown, setShowPriceDropdown] = useState(false);
   const [sortOrder, setSortOrder] = useState("desc");
+
+  const [salonData, setSalonData] = useState<any>(null);
+
   const [data, setData] = useState<any[]>([]);
   const [total, setTotal] = useState(0);
 
@@ -54,6 +58,8 @@ const ServiceList = () => {
   const salonIdFilter = searchParams.get("salonId") ?? "";
   const subCategoryNameFilter = searchParams.get("subCategoryName") ?? "";
   const subSubCategoryNameFilter = searchParams.get("subSubCategoryName") ?? "";
+
+  const id = searchParams.get("salonId");
   const page = Number(searchParams.get("page")) || 1;
 
   const fetchData = async () => {
@@ -89,6 +95,20 @@ const ServiceList = () => {
     sortOrder,
   ]);
 
+  useEffect(() => {
+    if (id) {
+      const fetchSalonData = async () => {
+        try {
+          const data = await getSalonById(id as string);
+          setSalonData(data);
+        } catch (error) {
+          message.error("Failed to load salon details");
+        }
+      };
+      fetchSalonData();
+    }
+  }, [id]);
+
   const handlePageChange = (newPage: number) => {
     const params = new URLSearchParams(searchParams);
     params.set("page", newPage.toString());
@@ -105,7 +125,7 @@ const ServiceList = () => {
       alert("You cannot add services from different salons in the same booking.");
       return;
     }
-    
+
     dispatch(
       addService({
         service: {
@@ -296,7 +316,7 @@ const ServiceList = () => {
             {data.length ? (
               data.map((item) => (
                 <motion.div key={item._id} whileHover={{ scale: 1.02 }} className="flex">
-                  <ServiceCard item={item} onAddToCart={handleAddToCart} />
+                  <ServiceCard salonId={salonData._id} salonName={salonData?.salon_name} item={item} onAddToCart={handleAddToCart} />
                 </motion.div>
               ))
             ) : (

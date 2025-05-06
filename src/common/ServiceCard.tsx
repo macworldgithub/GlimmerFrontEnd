@@ -10,9 +10,11 @@ import { useRouter } from "next/navigation";
 interface ServiceCardProps {
   item: any;
   onAddToCart: (item: any) => void;
+  salonId?: string;
+  salonName?: string;
 }
 
-const ServiceCard: FC<ServiceCardProps> = ({ item, onAddToCart }) => {
+const ServiceCard: FC<ServiceCardProps> = ({ item, salonId, salonName, onAddToCart }) => {
   const router = useRouter();
 
   const discountedPrice = item.hasDiscount
@@ -25,25 +27,29 @@ const ServiceCard: FC<ServiceCardProps> = ({ item, onAddToCart }) => {
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation();
-    onAddToCart(item); // Trigger adding the item to cart
+    onAddToCart(item);
   };
 
   return (
-    <div className="w-[280px] shadow-lg cursor-pointer rounded-lg" onClick={handleClick}>
-      <div className="relative w-full h-[150px]">
+    <div
+      className="w-[280px] h-[320px] sm:w-[300px] sm:h-[350px] md:max-w-[320px] md:h-[370px] bg-white rounded-xl border border-gray-200 shadow hover:shadow-lg transition duration-300 cursor-pointer snap-start shrink-0 relative overflow-visible"
+      onClick={handleClick}
+    >
+      {/* Top half - Image */}
+      <div className="relative w-full h-1/2">
         <img
           src={item.image1 || "/assets/images/default_image.jpg"}
           alt={item.name || "Service Image"}
-          className="w-full h-full max-lg:object-cover rounded-t-lg"
+          className="w-full h-full object-cover rounded-t-2xl"
         />
 
         <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 flex gap-2 w-full justify-center px-2 max-md:justify-between">
           <button
-            className="w-full py-2 gap-1 bg-[#583FA8] flex justify-center items-center rounded-md"
+            className="w-full py-2 max-xl:py-1 xl:gap-2 max-xl:gap-[2px] max-xl:px-1 gap-1 bg-[#583FA8] flex justify-center items-center max-md:py-1 rounded-md max-lg:px-2 max-lg:gap-1 max-md:w-fit"
             onClick={handleAddToCart}
           >
-            <RiShoppingBag4Line className="text-white h-5 w-5" />
-            <p className="text-white text-[9px] mt-1 max-md:hidden">ADD TO BAG</p>
+            <RiShoppingBag4Line size={20} className="text-white" />
+            <p className="text-white text-[12px] mt-1 max-xl:text-[8px] max-md:hidden">ADD TO BAG</p>
           </button>
 
           <div className="md:h-8 mt-1 px-2 border-[#583FA8] border bg-white flex justify-center items-center rounded-md">
@@ -52,49 +58,51 @@ const ServiceCard: FC<ServiceCardProps> = ({ item, onAddToCart }) => {
         </div>
 
         {item.hasDiscount && item.discountPercentage > 0 && (
-          <div className="absolute -top-4 -right-3 w-8 h-8 md:w-10 md:h-10 flex items-center justify-center">
+          <div className="absolute -top-0 -right-3 w-10 h-10 z-10">
             <img src="/assets/addtoBag/discount.png" alt="Discount" className="w-full h-full" />
-            <span className="absolute text-center text-white flex flex-col items-center leading-none">
-              <span className="font-bold text-[12px]">{`${item.discountPercentage}%`}</span>
-              <span className="font-normal text-[8px]">OFF</span>
+            <span className="absolute inset-0 flex flex-col items-center justify-center text-white text-xs leading-tight font-bold">
+              <span>{`${item.discountPercentage}%`}</span>
+              <span className="text-[8px] font-normal">OFF</span>
             </span>
           </div>
         )}
       </div>
 
-      <div className="p-1 px-3 mt-2">
-        <div className="flex flex-col">
-          <h2 className="font-light text-[14px] overflow-hidden line-clamp-1 text-[#636363]">
-            {item.name ? (item.name.length > 12 ? item.name.slice(0, 12) + "..." : item.name) : "Service Name"}
-          </h2>
+      {/* Bottom half - Content */}
+      <div className="p-4 h-1/2 flex flex-col justify-between">
+        <div>
+          {item.salonId === salonId && salonName && (
+            <h3 className="text-lg font-semibold truncate mb-2">
+              {salonName}
+            </h3>
+          )}
 
-          <h2 className="text-[12px] font-medium text-[#303030] mt-2 mb-3 overflow-hidden line-clamp-1">
-            {item.description || "No description available"}
-          </h2>
+          <h4 className="text-base font-medium text-gray-800 truncate mb-1">
+            {item.name ? item.name.slice(0, 40) : "Service Name"}
+          </h4>
+
+          {item.duration && (
+            <p className="text-sm text-gray-500 italic mt-2">
+              Duration: {item.duration} min
+            </p>
+          )}
         </div>
 
-        <div className="flex justify-between items-center">
-          <p className="text-gray-800 text-xl font-bold">
-            <span className="text-[14px] font-medium">
+        <div className="mt-2">
+          <div className="flex justify-between items-center">
+            <span className="text-base font-bold text-gray-900">
               {discountedPrice.toFixed(2)} PKR
             </span>
-            {item.hasDiscount && item.discountPercentage > 0 && (
-              <span className="text-gray-500 line-through ml-2 mr-2 text-[14px]">
+            {item.hasDiscount && (
+              <span className="text-gray-400 text-sm line-through">
                 {item.adminSetPrice.toFixed(2)} PKR
               </span>
             )}
-          </p>
+          </div>
         </div>
-
-        <div className="flex w-max">
-          <Rating
-            size={14}
-            initialValue={item.rating || 3}
-            SVGstyle={{ display: "inline-flex" }}
-            allowHover={false}
-            fillColor="#583FA8"
-          />
-        </div>
+        <p className="text-sm text-gray-600 truncate mt-1">
+          {item.description || "No description available"}
+        </p>
       </div>
     </div>
   );
