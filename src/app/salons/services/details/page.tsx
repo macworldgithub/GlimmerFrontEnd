@@ -28,6 +28,8 @@ const ServiceDetails = () => {
   const [data, setData] = useState<any[]>([]);
   const [isCartModalOpen, setIsCartModalOpen] = useState(false);
   const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
+  const [showCartConflictWarning, setShowCartConflictWarning] = useState(false);
+
   const [selectedItem, setSelectedItem] = useState<any | null>(null);
   const [bulkForm, setBulkForm] = useState({
     customerName: "",
@@ -209,7 +211,7 @@ const ServiceDetails = () => {
       selectedServices.length > 0 &&
       selectedServices[0].service.salonId !== newSalonId
     ) {
-      alert("You cannot add services from different salons in the same booking.");
+      setShowCartConflictWarning(true);
       return;
     }
     const discountedPrice = item.hasDiscount
@@ -306,8 +308,25 @@ const ServiceDetails = () => {
         )}
       </div>
       <div className="mb-8 flex flex-col justify-center lg:w-[91vw] mx-auto gap-8 p-8 md:mb-5 lg:flex-row lg:gap-12 lg:mb-10">
+        {/* Floating Cart Conflict Warning */}
+        {showCartConflictWarning && (
+          <div className="fixed bottom-6 right-6 bg-white/80 backdrop-blur-md border border-red-400 shadow-lg rounded-lg p-4 z-50 w-[300px] animate-fade-in">
+            <h4 className="text-red-600 font-semibold mb-2">Conflict Detected</h4>
+            <p className="text-sm text-gray-700 mb-3">
+              You cannot add services from different salons in the same booking.
+            </p>
+            <button
+              onClick={() => {
+                setShowCartConflictWarning(false);
+                setIsCartModalOpen(true);
+              }}
+              className="w-full py-2 px-3 bg-[#583FA8] text-white text-sm rounded-md hover:bg-purple-800 transition"
+            >
+              View Cart
+            </button>
+          </div>
+        )}
         {/* Left Side: Product Image Gallery */}
-
         <div className="flex flex-col items-center lg:w-[65%] w-full">
           {/* Main Image Container */}
           <div className="w-full max-w-[650px] max-sm:w-[300px] max-sm:h-[300px] sm:w-[400px] md:w-[500px] sm:h-[400px] flex items-center justify-center overflow-hidden rounded-md shadow bg-gray-100">

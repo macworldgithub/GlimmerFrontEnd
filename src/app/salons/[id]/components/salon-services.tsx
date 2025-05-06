@@ -22,6 +22,8 @@ const SalonServices = () => {
   const [services, setServices] = useState<any[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
+  const [showCartConflictWarning, setShowCartConflictWarning] = useState(false);
+
   const [bulkForm, setBulkForm] = useState({
     customerName: "",
     customerEmail: "",
@@ -51,34 +53,33 @@ const SalonServices = () => {
       selectedServices.length > 0 &&
       selectedServices[0].service.salonId !== newSalonId
     ) {
-      alert("You cannot add services from different salons in the same booking.");
+      setShowCartConflictWarning(true); 
       return;
     }
+
     const alreadyInCart = selectedServices.some((s) => s.service._id === service._id);
     if (!alreadyInCart) {
-      const discountedPrice = service.adminSetPrice - (service.adminSetPrice * service.discountPercentage) / 100;
-      const serviceWithDiscount = {
-        service: {
-          ...service,
-          discounted_price: discountedPrice,
-        },
-      };
-      dispatch(addService({
-        service: {
-          ...service,
-          discounted_price: discountedPrice,
-        },
-        bookingInfo: {
-          customerName: "",
-          customerEmail: "",
-          customerPhone: "",
-          bookingDate: "",
-          bookingTime: "",
-          paymentMethod: "",
-        },
-      }));
+      const discountedPrice =
+        service.adminSetPrice - (service.adminSetPrice * service.discountPercentage) / 100;
 
+      dispatch(
+        addService({
+          service: {
+            ...service,
+            discounted_price: discountedPrice,
+          },
+          bookingInfo: {
+            customerName: "",
+            customerEmail: "",
+            customerPhone: "",
+            bookingDate: "",
+            bookingTime: "",
+            paymentMethod: "",
+          },
+        })
+      );
     }
+
     setIsModalOpen(true);
   };
 
@@ -104,17 +105,21 @@ const SalonServices = () => {
     try {
       for (const { service } of selectedServices) {
         try {
-          await createBooking({
-            ...bulkForm,
-            serviceId: service._id,
-            finalPrice: service.discounted_price,
-          }, token);
+          await createBooking(
+            {
+              ...bulkForm,
+              serviceId: service._id,
+              finalPrice: service.discounted_price,
+            },
+            token
+          );
         } catch (error) {
           console.error("Booking failed for service:", service._id, error);
         }
       }
+
       dispatch(clearServiceCart());
-      localStorage.removeItem('serviceCart');
+      localStorage.removeItem("serviceCart");
       alert("Booking confirmed!");
       setIsCheckoutModalOpen(false);
       window.location.reload();
@@ -125,15 +130,40 @@ const SalonServices = () => {
   };
 
   return (
-    <div className="w-[99vw] p-4 sm:p-6 md:p-10 my-4 md:my-8">
+    <div className="w-[99vw] p-4 sm:p-6 md:p-10 my-4 md:my-8 relative">
       <div className="prose lg:prose-xl">
         <h2 className="mb-2 md:mb-3">Services</h2>
       </div>
 
+      {/* Floating Cart Conflict Warning */}
+      {showCartConflictWarning && (
+        <div className="fixed bottom-6 right-6 bg-white border border-red-400 shadow-lg rounded-lg p-4 z-50 w-[300px] animate-fade-in">
+          <h4 className="text-red-600 font-semibold mb-2">Conflict Detected</h4>
+          <p className="text-sm text-gray-700 mb-3">
+            You cannot add services from different salons in the same booking.
+          </p>
+          <button
+            onClick={() => {
+              setShowCartConflictWarning(false);
+              setIsModalOpen(true);
+            }}
+            className="w-full py-2 px-3 bg-[#583FA8] text-white text-sm rounded-md hover:bg-purple-800 transition"
+          >
+            View Cart
+          </button>
+        </div>
+      )}
+
       <div className="relative p-5 bg-[#FBE8A5]">
-        <Swiper slidesPerView="auto" breakpoints={{ 280: { slidesPerView: 3 }, 768: { slidesPerView: 10 } }}>
+        <Swiper
+          slidesPerView="auto"
+          breakpoints={{ 280: { slidesPerView: 3 }, 768: { slidesPerView: 10 } }}
+        >
           {services.map((item) => (
-            <SwiperSlide key={item._id} className="p-4 text-center hover:bg-black hover:text-white rounded-md">
+            <SwiperSlide
+              key={item._id}
+              className="p-4 text-center hover:bg-black hover:text-white rounded-md"
+            >
               <p className="font-bold">{item.name}</p>
             </SwiperSlide>
           ))}
@@ -200,7 +230,9 @@ const SalonServices = () => {
             form={bulkForm}
             errors={errors}
             onChange={handleFormChange}
-            onDateChange={(name: any, value: any) => setBulkForm((prev) => ({ ...prev, [name]: value }))}
+            onDateChange={(name: any, value: any) =>
+              setBulkForm((prev) => ({ ...prev, [name]: value }))
+            }
             onClose={() => setIsCheckoutModalOpen(false)}
             onSubmit={handleBooking}
           />

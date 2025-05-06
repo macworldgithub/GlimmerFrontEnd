@@ -34,6 +34,7 @@ const ServiceList = () => {
 
   const [isCartModalOpen, setIsCartModalOpen] = useState(false);
   const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
+  const [showCartConflictWarning, setShowCartConflictWarning] = useState(false);
   const [selectedItem, setSelectedItem] = useState<any | null>(null);
   const [bulkForm, setBulkForm] = useState({
     customerName: "",
@@ -122,7 +123,7 @@ const ServiceList = () => {
       selectedServices.length > 0 &&
       selectedServices[0].service.salonId !== newSalonId
     ) {
-      alert("You cannot add services from different salons in the same booking.");
+      setShowCartConflictWarning(true);
       return;
     }
 
@@ -224,6 +225,24 @@ const ServiceList = () => {
       </div>
 
       <div className="hidden md:block pt-[3rem] px-[1rem] sm:px-[2rem] md:px-[4rem] lg:px-[6rem] xl:px-[12rem]">
+        {/* Floating Cart Conflict Warning */}
+        {showCartConflictWarning && (
+          <div className="fixed bottom-6 right-6 bg-white border border-red-400 shadow-lg rounded-lg p-4 z-50 w-[300px] animate-fade-in">
+            <h4 className="text-red-600 font-semibold mb-2">Conflict Detected</h4>
+            <p className="text-sm text-gray-700 mb-3">
+              You cannot add services from different salons in the same booking.
+            </p>
+            <button
+              onClick={() => {
+                setShowCartConflictWarning(false);
+                setIsCartModalOpen(true);
+              }}
+              className="w-full py-2 px-3 bg-[#583FA8] text-white text-sm rounded-md hover:bg-purple-800 transition"
+            >
+              View Cart
+            </button>
+          </div>
+        )}
         <div className="w-full h-[50vh] rounded-lg overflow-hidden relative group">
           <img
             src="/assets/images/banner.png"
