@@ -8,20 +8,18 @@ import { useState, useEffect } from "react";
 
 interface ServiceNavMenuProps {
   className?: string;
-}
-interface ServiceNavMenuProps {
-  className?: string;
   onSubCategorySelect?: (subCategory: string) => void;
   onSubSubCategorySelect?: (subSubCategory: string) => void;
+  onNameTermChange?: (serviceTerm: string) => void;
 }
 
-
-const ServiceNavMenu = ({ className, onSubCategorySelect, onSubSubCategorySelect }: ServiceNavMenuProps) => {
+const ServiceNavMenu = ({ className, onSubCategorySelect, onSubSubCategorySelect, onNameTermChange }: ServiceNavMenuProps) => {
   const [services, setServices] = useState<{ _id: string; category: string }[]>([]);
   const [subServices, setSubservices] = useState<{ [key: string]: string[] }>({});
   const [productItems, setProductItems] = useState<string[]>([]);
   const [selectedService, setSelectedService] = useState<{ _id: string; category: string } | null>(null);
   const [selectedSubservice, setSelectedSubservice] = useState<string | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<string | null>(null);  // To store the selected product
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [expandedServices, setExpandedServices] = useState<{ [key: string]: boolean }>({});
   const [expandedSubservices, setExpandedSubservices] = useState<{ [key: string]: boolean }>({});
@@ -70,50 +68,53 @@ const ServiceNavMenu = ({ className, onSubCategorySelect, onSubSubCategorySelect
   const handleServiceClick = (service: { _id: string; category: string }) => {
     setSelectedService(service);
     setSelectedSubservice(null);
-    // if (onSelectService) {
-    //   onSelectService(service.category);
-    // }
+    setSelectedProduct(null); // Reset the product when selecting a new service
     setExpandedServices((prev) => ({ ...prev, [service._id]: !prev[service._id] }));
   };
 
   const handleSubserviceClick = (subservice: string) => {
     setSelectedSubservice(subservice);
+    setSelectedProduct(null); // Reset the product when selecting a new subservice
     if (onSubCategorySelect) onSubCategorySelect(subservice);
     setExpandedSubservices((prev) => ({ ...prev, [subservice]: !prev[subservice] }));
   };
 
   const handleProductClick = (product: string) => {
+    setSelectedProduct(product);
     if (onSubSubCategorySelect) onSubSubCategorySelect(product);
+  };
+
+  const handleSearchTermChange = (value: string) => {
+    setSearchTerm(value);
+    if (onNameTermChange) onNameTermChange(value); 
   };
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
-  // 🔍 Filter services, subservices, and products based on searchTerm
   const filteredServices = services.filter((service) =>
     service.category.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  // Get label for selected service, subservice, or product
+  const selectedLabel = selectedProduct || selectedSubservice || selectedService?.category || 'Search salons and services';
+
   return (
     <div className={`relative w-80 ${className}`}>
 
-      
       {/* Dropdown Trigger */}
       <div className="flex justify-between items-center p-3 cursor-pointer transition-all ease-in-out duration-300" onClick={toggleDropdown}>
-      <div className="p-2 flex items-center gap-2">
-            <FontAwesomeIcon icon={faSearch} className="text-gray-500" />
-            <input
-              type="text"
-              placeholder="Search salons and services"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full p-2 border-none outline-none"
-            />
-          </div>
-        {/* <span className="text-gray-700 font-medium">
-          {selectedService ? (selectedSubservice ? `${selectedService.category} > ${selectedSubservice}` : selectedService.category) : "Select Service"}
-        </span> */}
+        <div className="p-2 flex items-center gap-2">
+          <FontAwesomeIcon icon={faSearch} className="text-gray-500" />
+          <input
+            type="text"
+            placeholder={selectedLabel}  // Dynamic placeholder based on the selected label
+            value={searchTerm}
+            onChange={(e) => handleSearchTermChange(e.target.value)}
+            className="w-full p-2 border-none outline-none"
+          />
+        </div>
         <button className="text-blue-500 hover:text-blue-700 transition-colors duration-300">
           {isDropdownOpen ? <FontAwesomeIcon icon={faChevronUp} /> : <FontAwesomeIcon icon={faChevronDown} />}
         </button>
@@ -122,19 +123,6 @@ const ServiceNavMenu = ({ className, onSubCategorySelect, onSubSubCategorySelect
       {/* Dropdown Content */}
       {isDropdownOpen && (
         <div className="absolute z-10 bg-white rounded-lg mt-2 w-full max-h-80 overflow-y-auto shadow-lg transition-all ease-in-out duration-300">
-          {/* 🔍 Search Field */}
-          {/* <div className="p-2 border-b flex items-center gap-2 bg-gray-100">
-            <FontAwesomeIcon icon={faSearch} className="text-gray-500" />
-            <input
-              type="text"
-              placeholder="Search services..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full p-2 border-none outline-none bg-gray-100"
-            />
-          </div> */}
-
-          {/* Services */}
           {filteredServices.map((service) => (
             <div key={service._id}>
               <div className="p-3 cursor-pointer hover:bg-gray-100 flex justify-between items-center rounded-md transition-all ease-in-out duration-200" onClick={() => handleServiceClick(service)}>
@@ -187,5 +175,3 @@ const ServiceNavMenu = ({ className, onSubCategorySelect, onSubSubCategorySelect
 };
 
 export default ServiceNavMenu;
-
-

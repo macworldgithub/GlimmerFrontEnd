@@ -162,3 +162,35 @@ export const getAllActiveServices = createAsyncThunk(
       }
     }
   );
+
+  export const getServicesBySearch = createAsyncThunk(
+    "getServicesBySearch",
+    async (
+      payload: {
+        page_no: number;
+        nameTerm?: string;
+        gender?: string;
+        serviceTerm?: string;
+        price?: number;
+      },
+      { rejectWithValue }
+    ) => {
+      try {
+        const params = new URLSearchParams();
+  
+        if (payload.page_no) params.append("page_no", payload.page_no.toString());
+        if (payload.nameTerm) params.append("nameTerm", payload.nameTerm);
+        if (payload.gender) params.append("gender", payload.gender);  
+        if (payload.serviceTerm) params.append("serviceTerm", payload.serviceTerm);
+        if (payload.price) params.append("price", payload.price.toString());
+  
+        const response = await axios.get(
+          `${BACKEND_URL}/salon-services/search?${params.toString()}`,
+        );
+  
+        return response.data; // Return the response data if successful
+      } catch (error: any) {
+        return rejectWithValue(error.response?.data || "An error occurred");
+      }
+    }
+  );

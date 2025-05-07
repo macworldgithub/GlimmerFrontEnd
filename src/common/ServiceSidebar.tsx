@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import { message } from "antd";
-import { getAllServices, getAllServicesById } from "@/api/salon";
+import { getAllServices, getAllServicesById, getServicesBySearch } from "@/api/salon";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/store/reduxStore";
 
 const ServiceSidebar = () => {
   const router = useRouter();
+  const dispatch = useDispatch<AppDispatch>();
   const [services, setServices] = useState<{ _id: string; category: string }[]>(
     []
   );
@@ -67,19 +70,36 @@ const ServiceSidebar = () => {
   
   const updateUrlWithFilters = (subCategory: string | null, subSubCategory: string | null) => {
     const params = new URLSearchParams();
-    if (subCategory) params.set('subCategoryName', subCategory);
-    if (subSubCategory) params.set('subSubCategoryName', subSubCategory);
+    if (subCategory) params.set('gender', subCategory);
+    if (subSubCategory) params.set('serviceTerm', subSubCategory);
 
     router.push(`?${params.toString()}`, { scroll: false });
   };
 
   useEffect(() => {
-    const params = new URLSearchParams();
-    if (subCategoryName) params.set('subCategoryName', subCategoryName);
-    if (subSubCategoryName) params.set('subSubCategoryName', subSubCategoryName);
-    router.push(`?${params.toString()}`, { scroll: false });
-  }, [subCategoryName, subSubCategoryName, router]);
-
+    const fetchFilteredServices = async () => {
+      const filters: {
+        page_no: number;
+        nameTerm?: string;
+        gender?: string;
+        serviceTerm?: string;
+        price?: number;
+      } = {
+        page_no: 1,
+      };
+      
+      if (subCategoryName) filters.gender = subCategoryName;
+      if (subSubCategoryName) filters.serviceTerm = subSubCategoryName;
+  
+      const result = await dispatch(getServicesBySearch(filters));
+      if (result.payload) {
+        console.log("Fetched filtered services:", result.payload);
+      }
+    };
+  
+    fetchFilteredServices();
+  }, [subCategoryName, subSubCategoryName, dispatch]);
+  
 
   return (
     <div className="p-6 border-r bg-[#FDF3D2] shadow-md hidden md:block w-72">
@@ -170,31 +190,6 @@ const ServiceSidebar = () => {
             )}
           </div>
         ))}
-      </div>
-
-      {/* Price Filter */}
-      {/* <div className="mt-6"> */}
-      {/* <h3 className="font-semibold text-lg text-gray-700">Price Range</h3>
-        <div className="flex space-x-2">
-          <input
-            type="number"
-            placeholder="Min"
-            value={minPrice}
-            onChange={(e) => setMinPrice(e.target.value)}
-            className="w-1/2 p-2 border border-purple-800 bg-transparent rounded-md focus:outline-none focus:border-purple-800"
-          />
-          <input
-            type="number"
-            placeholder="Max"
-            value={maxPrice}
-            onChange={(e) => setMaxPrice(e.target.value)}
-            className="w-1/2 p-2 border border-purple-800 bg-transparent rounded-md focus:outline-none focus:border-purple-800"
-          />
-        </div> */}
-      <div className="mt-6">
-        <button className="w-full mt-2 bg-purple-800 text-white px-4 py-2 rounded-md hover:bg-purple-900">
-          Apply
-        </button>
       </div>
     </div>
   );

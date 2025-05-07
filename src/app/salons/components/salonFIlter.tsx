@@ -1,93 +1,62 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { IoLocationSharp } from "react-icons/io5";
+import React, { useState } from "react";
 import { IoMdPricetags } from "react-icons/io";
 import { FaPerson } from "react-icons/fa6";
 import ServiceNavMenu from "@/common/service-nav-menu";
-import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { getAllActiveServices } from "@/api/salon";
-import { AppDispatch } from "@/store/reduxStore";
 
 const Salonfilter: React.FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
 
-  const [subCategoryName, setSubCategoryName] = useState<string | null>(null);
-  const [subSubCategoryName, setSubSubCategoryName] = useState<string | null>(null);
-  // Update query params dynamically when selection changes
-  useEffect(() => {
-    const params = new URLSearchParams();
-    if (subCategoryName) params.set("subCategoryName", subCategoryName);
-    if (subSubCategoryName) params.set("subSubCategoryName", subSubCategoryName);
-    router.push(`?${params.toString()}`, { scroll: false });
-  }, [subCategoryName, subSubCategoryName, router]);
+  const [price, setPrice] = useState<string>("");
+  const [gender, setGender] = useState<string>(""); // gender = subCategoryName
+  const [serviceTerm, setServiceTerm] = useState<string>(""); // serviceTerm = subSubCategoryName
+  const [nameTerm, setNameTerm] = useState<string>("");
 
-  // Handle search button click
   const handleSearch = () => {
-    // Only dispatch API if the filters change
-    dispatch(
-      getAllActiveServices({
-        page_no: 1,
-        subCategoryName: subCategoryName || undefined,
-        subSubCategoryName: subSubCategoryName || undefined,
-      })
-    );
-
-    // Update the URL
     const filterParams: Record<string, string> = {};
-    if (subCategoryName) filterParams.subCategoryName = subCategoryName;
-    if (subSubCategoryName) filterParams.subSubCategoryName = subSubCategoryName;
+    if (price) filterParams.price = price;
+    if (gender) filterParams.gender = gender;
+    if (serviceTerm) filterParams.serviceTerm = serviceTerm;
+    if (nameTerm) filterParams.nameTerm = nameTerm;
 
-    const queryParams = new URLSearchParams(filterParams).toString();
-    router.push(`/salons/services?${queryParams}`, { scroll: false });
+    const queryString = new URLSearchParams(filterParams).toString();
+    router.push(`/salons/search?${queryString}`);
   };
 
   return (
     <>
+      {/* Mobile View */}
       <div className="flex flex-col p-10 gap-2 rounded-md bg-white lg:hidden">
-        <ServiceNavMenu className="w-full"
-        onSubCategorySelect={setSubCategoryName}
-        onSubSubCategorySelect={setSubSubCategoryName}
+        <ServiceNavMenu
+          className="w-full"
+          onSubCategorySelect={setGender}
+          onSubSubCategorySelect={setServiceTerm}
+          onNameTermChange={setNameTerm}
         />
-        <div className="flex gap-2">
-          <SearchFilterSection
-            placeholder="Price"
-            icon={<IoMdPricetags className="size-5" />}
-          />
-          <SearchFilterSection
-            placeholder="Gender"
-            icon={<FaPerson className="size-5" />}
-          />
-        </div>
-        <button className="btn btn-neutral btn-block"
-        onClick={handleSearch}
-        >
-        Search
+
+        <SearchInput placeholder="Price" value={price} onChange={setPrice} icon={<IoMdPricetags className="size-5" />} />
+        <GenderDropdown gender={gender} setGender={setGender} />
+
+        <button className="btn btn-neutral btn-block" onClick={handleSearch}>
+          Search
         </button>
       </div>
-      <div className="hidden items-center px-10 justify-between rounded-full bg-white lg:flex">
-        <ServiceNavMenu 
-        onSubCategorySelect={setSubCategoryName}
-        onSubSubCategorySelect={setSubSubCategoryName}
-        />
-        <HorizontalDivider className="hidden lg:block" />
-        
-        <HorizontalDivider className="hidden lg:block" />
 
-        <SearchFilterSection
-          placeholder="Price"
-          icon={<IoMdPricetags className="size-5" />}
+      {/* Desktop View */}
+      <div className="hidden items-center px-10 justify-between rounded-full bg-white lg:flex">
+        <ServiceNavMenu
+          onSubCategorySelect={setGender}
+          onSubSubCategorySelect={setServiceTerm}
+          onNameTermChange={setNameTerm}
         />
         <HorizontalDivider className="hidden lg:block" />
-        <SearchFilterSection
-          placeholder="Gender"
-          icon={<FaPerson className="size-5" />}
-        />
-        <button className="btn btn-neutral rounded-full w-[150px] h-[70px] mr-[-36px]"
-        onClick={handleSearch}
-        >
+        <HorizontalDivider className="hidden lg:block" />
+        <SearchInput placeholder="Price" value={price} onChange={setPrice} icon={<IoMdPricetags className="size-5" />} />
+        <HorizontalDivider className="hidden lg:block" />
+        <GenderDropdown gender={gender} setGender={setGender} />
+        <button className="btn btn-neutral rounded-full w-[150px] h-[70px] mr-[-36px]" onClick={handleSearch}>
           Search
         </button>
       </div>
@@ -97,42 +66,53 @@ const Salonfilter: React.FC = () => {
 
 export default Salonfilter;
 
-const HorizontalDivider = ({ className }: { className?: string }) => (
-  <div className={cn("h-[80%] bg-base-300", className)}></div>
-);
-const SearchFilterSection = ({
+// Input component remains unchanged
+const SearchInput = ({
+  placeholder,
+  value,
+  onChange,
   icon,
-  placeholder = "Products / Salons",
-  position = 0,
 }: {
-  icon: React.ReactNode;
   placeholder: string;
-  position?: 1 | 2 | 3 | 4 | 0;
-}) => {
-  return (
-      <div className="dropdown w-full lg:w-[20%]">
-          <label
-              className={cn(
-                  "input max-lg:input-bordered flex h-12 items-center gap-2 lg:h-14",
-                  position === 1 && "lg:rounded-l-full",
-                  position === 4 && "lg:rounded-r-full",
-              )}
-              tabIndex={0}
-          >
-              <div className="">{icon}</div>
-              <input type="text" className="w-full bg-transparent outline-none placeholder-black" placeholder={placeholder} />
-          </label>
-          <ul
-              tabIndex={0}
-              className="dropdown-content menu top-16 z-[1] w-full rounded-box border border-base-300 bg-base-100 shadow lg:w-72"
-          >
-              <li>
-                  <p>Item 1</p>
-              </li>
-              <li>
-                  <p>Item 2</p>
-              </li>
-          </ul>
-      </div>
-  );
-};
+  value: string;
+  onChange: (val: string) => void;
+  icon?: React.ReactNode;
+}) => (
+  <div className="input input-bordered flex items-center gap-2 w-full lg:w-[20%] h-12 lg:h-14">
+    {icon && <div>{icon}</div>}
+    <input
+      type="text"
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      placeholder={placeholder}
+      className="w-full bg-transparent outline-none placeholder-black"
+    />
+  </div>
+);
+
+const GenderDropdown = ({
+  gender,
+  setGender,
+}: {
+  gender: string;
+  setGender: (val: string) => void;
+}) => (
+  <div className="dropdown w-full lg:w-[20%]">
+    <label tabIndex={0} className="input input-bordered flex h-12 items-center gap-2 lg:h-14 cursor-pointer">
+      <FaPerson className="size-5" />
+      <span>{gender || "Select Gender"}</span>
+    </label>
+    <ul tabIndex={0} className="dropdown-content menu top-16 z-[1] w-full rounded-box border border-base-300 bg-base-100 shadow lg:w-72">
+      {["Male", "Female", "Kids"].map((g) => (
+        <li key={g}>
+          <button type="button" onClick={() => setGender(g)}>{g}</button>
+        </li>
+      ))}
+    </ul>
+  </div>
+);
+
+// Divider remains unchanged
+const HorizontalDivider = ({ className }: { className?: string }) => (
+  <div className={cn("h-[80%] w-px bg-base-300", className)}></div>
+);
