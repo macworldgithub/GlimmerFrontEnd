@@ -13,6 +13,7 @@ import { useDispatch } from "react-redux";
 import { clearCart } from "@/reduxSlices/cartSlice";
 
 import { useRouter } from "next/navigation";
+import { BACKEND_URL } from "@/api/config";
 
 export default function Checkout() {
   const credentials = useSelector((state: RootState) => state.login);
@@ -116,58 +117,84 @@ export default function Checkout() {
 
   const handleOrder = async () => {
     try {
-      // if (!credentials.token) {
-      //   router.push("/login");
-      //   return;
-      // }
       if (!validateForm()) {
         return;
       }
+  
       const orderData = {
         customerName: formData.fullName,
         customerEmail: formData.email,
-        // ...cart,
-        productList: cart.ProductList.map((productItem) => {
-          return {
-            product: {
-              _id: productItem.product._id,
-              name: productItem.product.name,
-              base_price: productItem.product.base_price,
-              discounted_price: productItem.product.discounted_price,
-              description: productItem.product.description,
-              image1: productItem.product.image1,
-              image2: productItem.product.image2 || "",
-              image3: productItem.product.image3 || "",
-              status: productItem.product.status,
-              type: productItem.product.type.map((t) => ({
-                id: t.id || "",
-                value: t.value || "-",
-              })),
-              size: productItem.product.size.map((s) => ({
-                id: s.id || "",
-                value: s.value || "-",
-                unit: s.unit || "-",
-              })),
-              rate_of_salon: productItem.product.rate_of_salon,
-              ref_of_salon: productItem.product.ref_of_salon,
-            },
-            storeId: productItem.product.store,
-            quantity: productItem.quantity,
-            total_price:
-              productItem.quantity * productItem.product.discounted_price,
-          };
-        }),
+        productList: cart.ProductList.map((productItem) => ({
+          product: {
+            _id: productItem.product._id,
+            name: productItem.product.name,
+            base_price: productItem.product.base_price,
+            discounted_price: productItem.product.discounted_price,
+            description: productItem.product.description,
+            image1: productItem.product.image1,
+            image2: productItem.product.image2 || "",
+            image3: productItem.product.image3 || "",
+            status: productItem.product.status,
+            type: productItem.product.type.map((t) => ({
+              id: t.id || "",
+              value: t.value || "-",
+            })),
+            size: productItem.product.size.map((s) => ({
+              id: s.id || "",
+              value: s.value || "-",
+              unit: s.unit || "-",
+            })),
+            rate_of_salon: productItem.product.rate_of_salon,
+            ref_of_salon: productItem.product.ref_of_salon,
+          },
+          storeId: productItem.product.store,
+          quantity: productItem.quantity,
+          total_price:
+            productItem.quantity * productItem.product.discounted_price,
+        })),
         total: cart.total,
         discountedTotal: cart.discountedTotal,
         paymentMethod: "COD",
         ShippingInfo: formData,
       };
-
-      console.log("Order Data:", orderData);
-
+  
       const res = await createOrder(orderData, credentials.token);
-      console.log(res);
-      if (res) {
+  
+      if (res?.order) {
+        const emailPayload = {
+          to: formData.email,
+          viewModel: {
+            customer: {
+              name: formData.fullName,
+              email: formData.email,
+            },
+            order: {
+              id: res.order._id, 
+              date: new Date().toLocaleDateString(), 
+              items: res.order.productList.map((productItem: any) => ({
+                productId: productItem.product._id,
+                storeId: productItem.product.store,
+                name: productItem.product.name,
+                image: productItem.product.image1,
+                quantity: productItem.quantity,
+                price: productItem.product.discounted_price,
+              })),
+              subtotal: res.order.total, 
+              shipping: 5, 
+              total: res.order.discountedTotal,
+            },
+          },
+        };
+  
+        await fetch(`${BACKEND_URL}/admin/send-order-confirmation-email`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${credentials.token}`, 
+          },
+          body: JSON.stringify(emailPayload),
+        });
+  
         toast.success(
           "Order has been confirmed! You will receive an email shortly."
         );
@@ -179,6 +206,7 @@ export default function Checkout() {
       console.error("Order Error:", error);
     }
   };
+  
   return (
     <>
       <Toaster />

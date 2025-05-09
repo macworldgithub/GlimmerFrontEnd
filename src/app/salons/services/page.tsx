@@ -15,6 +15,7 @@ import CartModal from "../[id]/components/cartModal";
 import CheckoutModal from "../[id]/components/checkoutModal";
 import { addService, clearServiceCart } from "@/reduxSlices/serviceCartSlice";
 import { message } from "antd";
+import { BACKEND_URL } from "@/api/config";
 
 const Loading = () => (
   <div className="justify-center flex min-h-[70vh] w-full items-center">
@@ -180,26 +181,45 @@ const ServiceList = () => {
     try {
       for (const { service } of selectedServices) {
         try {
-          await createBooking({
+          const response = await createBooking({
             ...bulkForm,
             serviceId: service._id,
             finalPrice: service.discounted_price,
           }, token);
+
+          const emailPayload = {
+            to: response.customerEmail,
+            viewModel: {
+              customer: {
+                name: response.customerName,
+              },
+              booking: response,
+            },
+          };
+
+          await fetch(`${BACKEND_URL}/admin/send-booking-confirmation-email`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(emailPayload),
+          });
         } catch (error) {
-          console.error("Booking failed for service:", service._id, error);
+          console.error("Booking or email failed for service:", service._id, error);
         }
       }
+
       dispatch(clearServiceCart());
       localStorage.removeItem('serviceCart');
       alert("Booking confirmed!");
       setIsCheckoutModalOpen(false);
       window.location.reload();
     } catch (error) {
-      console.error("Booking failed:", error);
+      console.error("Booking process failed:", error);
       alert("Booking failed.");
     }
   };
-
   return (
     <div className="flex flex-col w-[99vw] pb-[8rem]">
       <div className="px-10 py-10 bg-[#FBE8A5] mb-4 z-10">

@@ -11,6 +11,7 @@ import Link from "next/link";
 import CheckoutModal from "./checkoutModal";
 import CartModal from "./cartModal";
 import { addService, clearServiceCart } from "@/reduxSlices/serviceCartSlice";
+import { BACKEND_URL } from "@/api/config";
 
 const SalonServices = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -53,7 +54,7 @@ const SalonServices = () => {
       selectedServices.length > 0 &&
       selectedServices[0].service.salonId !== newSalonId
     ) {
-      setShowCartConflictWarning(true); 
+      setShowCartConflictWarning(true);
       return;
     }
 
@@ -105,26 +106,42 @@ const SalonServices = () => {
     try {
       for (const { service } of selectedServices) {
         try {
-          await createBooking(
-            {
-              ...bulkForm,
-              serviceId: service._id,
-              finalPrice: service.discounted_price,
+          const response = await createBooking({
+            ...bulkForm,
+            serviceId: service._id,
+            finalPrice: service.discounted_price,
+          }, token);
+
+          const emailPayload = {
+            to: response.customerEmail,
+            viewModel: {
+              customer: {
+                name: response.customerName,
+              },
+              booking: response,
             },
-            token
-          );
+          };
+
+          await fetch(`${BACKEND_URL}/admin/send-booking-confirmation-email`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(emailPayload),
+          });
         } catch (error) {
-          console.error("Booking failed for service:", service._id, error);
+          console.error("Booking or email failed for service:", service._id, error);
         }
       }
 
       dispatch(clearServiceCart());
-      localStorage.removeItem("serviceCart");
+      localStorage.removeItem('serviceCart');
       alert("Booking confirmed!");
       setIsCheckoutModalOpen(false);
       window.location.reload();
     } catch (error) {
-      console.error("Booking failed:", error);
+      console.error("Booking process failed:", error);
       alert("Booking failed.");
     }
   };

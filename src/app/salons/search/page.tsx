@@ -14,6 +14,7 @@ import CheckoutModal from "../[id]/components/checkoutModal";
 import Salonfilter from "../components/salonFIlter";
 import { addService, clearServiceCart } from "@/reduxSlices/serviceCartSlice";
 import Link from "next/link";
+import { BACKEND_URL } from "@/api/config";
 
 interface SearchFilters {
     page_no: number;
@@ -143,29 +144,50 @@ const SearchResultsPage = () => {
     const handleBooking = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!validateForm()) return;
-
+      
         try {
-            for (const { service } of selectedServices) {
-                try {
-                    await createBooking({
-                        ...bulkForm,
-                        serviceId: service._id,
-                        finalPrice: service.discounted_price,
-                    }, token);
-                } catch (error) {
-                    console.error("Booking failed for service:", service._id, error);
-                }
+          for (const { service } of selectedServices) {
+            try {
+              const response = await createBooking({
+                ...bulkForm,
+                serviceId: service._id,
+                finalPrice: service.discounted_price,
+              }, token);
+      
+              const emailPayload = {
+                to: response.customerEmail,
+                viewModel: {
+                  customer: {
+                    name: response.customerName,
+                  },
+                  booking: response,
+                },
+              };
+      
+              await fetch(`${BACKEND_URL}/admin/send-booking-confirmation-email`, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify(emailPayload),
+              });
+            } catch (error) {
+              console.error("Booking or email failed for service:", service._id, error);
             }
-            dispatch(clearServiceCart());
-            localStorage.removeItem('serviceCart');
-            alert("Booking confirmed!");
-            setIsCheckoutModalOpen(false);
-            window.location.reload();
+          }
+      
+          dispatch(clearServiceCart());
+          localStorage.removeItem('serviceCart');
+          alert("Booking confirmed!");
+          setIsCheckoutModalOpen(false);
+          window.location.reload();
         } catch (error) {
-            console.error("Booking failed:", error);
-            alert("Booking failed.");
+          console.error("Booking process failed:", error);
+          alert("Booking failed.");
         }
-    };
+      };
+      
 
     return (
         <div className="flex flex-col w-[99vw] pb-[8rem]">

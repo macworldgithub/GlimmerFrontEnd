@@ -20,6 +20,7 @@ import ServiceCard from "@/common/ServiceCard";
 import { addService, clearServiceCart } from "@/reduxSlices/serviceCartSlice";
 import CartModal from "../../[id]/components/cartModal";
 import CheckoutModal from "../../[id]/components/checkoutModal";
+import { BACKEND_URL } from "@/api/config";
 
 const ServiceDetails = () => {
   const [activeTab, setActiveTab] = useState("Description");
@@ -180,29 +181,47 @@ const ServiceDetails = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+  
     if (!validateForm()) return;
-
+  
     const bookingData = {
       ...bulkForm,
       serviceId: serviceId,
       finalPrice: discountedPrice,
     };
-
+  
     console.log("Submitting Booking Data:", bookingData);
-
+  
     try {
       const response = await createBooking(bookingData, token);
-
-      console.log("Booking Successful:", response);
+      const emailPayload = {
+        to: response.customerEmail,
+        viewModel: {
+          customer: {
+            name: response.customerName,
+          },
+          booking: response,
+        },
+      };
+  
+      await fetch(`${BACKEND_URL}/admin/send-booking-confirmation-email`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(emailPayload),
+      });
+  
       alert("Booking Confirmed!");
-
+  
       setIsCheckoutModalOpen(false); // Close modal only on success
     } catch (error) {
       console.error("Booking Failed:", error);
       alert("Failed to book service. Please try again.");
     }
   };
+  
 
   const handleAddToCart = (item: any) => {
     const newSalonId = item.salonId;
