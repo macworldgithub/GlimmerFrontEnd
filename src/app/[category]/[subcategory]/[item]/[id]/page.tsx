@@ -328,7 +328,10 @@ const ProductDisplay = () => {
           <div className="font-semibold text-4xl">
             {product?.discounted_price > 0 ? (
               <>
-                <span className="text-[#583FA8]">{product?.discounted_price} PKR</span>
+                <span className="text-[#583FA8]">
+                  {(product?.base_price - (product?.base_price * product?.discounted_price) / 100).toFixed(2)} PKR
+                </span>
+
                 {product?.base_price > product?.discounted_price && (
                   <span className="text-gray-500 line-through ml-2 mr-2 text-xs">
                     {product?.base_price} PKR
@@ -340,7 +343,7 @@ const ProductDisplay = () => {
                     alt="Discount"
                   />
                   <span className="absolute text-center text-sm text-white  font-bold">
-                    {`${Math.round(((product?.base_price - product?.discounted_price) / product?.base_price) * 100)}% OFF`}
+                    {`${product?.discounted_price}% OFF`}
                   </span>
                 </div>
               </>
