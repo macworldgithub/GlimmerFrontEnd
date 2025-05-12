@@ -1,9 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Search } from "lucide-react";
+import { getAllProducts } from "@/api/product";
+
+interface Product {
+  _id: string;
+  name: string;
+  image1?: string;
+  category?: string;
+  sub_category?: string;
+  item?: string;
+}
 
 interface ProductSearchBarProps {
   className?: string;
@@ -11,33 +21,70 @@ interface ProductSearchBarProps {
 
 export default function ProductSearchBar({ className }: ProductSearchBarProps) {
   const [searchTerm, setSearchTerm] = useState("");
+  const [suggestions, setSuggestions] = useState<Product[]>([]);
+  const [showDropdown, setShowDropdown] = useState(false);
   const router = useRouter();
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const fetchSuggestions = async (query: string) => {
+  if (!query.trim()) {
+    setSuggestions([]);
+    return;
+  }
+
+  try {
+    const res = await getAllProducts("", "", "", query.trim(), 1); 
+    setSuggestions(res.products.slice(0, 5));
+  } catch (error) {
+    console.error("Error fetching suggestions:", error);
+    setSuggestions([]);
+  }
+};
+
+  useEffect(() => {
+    const delayDebounce = setTimeout(() => {
+      fetchSuggestions(searchTerm);
+    }, 300); 
+
+    return () => clearTimeout(delayDebounce);
+  }, [searchTerm]);
 
   const handleSearch = () => {
     const params = new URLSearchParams();
     params.set("page", "1");
-
     if (searchTerm.trim()) {
       params.set("name", searchTerm.trim());
     }
-
     router.push(`/products?${params.toString()}`);
+    setShowDropdown(false);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      handleSearch();
+    if (e.key === "Enter") handleSearch();
+  };
+
+  const handleClickOutside = (e: MouseEvent) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+      setShowDropdown(false);
     }
   };
 
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   return (
-    <div className={cn("relative w-full max-w-md", className)}>
+    <div className={cn("relative w-full max-w-md", className)} ref={dropdownRef}>
       <input
         type="text"
         placeholder="Search products..."
         className="input input-bordered w-full h-12 pl-5 pr-12 rounded-lg border border-gray-300 focus:ring-2 focus:ring-gray-200 focus:outline-none transition"
         value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
+        onChange={(e) => {
+          setSearchTerm(e.target.value);
+          setShowDropdown(true);
+        }}
         onKeyDown={handleKeyDown}
       />
       <Search
@@ -45,6 +92,30 @@ export default function ProductSearchBar({ className }: ProductSearchBarProps) {
         size={20}
         onClick={handleSearch}
       />
+
+      {showDropdown && suggestions.length > 0 && (
+        <div className="absolute z-50 mt-1 w-full bg-white border rounded-md shadow-lg max-h-64 overflow-auto">
+          {suggestions.map((product) => (
+            <div
+              key={product._id}
+              className="flex items-center gap-2 p-2 hover:bg-gray-100 cursor-pointer"
+              onClick={() => {
+                router.push(`/${product.category}/${product.sub_category}/${product.item}/${product._id}`);
+                setShowDropdown(false);
+              }}
+            >
+              {product.image1 && (
+                <img
+                  src={product.image1}
+                  alt={product.name}
+                  className="w-8 h-8 object-cover rounded"
+                />
+              )}
+              <span className="text-sm">{product.name}</span>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
