@@ -333,7 +333,7 @@ const ProductDisplay = () => {
                 </span>
 
                 {product?.base_price > product?.discounted_price && (
-                  <span className="text-gray-500 line-through ml-2 mr-2 text-xs">
+                  <span className="text-gray-500 line-through ml-2 mr-2 text-xl">
                     {product?.base_price} PKR
                   </span>
                 )}
