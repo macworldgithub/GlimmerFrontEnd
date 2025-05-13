@@ -492,10 +492,14 @@ const ProductDisplay = () => {
           </div> */}
 
           {/* Buttons Section */}
-          <div className="flex items-center gap-4 mt-4">
+          {/* Buttons Section - Column Layout */}
+          <div className="flex flex-col items-stretch gap-y-4 mt-4 w-full">
+
+            {/* ADD TO BAG - Filled Button */}
             <button
-              className={`flex-1 w-full flex items-center text-xs justify-center gap-2 py-3 xl:px-6 px-4 border text-purple-800 font-semibold rounded-md 
-    ${isButtonDisabled ? 'border-gray-300 text-gray-500 cursor-not-allowed' : 'border-purple-800 hover:border-purple-800 hover:text-purple-800'}`}
+              className={`w-full flex items-center justify-center text-xs font-semibold gap-2 py-3 xl:px-6 px-4 
+      rounded-md bg-purple-800 text-white hover:bg-purple-900 
+      ${isButtonDisabled && 'bg-gray-300 text-gray-500 cursor-not-allowed hover:bg-gray-300'}`}
               onClick={handleAddToCart}
               disabled={isButtonDisabled}
             >
@@ -503,14 +507,59 @@ const ProductDisplay = () => {
                 alt="cart-icon"
                 width={15}
                 height={15}
-                src={"/assets/addtoBag/cart-icon.png"}
+                src="/assets/addtoBag/cart-icon.png"
               />
               ADD TO BAG
             </button>
 
-            {/* Modal */}
+            {/* BUY NOW - Outlined Button */}
+            <button
+              className={`w-full flex items-center justify-center text-xs font-semibold gap-2 py-3 xl:px-6 px-4 
+      rounded-md border border-purple-800 text-purple-800 hover:bg-purple-50 
+      ${isButtonDisabled && 'border-gray-300 text-gray-500 cursor-not-allowed hover:bg-transparent'}`}
+              onClick={handleAddToCart}
+              disabled={isButtonDisabled}
+            >
+              <Image
+                alt="cart-icon"
+                width={15}
+                height={15}
+                src="/assets/addtoBag/cart-icon.png"
+              />
+              BUY NOW
+            </button>
+
+            {/* BULK BUY + WISHLIST Section */}
+            <div className="flex items-center gap-4 w-full">
+              {/* BULK BUY - 80% Width, Yellow */}
+              <button
+                onClick={handleBulkBuy}
+                className="w-[80%] h-11 xl:px-5 text-xs bg-yellow-500 text-black font-semibold rounded-md hover:bg-yellow-400"
+              >
+                BULK BUY
+              </button>
+
+              {/* WISHLIST - 20% Width */}
+              <button
+                onClick={() => setIsWishlisted(!isWishlisted)}
+                className="w-[20%] h-11 flex items-center justify-center border border-[#583FA8] text-[#583FA8] rounded-md"
+              >
+                <Image
+                  src={
+                    isWishlisted
+                      ? "/assets/addtoBag/heart-filled.png"
+                      : "/assets/addtoBag/heart.png"
+                  }
+                  alt="wishlist"
+                  width={20}
+                  height={20}
+                />
+              </button>
+            </div>
+
+            {/* ADD TO CART MODAL */}
             {isModalOpen && (
-              <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+              <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
                 <motion.div
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
@@ -524,25 +573,23 @@ const ProductDisplay = () => {
               </div>
             )}
 
-            <button onClick={handleBulkBuy} className="flex-1 w-full h-12 xl:px-6 text-xs bg-[#583FA8] text-white font-semibold rounded-md hover:bg-purple-900">
-              BULK BUY
-            </button>
+            {/* BULK BUY MODAL */}
             {isBulkModalOpen && (
-              <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+              <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
                 <motion.div
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.8 }}
                   className="bg-white rounded-lg shadow-xl p-6 w-96"
                 >
-                  <h2 className="text-lg font-semibold text-gray-800">
+                  <h2 className="text-lg font-semibold text-gray-800 mb-2">
                     Looking for bulk options as a salon owner or reseller?
                   </h2>
                   <p className="text-sm text-gray-600 mb-4">
                     Share your details below, and our team will get in touch!
                   </p>
 
-                  {/* Bulk Form */}
+                  {/* Bulk Buy Form */}
                   <div className="space-y-3">
                     <input
                       type="text"
@@ -567,39 +614,22 @@ const ProductDisplay = () => {
                     />
                   </div>
 
-                  {/* Submit Button */}
+                  {/* Form Actions */}
                   <button
                     onClick={handleBulkSubmit}
                     className="mt-4 w-full py-2 px-6 bg-purple-800 text-white font-semibold rounded-md hover:bg-purple-900 transition duration-200"
                   >
                     Submit
                   </button>
-
-                  {/* Close Button */}
                   <button
                     onClick={() => setIsBulkModalOpen(false)}
-                    className="mt-4 w-full py-2 px-6 bg-gray-500 text-white font-semibold rounded-md hover:bg-gray-400 transition duration-200"
+                    className="mt-2 w-full py-2 px-6 bg-gray-500 text-white font-semibold rounded-md hover:bg-gray-400 transition duration-200"
                   >
                     Close
                   </button>
                 </motion.div>
               </div>
             )}
-            <button
-              onClick={() => setIsWishlisted(!isWishlisted)}
-              className="px-3 border border-[#583FA8] text-[#583FA8 ] h-11 rounded-md"
-            >
-              <Image
-                src={
-                  isWishlisted
-                    ? "/assets/addtoBag/heart-filled.png"
-                    : "/assets/addtoBag/heart.png"
-                }
-                alt="wishlist"
-                width={20}
-                height={20}
-              />
-            </button>
           </div>
 
 
