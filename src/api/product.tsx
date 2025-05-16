@@ -35,7 +35,7 @@ export const getAllProducts = async (
     return res.data; // Return the response data
   } catch (error) {
     console.error("Error fetching products:", error);
-    throw error; // Throw error to handle it in the calling function
+    throw error; 
   }
 };
 

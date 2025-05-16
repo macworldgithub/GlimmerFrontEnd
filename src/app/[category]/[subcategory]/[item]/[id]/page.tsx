@@ -161,10 +161,10 @@ const ProductDisplay = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  let images = [product?.image1, product?.image2, product?.image3].filter(Boolean);
+  let images = [product?.image1].filter(Boolean);
 
   // Ensure at least 3 images (fallback for missing ones)
-  while (images.length < 3) {
+  while (images.length < 1) {
     images.push("/assets/images/default_image.jpg");
   }
 
@@ -406,17 +406,17 @@ const ProductDisplay = () => {
                 : "No size"}
             </div>
 
-            <div className="flex items-center font-semibold text-gray-700 dark:text-gray-700">
+            {/* <div className="flex items-center font-semibold text-gray-700 dark:text-gray-700">
               <span>Stock:</span>
-            </div>
-            <div className="text-gray-600 dark:text-gray-400">
+            </div> */}
+            {/* <div className="text-gray-600 dark:text-gray-400">
               {product?.quantity ? product.quantity : "No stock"}
-            </div>
+            </div> */}
 
-            <div className="flex items-center font-semibold text-gray-700 dark:text-gray-700">
+            {/* <div className="flex items-center font-semibold text-gray-700 dark:text-gray-700">
               <span>Type:</span>
-            </div>
-            <div className="text-gray-600 dark:text-gray-400 space-x-2 flex gap-2 flex-wrap">
+            </div> */}
+            {/* <div className="text-gray-600 dark:text-gray-400 space-x-2 flex gap-2 flex-wrap">
               {product?.type?.length > 0
                 ? product.type.map((t: any) => (
                   <button
@@ -433,7 +433,7 @@ const ProductDisplay = () => {
                   </button>
                 ))
                 : "No type"}
-            </div>
+            </div> */}
           </div>
 
           {/* Voucher Promo
