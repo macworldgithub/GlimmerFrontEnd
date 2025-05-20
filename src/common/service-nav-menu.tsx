@@ -82,6 +82,7 @@ const ServiceNavMenu = ({ className, onSubCategorySelect, onSubSubCategorySelect
   const handleProductClick = (product: string) => {
     setSelectedProduct(product);
     if (onSubSubCategorySelect) onSubSubCategorySelect(product);
+    setIsDropdownOpen(false); // CLOSE DROPDOWN AFTER SELECTION
   };
 
   const handleSearchTermChange = (value: string) => {
@@ -97,19 +98,17 @@ const ServiceNavMenu = ({ className, onSubCategorySelect, onSubSubCategorySelect
     service.category.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Get label for selected service, subservice, or product
-  const selectedLabel = selectedProduct || selectedSubservice || selectedService?.category || 'Search salons and services';
+  const selectedLabel = selectedProduct || selectedSubservice || selectedService?.category || 'https://drive.google.com/file/d/1-OBBTinng-qPWrXl4IuGT6qDQqPyINK8/view?usp=sharing';
 
   return (
     <div className={`relative w-80 ${className}`}>
-
       {/* Dropdown Trigger */}
       <div className="flex justify-between items-center p-3 cursor-pointer transition-all ease-in-out duration-300" onClick={toggleDropdown}>
         <div className="p-2 flex items-center gap-2">
           <FontAwesomeIcon icon={faSearch} className="text-gray-500" />
           <input
             type="text"
-            placeholder={selectedLabel}  // Dynamic placeholder based on the selected label
+            placeholder={selectedLabel}
             value={searchTerm}
             onChange={(e) => handleSearchTermChange(e.target.value)}
             className="w-full p-2 border-none outline-none"
@@ -160,7 +159,7 @@ const ServiceNavMenu = ({ className, onSubCategorySelect, onSubSubCategorySelect
                     : productItems
                         .filter((product) => product.toLowerCase().includes(searchTerm.toLowerCase()))
                         .map((product, index) => (
-                          <div key={`${service._id}-${index}`} className="p-3 cursor-pointer hover:bg-gray-100 rounded-md transition-all ease-in-out duration-200">
+                          <div key={`${service._id}-${index}`} className="p-3 cursor-pointer hover:bg-gray-100 rounded-md transition-all ease-in-out duration-200" onClick={() => handleProductClick(product)}>
                             {product}
                           </div>
                         ))}

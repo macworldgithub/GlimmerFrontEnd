@@ -184,7 +184,7 @@ const SearchResultsPage = () => {
           window.location.reload();
         } catch (error) {
           console.error("Booking process failed:", error);
-          alert("Booking failed.");
+        alert("Booking failed.");
         }
       };
       
@@ -330,28 +330,7 @@ const SearchResultsPage = () => {
                         )}
                     </div>
 
-                    {/* Pagination
-                    {total > 0 && (
-                        <div className="w-full flex justify-center items-center space-x-2 py-4">
-                            <button
-                                onClick={() => handlePageChange(page - 1)}
-                                disabled={page === 1}
-                                className="px-4 py-2 bg-gray-200 text-gray-500 rounded-md hover:bg-gray-300 disabled:opacity-50"
-                            >
-                                Previous
-                            </button>
-                            <span className="text-lg text-gray-600">
-                                Page {page} of {Math.ceil(total / pageSize)}
-                            </span>
-                            <button
-                                onClick={() => handlePageChange(page + 1)}
-                                disabled={page === Math.ceil(total / pageSize)}
-                                className="px-4 py-2 bg-gray-200 text-gray-500 rounded-md hover:bg-gray-300 disabled:opacity-50"
-                            >
-                                Next
-                            </button>
-                        </div>
-                    )} */}
+                    
                 </motion.main>
             </div>
 
