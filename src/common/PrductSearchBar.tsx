@@ -33,7 +33,7 @@ export default function ProductSearchBar({ className }: ProductSearchBarProps) {
   }
 
   try {
-    const res = await getAllProducts("", "", "", query.trim(), 1); 
+    const res = await getAllProducts("", "", "", query.trim()); 
     setSuggestions(res.products.slice(0, 5));
   } catch (error) {
     console.error("Error fetching suggestions:", error);
@@ -51,7 +51,7 @@ export default function ProductSearchBar({ className }: ProductSearchBarProps) {
 
   const handleSearch = () => {
     const params = new URLSearchParams();
-    params.set("page", "1");
+    params.set("page","1");
     if (searchTerm.trim()) {
       params.set("name", searchTerm.trim());
     }
