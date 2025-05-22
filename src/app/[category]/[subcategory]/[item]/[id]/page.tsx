@@ -272,7 +272,7 @@ const ProductDisplay = () => {
             </button>
           </div>
           
-          {/* Ratings Section */}
+          Ratings Section
           <div className="mt-20 w-full hidden lg:block">
             <h2 className="text-4xl font-semibold text-gray-800">Ratings</h2>
             <p className="text-gray-700 mt-1 text-xl">
@@ -406,90 +406,10 @@ const ProductDisplay = () => {
                 : "No size"}
             </div>
 
-            {/* <div className="flex items-center font-semibold text-gray-700 dark:text-gray-700">
-              <span>Stock:</span>
-            </div> */}
-            {/* <div className="text-gray-600 dark:text-gray-400">
-              {product?.quantity ? product.quantity : "No stock"}
-            </div> */}
-
-            {/* <div className="flex items-center font-semibold text-gray-700 dark:text-gray-700">
-              <span>Type:</span>
-            </div> */}
-            {/* <div className="text-gray-600 dark:text-gray-400 space-x-2 flex gap-2 flex-wrap">
-              {product?.type?.length > 0
-                ? product.type.map((t: any) => (
-                  <button
-                    key={t.id}
-                    onClick={() => handleType(product?.id, t)}
-                    className={`${
-                      //@ts-ignore
-                      selectedType?.id === t?.id
-                        ? "bg-[#6B21A8] text-white"
-                        : "bg-white"
-                      } px-3 py-1 border hover:bg-[#6B21A8] hover:text-white cursor-pointer border-gray-300 dark:border-gray-600 rounded-md text-sm text-gray-700 dark:text-gray-500 hover:border-purple-700`}
-                  >
-                    {t.value}
-                  </button>
-                ))
-                : "No type"}
-            </div> */}
+           
           </div>
 
-          {/* Voucher Promo
-          <div className="mt-4 bg-white shadow-lg dark:text-white px-6 py-2 pl-8 rounded-lg">
-            <div className="mb-4">
-              <h4 className="font-semibold text-lg text-gray-800">
-                Voucher Promo
-              </h4>
-              <p className="text-gray-700 dark:text-gray-700">
-                {product?.promoCode
-                  ? `there are ${product.promoCode} promo codes for you`
-                  : "there are 3 promo codes for you"}
-              </p>
-            </div>
-
-            <div>
-              {[
-                {
-                  title: "GLOW15",
-                  value: product?.percentOff
-                    ? `${product.percentOff}% off for your entire purchase`
-                    : "No discount",
-                },
-                {
-                  title: "Skincare",
-                  value: product?.skinCare
-                    ? `${product.skinCare}% off skincare essentials`
-                    : "No skincare",
-                },
-              ].map((item, index) => (
-                <div key={index} className="mb-4 flex items-center">
-                  <div>
-                    <h4 className="font-semibold text-md text-[#583FA8] ">
-                      {item.title}
-                    </h4>
-                    <p className="text-gray-700 dark:text-gray-700">
-                      {item.value}
-                    </p>
-                  </div>
-                  <div className="ml-auto flex items-center">
-                    <button onClick={() => handleCopy(item.value, item.title)}>
-                      <Image
-                        src={"/assets/assurity/copy.png"}
-                        alt="copy"
-                        width={20}
-                        height={20}
-                      />
-                    </button>
-                    {copied === item.title && (
-                      <span className="text-green-500 ml-2">Copied!</span>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div> */}
+        
 
           {/* Buttons Section */}
           {/* Buttons Section - Column Layout */}
