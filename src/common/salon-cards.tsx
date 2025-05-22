@@ -145,7 +145,7 @@ const SalonCards: React.FC<SalonCardsProps> = ({
 
   return (
     <div className={`w-full max-w-[82rem] px-4 md:px-1 mx-auto py-10 ${className}`}>
-           <Link href="/src/app/salons/components/salons.tsx" className="block">
+           <Link href="/salons" className="block">
       <h2 className="text-2xl sm:text-2xl md:text-3xl font-semibold mb-8">{title}
         
       </h2>
