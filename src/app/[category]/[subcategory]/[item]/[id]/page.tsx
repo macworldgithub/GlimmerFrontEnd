@@ -383,31 +383,29 @@ const ProductDisplay = () => {
           <hr className="my-2.5 border-t border-gray-400 dark:text-gray-500 w-full" />
 
           {/* Size, Stock, Type */}
-          <div className="grid grid-cols-2 gap-3 mt-3">
-            <div className="flex items-center font-semibold text-gray-700 dark:text-gray-700">
-              <span>Size:</span>
-            </div>
-            <div className="text-gray-600 dark:text-gray-400 flex gap-2 flex-wrap ">
-              {product?.size?.length > 0
-                ? product.size.map((s: any) => (
-                  <span
-                    key={s.id}
-                    onClick={() => handleSize(product?.id, s)}
-                    className={`${
-                      //@ts-ignore
-                      selectedSize?.id === s?.id
-                        ? "bg-[#6B21A8] text-white"
-                        : "bg-white"
-                      } px-2 py-1 border hover:bg-[#6B21A8] hover:text-white cursor-pointer border-gray-300 dark:border-gray-600 rounded-md text-sm `}
-                  >
-                    {s.value} {s.unit}
-                  </span>
-                ))
-                : "No size"}
-            </div>
-
-           
-          </div>
+{product?.size?.length > 0 && (
+  <div className="grid grid-cols-2 gap-3 mt-3">
+    <div className="flex items-center font-semibold text-gray-700 dark:text-gray-700">
+      <span>Size:</span>
+    </div>
+    <div className="text-gray-600 dark:text-gray-400 flex gap-2 flex-wrap ">
+      {product.size.map((s: any) => (
+        <span
+          key={s.id}
+          onClick={() => handleSize(product?.id, s)}
+          className={`${
+            //@ts-ignore
+            selectedSize?.id === s?.id
+              ? "bg-[#6B21A8] text-white"
+              : "bg-white"
+          } px-2 py-1 border hover:bg-[#6B21A8] hover:text-white cursor-pointer border-gray-300 dark:border-gray-600 rounded-md text-sm `}
+        >
+          {s.value} {s.unit}
+        </span>
+      ))}
+    </div>
+  </div>
+)}
 
         
 
