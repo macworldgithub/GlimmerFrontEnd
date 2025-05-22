@@ -64,7 +64,7 @@ const ServiceNavMenu = ({
       }
     } catch (error) {
       message.error("Failed to fetch subservices and products");
-    }
+    }   
   };
 
   useEffect(() => {
