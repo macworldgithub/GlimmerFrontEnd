@@ -77,3 +77,32 @@ export const getAllProductsHighlights = createAsyncThunk<any, { filter?: string 
     }
   }
 );
+
+export const submitRating = async (productId: string, rating: number, token: string) => {
+  try {
+    const res = await axios.post(
+      `${BACKEND_URL}/product/submit_rating?id=${productId}`,
+      { rating },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return res.data;
+  } catch (error) {
+    console.error("Error submitting rating:", error);
+    throw error;
+  }
+};
+
+export const getRating = async (productId: string) => {
+  try {
+    const res = await axios.get(`${BACKEND_URL}/product/get_rating?id=${productId}`);
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching rating:", error);
+    throw error;
+  }
+};
