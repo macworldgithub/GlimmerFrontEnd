@@ -744,24 +744,19 @@ const ProductDisplay = () => {
   };
 
   const handleSubmitRating = async (rating: number) => {
-    console.log("Star clicked, submitting rating:", rating);
     if (isSubmitting) {
-      console.log("Submission in progress, ignoring click");
       return;
     }
     setIsSubmitting(true);
     setUserRating(rating); // Set yellow stars immediately
     try {
-      console.log("Auth token:", token ? "Found" : "Not found");
       if (!token) {
-        console.log("No token, showing login error");
+
         alert("Please log in to submit a rating");
         setUserRating(null); // Revert stars
         return;
       }
-      console.log("Sending API request for product ID:", path.id, "with rating:", rating);
       const response = await submitRating(path.id as string, rating, token);
-      console.log("API response:", response);
       alert("Rating submitted successfully");
       await fetchRatings(path.id as string); // Refresh ratings
     } catch (error: any) {
@@ -769,7 +764,6 @@ const ProductDisplay = () => {
       alert(error.response?.data?.message || "Failed to submit rating");
       setUserRating(null); // Revert stars on error
     } finally {
-      console.log("Submission complete, resetting isSubmitting");
       setIsSubmitting(false);
     }
   };
@@ -846,7 +840,6 @@ const ProductDisplay = () => {
   };
 
   const handleBulkSubmit = () => {
-    console.log("Bulk Buying Form Data:", bulkForm);
     setIsBulkModalOpen(false);
     alert("Your bulk buying request has been submitted!");
   };
