@@ -32,6 +32,7 @@ const RecommendedSaloons = () => {
     <div className="px-2 w-[99vw]">
       <SalonCards title="Recommended" salonsProp={salons} showButton={false} />
     </div>
+    
   );
 };
 

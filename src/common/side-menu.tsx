@@ -26,6 +26,7 @@ const SideMenu = ({
   const [isOpen, setIsOpen] = useState(false);
   const [showGymModal, setShowGymModal] = useState(false);
   const pathname = usePathname();
+  
 
   useEffect(() => {
     setIsOpen(false);
@@ -168,3 +169,4 @@ const SideMenu = ({
 };
 
 export default SideMenu;
+

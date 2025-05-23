@@ -47,7 +47,7 @@ const ServiceNavMenu = ({
     }
   };
 
-  // Fetch Subservices and Products based on selected service
+  
   const fetchSubservicesAndProducts = async (categoryId: string) => {
     if (!categoryId) return;
     try {
