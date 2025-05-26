@@ -53,6 +53,7 @@ const Salonfilter: React.FC = () => {
           onSubCategorySelect={setGender}
           onSubSubCategorySelect={setServiceTerm}
           onNameTermChange={setNameTerm}
+          //@ts-ignore
           isOpen={isServiceMenuOpen}
           setIsOpen={setIsServiceMenuOpen}
         />
@@ -71,6 +72,7 @@ const Salonfilter: React.FC = () => {
           onSubCategorySelect={setGender}
           onSubSubCategorySelect={setServiceTerm}
           onNameTermChange={setNameTerm}
+          //@ts-ignore
           isOpen={isServiceMenuOpen}
           setIsOpen={setIsServiceMenuOpen}
         />
