@@ -4,7 +4,7 @@ import { getAllServices, getAllServicesById } from "@/api/salon";
 import { faChevronDown, faChevronUp, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { message } from "antd";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 interface ServiceNavMenuProps {
   className?: string;
@@ -30,11 +30,27 @@ const ServiceNavMenu = ({
   const [expandedSubservices, setExpandedSubservices] = useState<{ [key: string]: boolean }>({});
   const [searchTerm, setSearchTerm] = useState("");
 
-  // Auto-close dropdown on scroll
+  const wrapperRef = useRef<HTMLDivElement | null>(null);
+
+  // Close dropdown on scroll
   useEffect(() => {
     const handleScroll = () => setIsDropdownOpen(false);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
 
   // Fetch Services
@@ -47,7 +63,6 @@ const ServiceNavMenu = ({
     }
   };
 
-  
   const fetchSubservicesAndProducts = async (categoryId: string) => {
     if (!categoryId) return;
     try {
@@ -64,7 +79,7 @@ const ServiceNavMenu = ({
       }
     } catch (error) {
       message.error("Failed to fetch subservices and products");
-    }   
+    }
   };
 
   useEffect(() => {
@@ -120,10 +135,10 @@ const ServiceNavMenu = ({
     selectedProduct ||
     selectedSubservice ||
     selectedService?.category ||
-    "https://drive.google.com/file/d/1-OBBTinng-qPWrXl4IuGT6qDQqPyINK8/view?usp=sharing";
+    "Search Services";
 
   return (
-    <div className={`relative w-80 ${className}`}>
+    <div ref={wrapperRef} className={`relative w-80 ${className}`}>
       {/* Dropdown Trigger */}
       <div
         className="flex justify-between items-center p-3 cursor-pointer transition-all ease-in-out duration-300"
