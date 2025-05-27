@@ -54,7 +54,8 @@ const SalonDetailsPage = () => {
   return (
     <>
       <div className="mb-6 w-[99vw] md:mb-8 p-10">
-        <div className="flex flex-col mt-4">
+       <div className="flex flex-col mt-0">
+
           <div className="flex justify-between items-center">
             <div className="prose">
               <h2 className="text-5xl">
@@ -82,7 +83,8 @@ const SalonDetailsPage = () => {
         </div>
 
         {/* ✅ Image Grid */}
-        <div className="hidden md:grid grid-cols-2 gap-6 mt-6 max-w-[85vw] mx-auto">
+      <div className="hidden md:grid grid-cols-2 gap-4 mt-6 max-w-[85vw] mx-auto px-16">
+
           {images.map((src, index) => (
             <div
               key={index}

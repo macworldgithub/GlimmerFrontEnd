@@ -5,11 +5,14 @@ import { RealCardItem } from "@/data";
 import { Rating } from "react-simple-star-rating";
 import { FaHeart } from "react-icons/fa";
 import { RiShoppingBag4Line } from "react-icons/ri";
+import { useDispatch } from "react-redux";
+import { addItem } from "@/reduxSlices/cartSlice"; // make sure path is correct
 
 const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
   const router = useRouter();
-  let queryParams = new URLSearchParams();
+  const dispatch = useDispatch();
 
+  let queryParams = new URLSearchParams();
   if (item.rate_of_salon) queryParams.append("rate", item.rate_of_salon.toString());
   if (item.ref_of_salon) queryParams.append("ref", item.ref_of_salon);
   //@ts-ignore
@@ -34,8 +37,13 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
 
         {/* Discount badge */}
         <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 flex gap-2 w-full justify-center px-2 max-md:justify-between">
+          {/* ✅ UPDATED BUTTON */}
           <button
-            onClick={() => router.push(finalPath)}
+            onClick={(e) => {
+              e.stopPropagation(); // prevent card click
+              const productWithQuantity = { ...item, quantity: 1 };
+              dispatch(addItem({ product: productWithQuantity, quantity: 1 }));
+            }}
             className="w-full py-2 max-xl:py-1 xl:gap-2 max-xl:gap-[2px] max-xl:px-1 gap-1 bg-[#583FA8] flex justify-center items-center max-md:py-1 rounded-md max-lg:px-2 max-lg:gap-1 max-md:w-fit"
           >
             <RiShoppingBag4Line
