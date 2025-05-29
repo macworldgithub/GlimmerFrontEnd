@@ -40,3 +40,4 @@ const CardSlider = ({ ProductList }: { ProductList: any }) => {
 };
 
 export default CardSlider;
+
