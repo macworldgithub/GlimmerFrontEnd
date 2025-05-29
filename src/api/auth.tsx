@@ -1,5 +1,5 @@
 import axios from "axios";
-import { development, production, BACKEND_URL } from "./config";
+import { BACKEND_URL } from "./config";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "@/store/reduxStore";
 interface PropsLogin {
