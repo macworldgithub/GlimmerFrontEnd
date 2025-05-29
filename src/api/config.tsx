@@ -6,5 +6,5 @@ const curr_env: "Prod" | "DEV" = "Prod";
 
 export const BACKEND_URL =
   //@ts-ignore
- curr_env === "DEV" ? developmentServer : productionServer;
+curr_env === "DEV" ? developmentServer : productionServer;
 // export const BACKEND_URL = "http://localhost:3000";
