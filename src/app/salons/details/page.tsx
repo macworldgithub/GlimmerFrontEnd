@@ -20,8 +20,6 @@ const SalonDetailsPage = () => {
 
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
 
-  const images = [salonData?.image1, salonData?.image2, salonData?.image3, salonData?.image4].filter(Boolean);
-
   useEffect(() => {
     if (id) {
       const fetchSalonData = async () => {
@@ -47,15 +45,39 @@ const SalonDetailsPage = () => {
     return `${formattedHour}:${minute} ${suffix}`;
   };
 
-  if (loading) return <p>Loading salon details...</p>;
-  if (error) return <p>{error}</p>;
-  if (!salonData) return <p>No data available for this salon.</p>;
+  const images = [salonData?.image1, salonData?.image2, salonData?.image3, salonData?.image4].filter(Boolean);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <p className="text-lg font-semibold">Loading salon details...</p>
+      </div>
+    );
+  }
+
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <p className="text-red-500 text-lg">{error}</p>
+      </div>
+    );
+  }
+
+  
+  if (!salonData) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <p>No data available for this salon.</p>
+      </div>
+    );
+  }
+
 
   return (
     <>
-      <div className="mb-6 w-[99vw] md:mb-8 p-10">
-       <div className="flex flex-col mt-0">
-
+      <div className="mb-6 w-[99vw] md:mb-8 pt-0 pb-10 px-10">
+        <div className="flex flex-col mt-0">
           <div className="flex justify-between items-center">
             <div className="prose">
               <h2 className="text-5xl">
@@ -83,8 +105,7 @@ const SalonDetailsPage = () => {
         </div>
 
         {/* ✅ Image Grid */}
-      <div className="hidden md:grid grid-cols-2 gap-4 mt-6 max-w-[85vw] mx-auto px-16">
-
+        <div className="hidden md:grid grid-cols-2 gap-3 mt-6 max-w-[85vw] mx-auto px-16">
           {images.map((src, index) => (
             <div
               key={index}
@@ -101,7 +122,7 @@ const SalonDetailsPage = () => {
         </div>
       </div>
 
-      {/* ✅ Fullscreen Modal with Navigation */}
+      {/* ✅ Fullscreen Modal */}
       {selectedImageIndex !== null && (
         <div
           className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50"

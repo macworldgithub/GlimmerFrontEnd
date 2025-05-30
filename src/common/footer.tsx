@@ -107,9 +107,9 @@ const Footer = () => {
               <h3 className="font-bold mb-2 text-white">Salon Services</h3>
               <ul className="space-y-1">
                 <li>
-                  <a className="hover:text-white" href="#">
+                  <Link href="/salons" className="hover:text-white">
                     Book a Salon Service
-                  </a>
+                  </Link>
                 </li>
                 <li>
                   <a className="hover:text-white" href="#">
@@ -158,12 +158,13 @@ const Footer = () => {
               <h3 className="font-bold mb-2 text-white">Partner With Us</h3>
               <ul className="space-y-1">
                 <li>
-                  <a className="hover:text-white" href="#">
+                  <Link href="/salons/business" className="hover:text-white">
                     Register your Salon
-                  </a>
+                  </Link>
                 </li>
+
                 <li>
-                  <a className="hover:text-white" href="#">
+                  <a className="hover:text-white" href="/RegisterGymModal">
                     Register your Gym
                   </a>
                 </li>
