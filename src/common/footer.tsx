@@ -14,8 +14,8 @@ const Footer = () => {
               <h3 className="font-bold mb-2 text-white">MY ACCOUNT</h3>
               <ul className="space-y-1">
                 <li>
-                  <a className="hover:text-white" href="/signup">
-                    Sign in
+                  <a className="hover:text-white" href="signup">
+                    SignIn/Register
                   </a>
                 </li>
 
@@ -26,12 +26,12 @@ const Footer = () => {
                 </li>
 
                 <li>
-                  <a className="hover:text-white" href="/cart">
+                  <a className="hover:text-white" href="Track_My_Order">
                     Track My Order
                   </a>
                 </li>
                 <li>
-                  <a className="hover:text-white" href="">
+                  <a className="hover:text-white" href="#">
                     Appointments
                   </a>
                 </li>
@@ -43,16 +43,12 @@ const Footer = () => {
               <h3 className="font-bold mb-2 text-white">INFORMATION</h3>
               <ul className="space-y-1">
                 <li>
-                  <a className="hover:text-white" href="#">
-                    Delivery Information
+                  <a className="hover:text-white" href="DelieveryInfo">
+                    Delivery Information & fAQ
                   </a>
                 </li>
-                {/* <li><a className="hover:text-white" href="#">Blog</a></li> */}
-                <li>
-                  <a className="hover:text-white" href="#">
-                    FAQ
-                  </a>
-                </li>
+             
+               
               </ul>
             </div>
 
@@ -61,7 +57,7 @@ const Footer = () => {
               <h3 className="font-bold mb-2 text-white">CUSTOMER SERVICES</h3>
               <ul className="space-y-1">
                 <li>
-                  <a className="hover:text-white" href="#">
+                  <a className="hover:text-white" href="Shipping_and_Returns">
                     Shipping and Returns
                   </a>
                 </li>
@@ -74,31 +70,13 @@ const Footer = () => {
                 PAYMENT AND SHIPPING
               </h3>
               <ul className="space-y-1">
+                
                 <li>
-                  <a className="hover:text-white" href="#">
-                    Terms of Us
-                  </a>
-                </li>
-                <li>
-                  <a className="hover:text-white" href="#">
+                  <a className="hover:text-white" href="Payment_Methods">
                     Payment Methods
                   </a>
                 </li>
-                <li>
-                  <a className="hover:text-white" href="#">
-                    Shipping Guide
-                  </a>
-                </li>
-                <li>
-                  <a className="hover:text-white" href="#">
-                    Locations We Ship To
-                  </a>
-                </li>
-                <li>
-                  <a className="hover:text-white" href="#">
-                    Estimated Delivery Time
-                  </a>
-                </li>
+                
               </ul>
             </div>
 
@@ -112,15 +90,11 @@ const Footer = () => {
                   </Link>
                 </li>
                 <li>
-                  <a className="hover:text-white" href="#">
-                    How Booking Works
+                  <a className="hover:text-white" href="Booking_Work_Policy">
+                     Booking Works & Policy
                   </a>
                 </li>
-                <li>
-                  <a className="hover:text-white" href="#">
-                    Salon Booking Policy
-                  </a>
-                </li>
+               
               </ul>
             </div>
 
@@ -131,25 +105,11 @@ const Footer = () => {
               </h3>
               <ul className="space-y-1">
                 <li>
-                  <a className="hover:text-white" href="#">
+                  <a className="hover:text-white" href="/Booking_Cancellation_policy">
                     Cancellation Window
                   </a>
                 </li>
-                <li>
-                  <a className="hover:text-white" href="#">
-                    How to cancel
-                  </a>
-                </li>
-                <li>
-                  <a className="hover:text-white" href="#">
-                    Late Cancellations
-                  </a>
-                </li>
-                <li>
-                  <a className="hover:text-white" href="#">
-                    Refund Policy
-                  </a>
-                </li>
+               
               </ul>
             </div>
 
@@ -163,11 +123,7 @@ const Footer = () => {
                   </Link>
                 </li>
 
-                <li>
-                  <a className="hover:text-white" href="/RegisterGymModal">
-                    Register your Gym
-                  </a>
-                </li>
+                
               </ul>
             </div>
 
@@ -198,19 +154,21 @@ const Footer = () => {
           <div className="flex flex-col md:flex-row justify-between items-center text-sm gap-3">
             {/* Left: Links */}
             <div className="space-x-3">
-              <a href="/privacy-policy" className="hover:underline">
+              {/* <a href="/privacy-policy" className="hover:underline">
                 Privacy Policy
-              </a>
+              </a> */}
               <span>|</span>
-              <a href="/terms-and-conditions" className="hover:underline">
+              {/* <a href="/terms-and-conditions" className="hover:underline">
                 Terms and Conditions
-              </a>
+              </a> */}
             </div>
 
             {/* Right: Copyright */}
             <div className="text-center md:text-right">
               Copyright © 2025 Glimmer. All Rights Reserved.
             </div>
+
+            <div className="text-center md:text-right">Business Hours: Mon–Sat | 10:00 AM – 6:00 PM</div>
 
             {/* Social Icons Row */}
             <div className="flex gap-4 mt-4 md:mt-0 md:ml-auto">
