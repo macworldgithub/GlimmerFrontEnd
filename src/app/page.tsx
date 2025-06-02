@@ -16,8 +16,8 @@ export default function Home() {
     <>
       <div className="w-[99vw]">
         <Hero />
+          <SeftcareCardList />
         <SalonCardList />
-        <SeftcareCardList />
         <BottomSlider />
         <GymBanner />
         <ProductFilter />

@@ -98,7 +98,7 @@ const NavbarClient = ({
 
   return (
     <>
-      <div className="navbar bg-base-100 w-[99vw]">
+      <div className="navbar bg-base-100 w-[99vw] sticky top-0 z-50">
         <div className="flex justify-between flex-1">
           <Link className="btn btn-ghost text-xl h-16" href="/">
             <img src={Logo.src} alt="logo" className="h-16" />
@@ -109,9 +109,7 @@ const NavbarClient = ({
                 "justify-end pr-10": isProductsPage,
               })}
             >
-              <ProductSearchBar
-                className="max-md:hidden"
-              />
+              <ProductSearchBar className="max-md:hidden" />
             </div>
           )}
         </div>
@@ -125,13 +123,10 @@ const NavbarClient = ({
           />
         </div>
       </div>
-   
-        <div className="flex justify-center mb-5">
-          <ProductSearchBar
-            className="md:hidden"
-          />
-        </div>
-      
+
+      <div className="flex justify-center mb-5">
+        <ProductSearchBar className="md:hidden" />
+      </div>
     </>
   );
 };

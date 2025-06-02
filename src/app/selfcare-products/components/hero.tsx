@@ -11,7 +11,7 @@ const Hero = ({ srcs = [] }: Props) => {
   const _srcs =
     srcs.length > 0 ? srcs : [HeroImg1.src, HeroImg2.src, HeroImg3.src];
   return (
-    <div className=" mb-6 md:mb-14 w-[99vw]">
+    <div className=" ml-56 mb-6 md:mb-14 w-[90%]">
       <AutoSlider srcs={_srcs} />
     </div>
   );

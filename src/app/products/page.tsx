@@ -242,7 +242,7 @@ const ProductsList = () => {
           href="/selfcare-products"
           className="text-gray-500 font-medium text-base lg:text-xl"
         >
-          Selfcare Products
+          Selfcare Products 
         </Link>
 
         {(categoryFilter || subCategoryFilter || itemFilter || nameFilter) && (

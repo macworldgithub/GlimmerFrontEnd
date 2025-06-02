@@ -3,15 +3,15 @@ import * as React from "react";
 import glimmerBannerImg from "@/assets/salon-profile/Glimmer-Banner-img.png";
 import AutoSlider from "@/common/auto-slider";
 type Props = {
-	srcs?: string[];
+  srcs?: string[];
 };
 const GlimmerBanner = ({ srcs = [] }: Props) => {
-	const _srcs = srcs.length > 0 ? srcs : [glimmerBannerImg.src];
-	return (
-		<div className="w-[99vw] p-10 md:mb-14">
-			<AutoSlider srcs={_srcs} />
-		</div>
-	);
+  const _srcs = srcs.length > 0 ? srcs : [glimmerBannerImg.src];
+  return (
+    <div className="w-[95%] p-10 md:mb-14 ml-52">
+      <AutoSlider srcs={_srcs} />
+    </div>
+  );
 };
 
 export default GlimmerBanner;

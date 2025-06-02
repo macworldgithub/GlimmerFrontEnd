@@ -42,15 +42,15 @@ const AutoSlider = ({ srcs = [], type = "slide", delay = 3000 }: Props) => {
       >
         {_srcs.map((s, index) => (
           <SwiperSlide key={s}>
-					<div className="w-full">
+					{/* <div className="w-[100%]"> */}
               <Link href={index === 0 ? "/salons" : "/selfcare-products"}>
                 <img
                   src={s}
-                  className="w-full h-full  max-xl:object-cover rounded-lg transition-transform duration-500 hover:scale-105 hover:brightness-110"
+                  className="w-[90%] h-[90%]  max-xl:object-cover rounded-lg transition-transform duration-500 hover:scale-105 hover:brightness-110"
                   alt="Swiper Carousel component"
                 />
               </Link>
-            </div>
+            {/* </div> */}
           </SwiperSlide>
         ))}
       </Swiper>

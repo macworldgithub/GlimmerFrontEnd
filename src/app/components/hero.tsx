@@ -8,8 +8,8 @@ type Props = {
 const Hero = ({ srcs = [] }: Props) => {
   const _srcs = srcs.length > 0 ? srcs : [HeroImg1.src, HeroImg2.src];
   return (
-    <div className="mb-6 md:mb-14 w-[99vw] ">
-      <AutoSlider srcs={_srcs} />
+    <div className=" ml-36 w-[90%] ">
+      <AutoSlider srcs={_srcs} />{" "}
     </div>
   );
 };

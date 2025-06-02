@@ -20,7 +20,10 @@ const Breadcrumbs = () => {
 
       {/* Static Selfcare Products Link */}
       <span className="mx-2 text-gray-500 text-base lg:text-xl">/</span>
-      <Link href="/products" className="text-purple-800 font-medium text-base lg:text-xl">
+      <Link
+        href="/products"
+        className="text-purple-800 font-medium text-base lg:text-xl"
+      >
         Selfcare Products
       </Link>
 
@@ -28,7 +31,10 @@ const Breadcrumbs = () => {
       {(category || subCategory || item) && (
         <>
           <span className="mx-2 text-gray-500 text-base lg:text-xl">/</span>
-          <Link href="/products" className="text-purple-800 font-medium text-base lg:text-xl">
+          <Link
+            href="/products"
+            className="text-purple-800 font-medium text-base lg:text-xl"
+          >
             Products
           </Link>
         </>

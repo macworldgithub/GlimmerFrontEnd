@@ -63,7 +63,7 @@ const SideMenu = ({
             <FaArrowRight className="size-4" /> Products
           </Link>
         </li>
-        <li>
+        {/* <li>
           <Link
             className="text-base"
             href="/salons/business"
@@ -71,8 +71,8 @@ const SideMenu = ({
           >
             <FaArrowRight className="size-4" /> Register your salon
           </Link>
-        </li>
-        <li>
+        </li> */}
+        {/* <li>
           <button
             onClick={() => setShowGymModal(true)}
             className="text-base flex items-center space-x-2"
@@ -80,7 +80,7 @@ const SideMenu = ({
             <FaArrowRight className="size-4" />
             <span>Register your gym</span>
           </button>
-        </li>
+        </li> */}
         <li>
           {credentials.token ? (
             <div

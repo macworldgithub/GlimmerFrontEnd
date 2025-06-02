@@ -14,7 +14,7 @@ const VideoTutorial = () => {
         frameBorder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowFullScreen
-        className="w-full h-[500px] rounded-lg "
+        className="w-[80%] h-[500px] rounded-lg "
       ></iframe>
     </div>
   );
