@@ -27,7 +27,7 @@ const OfferPictures = () => {
             <div className="w-full h-full rounded-lg ">
               <img
                 src={item.image1}
-                className=" w-[80%] h-full ml-20 lg:object-cover"
+                className=" w-[80%] h-full mx-auto lg:object-cover"
                 alt={item.name}
               />
             </div>
