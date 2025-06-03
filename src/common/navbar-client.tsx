@@ -100,6 +100,12 @@ const NavbarClient = ({
     <>
       <div className="navbar bg-base-100 w-[99vw] sticky top-0 z-50">
         <div className="flex justify-between flex-1">
+         
+     <SideMenu
+            isLoggedIn={!!session?.userId}
+            handleLogout={handleLogout}
+          />
+
           <Link className="btn btn-ghost text-xl h-16" href="/">
             <img src={Logo.src} alt="logo" className="h-16" />
           </Link>
@@ -117,10 +123,10 @@ const NavbarClient = ({
         <div className="flex-none">
           <ShowUser />
           <CartNavbar />
-          <SideMenu
+          {/* <SideMenu
             isLoggedIn={!!session?.userId}
             handleLogout={handleLogout}
-          />
+          /> */}
         </div>
       </div>
 

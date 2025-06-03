@@ -333,44 +333,42 @@ const ProductDisplay = () => {
             <button onClick={handlePrev} className="p-2 text-gray-500">
               <MdOutlineKeyboardArrowLeft size={50} />
             </button>
-            <div className="flex gap-2 overflow-hidden">
-              {isMobile
-                ? [images[index]].map((image, i) => (
-                    <div
-                      key={i}
-                      className="mx-4 w-[120px] h-[120px] sm:w-[140px] sm:h-[140px] flex items-center justify-center overflow-hidden rounded-md shadow bg-gray-100 border cursor-pointer border-purple-900"
-                    >
-                      <img
-                        src={image}
-                        alt={`Thumbnail ${i + 1}`}
-                        className="w-full h-full object-cover"
-                        onError={(e) =>
-                          (e.currentTarget.src =
-                            "/assets/images/default_image.jpg")
-                        }
-                      />
-                    </div>
-                  ))
-                : images.map((image, i) => (
-                    <div
-                      key={i}
-                      className={`mx-4 md:w-[90px] md:h-[90px] flex items-center justify-center overflow-hidden rounded-md shadow bg-gray-100 border border-gray-300 cursor-pointer ${
-                        i === index ? "border-purple-900" : ""
-                      }`}
-                      onClick={() => setIndex(i)}
-                    >
-                      <img
-                        src={image}
-                        alt={`Thumbnail ${i + 1}`}
-                        className="w-full h-full object-cover"
-                        onError={(e) =>
-                          (e.currentTarget.src =
-                            "/assets/images/default_image.jpg")
-                        }
-                      />
-                    </div>
-                  ))}
-            </div>
+          <div className="flex gap-2 overflow-hidden">
+  {isMobile
+    ? images.length > 0 && (
+        <div
+          className="mx-4 w-[120px] h-[120px] sm:w-[140px] sm:h-[140px] flex items-center justify-center overflow-hidden rounded-md shadow bg-gray-100 border cursor-pointer border-purple-900"
+        >
+          <img
+            src={images[index]}
+            alt={`Thumbnail ${index + 1}`}
+            className="w-full h-full object-cover"
+            onError={(e) =>
+              (e.currentTarget.src = "/assets/images/default_image.jpg")
+            }
+          />
+        </div>
+      )
+    : images.slice(0, 3).map((image, i) => (
+        <div
+          key={i}
+          className={`mx-4 md:w-[90px] md:h-[90px] flex items-center justify-center overflow-hidden rounded-md shadow bg-gray-100 border border-gray-300 cursor-pointer ${
+            i === index ? "border-purple-900" : ""
+          }`}
+          onClick={() => setIndex(i)}
+        >
+          <img
+            src={image}
+            alt={`Thumbnail ${i + 1}`}
+            className="w-full h-full object-cover"
+            onError={(e) =>
+              (e.currentTarget.src = "/assets/images/default_image.jpg")
+            }
+          />
+        </div>
+      ))}
+</div>
+
             <button onClick={handleNext} className="p-2 text-gray-500">
               <MdKeyboardArrowRight size={50} />
             </button>

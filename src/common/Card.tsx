@@ -1,16 +1,17 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { RealCardItem } from "@/data";
 import { Rating } from "react-simple-star-rating";
 import { FaHeart } from "react-icons/fa";
 import { RiShoppingBag4Line } from "react-icons/ri";
 import { useDispatch } from "react-redux";
-import { addItem } from "@/reduxSlices/cartSlice"; // make sure path is correct
+import { addItem } from "@/reduxSlices/cartSlice";
 
 const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
   const router = useRouter();
   const dispatch = useDispatch();
+  const [showMessage, setShowMessage] = useState(false); // ✅
 
   let queryParams = new URLSearchParams();
   if (item.rate_of_salon) queryParams.append("rate", item.rate_of_salon.toString());
@@ -24,10 +25,17 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
 
   return (
     <div
-      className="w-[280px] h-[320px] sm:w-[300px] sm:h-[350px] md:max-w-[320px] md:h-[370px] mx-auto bg-white rounded-2xl bg-gradient-to-b from-white to-gray-100 shadow-md hover:shadow-lg transition duration-300 cursor-pointer flex flex-col overflow-visible relative"
+      className="relative w-[280px] h-[320px] sm:w-[300px] sm:h-[350px] md:max-w-[320px] md:h-[370px] mx-auto bg-white rounded-2xl bg-gradient-to-b from-white to-gray-100 shadow-md hover:shadow-lg transition duration-300 cursor-pointer flex flex-col overflow-visible"
       onClick={() => router.push(finalPath)}
     >
-      {/* Top 50% Image */}
+      {/* ✅ SUCCESS MESSAGE */}
+      {showMessage && (
+        <div className="absolute top-2 left-1/2 transform -translate-x-1/2 bg-green-500 text-white text-xs px-3 py-1 rounded-md shadow z-50">
+          Item has been added to cart
+        </div>
+      )}
+
+      {/* Top half image */}
       <div className="relative w-full h-1/2 flex items-center justify-center bg-white">
         <img
           src={item.image1 || "/assets/images/default_image.jpg"}
@@ -35,14 +43,15 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
           className="max-h-full max-w-full object-contain rounded-t-2xl"
         />
 
-        {/* Discount badge */}
+        {/* Discount and actions */}
         <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 flex gap-2 w-full justify-center px-2 max-md:justify-between">
-          {/* ✅ UPDATED BUTTON */}
           <button
             onClick={(e) => {
-              e.stopPropagation(); // prevent card click
+              e.stopPropagation();
               const productWithQuantity = { ...item, quantity: 1 };
               dispatch(addItem({ product: productWithQuantity, quantity: 1 }));
+              setShowMessage(true); // ✅ Show message
+              setTimeout(() => setShowMessage(false), 2000); // ✅ Auto hide after 2s
             }}
             className="w-full py-2 max-xl:py-1 xl:gap-2 max-xl:gap-[2px] max-xl:px-1 gap-1 bg-[#583FA8] flex justify-center items-center max-md:py-1 rounded-md max-lg:px-2 max-lg:gap-1 max-md:w-fit"
           >
@@ -77,7 +86,7 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
         )}
       </div>
 
-      {/* Bottom 50% Content */}
+      {/* Bottom half content */}
       <div className="p-4 h-1/2 flex flex-col justify-between">
         <div>
           <h2 className="text-lg font-semibold truncate mb-1">{item.name}</h2>

@@ -119,7 +119,7 @@ const SideMenu = ({
   return (
     <>
       {/* desktop */}
-      <div className="dropdown dropdown-end hidden md:block">
+      <div className="dropdown menu-dropdown-show hidden md:block">
         <div
           tabIndex={0}
           role="button"

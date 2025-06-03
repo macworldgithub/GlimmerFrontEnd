@@ -10,14 +10,14 @@ import "swiper/css/effect-fade"; // Import required styles
 
 type Props = {
   srcs?: string[];
-	type?:
-		| "slide"
-		| "fade"
-		| "cube"
-		| "coverflow"
-		| "flip"
-		| "creative"
-		| "cards";
+  type?:
+    | "slide"
+    | "fade"
+    | "cube"
+    | "coverflow"
+    | "flip"
+    | "creative"
+    | "cards";
   delay?: number | null;
 };
 
@@ -32,8 +32,8 @@ const AutoSlider = ({ srcs = [], type = "slide", delay = 3000 }: Props) => {
         modules={modules}
         spaceBetween={50}
         slidesPerView={1}
-			// onSlideChange={() => console.log("slide change")}
-			// onSwiper={(swiper) => console.log(swiper)}
+        // onSlideChange={() => console.log("slide change")}
+        // onSwiper={(swiper) => console.log(swiper)}
         effect={type}
         autoplay={{ delay: delay as number }}
         loop={true}
@@ -42,14 +42,14 @@ const AutoSlider = ({ srcs = [], type = "slide", delay = 3000 }: Props) => {
       >
         {_srcs.map((s, index) => (
           <SwiperSlide key={s}>
-					{/* <div className="w-[100%]"> */}
-              <Link href={index === 0 ? "/salons" : "/selfcare-products"}>
-                <img
-                  src={s}
-                  className="w-[90%] h-[90%]  max-xl:object-cover rounded-lg transition-transform duration-500 hover:scale-105 hover:brightness-110"
-                  alt="Swiper Carousel component"
-                />
-              </Link>
+            {/* <div className="w-[100%]"> */}
+            <Link href={index === 0 ? "/salons" : "/selfcare-products"}>
+              <img
+                src={s}
+                className="w-full h-full  max-xl:object-cover rounded-lg transition-transform duration-500 hover:scale-105 hover:brightness-110"
+                alt="Swiper Carousel component"
+              />
+            </Link>
             {/* </div> */}
           </SwiperSlide>
         ))}

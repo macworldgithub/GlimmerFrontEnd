@@ -84,11 +84,10 @@ const CartSlice = createSlice({
   reducers: {
     addItem: (state, action) => {
       const { product } = action.payload;
+
       const existingItemIndex = state.ProductList.findIndex(
-        (item) => item.product.id === product._id
+        (item) => item.product._id === product._id
       );
-      console.log("first");
-      console.log(product._id);
 
       if (existingItemIndex !== -1) {
         state.ProductList[existingItemIndex].quantity += 1;
@@ -104,23 +103,6 @@ const CartSlice = createSlice({
       state.discountedTotal = discountSum;
     },
 
-    removeItem: (state, action) => {
-      const productId = action.payload;
-
-      const existingItemIndex = state.ProductList.findIndex(
-        (item) => item.product.id === productId
-      );
-
-      if (existingItemIndex !== -1) {
-        state.ProductList.splice(existingItemIndex, 1);
-      }
-
-      const { sum, discountSum } = CalculateTotal(state.ProductList);
-      state.total = sum;
-      state.discountedTotal = discountSum;
-    },
-
-
     totalCartAmount: (state) => {
       let sum = 0;
       let discountSum = 0;
@@ -132,20 +114,22 @@ const CartSlice = createSlice({
       state.discountedTotal = discountSum;
     },
 
-    updateQty: (state, action) => {
-      const { _id, qty } = action.payload;
+   updateQty: (state, action) => {
+  const { _id, qty } = action.payload;
 
-      for (let item of state.ProductList) {
-        const product = item.product;
-        if (product.id === _id) {
-          item.quantity = qty;
-        }
-      }
+  for (let item of state.ProductList) {
+    const product = item.product.id;
+    if (product=== _id) {
+      item.quantity = qty;
+      break; // quantity updated, no need to continue loop
+    }
+  }
 
-      const { sum, discountSum } = CalculateTotal(state.ProductList);
-      state.total = sum;
-      state.discountedTotal = discountSum;
-    },
+  const { sum, discountSum } = CalculateTotal(state.ProductList);
+  state.total = sum;
+  state.discountedTotal = discountSum;
+},
+
 
     updateProductSize: (
       state,
@@ -175,6 +159,22 @@ const CartSlice = createSlice({
       state.ProductList = [];
       state.total = 0;
       state.discountedTotal = 0;
+    },
+
+     removeItem: (state, action) => {
+      const productId = action.payload;
+
+      const existingItemIndex = state.ProductList.findIndex(
+        (item) => item.product.id === productId
+      );
+
+      if (existingItemIndex !== -1) {
+        state.ProductList.splice(existingItemIndex, 1);
+      }
+
+      const { sum, discountSum } = CalculateTotal(state.ProductList);
+      state.total = sum;
+      state.discountedTotal = discountSum;
     },
   },
 });

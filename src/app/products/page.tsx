@@ -342,37 +342,7 @@ const ProductsList = () => {
               )}
             </div>
 
-            {/* <div className="relative">
-              <button
-                onClick={() => setShowRatingDropdown(!showRatingDropdown)}
-                className="flex items-center gap-2 border px-6 py-2 rounded-md text-lg font-medium transition duration-300 ease-in-out border-gray-400 text-gray-700 hover:bg-[#FDF3D2]"
-              >
-                Ratings {ratingFilter ? `${ratingFilter} ★` : ""} <BiChevronDown size={20} />
-              </button>
-
-              {showRatingDropdown && (
-                <div className="absolute z-50 left-0 mt-2 w-44 bg-white rounded-lg shadow-lg">
-                  {showRatingDropdown && (
-                    <div className="absolute z-50 left-0 mt-2 w-44 bg-white border border-gray-300 rounded-lg shadow-lg">
-                      {[1, 2, 3, 4, 5].map((star) => (
-                        <button
-                          key={star}
-                          onClick={() => {
-                            setRatingFilter(star);
-                            setShowRatingDropdown(false);
-                          }}
-                          className="block w-full text-left px-5 py-3 text-lg font-medium hover:bg-gray-200 items-center"
-                        >
-                          {[...Array(5)].map((_, i) => (
-                            <span key={i} className={i < star ? "text-purple-800" : "text-gray-300"}>★</span>
-                          ))}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              )}
-            </div> */}
+          
           </div>
 
           <div className=" w-full h-max grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-x-8 gap-y-10 p-6">
@@ -403,7 +373,7 @@ const ProductsList = () => {
                 disabled={page === 1}
                 className="px-4 py-2 bg-gray-200 text-gray-500 rounded-md hover:bg-gray-300 disabled:opacity-50"
               >
-                Previous
+                Previous 
               </button>
               <span className="text-lg text-gray-600">
                 Page {page} of {Math.ceil(total / pageSize)}
