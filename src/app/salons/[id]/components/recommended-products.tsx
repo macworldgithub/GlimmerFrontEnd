@@ -14,7 +14,6 @@ const RecommendedProducts = () => {
   const cardsToShow = 4;
 
   const salonId = searchParams.get("salonId") ?? "";
-
   useEffect(() => {
     const fetchProductsOfSalon = async () => {
       const response = await getRecommendedProductsOfSalon(salonId);

@@ -65,11 +65,15 @@ const CategoryNavMenu = ({ className }: { className?: string }) => {
   };
 
   const sortCategories = (arr: any[]) => {
-    return arr.sort((a, b) => a.product_category.name.localeCompare(b.product_category.name));
+    return arr.sort((a, b) =>
+      a.product_category.name.localeCompare(b.product_category.name)
+    );
   };
 
-
-  const transformToMenuItems = (data: Category[], handleClick: any): MenuItem[] => {
+  const transformToMenuItems = (
+    data: Category[],
+    handleClick: any
+  ): MenuItem[] => {
     const sortedCategories = sortCategories(data);
     return sortedCategories.map((category: any) => ({
       key: category._id,
@@ -131,7 +135,10 @@ const CategoryNavMenu = ({ className }: { className?: string }) => {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setSelectedSubCategory([]);
       }
     };
@@ -188,8 +195,9 @@ const CategoryNavMenu = ({ className }: { className?: string }) => {
   return (
     <>
       <div
-        className={`max-md:hidden relative h-[60px] w-[99vw] flex justify-center py-2 ${isProductsPage ? "bg-white border-[1px] border-black" : "bg-[#FBE8A5]"
-          } ${className}`}
+        className={`max-md:hidden relative h-[60px] w-[99vw] flex justify-center py-2 ${
+          isProductsPage ? "bg-white border-[1px] border-black" : "bg-[#FBE8A5]"
+        } ${className}`}
       >
         <div className="flex gap-12 items-center">
           {categories.map((item: any) => (
@@ -205,10 +213,11 @@ const CategoryNavMenu = ({ className }: { className?: string }) => {
         {/* Menu is below which need to appear smoothly */}
         <div
           ref={dropdownRef}
-          className={`w-full justify-between px-8 py-1 flex h-max bg-white absolute top-[70px] z-50 transition-all duration-500 ${selectedSubCategory.length > 0
-            ? "opacity-100 translate-y-0"
-            : "opacity-0 -translate-y-5 pointer-events-none"
-            }`}
+          className={`w-full justify-between px-8 py-1 flex h-max bg-white absolute top-[70px] z-50 transition-all duration-500 ${
+            selectedSubCategory.length > 0
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 -translate-y-5 pointer-events-none"
+          }`}
         >
           {selectedSubCategory?.map((item: any, index: number) => (
             <div className="flex flex-col" key={index}>
@@ -216,7 +225,7 @@ const CategoryNavMenu = ({ className }: { className?: string }) => {
                 onClick={() =>
                   HandlePath(`${item?.product_category}-${item?._id}`)
                 }
-                className="font-semibold text-[20px] cursor-pointer"
+                className="font-semibold text-[16px] cursor-pointer"
               >
                 {item?.name}
               </p>
@@ -228,7 +237,7 @@ const CategoryNavMenu = ({ className }: { className?: string }) => {
                         `${item?.product_category}-${item?._id}-${product?._id}`
                       )
                     }
-                    className="w-[160px] cursor-pointer"
+                    className="text-[12px] sm:text-[11px] text-black hover:text-gray-900 transition-all duration-200 cursor-pointer w-[120px] sm:w-[160px] break-words whitespace-normal"
                     key={i}
                   >
                     {product?.name}
@@ -243,7 +252,7 @@ const CategoryNavMenu = ({ className }: { className?: string }) => {
             <button>Book Salon Now</button>
           </div>
         </Link>
-      </div >
+      </div>
 
       <div className="md:hidden">
         <MenuOutlined

@@ -566,7 +566,7 @@ const ProductDisplay = () => {
       height={15}
       src="/assets/addtoBag/cart-icon.png"
     />
-    ADD TO BAG
+    ADD TO BAG 
   </button>
 
   {/* + - Quantity Controller */}
@@ -588,7 +588,6 @@ const ProductDisplay = () => {
     </button>
   </div>
 </div>
-
 
             <button
               className={`w-full flex items-center justify-center text-xs font-semibold gap-2 py-3 xl:px-6 px-4 

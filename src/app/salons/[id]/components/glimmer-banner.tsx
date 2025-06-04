@@ -8,7 +8,7 @@ type Props = {
 const GlimmerBanner = ({ srcs = [] }: Props) => {
   const _srcs = srcs.length > 0 ? srcs : [glimmerBannerImg.src];
   return (
-    <div className="w-[95%] p-10 md:mb-14 mx-auto">
+    <div className="w-[87%] p-10 md:mb-14 mx-auto">
       <AutoSlider srcs={_srcs} />
     </div>
   );

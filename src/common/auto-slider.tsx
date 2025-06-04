@@ -6,7 +6,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, EffectFade } from "swiper/modules";
 import Link from "next/link";
 import "swiper/css";
-import "swiper/css/effect-fade"; // Import required styles
+import "swiper/css/effect-fade"; 
 
 type Props = {
   srcs?: string[];
