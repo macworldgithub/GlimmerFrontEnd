@@ -23,10 +23,16 @@ import ProductFilter from "@/common/ProductFilter";
 export default async function Home() {
   return (
     <>
-      <Suspense fallback={<div>Loading...</div>}>
+     <Suspense fallback={<div>Loading...</div>}>
         <CategoryNavMenu className="mb-4" />
-        <Breadcrumbs />
-        <Hero />
+           <Breadcrumbs />
+      {/* HERO KO PEHLE DIKHAAO (Suspense ke bahar) */}
+      <Hero />
+       </Suspense>
+
+      {/* Baaki sab Suspense ke andar jaise already tha */}
+     
+     
         <Assurity />
         <OfferPictures />
         <VideoTutorial />
@@ -34,8 +40,8 @@ export default async function Home() {
         <MustItems />
         <BestSellers />
         <DynamicBanner imageUrl="" title="Shop Now and Unleash Your Inner Glow!" />
-        <Faq/>
-      </Suspense>
+        <Faq />
+     
     </>
   );
 }

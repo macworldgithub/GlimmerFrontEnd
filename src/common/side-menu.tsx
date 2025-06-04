@@ -95,7 +95,7 @@ const SideMenu = ({
                   src={DefaultAvatar.src}
                 />
               </div>
-              Logout
+              Logout 
             </div>
           ) : (
             <Link
@@ -109,7 +109,7 @@ const SideMenu = ({
                   src={DefaultAvatar.src}
                 />
               </div>
-              Login
+              Login 
             </Link>
           )}
         </li>
