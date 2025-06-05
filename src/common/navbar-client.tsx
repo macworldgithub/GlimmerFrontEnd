@@ -100,8 +100,7 @@ const NavbarClient = ({
     <>
       <div className="navbar bg-base-100 w-[99vw] sticky top-0 z-50">
         <div className="flex justify-between flex-1">
-         
-     <SideMenu
+          <SideMenu
             isLoggedIn={!!session?.userId}
             handleLogout={handleLogout}
           />
@@ -111,11 +110,33 @@ const NavbarClient = ({
           </Link>
           {!isSalonPage && (
             <div
-              className={cn("flex w-full", {
+              className={cn("flex flex-col w-full", {
                 "justify-end pr-10": isProductsPage,
               })}
             >
               <ProductSearchBar className="max-md:hidden" />
+
+              {/* Desktop-only navigation links below the search bar */}
+              <div className="hidden md:flex justify-center gap-8 mt-2  ml-24 mr-auto">
+                <Link
+                  href="/"
+                  className="text-center font-bold text-gray-700 hover:text-primary"
+                >
+                  Home
+                </Link>
+                <Link
+                  href="/salons"
+                  className="text-center font-bold text-gray-700 hover:text-primary"
+                >
+                  Salons
+                </Link>
+                <Link
+                  href="/selfcare-products"
+                  className="text-center font-bold text-gray-700 hover:text-primary"
+                >
+                  Products
+                </Link>
+              </div>
             </div>
           )}
         </div>

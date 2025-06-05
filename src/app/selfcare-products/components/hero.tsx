@@ -14,8 +14,8 @@ const Hero = ({ srcs = [] }: Props) => {
     srcs.length > 0 ? srcs : [HeroImg1.src, HeroImg2.src, HeroImg3.src];
 
   return (
-    <div className="flex justify-center w-full px-4 md:px-0 mx-auto">
-      <div className="w-full max-w-5xl">
+    <div className="flex justify-center w-[120%] px-4 md:px-0 mx-auto">
+      <div className="w-[100%] max-w-5xl">
         <AutoSlider srcs={_srcs} />
       </div>
     </div>
