@@ -116,7 +116,7 @@ const NavbarClient = ({
             >
               <ProductSearchBar className="max-md:hidden" />
 
-              {/* Desktop-only navigation links below the search bar */}
+              {/* Desktop-only navigation links below the search bar
               <div className="hidden md:flex justify-center gap-8 mt-2  ml-24 mr-auto">
                 <Link
                   href="/"
@@ -136,7 +136,7 @@ const NavbarClient = ({
                 >
                   Products
                 </Link>
-              </div>
+              </div> */}
             </div>
           )}
         </div>
