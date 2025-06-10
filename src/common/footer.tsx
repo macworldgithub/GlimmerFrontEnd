@@ -22,10 +22,26 @@ const Footer = () => {
               <div>
                 <h3 className="font-bold mb-2 text-white">MY ACCOUNT</h3>
                 <ul className="space-y-1">
-                  <li><a className="hover:text-white" href="signup">SignIn/Register</a></li>
-                  <li><a className="hover:text-white" href="/cart">New Bag</a></li>
-                  <li><a className="hover:text-white" href="Track_My_Order">Track My Order</a></li>
-                  <li><a className="hover:text-white" href="#">Appointments</a></li>
+                  <li>
+                    <a className="hover:text-white" href="signup">
+                      SignIn/Register
+                    </a>
+                  </li>
+                  <li>
+                    <a className="hover:text-white" href="/cart">
+                      New Bag
+                    </a>
+                  </li>
+                  <li>
+                    <a className="hover:text-white" href="Track_My_Order">
+                      Track My Order
+                    </a>
+                  </li>
+                  <li>
+                    <a className="hover:text-white" href="#">
+                      Appointments
+                    </a>
+                  </li>
                 </ul>
               </div>
 
@@ -33,7 +49,11 @@ const Footer = () => {
               <div>
                 <h3 className="font-bold mb-2 text-white">INFORMATION</h3>
                 <ul className="space-y-1">
-                  <li><a className="hover:text-white" href="DelieveryInfo">Delivery Information & FAQ</a></li>
+                  <li>
+                    <a className="hover:text-white" href="DelieveryInfo">
+                      Delivery Information & FAQ
+                    </a>
+                  </li>
                 </ul>
               </div>
 
@@ -41,15 +61,25 @@ const Footer = () => {
               <div>
                 <h3 className="font-bold mb-2 text-white">CUSTOMER SERVICES</h3>
                 <ul className="space-y-1">
-                  <li><a className="hover:text-white" href="Shipping_and_Returns">Shipping and Returns</a></li>
+                  <li>
+                    <a className="hover:text-white" href="Shipping_and_Returns">
+                      Shipping and Returns
+                    </a>
+                  </li>
                 </ul>
               </div>
 
               {/* Section 4 */}
               <div>
-                <h3 className="font-bold mb-2 text-white">PAYMENT AND SHIPPING</h3>
+                <h3 className="font-bold mb-2 text-white">
+                  PAYMENT AND SHIPPING
+                </h3>
                 <ul className="space-y-1">
-                  <li><a className="hover:text-white" href="Payment_Methods">Payment Methods</a></li>
+                  <li>
+                    <a className="hover:text-white" href="Payment_Methods">
+                      Payment Methods
+                    </a>
+                  </li>
                 </ul>
               </div>
 
@@ -57,16 +87,33 @@ const Footer = () => {
               <div>
                 <h3 className="font-bold mb-2 text-white">Salon Services</h3>
                 <ul className="space-y-1">
-                  <li><Link href="/salons" className="hover:text-white">Book a Salon Service</Link></li>
-                  <li><a className="hover:text-white" href="Booking_Work_Policy">Booking Works & Policy</a></li>
+                  <li>
+                    <Link href="/salons" className="hover:text-white">
+                      Book a Salon Service
+                    </Link>
+                  </li>
+                  <li>
+                    <a className="hover:text-white" href="Booking_Work_Policy">
+                      Booking Works & Policy
+                    </a>
+                  </li>
                 </ul>
               </div>
 
               {/* Section 6 */}
               <div>
-                <h3 className="font-bold mb-2 text-white">Booking Cancellation Policy</h3>
+                <h3 className="font-bold mb-2 text-white">
+                  Booking Cancellation Policy
+                </h3>
                 <ul className="space-y-1">
-                  <li><a className="hover:text-white" href="/Booking_Cancellation_policy">Cancellation Window</a></li>
+                  <li>
+                    <a
+                      className="hover:text-white"
+                      href="/Booking_Cancellation_policy"
+                    >
+                      Cancellation Window
+                    </a>
+                  </li>
                 </ul>
               </div>
 
@@ -74,7 +121,11 @@ const Footer = () => {
               <div>
                 <h3 className="font-bold mb-2 text-white">Partner With Us</h3>
                 <ul className="space-y-1">
-                  <li><Link href="/salons/business" className="hover:text-white">Register your Salon</Link></li>
+                  <li>
+                    <Link href="/salons/business" className="hover:text-white">
+                      Register your Salon
+                    </Link>
+                  </li>
                   <li>
                     <a
                       href="#"
@@ -118,22 +169,42 @@ const Footer = () => {
 
             <div className="flex flex-col md:flex-row justify-between items-center text-sm gap-3">
               <div className="space-x-3">
-                <span>|</span>
+               {/* <span>|</span>  */}
               </div>
-              <div className="text-center md:text-right">
+              {/* <div className="text-center md:text-right">
                 Copyright © 2025 Glimmer. All Rights Reserved.
+              </div> */}
+
+              <div className="text-center md:text-right">
+                A-125 Gulshan-e-iqbal, Block 1, Karachi.{" "}
+                 <span>|</span> 
               </div>
               <div className="text-center md:text-right">
                 Business Hours: Mon–Sat | 10:00 AM – 6:00 PM
               </div>
               <div className="flex gap-4 mt-4 md:mt-0 md:ml-auto">
-                <a href="https://www.google.com" target="_blank" rel="noopener noreferrer" className="text-white hover:text-gray-300">
+                <a
+                  href="https://www.google.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-white hover:text-gray-300"
+                >
                   <FaGoogle size={20} />
                 </a>
-                <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-white hover:text-gray-300">
+                <a
+                  href="https://twitter.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-white hover:text-gray-300"
+                >
                   <FaTwitter size={20} />
                 </a>
-                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-white hover:text-gray-300">
+                <a
+                  href="https://instagram.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-white hover:text-gray-300"
+                >
                   <FaInstagram size={20} />
                 </a>
               </div>

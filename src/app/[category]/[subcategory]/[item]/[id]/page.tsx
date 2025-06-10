@@ -523,29 +523,35 @@ const ProductDisplay = () => {
           </div>
           <hr className="my-2.5 border-t border-gray-400 dark:text-gray-500 w-full" />
 
-          {Array.isArray(product?.size) && product.size.flat().length > 0 && (
-            <div className="grid grid-cols-2 gap-3 mt-3">
-              <div className="flex items-center font-semibold text-gray-700 dark:text-gray-700">
-                <span>Size:</span>
-              </div>
-              <div className="text-gray-600 dark:text-gray-400 flex gap-2 flex-wrap ">
-                {product.size.flat().map((s: any) => (
-                  <span
-                    key={s.id}
-                    onClick={() => handleSize(product?.id, s)}
-                    className={`${
-                      //@ts-ignore
-                      selectedSize?.id === s?.id
-                        ? "bg-[#6B21A8] text-white"
-                        : "bg-white"
-                    } px-2 py-1 border hover:bg-[#6B21A8] hover:text-white cursor-pointer border-gray-300 dark:border-gray-600 rounded-md text-sm `}
-                  >
-                    {s?.value} {s?.unit}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
+         {Array.isArray(product?.size) &&
+  product.size.flat().filter((s: any) => s?.value)?.length > 0 ? (
+  <div className="grid grid-cols-2 gap-3 mt-3">
+    <div className="flex items-center font-semibold text-gray-700 dark:text-gray-700">
+      <span>Size:</span>
+    </div>
+    <div className="text-gray-600 dark:text-gray-400 flex gap-2 flex-wrap ">
+      {product.size
+        .flat()
+        .filter((s: any) => s?.value)
+        .map((s: any) => (
+          <span
+            key={s.id}
+            onClick={() => handleSize(product?.id, s)}
+            className={`${
+              //@ts-ignore
+              selectedSize?.id === s?.id
+                ? "bg-[#6B21A8] text-white"
+                : "bg-white"
+            } px-2 py-1 border hover:bg-[#6B21A8] hover:text-white cursor-pointer border-gray-300 dark:border-gray-600 rounded-md text-sm `}
+          >
+            {s?.value} {s?.unit}
+          </span>
+        ))}
+    </div>
+  </div>
+) : null}
+
+
 
           <div className="flex flex-col items-stretch gap-y-4 mt-4 w-full">
            <div className="flex items-center gap-4">

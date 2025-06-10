@@ -6,7 +6,9 @@ import Navbar from "@/common/navbar";
 import "swiper/css/bundle";
 import { CartStoreProvider } from "@/store/cartStoreContext";
 import CookieBanner from "@/common/cookie-banner";
-import ClientLayout from "@/common/client-layout"; // NEW component
+import ClientLayout from "@/common/client-layout";
+import FloatingWhatsApp from "@/common/FloatingWhatsApp"; // ✅ Import here
+// import FloatingChatbot from '@/common/FloatingChatbot'; 
 
 const prompt = Prompt({
   subsets: ["latin"],
@@ -33,6 +35,8 @@ export default function RootLayout({
           <Navbar />
           <ClientLayout>{children}</ClientLayout>
           <CookieBanner />
+          <FloatingWhatsApp /> {/* ✅ Add here at the bottom of body */}
+          {/* <FloatingChatbot /> */}
         </CartStoreProvider>
       </body>
     </html>
