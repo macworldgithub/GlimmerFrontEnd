@@ -102,6 +102,7 @@ export default function ProductSearchBar({ className }: ProductSearchBarProps) {
               onClick={() => {
                 router.push(`/${product.category}/${product.sub_category}/${product.item}/${product._id}`);
                 setShowDropdown(false);
+                 setSearchTerm(""); 
               }}
             >
               {product.image1 && (
