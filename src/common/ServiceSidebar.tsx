@@ -64,7 +64,7 @@ const ServiceSidebar = () => {
   };
 
   const handleProductClick = (product: string) => {
-    setSubSubCategoryName(product); // Update subSubCategoryName filter with product selection
+    setSubSubCategoryName(product); 
     updateUrlWithFilters(subCategoryName, product);
   };
   
