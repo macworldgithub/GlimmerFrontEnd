@@ -875,7 +875,7 @@ import {
 import { RootState } from "@/store/reduxStore";
 import Image from "next/image";
 import { useParams, usePathname, useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { motion } from "framer-motion";
 import Link from "next/link";
@@ -1099,6 +1099,8 @@ const ProductDisplay = () => {
     typeof window !== "undefined" && window.innerWidth < 768
   );
 
+  const swiperRef = useRef<any>(null); // Ref to access Swiper instance
+
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
@@ -1184,6 +1186,7 @@ const ProductDisplay = () => {
               }}
               loop={images.length > 1}
               className="w-full h-full"
+              onSwiper={(swiper) => (swiperRef.current = swiper)} // Assign Swiper instance to ref
             >
               {images.map((image, i) => (
                 <SwiperSlide key={i}>
@@ -1226,8 +1229,7 @@ const ProductDisplay = () => {
                         i === 0 ? "border-purple-900" : ""
                       }`}
                       onClick={() => {
-                        const swiper = document.querySelector(".swiper")?.swiper;
-                        if (swiper) swiper.slideTo(i);
+                        if (swiperRef.current) swiperRef.current.slideTo(i);
                       }}
                     >
                       <img
