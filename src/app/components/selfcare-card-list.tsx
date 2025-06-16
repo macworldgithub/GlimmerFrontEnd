@@ -38,7 +38,6 @@ const SelfcareCardList = () => {
     fetchProducts();
   }, []);
 
-  // Resize Logic
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
