@@ -11,7 +11,7 @@ const QrCodeSection = ({ srcs = [] }: Props) => {
   const _srcs = srcs.length > 0 ? srcs : [QrcodeImg.src];
 
   return (
-    <div className="mb-6 md:mb-8 w-[100vw] p-6 md:p-[6rem]">
+    <div className="mb-6 md:mb-8 w-[99vw] p-6 md:p-[6rem]">
       <AutoSlider delay={null} srcs={_srcs} />
     </div>
   );

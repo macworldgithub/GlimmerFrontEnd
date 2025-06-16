@@ -312,7 +312,7 @@ const ProductDisplay = () => {
           <>
             <span className="mx-2 text-purple-800 text-base lg:text-xl">/</span>
             <span className="text-purple-800 font-medium text-base lg:text-xl">
-              Detail
+              Detail 
             </span>
           </>
         )}
@@ -330,7 +330,7 @@ const ProductDisplay = () => {
               }}
               loop={images.length > 1}
               className="w-full h-full"
-              onSwiper={(swiper) => (swiperRef.current = swiper)} // Assign Swiper instance to ref
+              onSwiper={(swiper) => (swiperRef.current = swiper)} 
             >
               {images.map((image, i) => (
                 <SwiperSlide key={i}>
