@@ -162,6 +162,7 @@ const Cart = () => {
           {/* Apply Coupon */}
           <div className="rounded-lg bg-gray-100 p-4">
             <h3 className="mb-2 font-semibold text-lg">Apply Coupon</h3>
+      
             <input
               type="text"
               placeholder="Coupon code"

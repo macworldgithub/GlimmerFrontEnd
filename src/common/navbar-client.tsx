@@ -92,6 +92,7 @@ const NavbarClient = ({
     }
   };
 
+
   useEffect(() => {
     fetchData();
   }, [searchParams]);
@@ -159,3 +160,4 @@ const NavbarClient = ({
 };
 
 export default NavbarClient;
+

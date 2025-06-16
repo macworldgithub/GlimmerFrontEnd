@@ -52,6 +52,7 @@ const Footer = () => {
                   <li>
                     <a className="hover:text-white" href="DelieveryInfo">
                       Delivery Information & FAQ
+                    
                     </a>
                   </li>
                 </ul>
@@ -146,7 +147,7 @@ const Footer = () => {
                 <h3 className="font-bold mb-3 text-white">CONTACT US</h3>
                 <div className="flex flex-col items-center md:items-start mt-3">
                   <Link
-                    href="https://wa.me/0331-2062376"
+                    href="https://wa.me/+923312062376"
                     target="_blank"
                     className="flex items-center opacity-90 hover:opacity-100 hover:text-white"
                   >
@@ -171,9 +172,7 @@ const Footer = () => {
               <div className="space-x-3">
                {/* <span>|</span>  */}
               </div>
-              {/* <div className="text-center md:text-right">
-                Copyright © 2025 Glimmer. All Rights Reserved.
-              </div> */}
+            
 
               <div className="text-center md:text-right">
                 A-125 Gulshan-e-iqbal, Block 1, Karachi.{" "}
