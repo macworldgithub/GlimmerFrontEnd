@@ -11,18 +11,18 @@ import { createOrder } from "@/api/order";
 import toast, { Toaster } from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { clearCart } from "@/reduxSlices/cartSlice";
-
+import { Modal } from "antd";
 import { useRouter } from "next/navigation";
 import { BACKEND_URL } from "@/api/config";
+// import { useRouter } from "next/router";
 
 export default function Checkout() {
   const credentials = useSelector((state: RootState) => state.login);
   const cart = useSelector((state: RootState) => state.cart);
   const router = useRouter();
-  // const [showJazzCashModal, setShowJazzCashModal] = useState(false);
+  // const [showJazzCashCheckout, setShowJazzCashCheckout] = useState(false);
+
   // const [showBankModal, setShowBankModal] = useState(false);
-
-
 
   const dispatch = useDispatch();
 
@@ -37,7 +37,7 @@ export default function Checkout() {
     address: "",
     deliveryMethod: "COD",
     shippingMethod: "Delivery",
-      paymentMethod: "Cash on Delivery",
+    paymentMethod: "Cash on Delivery",
     agree: false,
   });
   const [cartItems, setCartItems] = useState([
@@ -125,93 +125,66 @@ export default function Checkout() {
       if (!validateForm()) {
         return;
       }
-  
-      const orderData = {
-        customerName: formData.fullName,
-        customerEmail: formData.email,
-        productList: cart.ProductList.map((productItem) => ({
-          product: {
-            _id: productItem.product._id,
-            name: productItem.product.name,
-            base_price: productItem.product.base_price,
-            discounted_price: productItem.product.discounted_price,
-            description: productItem.product.description,
-            image1: productItem.product.image1,
-            image2: productItem.product.image2 || "",
-            image3: productItem.product.image3 || "",
-            status: productItem.product.status,
-            type: productItem.product.type.map((t) => ({
-              id: t.id || "",
-              value: t.value || "-",
-            })),
-            size: productItem.product.size.map((s) => ({
-              id: s.id || "",
-              value: s.value || "-",
-              unit: s.unit || "-",
-            })),
-            rate_of_salon: productItem.product.rate_of_salon,
-            ref_of_salon: productItem.product.ref_of_salon,
-          },
-          storeId: productItem.product.store,
-          quantity: productItem.quantity,
-          total_price:
-            productItem.quantity * productItem.product.discounted_price,
-        })),
-        total: cart.total,
-        discountedTotal: cart.discountedTotal,
-        paymentMethod: "COD",
-        ShippingInfo: formData,
-      };
-  
-      const res = await createOrder(orderData, credentials.token);
-  
-      if (res?.order) {
-        const emailPayload = {
-          to: formData.email,
-          viewModel: {
-            customer: {
-              name: formData.fullName,
-              email: formData.email,
-            },
-            order: {
-              id: res.order._id, 
-              date: new Date().toLocaleDateString(), 
-              items: res.order.productList.map((productItem: any) => ({
-                productId: productItem.product._id,
-                storeId: productItem.product.store,
-                name: productItem.product.name,
-                image: productItem.product.image1,
-                quantity: productItem.quantity,
-                price: productItem.product.discounted_price,
-              })),
-              subtotal: res.order.total, 
-              shipping: 5, 
-              total: res.order.discountedTotal,
-            },
-          },
-        };
-  
-        await fetch(`${BACKEND_URL}/admin/send-order-confirmation-email`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${credentials.token}`, 
-          },
-          body: JSON.stringify(emailPayload),
-        });
-  
-        toast.success(
-          "Order has been confirmed! You will receive an email shortly."
-        );
 
-        dispatch(clearCart());
+      const paymentMethodSelected = formData.paymentMethod;
+     if (paymentMethodSelected === "JazzCash") {
+        router.push("/jazzcashCheckout"); 
+       return;
+}
+       else {
+        // COD or other payment methods
+        const orderData = {
+          customerName: formData.fullName,
+          customerEmail: formData.email,
+          productList: cart.ProductList.map((productItem) => ({
+            product: {
+              _id: productItem.product._id,
+              name: productItem.product.name,
+              base_price: productItem.product.base_price,
+              discounted_price: productItem.product.discounted_price,
+              description: productItem.product.description,
+              image1: productItem.product.image1,
+              image2: productItem.product.image2 || "",
+              image3: productItem.product.image3 || "",
+              status: productItem.product.status,
+              type: productItem.product.type.map((t) => ({
+                id: t.id || "",
+                value: t.value || "-",
+              })),
+              size: productItem.product.size.map((s) => ({
+                id: s.id || "",
+                value: s.value || "-",
+                unit: s.unit || "-",
+              })),
+              rate_of_salon: productItem.product.rate_of_salon,
+              ref_of_salon: productItem.product.ref_of_salon,
+            },
+            storeId: productItem.product.store,
+            quantity: productItem.quantity,
+            total_price:
+              productItem.quantity * productItem.product.discounted_price,
+          })),
+          total: cart.total,
+          discountedTotal: cart.discountedTotal,
+          paymentMethod: paymentMethodSelected || "COD",
+          ShippingInfo: formData,
+        };
+
+        // const res = await createOrder(orderData, credentials.token);
+
+        // if (res?.order) {
+        //   toast.success(
+        //     "Order has been confirmed! You will receive an email shortly."
+        //   );
+        //   dispatch(clearCart());
+        // }
       }
     } catch (error) {
       toast.error("Failed to place order. Please try again.");
       console.error("Order Error:", error);
     }
   };
-  
+
   return (
     <>
       <Toaster />
@@ -237,17 +210,6 @@ export default function Checkout() {
                     />
                     <span className="ml-2">Delivery</span>
                   </label>
-                  {/* <label className="flex items-center">
-                    <input
-                      type="radio"
-                      name="deliveryMethod"
-                      value="Pick Up"
-                      checked={formData.deliveryMethod === "Pick Up"}
-                      onChange={handleInputChange}
-                      className="form-radio"
-                    />
-                    <span className="ml-2">Pick up</span>
-                  </label> */}
                 </div>
                 <input
                   type="text"
@@ -279,19 +241,10 @@ export default function Checkout() {
                   onChange={handleInputChange}
                   className="w-full p-3 border rounded"
                 />
-                 {errors.phone && (
+                {errors.phone && (
                   <p className="text-red-500 text-sm">{errors.phone}</p>
                 )}
-                {/* <select
-                            name="country"
-                            value={formData.country}
-                            onChange={handleInputChange}
-                            className="w-full p-3 border rounded"
-                        >
-                            <option value="">Select country</option>
-                            <option value="USA">USA</option>
-                            <option value="Canada">Canada</option>
-                        </select> */}
+
                 <Select
                   value={"Pakistan"}
                   defaultValue={"Pakistan"}
@@ -309,7 +262,7 @@ export default function Checkout() {
                     onChange={handleInputChange}
                     className="w-full p-3 border rounded"
                   />
-                   {errors.city && (
+                  {errors.city && (
                     <p className="text-red-500 text-sm">{errors.city}</p>
                   )}
                   <input
@@ -347,78 +300,89 @@ export default function Checkout() {
                   <p className="text-red-500 text-sm">{errors.address}</p>
                 )}
 
+                <div className="mt-6">
+                  <label className="block font-semibold mb-2">
+                    Payment Method
+                  </label>
+                  <div className="flex gap-4 flex-wrap">
+                    {/* Cash on Delivery */}
+                    <label
+                      className={`flex items-center justify-center gap-2 px-4 py-3 rounded-lg border cursor-pointer transition-all
+        ${
+          formData.paymentMethod === "Cash on Delivery"
+            ? "border-blue-500 bg-blue-50"
+            : "border-gray-300"
+        }`}
+                    >
+                      <input
+                        type="radio"
+                        name="paymentMethod"
+                        value="Cash on Delivery"
+                        checked={formData.paymentMethod === "Cash on Delivery"}
+                        onChange={handleInputChange}
+                        className="hidden"
+                      />
+                      <span>💵</span>
+                      <span className="font-medium">Cash on Delivery</span>
+                    </label>
 
+                    {/* JazzCash */}
+                    <label
+                      className={`flex items-center justify-center gap-2 px-4 py-3 rounded-lg border cursor-pointer transition-all
+    ${
+      formData.paymentMethod === "JazzCash"
+        ? "border-blue-500 bg-blue-50"
+        : "border-gray-300"
+    }`}
+                      onClick={() => {
+                        setFormData({ ...formData, paymentMethod: "JazzCash" });
+                        // setShowJazzCashCheckout(true);
+                      }}
+                    >
+                      <input
+                        type="radio"
+                        name="paymentMethod"
+                        value="JazzCash"
+                        checked={formData.paymentMethod === "JazzCash"}
+                        onChange={handleInputChange}
+                        className="hidden"
+                      />
+                      <span>💳</span>
+                      <span className="font-medium">JazzCash</span>
+                    </label>
 
-<div className="mt-6">
-  <label className="block font-semibold mb-2">Payment Method</label>
-  <div className="flex gap-4 flex-wrap">
-    {/* Cash on Delivery */}
-    <label
-      className={`flex items-center justify-center gap-2 px-4 py-3 rounded-lg border cursor-pointer transition-all
-        ${formData.paymentMethod === "Cash on Delivery" ? "border-blue-500 bg-blue-50" : "border-gray-300"}`}
-    >
-      <input
-        type="radio"
-        name="paymentMethod"
-        value="Cash on Delivery"
-        checked={formData.paymentMethod === "Cash on Delivery"}
-        onChange={handleInputChange}
-        className="hidden"
-      />
-      <span>💵</span>
-      <span className="font-medium">Cash on Delivery</span>
-    </label>
+                    {/* Bank Alfalah */}
+                    {/* Bank Alfalah */}
+                    <label
+                      className={`flex items-center justify-center gap-2 px-4 py-3 rounded-lg border cursor-pointer transition-all
+    ${
+      formData.paymentMethod === "Bank Alfalah"
+        ? "border-blue-500 bg-blue-50"
+        : "border-gray-300"
+    }`}
+                      onClick={() => {
+                        setFormData({
+                          ...formData,
+                          paymentMethod: "Bank Alfalah",
+                        });
+                        // setShowBankModal(true); // 👈 Open Bank modal
+                      }}
+                    >
+                      <input
+                        type="radio"
+                        name="paymentMethod"
+                        value="Bank Alfalah"
+                        checked={formData.paymentMethod === "Bank Alfalah"}
+                        onChange={handleInputChange}
+                        className="hidden"
+                      />
 
-    {/* JazzCash */}
-    <label
-  className={`flex items-center justify-center gap-2 px-4 py-3 rounded-lg border cursor-pointer transition-all
-    ${formData.paymentMethod === "JazzCash" ? "border-blue-500 bg-blue-50" : "border-gray-300"}`}
-  onClick={() => {
-    setFormData({ ...formData, paymentMethod: "JazzCash" });
-    // setShowJazzCashModal(true); // 👈 Open modal
-  }}
->
-      <input
-        type="radio"
-        name="paymentMethod"
-        value="JazzCash"
-        checked={formData.paymentMethod === "JazzCash"}
-        onChange={handleInputChange}
-        className="hidden"
-      />
-       <span>💳</span>
-      <span className="font-medium">JazzCash</span>
-    </label>
+                      <span>🏦</span>
+                      <span className="font-medium">Bank Alfalah</span>
+                    </label>
+                  </div>
+                </div>
 
-    {/* Bank Alfalah */}
-   {/* Bank Alfalah */}
-<label
-  className={`flex items-center justify-center gap-2 px-4 py-3 rounded-lg border cursor-pointer transition-all
-    ${formData.paymentMethod === "Bank Alfalah" ? "border-blue-500 bg-blue-50" : "border-gray-300"}`}
-  onClick={() => {
-    setFormData({ ...formData, paymentMethod: "Bank Alfalah" });
-    // setShowBankModal(true); // 👈 Open Bank modal
-  }}
->
-      <input
-        type="radio"
-        name="paymentMethod"
-        value="Bank Alfalah"
-        checked={formData.paymentMethod === "Bank Alfalah"}
-        onChange={handleInputChange}
-        className="hidden"
-      />
-
-
-
-      <span>🏦</span>
-      <span className="font-medium">Bank Alfalah</span>
-    </label>
-  </div>
-</div>
-
-
-                
                 <label className="flex items-center space-x-2">
                   <input
                     type="checkbox"
@@ -505,26 +469,99 @@ export default function Checkout() {
           <div className="max-w-4xl mx-auto text-center  justify-center items-center bg-white shadow-lg rounded-lg p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
             {" "}
             <p className="font-medium">Please Add Some Products in Cart</p>
-            
           </div>
         )}
       </div>
 
 
-  {/* JazzCash Modal
-      {showJazzCashModal && (
-        <div className="fixed inset-0 z-50 bg-black bg-opacity-40 flex items-center justify-center">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md">
-            <h2 className="text-xl font-semibold mb-4">Enter JazzCash Details</h2>
-            <input type="text" placeholder="JazzCash Number" className="w-full border p-2 mb-3 rounded" />
-            <input type="text" placeholder="CNIC (last 6 digits)" className="w-full border p-2 mb-4 rounded" />
-            <div className="flex justify-end gap-4">
-              <button className="px-4 py-2 bg-gray-300 rounded" onClick={() => setShowJazzCashModal(false)}>Cancel</button>
-              <button className="px-4 py-2 bg-blue-600 text-white rounded" onClick={() => setShowJazzCashModal(false)}>Confirm</button>
-            </div>
-          </div>
-        </div>
-      )}
+      
+{/* 
+      <Modal
+  title="JazzCash Checkout"
+  open={showJazzCashCheckout}
+  onCancel={() => setShowJazzCashCheckout(false)}
+  footer={null}
+>
+  <div className="text-center">
+    <p className="mb-4">Redirecting to JazzCash...</p>
+    <button
+      onClick={async () => {
+        const orderDto = {
+          customerName: formData.fullName,
+          customerEmail: formData.email,
+          total: cart.total,
+          discountedTotal: cart.discountedTotal,
+          payment: {
+            status: "Pending",
+            gateway: "JazzCash",
+          },
+          productList: cart.ProductList.map((productItem) => ({
+            product: {
+              _id: productItem.product._id,
+              name: productItem.product.name,
+              base_price: productItem.product.base_price,
+              discounted_price: productItem.product.discounted_price,
+              description: productItem.product.description,
+              image1: productItem.product.image1,
+              image2: productItem.product.image2 || "",
+              image3: productItem.product.image3 || "",
+              status: productItem.product.status,
+              type: productItem.product.type.map((t) => ({
+                id: t.id || "",
+                value: t.value || "-",
+              })),
+              size: productItem.product.size.map((s) => ({
+                id: s.id || "",
+                value: s.value || "-",
+                unit: s.unit || "-",
+              })),
+              rate_of_salon: productItem.product.rate_of_salon,
+              ref_of_salon: productItem.product.ref_of_salon,
+            },
+            storeId: productItem.product.store,
+            quantity: productItem.quantity,
+            total_price:
+              productItem.quantity * productItem.product.discounted_price,
+          })),
+          ShippingInfo: {
+            ...formData,
+            country: "Pakistan", 
+            shippingMethod: "Delivery",
+          },
+        };
+
+        try {
+         const { data } = await axios.post(
+        'http://localhost:3000/jazzcash/initiate-payment',
+        orderDto
+      );
+
+
+          const form = document.createElement("form");
+          form.method = "POST";
+          form.action =
+            "https://sandbox.jazzcash.com.pk/CustomerPortal/transactionmanagement/merchantform/";
+
+          Object.entries(data.paymentParams).forEach(([key, value]) => {
+            const input = document.createElement("input");
+            input.type = "hidden";
+            input.name = key;
+            input.value = String(value);
+            form.appendChild(input);
+          });
+
+          document.body.appendChild(form);
+          form.submit();
+        } catch (error) {
+          toast.error("JazzCash order failed");
+        }
+      }}
+      className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600"
+    >
+      Pay Now
+    </button>
+  </div>
+</Modal> */}
 
       {/* Bank Alfalah Modal */}
       {/* {showBankModal && (
@@ -547,8 +584,7 @@ export default function Checkout() {
             <button className="text-sm text-gray-600 mt-2 underline block mx-auto" onClick={() => setShowBankModal(false)}>Cancel</button>
           </div>
         </div>
-      )} */} 
-
+      )} */}
     </>
   );
 }
