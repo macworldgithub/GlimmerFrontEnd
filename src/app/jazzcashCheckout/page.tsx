@@ -11,7 +11,7 @@ export default function Checkout() {
   const handleCheckout = async () => {
     try {
       setLoading(true);
-      // Prepare order data
+    
       const orderDto = {
         customerName: "Muhammad Anas",
         customerEmail: "anas@example.com",

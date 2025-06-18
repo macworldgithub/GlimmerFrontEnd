@@ -15,14 +15,15 @@ import { Modal } from "antd";
 import { useRouter } from "next/navigation";
 import { BACKEND_URL } from "@/api/config";
 // import { useRouter } from "next/router";
+import axios from "axios";
+
 
 export default function Checkout() {
   const credentials = useSelector((state: RootState) => state.login);
   const cart = useSelector((state: RootState) => state.cart);
   const router = useRouter();
-  // const [showJazzCashCheckout, setShowJazzCashCheckout] = useState(false);
-
-  // const [showBankModal, setShowBankModal] = useState(false);
+ const [showJazzCashModal, setShowJazzCashModal] = useState(false);
+const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -127,11 +128,11 @@ export default function Checkout() {
       }
 
       const paymentMethodSelected = formData.paymentMethod;
-     if (paymentMethodSelected === "JazzCash") {
-        router.push("/jazzcashCheckout"); 
-       return;
-}
-       else {
+       if (paymentMethodSelected === "JazzCash") {
+      setShowJazzCashModal(true); // Show JazzCash modal
+      return;
+        return;
+      } else {
         // COD or other payment methods
         const orderData = {
           customerName: formData.fullName,
@@ -169,21 +170,86 @@ export default function Checkout() {
           paymentMethod: paymentMethodSelected || "COD",
           ShippingInfo: formData,
         };
-
-        // const res = await createOrder(orderData, credentials.token);
-
-        // if (res?.order) {
-        //   toast.success(
-        //     "Order has been confirmed! You will receive an email shortly."
-        //   );
-        //   dispatch(clearCart());
-        // }
       }
     } catch (error) {
       toast.error("Failed to place order. Please try again.");
       console.error("Order Error:", error);
     }
   };
+
+  const handleCheckout = async () => {
+  try {
+    setLoading(true);
+    // Prepare order data using form data instead of hardcoded values
+    const orderDto = {
+      customerName: formData.fullName,
+      customerEmail: formData.email,
+      total: cart.total,
+      discountedTotal: cart.discountedTotal,
+      payment: {
+        status: "Pending",
+        gateway: "JazzCash",
+        transactionId: `JAZZ-${Date.now()}`,
+      },
+      productList: cart.ProductList.map((productItem) => ({
+        storeId: productItem.product.store,
+        quantity: productItem.quantity,
+        total_price: productItem.quantity * productItem.product.discounted_price,
+        product: {
+          _id: productItem.product._id,
+          name: productItem.product.name,
+          base_price: productItem.product.base_price,
+          discounted_price: productItem.product.discounted_price,
+          status: productItem.product.status,
+          type: productItem.product.type,
+          size: productItem.product.size,
+        },
+      })),
+      ShippingInfo: {
+        fullName: formData.fullName,
+        email: formData.email,
+        phone: formData.phone,
+        country: formData.country,
+        city: formData.city,
+        state: formData.state,
+        zip: formData.zip,
+        address: formData.address,
+        shippingMethod: formData.shippingMethod,
+      },
+      customerPhone: formData.phone,
+      customerCNIC: "4250156667561", // You might want to add this to your form
+    };
+
+    // Call backend to initiate payment
+    const { data } = await axios.post(
+      "https://www.api.glimmer.com.pk/jazzcash/initiate-payment",
+      orderDto
+    );
+    
+    // Create form with all parameters from backend
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = data.redirectUrl;
+
+    // Add all parameters from backend
+    Object.entries(data.paymentParams).forEach(([key, value]) => {
+      const input = document.createElement("input");
+      input.type = "hidden";
+      input.name = key;
+      input.value = String(value);
+      form.appendChild(input);
+    });
+
+    document.body.appendChild(form);
+    form.submit();
+    
+  } catch (err) {
+    console.error("Payment initiation failed:", err);
+    toast.error("Payment initiation failed. Please try again.");
+    setLoading(false);
+    setShowJazzCashModal(false);
+  }
+};
 
   return (
     <>
@@ -473,118 +539,19 @@ export default function Checkout() {
         )}
       </div>
 
-
-      
-{/* 
-      <Modal
-  title="JazzCash Checkout"
-  open={showJazzCashCheckout}
-  onCancel={() => setShowJazzCashCheckout(false)}
-  footer={null}
+  <Modal
+  title="JazzCash Payment"
+  visible={showJazzCashModal}
+  onOk={handleCheckout}
+  onCancel={() => setShowJazzCashModal(false)}
+  okText={loading ? "Processing..." : "Proceed to Payment"}
+  cancelText="Cancel"
+  confirmLoading={loading}
 >
-  <div className="text-center">
-    <p className="mb-4">Redirecting to JazzCash...</p>
-    <button
-      onClick={async () => {
-        const orderDto = {
-          customerName: formData.fullName,
-          customerEmail: formData.email,
-          total: cart.total,
-          discountedTotal: cart.discountedTotal,
-          payment: {
-            status: "Pending",
-            gateway: "JazzCash",
-          },
-          productList: cart.ProductList.map((productItem) => ({
-            product: {
-              _id: productItem.product._id,
-              name: productItem.product.name,
-              base_price: productItem.product.base_price,
-              discounted_price: productItem.product.discounted_price,
-              description: productItem.product.description,
-              image1: productItem.product.image1,
-              image2: productItem.product.image2 || "",
-              image3: productItem.product.image3 || "",
-              status: productItem.product.status,
-              type: productItem.product.type.map((t) => ({
-                id: t.id || "",
-                value: t.value || "-",
-              })),
-              size: productItem.product.size.map((s) => ({
-                id: s.id || "",
-                value: s.value || "-",
-                unit: s.unit || "-",
-              })),
-              rate_of_salon: productItem.product.rate_of_salon,
-              ref_of_salon: productItem.product.ref_of_salon,
-            },
-            storeId: productItem.product.store,
-            quantity: productItem.quantity,
-            total_price:
-              productItem.quantity * productItem.product.discounted_price,
-          })),
-          ShippingInfo: {
-            ...formData,
-            country: "Pakistan", 
-            shippingMethod: "Delivery",
-          },
-        };
-
-        try {
-         const { data } = await axios.post(
-        'http://localhost:3000/jazzcash/initiate-payment',
-        orderDto
-      );
-
-
-          const form = document.createElement("form");
-          form.method = "POST";
-          form.action =
-            "https://sandbox.jazzcash.com.pk/CustomerPortal/transactionmanagement/merchantform/";
-
-          Object.entries(data.paymentParams).forEach(([key, value]) => {
-            const input = document.createElement("input");
-            input.type = "hidden";
-            input.name = key;
-            input.value = String(value);
-            form.appendChild(input);
-          });
-
-          document.body.appendChild(form);
-          form.submit();
-        } catch (error) {
-          toast.error("JazzCash order failed");
-        }
-      }}
-      className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600"
-    >
-      Pay Now
-    </button>
-  </div>
-</Modal> */}
-
-      {/* Bank Alfalah Modal */}
-      {/* {showBankModal && (
-        <div className="fixed inset-0 z-50 bg-black bg-opacity-40 flex items-center justify-center px-4">
-          <div className="bg-white rounded-lg w-full max-w-md p-6 shadow-xl">
-            <h2 className="text-xl font-semibold mb-4">Complete Your Payment</h2>
-            <div className="border rounded-lg p-4 space-y-4">
-              <input type="text" placeholder="Account Number" className="w-full border rounded px-3 py-2" />
-              <div className="grid grid-cols-2 gap-4">
-                <input type="text" placeholder="Expiration (MM/YY)" className="border rounded px-3 py-2 w-full" />
-                <input type="text" placeholder="CVC" className="border rounded px-3 py-2 w-full" />
-              </div>
-              <select className="w-full border rounded px-3 py-2">
-                <option value="Pakistan">Pakistan</option>
-                <option value="UAE">UAE</option>
-                <option value="UK">UK</option>
-              </select>
-            </div>
-            <button className="w-full mt-4 bg-purple-600 text-white py-2 rounded hover:bg-purple-700" onClick={() => setShowBankModal(false)}>Pay Now</button>
-            <button className="text-sm text-gray-600 mt-2 underline block mx-auto" onClick={() => setShowBankModal(false)}>Cancel</button>
-          </div>
-        </div>
-      )} */}
+  <p>You will be redirected to JazzCash payment gateway to complete your payment.</p>
+  <p className="font-semibold mt-2">Total Amount: PKR {cart.discountedTotal}</p>
+</Modal>
+      
     </>
   );
 }
