@@ -14,12 +14,12 @@ const SaloonPictures = () => {
       image1: "/assets/saloonPicture/spa.png",
       discounted_price: 39.99,
     },
-    {
-      id: 3,
-      name: "Daily Moisturizer",
-      image1: "/assets/saloonPicture/clinic.png",
-      discounted_price: 24.99,
-    },
+    // {
+    //   id: 3,
+    //   name: "Daily Moisturizer",
+    //   image1: "/assets/saloonPicture/clinic.png",
+    //   discounted_price: 24.99,
+    // },
     {
       id: 4,
       name: "Daily Moisturizer",
