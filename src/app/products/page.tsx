@@ -227,48 +227,47 @@ const ProductsList = () => {
       <div className="w-full mb-4">
         <CategoryNavMenu />
       </div>
-      {/* Breadcrumbs */}
-      <div className="breadcrumbs mb-4 text-xl lg:text-xl px-10">
+      {/* Banner Image */}
+<div className="hidden md:block pt-[3rem] px-[1rem] sm:px-[2rem] md:px-[4rem] lg:px-[6rem] xl:px-[12rem]">
+  <div className="w-full h-[50vh] sm:h-[50vh] md:h-[50vh] lg:h-[50vh] xl:h-[50vh] rounded-lg overflow-hidden relative group">
+    <img
+      src="/assets/images/banner.png"
+      alt="Banner"
+      className="w-full h-full transition-transform duration-500"
+    />
+    <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/30 group-hover:bg-black/20 transition-all duration-500 px-4 lg:p-[8rem]">
+      <h1 className="text-white text-2xl sm:text-3xl md:text-4xl font-bold text-center">
+        Explore Our Best Collection
+      </h1>
+
+      {/* Breadcrumbs inside banner under heading */}
+      <div className="breadcrumbs mt-4 text-white text-base sm:text-lg lg:text-xl text-center">
         <Link
           href="/"
-          className="text-gray-500 font-medium text-base lg:text-xl"
+          className="text-white font-medium"
         >
           Home
         </Link>
-        <span className="mx-2 text-gray-500 font-medium text-base lg:text-xl">
-          /
-        </span>
+        <span className="mx-2 text-white font-medium">/</span>
         <Link
           href="/selfcare-products"
-          className="text-gray-500 font-medium text-base lg:text-xl"
+          className="text-white font-medium"
         >
           Selfcare Products 
         </Link>
 
         {(categoryFilter || subCategoryFilter || itemFilter || nameFilter) && (
           <>
-            <span className="mx-2 text-purple-800 text-base lg:text-xl">/</span>
-            <span className="text-purple-800 font-medium text-base lg:text-xl">
+            <span className="mx-2 text-purple-200">/</span>
+            <span className="text-purple-200 font-medium">
               Products
             </span>
           </>
         )}
       </div>
-      {/* Banner Image */}
-      <div className="hidden md:block pt-[3rem] px-[1rem] sm:px-[2rem] md:px-[4rem] lg:px-[6rem] xl:px-[12rem]">
-        <div className="w-full h-[50vh] sm:h-[50vh] md:h-[50vh] lg:h-[50vh] xl:h-[50vh] rounded-lg overflow-hidden relative group">
-          <img
-            src="/assets/images/banner.png"
-            alt="Banner"
-            className="w-full h-full transition-transform duration-500"
-          />
-          <div className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/20 transition-all duration-500 px-4 lg:p-[8rem]">
-            <h1 className="text-white text-2xl sm:text-3xl md:text-4xl font-bold text-center">
-              Explore Our Best Collection
-            </h1>
-          </div>
-        </div>
-      </div>
+    </div>
+  </div>
+</div>
 
       {/* Content Area: Sidebar & Items Grid */}
       <div className="flex flex-col md:flex-row px-[1rem] sm:px-[2rem] md:px-[4rem] lg:px-[5rem] xl:px-[10rem] lg:py-[2rem]">

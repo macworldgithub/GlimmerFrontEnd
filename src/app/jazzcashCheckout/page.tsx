@@ -11,16 +11,6 @@ export default function Checkout() {
   const handleCheckout = async () => {
     try {
       setLoading(true);
-      
-      // // Collect CNIC from user - required for JazzCash
-      // const customerCNIC = prompt("Please enter your CNIC (without dashes):") || "";
-      
-      // if (!customerCNIC || customerCNIC.length !== 13) {
-      //   alert("Please enter a valid 13-digit CNIC");
-      //   setLoading(false);
-      //   return;
-      // }
-
       // Prepare order data
       const orderDto = {
         customerName: "Muhammad Anas",
