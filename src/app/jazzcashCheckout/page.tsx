@@ -1,70 +1,84 @@
 // pages/checkout.tsx
 "use client";
-import { useState } from 'react';
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import axios from 'axios';
-import { useRouter } from 'next/navigation';
 
 
 export default function Checkout() {
-  const router = useRouter();
   const [loading, setLoading] = useState(false);
-
+  
   const handleCheckout = async () => {
-    setLoading(true);
-
     try {
-      // Sample data — Replace with dynamic cart data
+      setLoading(true);
+      
+      // // Collect CNIC from user - required for JazzCash
+      // const customerCNIC = prompt("Please enter your CNIC (without dashes):") || "";
+      
+      // if (!customerCNIC || customerCNIC.length !== 13) {
+      //   alert("Please enter a valid 13-digit CNIC");
+      //   setLoading(false);
+      //   return;
+      // }
+
+      // Prepare order data
       const orderDto = {
-        customerName: 'Muhammad Anas',
-        customerEmail: 'anas@example.com',
+        customerName: "Muhammad Anas",
+        customerEmail: "anas@example.com",
         total: 1200,
         discountedTotal: 1000,
         payment: {
-          status: 'Pending',
-          gateway: 'JazzCash',
+          status: "Pending",
+          gateway: "JazzCash",
+          transactionId: `JAZZ-${Date.now()}`,
         },
         productList: [
           {
-            storeId: 'store123',
+            storeId: "store123",
             quantity: 1,
             total_price: 1200,
             product: {
-              _id: 'product123',
-              name: 'Sample Product',
+              _id: "product123",
+              name: "Sample Product",
               base_price: 1200,
               discounted_price: 1000,
-              status: 'active',
+              status: "active",
               type: [],
               size: [],
             },
           },
         ],
         ShippingInfo: {
-          fullName: 'Muhammad Anas',
-          email: 'anas@example.com',
-          phone: '03123456789',
-          country: 'Pakistan',
-          city: 'Lahore',
-          state: 'Punjab',
-          zip: '54000',
-          address: 'Gulberg, Lahore',
-          shippingMethod: 'Delivery',
+          fullName: "Muhammad Anas",
+          email: "anas@example.com",
+          phone: "03123456789",
+          country: "Pakistan",
+          city: "Lahore",
+          state: "Punjab",
+          zip: "54000",
+          address: "Gulberg, Lahore",
+          shippingMethod: "Delivery",
         },
+        // Add these two fields as required by backend
+        customerPhone: "03123456789",
+        customerCNIC: "4250156667561",
       };
 
+      // Call backend to initiate payment
       const { data } = await axios.post(
-        'http://localhost:3000/jazzcash/initiate-payment',
+        "https://www.api.glimmer.com.pk/jazzcash/initiate-payment",
         orderDto
       );
+      
+      // Create form with all parameters from backend
+      const form = document.createElement("form");
+      form.method = "POST";
+      form.action = data.redirectUrl;
 
-      // Redirect to JazzCash using form
-      const form = document.createElement('form');
-      form.method = 'POST';
-      form.action = 'https://sandbox.jazzcash.com.pk/CustomerPortal/transactionmanagement/merchantform/'; // use live endpoint in production
-
+      // Add all parameters from backend
       Object.entries(data.paymentParams).forEach(([key, value]) => {
-        const input = document.createElement('input');
-        input.type = 'hidden';
+        const input = document.createElement("input");
+        input.type = "hidden";
         input.name = key;
         input.value = String(value);
         form.appendChild(input);
@@ -72,18 +86,21 @@ export default function Checkout() {
 
       document.body.appendChild(form);
       form.submit();
+      
     } catch (err) {
-      console.error('Order Error:', err);
-      alert('Error creating order.');
+      console.error("Payment initiation failed:", err);
+      alert("Payment initiation failed. Please try again.");
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   return (
     <div style={{ padding: 40 }}>
       <h2>JazzCash Checkout</h2>
-      <button onClick={handleCheckout} disabled={loading}>
+      <button 
+        onClick={handleCheckout} 
+        disabled={loading}
+      >
         {loading ? 'Processing...' : 'Pay with JazzCash'}
       </button>
     </div>
