@@ -6,20 +6,22 @@ const OfferPictures = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-[950px] px-4">
         {/* Card 1 */}
         <div className="bg-[#D9D9D9] rounded-lg shadow-md flex h-[320px] w-full overflow-hidden">
-          <div className="w-1/2 p-4 flex flex-col justify-center items-start">
-            <p className="text-white text-xs font-medium uppercase tracking-wide">
-              LIMITED TIME OFFER
-            </p>
-            <h2 className="text-white text-2xl font-bold leading-tight mt-2">
-              Buy 2<br />Get 1
-            </h2>
-          </div>
           <div className="h-full">
             <img
               src="/assets/saloonPicture/salon.png"
               alt="Buy 2 Get 1"
               className="w-full h-full object-cover"
             />
+          </div>
+
+          <div className="w-1/2 p-4 flex flex-col justify-center items-start">
+            <p className="text-white text-xs font-medium uppercase tracking-wide">
+              LIMITED TIME OFFER
+            </p>
+            <h2 className="text-white text-2xl font-bold leading-tight mt-2">
+              Buy 2<br />
+              Get 1
+            </h2>
           </div>
         </div>
 
