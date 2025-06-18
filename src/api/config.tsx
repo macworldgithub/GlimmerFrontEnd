@@ -6,7 +6,7 @@ const curr_env: "Prod" | "DEV" = "DEV";
 
 // export const BACKEND_URL =
 //   //@ts-ignore
-// curr_env === "DEV" ? development : production;
-// export const BACKEND_URL = "https://www.api.glimmer.com.pk";
-export const BACKEND_URL = "http://localhost:3000";
+curr_env === "DEV" ? development : production;
+export const BACKEND_URL = "https://www.api.glimmer.com.pk";
+// export const BACKEND_URL = "http://localhost:3000";
 // curr_env === "DEV" ? development : production;

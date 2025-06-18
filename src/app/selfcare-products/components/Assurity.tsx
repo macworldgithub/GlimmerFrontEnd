@@ -30,7 +30,7 @@ const Assurity = () => {
             width={50}
             height={50}
           />
-          <p className="font-semibold">{assurance.text}</p>
+          <p className="font-normal">{assurance.text}</p>
           {index !== assurances.length - 1 && <ResponsiveSeparator />}
         </div>
       ))}
