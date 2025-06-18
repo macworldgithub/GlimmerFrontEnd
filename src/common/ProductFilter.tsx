@@ -1,74 +1,81 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import React, { useEffect } from "react";
+import React from "react";
 
 const ProductFilter = () => {
-  const router = useRouter();
-  const picture = [
-    {
-      id: 1,
-      name: "Hydrating Face Cream",
-      image1: "/assets/saloonPicture/salon.png",
-      discounted_price: 29.99,
-    },
-    {
-      id: 2,
-      name: "Glow Boost Serum",
-      image1: "/assets/saloonPicture/spa.png",
-      discounted_price: 39.99,
-    },
-    {
-      id: 3,
-      name: "Daily Moisturizer",
-      image1: "/assets/saloonPicture/clinic.png",
-      discounted_price: 24.99,
-    },
-    {
-      id: 4,
-      name: "Daily Moisturizer",
-      image1: "/assets/saloonPicture/gym.png",
-      discounted_price: 24.99,
-    },
-  ];
-
-  const handleFilterClick = (id: any) => {
-    const params = new URLSearchParams(window.location.search);
-
-    if (id === 1) {
-      const pastWeek = new Date();
-      pastWeek.setDate(pastWeek.getDate() - 7);
-      params.set("filter", "new");
-      params.set("created_at", pastWeek.toISOString());
-    }
-    const currentPage = params.get("page") || "1";
-    params.set("page", currentPage);
-    router.push(`/products?${params.toString()}`);
-  };
-
-  useEffect(() => {
-    const savedFilters = localStorage.getItem("productFilters");
-    if (savedFilters) {
-      router.push(`/products?${savedFilters}`);
-    }
-  }, []);
-
   return (
-    <div className="flex flex-col w-[99vw] px-5 md:p-[0rem]  h-max rounded cursor-pointer">
-      <div className="flex flex-wrap gap-5 gap-y-4 justify-center max-md:flex-col pb-[6rem] ">
-        {picture.map((item) => (
-          <div
-            key={item.id}
-            className="w-[44%] max-md:w-[100%] h-auto flex justify-center"
-            onClick={() => handleFilterClick(item.id)}
-          >
+    <div className="w-full flex justify-center px-4 py-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-[1220px]">
+        {/* Card 1 */}
+        <div className="bg-[#FFF1C8] rounded-[10px] p-6 flex flex-col justify-between w-full max-w-[750px] min-h-[576px] mx-auto">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-1">
+              Salon Booking
+            </h2>
+            <p className="text-sm text-gray-700">Starting from</p>
+            <p className="text-lg font-bold text-[#D92C59]">$29.99</p>
+          </div>
+          <div className="mt-4 w-full h-[358px] overflow-hidden rounded-[10px]">
             <img
-              src={item.image1}
-              className="w-[75%] h-auto object-cover rounded-[10px] transition-transform duration-300 hover:scale-110"
-              alt={item.name}
+              src="/assets/saloonPicture/salon.png"
+              alt="Salon Booking"
+              className="w-full h-full object-cover"
             />
           </div>
-        ))}
+        </div>
+
+        {/* Card 2 */}
+        <div className="bg-[#F5F5F5] rounded-[10px] p-6 flex flex-col justify-between w-full max-w-[750px] min-h-[576px] mx-auto">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-1">
+              Spa Booking
+            </h2>
+            <p className="text-sm text-gray-700">Starting from</p>
+            <p className="text-lg font-bold text-[#D92C59]">$24.99</p>
+          </div>
+          <div className="mt-4 w-full h-[436px] overflow-hidden rounded-[10px]">
+            <img
+              src="/assets/saloonPicture/spa.png"
+              alt="Spa Booking"
+              className="w-full h-full object-cover"
+            />
+          </div>
+        </div>
+
+        {/* Card 3 */}
+        <div className="bg-[#F5F5F5] rounded-[10px] p-6 flex flex-col justify-between w-full max-w-[750px] min-h-[576px] mx-auto">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-1">
+              Aesthetic Clinic Appointments
+            </h2>
+          </div>
+          <div className="mt-4 w-full h-[342px] overflow-hidden rounded-[10px]">
+            <img
+              src="/assets/saloonPicture/clinic.png"
+              alt="Clinic"
+              className="w-full h-full object-cover"
+            />
+          </div>
+        </div>
+
+        {/* Card 4 */}
+        <div className="bg-[#FFF1C8] rounded-[10px] p-6 flex flex-col justify-between w-full max-w-[750px] min-h-[576px] mx-auto">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-1">
+              Gym Memberships
+            </h2>
+            <p className="text-sm text-gray-700">MAKEUP</p>
+            <p className="text-sm text-gray-700">Ultimate Beauty Kit</p>
+            <p className="text-lg font-bold text-[#D92C59]">$49.99</p>
+          </div>
+          <div className="mt-4 w-full h-[342px] overflow-hidden rounded-[10px]">
+            <img
+              src="/assets/saloonPicture/gym.png"
+              alt="Gym"
+              className="w-full h-full object-cover"
+            />
+          </div>
+        </div>
       </div>
     </div>
   );
