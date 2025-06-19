@@ -22,6 +22,7 @@ interface PaymentParams {
 
 export default function Checkout() {
   const credentials = useSelector((state: RootState) => state.login);
+  console.log(credentials)
   const cart = useSelector((state: RootState) => state.cart);
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -174,7 +175,7 @@ export default function Checkout() {
         ShippingInfo: formData,
       };
 
-      const response = await createOrder(orderData);
+      // const response = await createOrder(orderData);
       toast.success("Order placed successfully!");
       dispatch(clearCart());
       router.push("/order-confirmation");
@@ -267,7 +268,7 @@ export default function Checkout() {
         const input = document.createElement("input");
         input.type = "hidden";
         input.name = key;
-        input.value = value;
+        input.value = value as string;
         form.appendChild(input);
       });
 
