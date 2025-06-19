@@ -65,6 +65,7 @@ export default function Checkout() {
     zip: "",
     address: "",
     agree: "",
+    
   });
 
   const handleInputChange = (e: any) => {
@@ -258,11 +259,11 @@ export default function Checkout() {
         throw new Error("Invalid payment response");
       }
 
-      // Create and submit the payment form to redirect to JazzCash
+      // Create and submit the payment form to redirect to JazzCash Method
       const form = document.createElement("form");
       form.method = "POST";
       form.action = data.redirectUrl;
-      form.target = "_blank"; // Open in a new tab/window
+      form.target = "_blank"; 
 
       Object.entries(data.paymentParams).forEach(([key, value]) => {
         const input = document.createElement("input");
