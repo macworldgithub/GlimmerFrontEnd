@@ -33,7 +33,7 @@ const ProductFilter = () => {
             <p className="text-sm text-gray-700">Starting from</p>
             <p className="text-lg font-bold text-[#D92C59]">$24.99</p>
           </div>
-          <div className="mt-4 w-full h-[436px] overflow-hidden rounded-[10px]">
+          <div className="mt-4 w-full h-[358px] overflow-hidden rounded-[10px]">
             <img
               src="/assets/saloonPicture/spa.png"
               alt="Spa Booking"
