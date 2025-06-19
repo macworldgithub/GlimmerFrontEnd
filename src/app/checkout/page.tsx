@@ -137,6 +137,10 @@ export default function Checkout() {
         await handleJazzCashPayment();
         return;
       }
+      else if (paymentMethodSelected === "Bank Alfalah") {
+      await handleBankAlfalahPayment(); 
+      return;
+    }
 
       const orderData = {
         customerName: formData.fullName,
@@ -282,9 +286,115 @@ export default function Checkout() {
       toast.error("Payment initiation failed. Please try again.");
       setLoading(false);
     }
-  };
+  }
 
-  return (
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ const handleBankAlfalahPayment = async () => {
+  try {
+    setLoading(true);
+
+    const validProductList = cart.ProductList.map((productItem) => {
+      const validTypes = productItem.product.type
+        .filter((t) => t.value && t.value !== "-")
+        .map((t) => ({
+          id: t.id || "",
+          value: t.value || "DefaultType",
+        }));
+
+      return {
+        storeId: productItem.product.store,
+        quantity: productItem.quantity,
+        total_price: productItem.quantity * productItem.product.discounted_price,
+        product: {
+          _id: productItem.product._id,
+          name: productItem.product.name,
+          base_price: productItem.product.base_price,
+          discounted_price: productItem.product.discounted_price,
+          status: productItem.product.status,
+          type: validTypes.length > 0 ? validTypes : [{ id: "", value: "DefaultType" }],
+          size: productItem.product.size.map((s) => ({
+            id: s.id || "",
+            value: s.value || "DefaultSize",
+            unit: s.unit || "-",
+          })),
+        },
+      };
+    });
+
+    if (validProductList.some((item) => item.product.type.length === 0)) {
+      toast.error("Some products have invalid types. Please check your cart accordingly.");
+      setLoading(false);
+      return;
+    }
+
+    const orderDto = {
+      customerName: formData.fullName,
+      customerEmail: formData.email,
+      total: cart.total,
+      discountedTotal: cart.discountedTotal,
+      ShippingInfo: {
+        fullName: formData.fullName,
+        email: formData.email,
+        phone: formData.phone,
+        country: formData.country,
+        city: formData.city,
+        state: formData.state,
+        zip: formData.zip,
+        address: formData.address,
+        shippingMethod: formData.shippingMethod,
+      },
+      productList: validProductList,
+      customerPhone: formData.phone,
+      customerCNIC: "4250156667561",
+    };
+
+    const response = await fetch("https://www.api.glimmer.com.pk/alfalah/initiate-payment", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(orderDto),
+    });
+
+    const data = await response.json();
+
+    if (response.ok && data.redirectUrl) {
+      window.location.href = data.redirectUrl; // 🔁 redirect to Alfalah
+    } else {
+      toast.error(data.message || "Something went wrong during payment.");
+    }
+
+  } catch (err) {
+    console.error("Alfalah payment failed:", err);
+    toast.error("Payment initiation failed. Please try again.");
+  } finally {
+    setLoading(false);
+  }
+};
+
+
+
+
+
+
+return (
     <>
       <Toaster />
       <div className="w-[99vw] p-8 max-sm:h-max">
