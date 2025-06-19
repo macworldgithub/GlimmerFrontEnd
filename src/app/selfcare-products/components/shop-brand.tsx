@@ -46,7 +46,7 @@ const AutoSliderShopBrand = ({
 				className="mb-6 w-full md:mb-8"
 				breakpoints={{
 					768: {
-						// Medium screen (md) and above (768px+)
+						
 						slidesPerView: 2, // Show 2 slides
 					},
 				}}

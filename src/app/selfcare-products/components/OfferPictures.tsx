@@ -24,6 +24,7 @@ const OfferPictures = () => {
             </h2>
           </div>
         </div>
+        
 
         {/* Card 2 */}
         <div className="bg-[#D9D9D9] rounded-lg shadow-md flex h-[320px] w-full overflow-hidden">

@@ -11,7 +11,7 @@ const CardSlider = ({ ProductList }: { ProductList: any }) => {
   const displayedProducts = showAll ? ProductList : ProductList.slice(0, 5);
 
   const handleViewMore = () => {
-    // Navigate to the '/products' page when the button is clicked
+   
     router.push("/products");
   };
 

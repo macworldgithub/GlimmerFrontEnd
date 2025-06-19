@@ -23,6 +23,7 @@ export default function Home() {
         <ProductFilter />
         <HairBanner />
         {/* <FakeReviewList /> */}
+      
       </div>
 
     </>
