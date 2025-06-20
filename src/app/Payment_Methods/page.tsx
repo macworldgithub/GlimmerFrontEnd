@@ -38,6 +38,7 @@ const PaymentMethodsPage = () => {
           <li>Estimated delivery time: 3–4 working days after order confirmation.</li>
           <li>Products purchased through salon profiles are processed like regular orders.</li>
           <li>Same return policy applies (24 hours from delivery, if eligible).</li>
+         
         </ul>
       </section>
     </div>

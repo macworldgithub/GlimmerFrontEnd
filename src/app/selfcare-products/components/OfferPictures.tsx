@@ -24,7 +24,6 @@ const OfferPictures = () => {
             </h2>
           </div>
         </div>
-        
 
         {/* Card 2 */}
         <div className="bg-[#D9D9D9] rounded-lg shadow-md flex h-[320px] w-full overflow-hidden">
@@ -40,7 +39,6 @@ const OfferPictures = () => {
             </button>
           </div>
           <div className="h-full">
-            
             <img
               src="/assets/saloonPicture/spa.png"
               alt="Save 20%"

@@ -32,8 +32,6 @@ const AutoSlider = ({ srcs = [], type = "slide", delay = 3000 }: Props) => {
         modules={modules}
         spaceBetween={50}
         slidesPerView={1}
-        // onSlideChange={() => console.log("slide change")}
-        // onSwiper={(swiper) => console.log(swiper)}
         effect={type}
         autoplay={{ delay: delay as number }}
         loop={true}

@@ -18,6 +18,7 @@ export default function DynamicBanner({ imageUrl, title }: { imageUrl: string; t
             objectFit="cover"
             className="absolute inset-0"
           />
+          
 
           {/* Left Sparkle SVG */}
           <Image
@@ -51,6 +52,8 @@ export default function DynamicBanner({ imageUrl, title }: { imageUrl: string; t
           )}
         </div>
       </div>
+
+      
       
       {/* Category Links */}
 <div className="mt-10 mb-6 flex gap-4 text-[#d7d1ea] text-md max-sm:grid max-sm:grid-cols-2 max-sm:gap-X-10">

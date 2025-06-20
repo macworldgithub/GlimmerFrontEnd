@@ -7,7 +7,7 @@ import "swiper/css/bundle";
 import { CartStoreProvider } from "@/store/cartStoreContext";
 import CookieBanner from "@/common/cookie-banner";
 import ClientLayout from "@/common/client-layout";
-import FloatingWhatsApp from "@/common/FloatingWhatsApp"; // ✅ Import here
+import FloatingWhatsApp from "@/common/FloatingWhatsApp"; 
 // import FloatingChatbot from '@/common/FloatingChatbot'; 
 
 const prompt = Prompt({
@@ -17,11 +17,13 @@ const prompt = Prompt({
   variable: "--font-prompt",
 });
 
+
 export const metadata: Metadata = {
   title:
     "Make an online salon appointment at The Best Prices Online Cosmetics Store in Pakistan by visiting glimmer.com.pk.",
   description:
     "Make an online salon appointment at The Best Prices Online Cosmetics Store in Pakistan by visiting glimmer.com.pk.",
+    
 };
 
 export default function RootLayout({
@@ -36,9 +38,9 @@ export default function RootLayout({
           <Navbar />
           <ClientLayout>{children}</ClientLayout>
           <CookieBanner />
-          <FloatingWhatsApp /> {/* ✅ Add here at the bottom of body */}
-          {/* <FloatingChatbot /> */}
+          <FloatingWhatsApp /> 
         </CartStoreProvider>
+      
       </body>
     </html>
   );

@@ -3,12 +3,12 @@
 import React, { useState } from "react";
 
 const mockData = {
-  "ORDER12345": {
+  ORDER12345: {
     status: "Shipped",
     courier: "TCS",
     trackingLink: "https://www.tcsexpress.com/track/ORDER12345",
   },
-  "ORDER98765": {
+  ORDER98765: {
     status: "Delivered",
     courier: "Leopard",
     trackingLink: "https://leopardcourier.com/track/ORDER98765",
@@ -63,8 +63,12 @@ const TrackOrderPage = () => {
       {orderInfo && (
         <div className="bg-gray-50 border border-gray-300 rounded-lg p-4">
           <h2 className="text-xl font-semibold mb-2">Order Status</h2>
-          <p><strong>Status:</strong> {orderInfo.status}</p>
-          <p><strong>Courier:</strong> {orderInfo.courier}</p>
+          <p>
+            <strong>Status:</strong> {orderInfo.status}
+          </p>
+          <p>
+            <strong>Courier:</strong> {orderInfo.courier}
+          </p>
           <p>
             <strong>Tracking Link:</strong>{" "}
             <a

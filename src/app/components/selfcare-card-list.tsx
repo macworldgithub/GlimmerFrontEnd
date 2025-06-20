@@ -81,7 +81,9 @@ const SelfcareCardList = () => {
       </Link>
 
       {/* Loading & Error */}
-      {loading && <p className="text-center text-gray-500">Loading products...</p>}
+      {loading && (
+        <p className="text-center text-gray-500">Loading products...</p>
+      )}
       {error && <p className="text-center text-red-500">{error}</p>}
 
       {/* Product Grid / Carousel */}
@@ -95,16 +97,18 @@ const SelfcareCardList = () => {
               </div>
             ))
           ) : (
-            <p className="text-center text-gray-500 w-full">No products available</p>
+            <p className="text-center text-gray-500 w-full">
+              No products available
+            </p>
           )}
         </div>
       ) : (
         // Grid for desktop
         <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {products.length > 0 ? (
-            products.slice(startIndex, startIndex + cardsToShow).map((product) => (
-              <Card key={product._id} item={product} />
-            ))
+            products
+              .slice(startIndex, startIndex + cardsToShow)
+              .map((product) => <Card key={product._id} item={product} />)
           ) : (
             <p className="text-center text-gray-500">No products available</p>
           )}

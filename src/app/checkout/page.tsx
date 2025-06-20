@@ -1,4 +1,3 @@
-
 "use client";
 import { useState, useEffect } from "react";
 import selfcare_1 from "../../assets/selfcare-items/selfcare-item-1.png";
@@ -22,7 +21,7 @@ interface PaymentParams {
 
 export default function Checkout() {
   const credentials = useSelector((state: RootState) => state.login);
-  console.log(credentials)
+  console.log(credentials);
   const cart = useSelector((state: RootState) => state.cart);
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -65,7 +64,6 @@ export default function Checkout() {
     zip: "",
     address: "",
     agree: "",
-    
   });
 
   const handleInputChange = (e: any) => {
@@ -136,11 +134,10 @@ export default function Checkout() {
       if (paymentMethodSelected === "JazzCash") {
         await handleJazzCashPayment();
         return;
+      } else if (paymentMethodSelected === "Bank Alfalah") {
+        await handleBankAlfalahPayment();
+        return;
       }
-      else if (paymentMethodSelected === "Bank Alfalah") {
-      await handleBankAlfalahPayment(); 
-      return;
-    }
 
       const orderData = {
         customerName: formData.fullName,
@@ -172,7 +169,8 @@ export default function Checkout() {
           },
           storeId: productItem.product.store,
           quantity: productItem.quantity,
-          total_price: productItem.quantity * productItem.product.discounted_price,
+          total_price:
+            productItem.quantity * productItem.product.discounted_price,
         })),
         total: cart.total,
         discountedTotal: cart.discountedTotal,
@@ -205,14 +203,18 @@ export default function Checkout() {
         return {
           storeId: productItem.product.store,
           quantity: productItem.quantity,
-          total_price: productItem.quantity * productItem.product.discounted_price,
+          total_price:
+            productItem.quantity * productItem.product.discounted_price,
           product: {
             _id: productItem.product._id,
             name: productItem.product.name,
             base_price: productItem.product.base_price,
             discounted_price: productItem.product.discounted_price,
             status: productItem.product.status,
-            type: validTypes.length > 0 ? validTypes : [{ id: "", value: "DefaultType" }],
+            type:
+              validTypes.length > 0
+                ? validTypes
+                : [{ id: "", value: "DefaultType" }],
             size: productItem.product.size.map((s) => ({
               id: s.id || "",
               value: s.value || "DefaultSize",
@@ -223,7 +225,9 @@ export default function Checkout() {
       });
 
       if (validProductList.some((item) => item.product.type.length === 0)) {
-        toast.error("Some products have invalid types. Please check your cart.");
+        toast.error(
+          "Some products have invalid types. Please check your cart."
+        );
         setLoading(false);
         return;
       }
@@ -267,7 +271,7 @@ export default function Checkout() {
       const form = document.createElement("form");
       form.method = "POST";
       form.action = data.redirectUrl;
-      form.target = "_blank"; 
+      form.target = "_blank";
 
       Object.entries(data.paymentParams).forEach(([key, value]) => {
         const input = document.createElement("input");
@@ -286,115 +290,100 @@ export default function Checkout() {
       toast.error("Payment initiation failed. Please try again.");
       setLoading(false);
     }
-  }
+  };
 
+  const handleBankAlfalahPayment = async () => {
+    try {
+      setLoading(true);
 
+      const validProductList = cart.ProductList.map((productItem) => {
+        const validTypes = productItem.product.type
+          .filter((t) => t.value && t.value !== "-")
+          .map((t) => ({
+            id: t.id || "",
+            value: t.value || "DefaultType",
+          }));
 
+        return {
+          storeId: productItem.product.store,
+          quantity: productItem.quantity,
+          total_price:
+            productItem.quantity * productItem.product.discounted_price,
+          product: {
+            _id: productItem.product._id,
+            name: productItem.product.name,
+            base_price: productItem.product.base_price,
+            discounted_price: productItem.product.discounted_price,
+            status: productItem.product.status,
+            type:
+              validTypes.length > 0
+                ? validTypes
+                : [{ id: "", value: "DefaultType" }],
+            size: productItem.product.size.map((s) => ({
+              id: s.id || "",
+              value: s.value || "DefaultSize",
+              unit: s.unit || "-",
+            })),
+          },
+        };
+      });
 
+      if (validProductList.some((item) => item.product.type.length === 0)) {
+        toast.error(
+          "Some products have invalid types. Please check your cart accordingly."
+        );
+        setLoading(false);
+        return;
+      }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- const handleBankAlfalahPayment = async () => {
-  try {
-    setLoading(true);
-
-    const validProductList = cart.ProductList.map((productItem) => {
-      const validTypes = productItem.product.type
-        .filter((t) => t.value && t.value !== "-")
-        .map((t) => ({
-          id: t.id || "",
-          value: t.value || "DefaultType",
-        }));
-
-      return {
-        storeId: productItem.product.store,
-        quantity: productItem.quantity,
-        total_price: productItem.quantity * productItem.product.discounted_price,
-        product: {
-          _id: productItem.product._id,
-          name: productItem.product.name,
-          base_price: productItem.product.base_price,
-          discounted_price: productItem.product.discounted_price,
-          status: productItem.product.status,
-          type: validTypes.length > 0 ? validTypes : [{ id: "", value: "DefaultType" }],
-          size: productItem.product.size.map((s) => ({
-            id: s.id || "",
-            value: s.value || "DefaultSize",
-            unit: s.unit || "-",
-          })),
+      const orderDto = {
+        customerName: formData.fullName,
+        customerEmail: formData.email,
+        total: cart.total,
+        discountedTotal: cart.discountedTotal,
+        ShippingInfo: {
+          fullName: formData.fullName,
+          email: formData.email,
+          phone: formData.phone,
+          country: formData.country,
+          city: formData.city,
+          state: formData.state,
+          zip: formData.zip,
+          address: formData.address,
+          shippingMethod: formData.shippingMethod,
         },
+        productList: validProductList,
+        customerPhone: formData.phone,
+        customerCNIC: "4250156667561",
       };
-    });
 
-    if (validProductList.some((item) => item.product.type.length === 0)) {
-      toast.error("Some products have invalid types. Please check your cart accordingly.");
+      const response = await fetch(
+        "https://www.api.glimmer.com.pk/alfalah/initiate-payment",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(orderDto),
+        }
+      );
+
+      const data = await response.json();
+
+      if (response.ok && data.redirectUrl) {
+        window.location.href = data.redirectUrl; // 🔁 redirect to Alfalah
+      } else {
+        toast.error(data.message || "Something went wrong during payment.");
+      }
+    } catch (err) {
+      console.error("Alfalah payment failed:", err);
+      toast.error("Payment initiation failed. Please try again.");
+    } finally {
       setLoading(false);
-      return;
     }
+  };
 
-    const orderDto = {
-      customerName: formData.fullName,
-      customerEmail: formData.email,
-      total: cart.total,
-      discountedTotal: cart.discountedTotal,
-      ShippingInfo: {
-        fullName: formData.fullName,
-        email: formData.email,
-        phone: formData.phone,
-        country: formData.country,
-        city: formData.city,
-        state: formData.state,
-        zip: formData.zip,
-        address: formData.address,
-        shippingMethod: formData.shippingMethod,
-      },
-      productList: validProductList,
-      customerPhone: formData.phone,
-      customerCNIC: "4250156667561",
-    };
-
-    const response = await fetch("https://www.api.glimmer.com.pk/alfalah/initiate-payment", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(orderDto),
-    });
-
-    const data = await response.json();
-
-    if (response.ok && data.redirectUrl) {
-      window.location.href = data.redirectUrl; // 🔁 redirect to Alfalah
-    } else {
-      toast.error(data.message || "Something went wrong during payment.");
-    }
-
-  } catch (err) {
-    console.error("Alfalah payment failed:", err);
-    toast.error("Payment initiation failed. Please try again.");
-  } finally {
-    setLoading(false);
-  }
-};
-
-
-
-
-
-
-return (
+  return (
     <>
       <Toaster />
       <div className="w-[99vw] p-8 max-sm:h-max">
@@ -402,7 +391,9 @@ return (
           <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
               <h1 className="text-4xl font-bold mb-4">Checkout</h1>
-              <h2 className="text-xl font-semibold mb-6">Shipping Information</h2>
+              <h2 className="text-xl font-semibold mb-6">
+                Shipping Information
+              </h2>
               <form className="space-y-4">
                 <div className="flex items-center space-x-4">
                   <label className="flex items-center">
@@ -505,7 +496,9 @@ return (
                   <p className="text-red-500 text-sm">{errors.address}</p>
                 )}
                 <div className="mt-6">
-                  <label className="block font-semibold mb-2">Payment Method</label>
+                  <label className="block font-semibold mb-2">
+                    Payment Method
+                  </label>
                   <div className="flex gap-4 flex-wrap">
                     <label
                       className={`flex items-center justify-center gap-2 px-4 py-3 rounded-lg border cursor-pointer transition-all
@@ -556,7 +549,10 @@ return (
                             : "border-gray-300"
                         }`}
                       onClick={() => {
-                        setFormData({ ...formData, paymentMethod: "Bank Alfalah" });
+                        setFormData({
+                          ...formData,
+                          paymentMethod: "Bank Alfalah",
+                        });
                       }}
                     >
                       <input

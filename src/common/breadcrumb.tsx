@@ -18,6 +18,8 @@ const Breadcrumbs = () => {
         Home
       </Link>
 
+    
+
       {/* Static Selfcare Products Link */}
       <span className="mx-2 text-gray-500 text-base lg:text-xl">/</span>
       <Link
@@ -26,6 +28,8 @@ const Breadcrumbs = () => {
       >
         Selfcare Products
       </Link>
+
+
 
       {/* When Category, SubCategory, or Item is Selected, Show "Products" */}
       {(category || subCategory || item) && (
