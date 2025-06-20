@@ -88,6 +88,7 @@ const RecommendedProducts = () => {
             ))
           ) : (
             <p className="text-center text-gray-500 w-full">No products available</p>
+            
           )}
         </div>
       ) : (
@@ -100,6 +101,7 @@ const RecommendedProducts = () => {
           ) : (
             <p className="text-center text-gray-500 w-full col-span-4">
               No products available
+              
             </p>
           )}
         </div>

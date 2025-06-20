@@ -2,7 +2,7 @@ import React from "react";
 
 const OfferPictures = () => {
   return (
-    <div className="w-full py-10 flex justify-center mx-auto ml-24">
+    <div className="w-full py-10 flex justify-center mx-auto ml-28">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-[950px] px-4">
         {/* Card 1 */}
         <div className="bg-[#D9D9D9] rounded-lg shadow-md flex h-[320px] w-full overflow-hidden">

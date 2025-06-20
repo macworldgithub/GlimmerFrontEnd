@@ -3,11 +3,11 @@ import React from "react";
 
 const SalonsNearby = () => {
   return (
-    <div className="ml-6 lg:ml-10 xl:ml-24"> {/* Add left margin here */}
+    <div className="px-4 lg:px-10 xl:px-24">
       <SalonCards
         title="Other Salons"
         showButton={true}
-        className="!w-[99vw] !max-w-none"
+        className="w-full max-w-[1200px] mx-auto"
       />
     </div>
   );
