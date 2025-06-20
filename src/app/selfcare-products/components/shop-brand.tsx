@@ -39,7 +39,7 @@ const AutoSliderShopBrand = ({
 			<Swiper
 				modules={modules}
 				spaceBetween={50}
-				slidesPerView={1} // Default to 1 slide on mobile
+				slidesPerView={1} 
 				effect={type}
 				autoplay={{ delay: delay as number }}
 				onError={(e) => console.log("[hero swiper] error: ", e)}
@@ -47,7 +47,8 @@ const AutoSliderShopBrand = ({
 				breakpoints={{
 					768: {
 						
-						slidesPerView: 2, // Show 2 slides
+						slidesPerView: 2, 
+						
 					},
 				}}
 				cssMode={true}
