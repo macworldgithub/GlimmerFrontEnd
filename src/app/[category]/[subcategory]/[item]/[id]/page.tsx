@@ -571,7 +571,7 @@ const ProductDisplay = () => {
 
 
 
-          <div className="flex flex-col items-stretch gap-y-4 mt-4 w-full">
+         <div className="flex flex-col items-stretch gap-y-4 mt-4 w-full">
            <div className="flex items-center gap-4">
   <button
     className={`flex-1 flex items-center justify-center text-xs font-semibold gap-2 py-3 xl:px-6 px-4 

@@ -99,7 +99,7 @@ const NavbarClient = ({
   return (
     <>
       <div className="navbar bg-base-100 w-[99vw] sticky top-0 z-50">
-        <div className="flex  flex-1">
+        <div className="flex flex-1">
           <SideMenu
             isLoggedIn={!!session?.userId}
             handleLogout={handleLogout}
