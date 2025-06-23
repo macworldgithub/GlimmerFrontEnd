@@ -105,7 +105,7 @@ const SalonDetailsPage = () => {
         </div>
 
         {/* ✅ Image Grid */}
-        <div className="hidden md:grid grid-cols-2 gap-x-0 gap-y-3 mt-6 max-w-[85vw] mx-auto px-16">
+        <div className="hidden md:grid grid-cols-2 gap-x-0 gap-y-3 mt-6 max-w-[75vw] mx-auto px-16">
 
           {images.map((src, index) => (
             <div
