@@ -1,3 +1,5 @@
+"use client";
+
 import SalonCards from "@/common/salon-cards";
 import React from "react";
 
