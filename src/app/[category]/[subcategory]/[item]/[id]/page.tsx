@@ -283,6 +283,9 @@ const ProductDisplay = () => {
       <div className="w-full mb-4">
         <CategoryNavMenu />
       </div>
+
+
+
       <div className="breadcrumbs mb-4 text-xl lg:text-xl px-10">
         <Link
           href="/"
@@ -345,6 +348,7 @@ const ProductDisplay = () => {
                 </SwiperSlide>
               ))}
             </Swiper>
+
           </div>
           <div className="mt-10 flex items-center justify-center w-full max-w-[500px]">
             <button className="custom-prev p-2 text-gray-500">
@@ -590,7 +594,7 @@ const ProductDisplay = () => {
       height={15}
       src="/assets/addtoBag/cart-icon.png"
     />
-    ADD TO BAG
+    ADD TO BAG 
   </button>
 
   {/* + - Quantity Controller */}

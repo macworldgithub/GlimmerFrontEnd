@@ -35,10 +35,11 @@ export default async function Home() {
      
         <Assurity />
         <OfferPictures />
-        <VideoTutorial />
+       
         <TrendingProducts />
         <MustItems />
         <BestSellers />
+         <VideoTutorial />
         <DynamicBanner imageUrl="" title="Shop Now and Unleash Your Inner Glow!" />
         <Faq />
      

@@ -219,3 +219,4 @@ const SalonDetailsPage = () => {
 };
 
 export default SalonDetailsPage;
+
