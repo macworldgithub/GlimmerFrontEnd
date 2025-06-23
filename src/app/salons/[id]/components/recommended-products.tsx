@@ -17,8 +17,10 @@ const RecommendedProducts = () => {
   useEffect(() => {
     const fetchProductsOfSalon = async () => {
       const response = await getRecommendedProductsOfSalon(salonId);
-          console.log("Full API Response:", response);
-      setProducts(response?.data || response);
+      console.log("Full API Response:", response);
+      // setProducts(response?.data || response);
+      const productList = response?.[0]?.productList || [];
+      setProducts(productList);
     };
 
     fetchProductsOfSalon();
