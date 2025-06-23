@@ -145,11 +145,17 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
   const path = `/${item.category}/${item.sub_category}/${item.item}/${item._id}`;
   const finalPath = queryParams.toString() ? `${path}?${queryParams.toString()}` : path;
 
-  // Calculate the final price
-  const finalPrice =
-    item.discounted_price > 0
-      ? (item.base_price - (item.base_price * item.discounted_price) / 100).toFixed(2)
-      : item.base_price.toFixed(2);
+  // Calculate the final price with defensive checks
+  const basePrice = Number(item.base_price) || 0;
+  const discountedPrice = Number(item.discounted_price) || 0;
+  let finalPrice = "N/A"; // Fallback if price is invalid
+
+  if (basePrice > 0) {
+    finalPrice =
+      discountedPrice > 0
+        ? (basePrice - (basePrice * discountedPrice) / 100).toFixed(2)
+        : basePrice.toFixed(2);
+  }
 
   return (
     <div
@@ -197,7 +203,7 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
           </div>
         </div>
 
-        {item?.discounted_price > 0 && (
+        {discountedPrice > 0 && basePrice > 0 && (
           <div className="absolute -top-3 -right-3 w-10 h-10 z-10">
             <img
               src="/assets/addtoBag/discount.png"
@@ -205,7 +211,7 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
               className="w-full h-full"
             />
             <span className="absolute inset-0 flex flex-col items-center justify-center text-white text-xs leading-tight font-bold">
-              <span>{`${item.discounted_price}%`}</span>
+              <span>{`${discountedPrice}%`}</span>
               <span className="text-[8px] font-normal">OFF</span>
             </span>
           </div>
@@ -222,11 +228,11 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
         <div>
           <div className="flex justify-between items-center mt-4">
             <span className="text-md font-bold text-gray-800">
-              {finalPrice} PKR
+              {finalPrice} {finalPrice !== "N/A" && "PKR"}
             </span>
-            {item.discounted_price > 0 && (
+            {discountedPrice > 0 && basePrice > 0 && (
               <span className="text-gray-400 text-md line-through">
-                {item.base_price.toFixed(2)} PKR
+                {basePrice.toFixed(2)} PKR
               </span>
             )}
           </div>
