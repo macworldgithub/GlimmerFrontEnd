@@ -181,7 +181,7 @@ export default function Checkout() {
       // const response = await createOrder(orderData);
       toast.success("Order placed successfully!");
       dispatch(clearCart());
-      router.push("/order-confirmation");
+      // router.push("/order-confirmation");
     } catch (error) {
       toast.error("Failed to place order. Please try again.");
       console.error("Order Error:", error);

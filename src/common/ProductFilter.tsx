@@ -7,8 +7,7 @@ const ProductFilter = () => {
     <div className="w-full flex justify-center px-4 py-8">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-[1220px]">
         {/* Card 1 */}
-      <div className="bg-[#FFF1C8] rounded-[10px] p-6 flex flex-col justify-between w-full max-w-[750px] min-h-[576px] mx-auto transition-transform duration-300 ease-in-out hover:scale-x-105">
-
+        <div className="bg-[#FFF1C8] rounded-[10px] p-6 flex flex-col justify-between w-full max-w-[700px] min-h-[570px] mx-auto transition-transform duration-300 ease-in-out hover:scale-x-105">
           <div>
             <h2 className="text-2xl font-bold text-gray-900 mb-1">
               Salon Booking
@@ -26,8 +25,7 @@ const ProductFilter = () => {
         </div>
 
         {/* Card 2 */}
-        <div className="bg-[#FFF1C8] rounded-[10px] p-6 flex flex-col justify-between w-full max-w-[750px] min-h-[576px] mx-auto transition-transform duration-300 ease-in-out hover:scale-105">
-
+        <div className="bg-[#FFF1C8] rounded-[10px] p-6 flex flex-col justify-between w-full max-w-[700px] min-h-[570px] mx-auto transition-transform duration-300 ease-in-out hover:scale-105">
           <div>
             <h2 className="text-2xl font-bold text-gray-900 mb-1">
               Spa Booking
@@ -45,8 +43,7 @@ const ProductFilter = () => {
         </div>
 
         {/* Card 3 */}
-        <div className="bg-[#FFF1C8] rounded-[10px] p-6 flex flex-col justify-between w-full max-w-[750px] min-h-[576px] mx-auto transition-transform duration-300 ease-in-out hover:scale-105">
-
+        <div className="bg-[#FFF1C8] rounded-[10px] p-6 flex flex-col justify-between w-full max-w-[700px] min-h-[570px] mx-auto transition-transform duration-300 ease-in-out hover:scale-105">
           <div>
             <h2 className="text-2xl font-bold text-gray-900 mb-1">
               Aesthetic Clinic Appointments
@@ -62,8 +59,7 @@ const ProductFilter = () => {
         </div>
 
         {/* Card 4 */}
-        <div className="bg-[#FFF1C8] rounded-[10px] p-6 flex flex-col justify-between w-full max-w-[750px] min-h-[576px] mx-auto transition-transform duration-300 ease-in-out hover:scale-105">
-
+        <div className="bg-[#FFF1C8] rounded-[10px] p-6 flex flex-col justify-between w-full max-w-[700px] min-h-[570px] mx-auto transition-transform duration-300 ease-in-out hover:scale-105">
           <div>
             <h2 className="text-2xl font-bold text-gray-900 mb-1">
               Gym Memberships
