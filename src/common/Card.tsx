@@ -148,7 +148,7 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
   // Calculate the final price with defensive checks
   const basePrice = Number(item.base_price) || 0;
   const discountedPrice = Number(item.discounted_price) || 0;
-  let finalPrice = "N/A"; // Fallback if price is invalid
+  let finalPrice = "N/A"; 
 
   if (basePrice > 0) {
     finalPrice =
@@ -168,6 +168,8 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
           Item has been added to cart
         </div>
       )}
+
+     
 
       {/* Top half image */}
       <div className="relative w-full h-1/2 flex items-center justify-center bg-white">
@@ -239,7 +241,8 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
           <div className="flex mt-2">
             <Rating
               size={20}
-              initialValue={3}
+              //initialValue={3}
+              initialValue={2}
               SVGstyle={{ display: "inline-flex" }}
               allowHover={false}
               fillColor="#583FA8"
