@@ -12,6 +12,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { clearCart } from "@/reduxSlices/cartSlice";
 import { useRouter } from "next/navigation";
+import { BACKEND_URL } from "@/api/config";
 import axios from "axios";
 
 // New interface for payment params
@@ -139,7 +140,7 @@ export default function Checkout() {
         return;
       }
 
-      const orderData = {
+     const orderData = {
         customerName: formData.fullName,
         customerEmail: formData.email,
         productList: cart.ProductList.map((productItem) => ({
@@ -153,15 +154,13 @@ export default function Checkout() {
             image2: productItem.product.image2 || "",
             image3: productItem.product.image3 || "",
             status: productItem.product.status,
-            type: productItem.product.type
-              .filter((t) => t.value && t.value !== "-")
-              .map((t) => ({
-                id: t.id || "",
-                value: t.value || "DefaultType",
-              })),
+            type: productItem.product.type.map((t) => ({
+              id: t.id || "",
+              value: t.value || "-",
+            })),
             size: productItem.product.size.map((s) => ({
               id: s.id || "",
-              value: s.value || "DefaultSize",
+              value: s.value || "-",
               unit: s.unit || "-",
             })),
             rate_of_salon: productItem.product.rate_of_salon,
@@ -174,13 +173,53 @@ export default function Checkout() {
         })),
         total: cart.total,
         discountedTotal: cart.discountedTotal,
-        paymentMethod: paymentMethodSelected || "COD",
+        paymentMethod: "COD",
         ShippingInfo: formData,
       };
+  
+      const res = await createOrder(orderData, credentials.token);
+  
+      if (res?.order) {
+        const emailPayload = {
+          to: formData.email,
+          viewModel: {
+            customer: {
+              name: formData.fullName,
+              email: formData.email,
+            },
+            order: {
+              id: res.order._id, 
+              date: new Date().toLocaleDateString(), 
+              items: res.order.productList.map((productItem: any) => ({
+                productId: productItem.product._id,
+                storeId: productItem.product.store,
+                name: productItem.product.name,
+                image: productItem.product.image1,
+                quantity: productItem.quantity,
+                price: productItem.product.discounted_price,
+              })),
+              subtotal: res.order.total, 
+              shipping: 5, 
+              total: res.order.discountedTotal,
+            },
+          },
+        };
+  
+        await fetch(`${BACKEND_URL}/admin/send-order-confirmation-email`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${credentials.token}`, 
+          },
+          body: JSON.stringify(emailPayload),
+        });
+  
+        toast.success(
+          "Order has been confirmed! You will receive an email shortly."
+        );
 
-      // const response = await createOrder(orderData);
-      toast.success("Order placed successfully!");
-      dispatch(clearCart());
+        dispatch(clearCart());
+      }
     } catch (error) {
       toast.error("Failed to place order. Please try again.");
       console.error("Order Error:", error);

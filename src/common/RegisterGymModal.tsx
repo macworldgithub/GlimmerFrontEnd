@@ -1,14 +1,18 @@
-// components/RegisterGymModal.tsx
 "use client";
-import { Modal, Form, Input, Button } from "antd";
+import { Modal, Form, Input, Button, message } from "antd";
 import React from "react";
 
 const RegisterGymModal = ({ visible, onCancel, onSubmit }: any) => {
   const [form] = Form.useForm();
 
   const handleFinish = (values: any) => {
-    onSubmit(values);
-    form.resetFields();
+    message.success("Our team will contact you soon!");
+
+    setTimeout(() => {
+      onSubmit(values);    
+      form.resetFields();   
+      onCancel();          
+    }, 2000); 
   };
 
   return (
@@ -19,11 +23,7 @@ const RegisterGymModal = ({ visible, onCancel, onSubmit }: any) => {
       footer={null}
       width={500}
     >
-      <Form
-        layout="vertical"
-        form={form}
-        onFinish={handleFinish}
-      >
+      <Form layout="vertical" form={form} onFinish={handleFinish}>
         <Form.Item
           label="Name"
           name="name"
@@ -52,10 +52,8 @@ const RegisterGymModal = ({ visible, onCancel, onSubmit }: any) => {
           <Input />
         </Form.Item>
 
-        <p className="text-center text-sm mb-4">Our team will contact you soon!</p>
-
         <Button type="primary" htmlType="submit" block>
-          Send Reuqest
+          Send Request
         </Button>
       </Form>
     </Modal>
