@@ -140,7 +140,7 @@ export default function Checkout() {
         return;
       }
 
-     const orderData = {
+    const orderData = {
         customerName: formData.fullName,
         customerEmail: formData.email,
         productList: cart.ProductList.map((productItem) => ({
@@ -173,7 +173,7 @@ export default function Checkout() {
         })),
         total: cart.total,
         discountedTotal: cart.discountedTotal,
-        paymentMethod: "COD",
+       paymentMethod: "Cash on Delivery",
         ShippingInfo: formData,
       };
   
@@ -226,6 +226,10 @@ export default function Checkout() {
     }
   };
 
+  
+
+  
+  
   const handleJazzCashPayment = async () => {
     try {
       setLoading(true);

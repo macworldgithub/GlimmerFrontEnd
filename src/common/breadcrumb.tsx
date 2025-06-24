@@ -15,7 +15,7 @@ const Breadcrumbs = () => {
     <div className="breadcrumbs mb-4 text-xl lg:text-xl px-10">
       {/* Home Link */}
       <Link href="/" className="text-gray-500 font-medium text-base lg:text-xl">
-        Home
+        Home 
       </Link>
 
     

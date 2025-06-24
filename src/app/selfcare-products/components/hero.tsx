@@ -4,6 +4,7 @@ import HeroImg1 from "@/assets/selfcare-slider/selfcare-slider-1.png";
 import HeroImg2 from "@/assets/selfcare-slider/selfcare-slider-2.png";
 import HeroImg3 from "@/assets/selfcare-slider/selfcare-slider-3.png";
 import AutoSlider from "@/common/auto-slider";
+import { Breadcrumb } from "antd";
 
 type Props = {
   srcs?: string[];
@@ -15,7 +16,9 @@ const Hero = ({ srcs = [] }: Props) => {
 
   return (
     <div className="w-screen overflow-x-hidden">
+   
       <AutoSlider srcs={_srcs} />
+    
     </div>
   );
 };
