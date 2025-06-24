@@ -29,7 +29,7 @@ export const getAllProducts = async (
     if (sortBy) url += `&sortBy=${sortBy}`;
     if (order) url += `&order=${order}`;
 
-    // Make the API request with the dynamically constructed URL
+  
     const res = await axios.get(url);
 
     return res.data; // Return the response data

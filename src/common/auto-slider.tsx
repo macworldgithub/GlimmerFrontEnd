@@ -53,7 +53,7 @@ const AutoSlider = ({ srcs = [], type = "slide", delay = 3000 }: Props) => {
         ))}
       </Swiper>
     </div>
-  );
+  );  
 };
 
 export default AutoSlider;

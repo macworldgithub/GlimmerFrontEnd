@@ -19,30 +19,33 @@ import Faq from "./components/Faq";
 import Banner from "./components/Banner";
 import DynamicBanner from "./components/Banner";
 import ProductFilter from "@/common/ProductFilter";
+import ProductCards from "@/common/ProductCard";
+import AllProducts from "./components/AllProducts";
 
 export default async function Home() {
   return (
     <>
-     <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<div>Loading...</div>}>
         <CategoryNavMenu className="mb-4" />
-           <Breadcrumbs />
-      {/* HERO KO PEHLE DIKHAAO (Suspense ke bahar) */}
-      <Hero />
-       </Suspense>
+        <Breadcrumbs />
+        {/* HERO KO PEHLE DIKHAAO (Suspense ke bahar) */}
+        <Hero />
+      </Suspense>
 
       {/* Baaki sab Suspense ke andar jaise already tha */}
-     
-     
-        <Assurity />
-        <OfferPictures />
-       
-        <TrendingProducts />
-        <MustItems />
-        <BestSellers />
-         <VideoTutorial />
-        <DynamicBanner imageUrl="" title="Shop Now and Unleash Your Inner Glow!" />
-        <Faq />
-     
+
+      <Assurity />
+      <OfferPictures />
+      <AllProducts />
+      <TrendingProducts />
+      <MustItems />
+      <BestSellers />
+      <VideoTutorial />
+      <DynamicBanner
+        imageUrl=""
+        title="Shop Now and Unleash Your Inner Glow!"
+      />
+      <Faq />
     </>
   );
 }

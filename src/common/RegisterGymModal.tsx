@@ -6,13 +6,15 @@ const RegisterGymModal = ({ visible, onCancel, onSubmit }: any) => {
   const [form] = Form.useForm();
 
   const handleFinish = (values: any) => {
+    // Step 1: Show success message
     message.success("Our team will contact you soon!");
 
+    // Step 2: Delay for 2 seconds, then:
     setTimeout(() => {
-      onSubmit(values);    
-      form.resetFields();   
-      onCancel();          
-    }, 2000); 
+      form.resetFields();   // Clear the form
+      onSubmit(values);     // Submit data
+      onCancel();           // Close modal
+    }, 2000);
   };
 
   return (
