@@ -646,7 +646,7 @@ const ProductsList = () => {
           />
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/30 group-hover:bg-black/20 transition-all duration-500 px-4 lg:p-[8rem]">
             <h1 className="text-white text-2xl sm:text-3xl md:text-4xl font-bold text-center">
-              Explore Our Best Collection
+              Explore Our Best Collection 
             </h1>
             <div className="breadcrumbs mt-4 text-white text-base sm:text-lg lg:text-xl text-center">
               <Link href="/" className="text-white font-medium">

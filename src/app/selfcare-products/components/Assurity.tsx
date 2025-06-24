@@ -9,9 +9,9 @@ interface Assurance {
 const Assurity = () => {
   const assurances: Assurance[] = [
     { text: "Quality Assurance ", picture: "/assets/assurity/vector.png" },
+      { text: "Customer Satisfaction", picture: "/assets/assurity/Vector1.png" },
     { text: "Trust & Reliability", picture: "/assets/assurity/vector2.png" },
     { text: "Personalization", picture: "/assets/assurity/vector3.png" },
-     { text: "Customer Satisfaction", picture: "/assets/assurity/vector1.png" },
     { text: "Continous Improvement", picture: "/assets/assurity/vector4.png" },
   ];
 

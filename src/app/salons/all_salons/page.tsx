@@ -81,32 +81,33 @@ const formatTime = (timeStr: any) => {
         <Salonfilter />
       </div>
   
+      
+ {/* Banner Image */}
+<div className="hidden md:block pt-12 px-4 sm:px-6 md:px-10 xl:px-32">
+  <div className="w-full h-[40vh] rounded-lg overflow-hidden relative group">
+    <img
+      src="/assets/images/banner.png"
+      alt="Banner"
+      className="w-full h-full object-cover transition-transform duration-500"
+    />
+    <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/30 group-hover:bg-black/20 transition-all duration-500 px-4 md:px-12 lg:px-32">
+      <h1 className="text-white text-xl sm:text-3xl md:text-4xl font-bold text-center mb-2">
+        Explore Our Best Collection
+      </h1>
       {/* Breadcrumbs */}
-      <div className="breadcrumbs mb-4 text-base sm:text-lg md:text-xl px-4 sm:px-6 lg:px-10">
-        <Link href="/salons" className="text-gray-500 font-medium">
+      <div className="breadcrumbs text-white text-base sm:text-lg lg:text-xl text-center">
+        <Link href="/salons" className="text-white font-medium">
           Salons
         </Link>
-        <span className="mx-2 text-gray-500 font-medium">/</span>
-        <Link href="/salons/all_salons" className="text-purple-800 font-medium">
-          All Salons
+        <span className="mx-2 text-gray-300 font-medium">/</span>
+        <Link href="/salons/all_salons" className="text-white font-medium">
+          All Salons 
         </Link>
       </div>
-  
-      {/* Banner Image */}
-      <div className="hidden md:block pt-12 px-4 sm:px-6 md:px-10 xl:px-32">
-        <div className="w-full h-[40vh] rounded-lg overflow-hidden relative group">
-          <img
-            src="/assets/images/banner.png"
-            alt="Banner"
-            className="w-full h-full object-cover transition-transform duration-500"
-          />
-          <div className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/20 transition-all duration-500 px-4 md:px-12 lg:px-32">
-            <h1 className="text-white text-xl sm:text-3xl md:text-4xl font-bold text-center">
-              Explore Our Best Collection
-            </h1>
-          </div>
-        </div>
-      </div>
+    </div>
+  </div>
+</div>
+
   
       {/* Main Content */}
       <div className="flex flex-col md:flex-row px-4 sm:px-6 md:px-8 lg:px-12 xl:px-32 py-6 lg:py-10">
