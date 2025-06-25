@@ -23,9 +23,7 @@
 //   }[];
 // }
 
-
 // const priceOptions = ["Low to High", "High to Low"];
-
 
 // // A loading component for suspense fallback
 // const Loading = () => (
@@ -238,7 +236,7 @@
 //     <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/30 group-hover:bg-black/20 transition-all duration-500 px-4 lg:p-[8rem]">
 //       <h1 className="text-white text-2xl sm:text-3xl md:text-4xl font-bold text-center">
 //         Explore Our Best Collection
-       
+
 //       </h1>
 
 //       {/* Breadcrumbs inside banner under heading */}
@@ -254,7 +252,7 @@
 //           href="/selfcare-products"
 //           className="text-white font-medium"
 //         >
-//           Selfcare Products 
+//           Selfcare Products
 //         </Link>
 
 //         {(categoryFilter || subCategoryFilter || itemFilter || nameFilter) && (
@@ -342,7 +340,6 @@
 //               )}
 //             </div>
 
-          
 //           </div>
 
 //           <div className=" w-full h-max grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-x-8 gap-y-10 p-6">
@@ -373,7 +370,7 @@
 //                 disabled={page === 1}
 //                 className="px-4 py-2 bg-gray-200 text-gray-500 rounded-md hover:bg-gray-300 disabled:opacity-50"
 //               >
-//                 Previous 
+//                 Previous
 //               </button>
 //               <span className="text-lg text-gray-600">
 //                 Page {page} of {Math.ceil(total / pageSize)}
@@ -509,7 +506,10 @@ const ProductsList = () => {
           ...product,
           finalPrice:
             product.discounted_price > 0
-              ? (product.base_price - (product.base_price * product.discounted_price) / 100).toFixed(2)
+              ? (
+                  product.base_price -
+                  (product.base_price * product.discounted_price) / 100
+                ).toFixed(2)
               : product.base_price.toFixed(2),
         }))
         .filter((product: any) => {
@@ -518,7 +518,8 @@ const ProductsList = () => {
           const productCreatedAt = new Date(product.created_at);
           const min = minPriceFilter ? Number(minPriceFilter) : undefined;
           const max = maxPriceFilter ? Number(maxPriceFilter) : undefined;
-          const matchesPrice = (min !== undefined ? productPrice >= min : true) &&
+          const matchesPrice =
+            (min !== undefined ? productPrice >= min : true) &&
             (max !== undefined ? productPrice <= max : true);
           const matchesName = nameFilter
             ? productName.includes(nameFilter.toLowerCase())
@@ -532,8 +533,10 @@ const ProductsList = () => {
       if (activeSort === "Date") {
         filteredProducts.sort((a: any, b: any) => {
           return sortOrder === "desc"
-            ? new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-            : new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+            ? new Date(b.created_at).getTime() -
+                new Date(a.created_at).getTime()
+            : new Date(a.created_at).getTime() -
+                new Date(b.created_at).getTime();
         });
       } else if (activeSort === "Price") {
         filteredProducts.sort((a: any, b: any) => {
@@ -646,17 +649,31 @@ const ProductsList = () => {
           />
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/30 group-hover:bg-black/20 transition-all duration-500 px-4 lg:p-[8rem]">
             <h1 className="text-white text-2xl sm:text-3xl md:text-4xl font-bold text-center">
-              Explore Our Best Collection 
+              Explore Our Best Collection
             </h1>
             <div className="breadcrumbs mt-4 text-white text-base sm:text-lg lg:text-xl text-center">
               <Link href="/" className="text-white font-medium">
                 Home
               </Link>
               <span className="mx-2 text-white font-medium">/</span>
-              <Link href="/selfcare-products" className="text-white font-medium">
+              <Link
+                href="/selfcare-products"
+                className="text-white font-medium"
+              >
                 Selfcare Products
               </Link>
-              {(categoryFilter || subCategoryFilter || itemFilter || nameFilter) && (
+               
+
+
+
+
+
+
+
+              {(categoryFilter ||
+                subCategoryFilter ||
+                itemFilter ||
+                nameFilter) && (
                 <>
                   <span className="mx-2 text-purple-200">/</span>
                   <span className="text-purple-200 font-medium">Products</span>
@@ -673,7 +690,10 @@ const ProductsList = () => {
           transition={{ duration: 1 }}
           className="w-full md:w-[30%] lg:w-[30%] p-6"
         >
-          <Sidebar selections={selections} onFilterChange={handleFilterChange} />
+          <Sidebar
+            selections={selections}
+            onFilterChange={handleFilterChange}
+          />
         </motion.aside>
         <motion.main
           initial={{ opacity: 0 }}
@@ -689,19 +709,30 @@ const ProductsList = () => {
                 setSortOrder(sortOrder === "desc" ? "asc" : "desc");
               }}
               className={`border px-6 py-2 rounded-md text-lg font-medium transition duration-300 ease-in-out ${
-                activeSort === "Date" ? "border-purple-800 text-purple-800 bg-purple-100" : "border-gray-400 text-gray-700 hover:bg-[#FDF3D2]"
+                activeSort === "Date"
+                  ? "border-purple-800 text-purple-800 bg-purple-100"
+                  : "border-gray-400 text-gray-700 hover:bg-[#FDF3D2]"
               }`}
             >
-              Date {activeSort === "Date" ? (sortOrder === "desc" ? "↓" : "↑") : ""}
+              Date{" "}
+              {activeSort === "Date" ? (sortOrder === "desc" ? "↓" : "↑") : ""}
             </button>
             <div className="relative">
               <button
                 onClick={() => setShowPriceDropdown(!showPriceDropdown)}
                 className={`flex items-center gap-2 border px-6 py-2 rounded-md text-lg font-medium transition duration-300 ease-in-out ${
-                  activeSort === "Price" ? "border-purple-800 text-purple-800 bg-purple-100" : "border-gray-400 text-gray-700 hover:bg-[#FDF3D2]"
+                  activeSort === "Price"
+                    ? "border-purple-800 text-purple-800 bg-purple-100"
+                    : "border-gray-400 text-gray-700 hover:bg-[#FDF3D2]"
                 }`}
               >
-                Price {activeSort === "Price" ? (sortOrder === "desc" ? "↓" : "↑") : ""} <BiChevronDown size={20} />
+                Price{" "}
+                {activeSort === "Price"
+                  ? sortOrder === "desc"
+                    ? "↓"
+                    : "↑"
+                  : ""}{" "}
+                <BiChevronDown size={20} />
               </button>
               {showPriceDropdown && (
                 <div className="absolute z-50 left-0 mt-2 w-44 bg-white border border-gray-300 rounded-lg shadow-lg">
