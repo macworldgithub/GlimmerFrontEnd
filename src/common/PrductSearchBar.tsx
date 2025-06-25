@@ -57,6 +57,7 @@ export default function ProductSearchBar({ className }: ProductSearchBarProps) {
     }
     router.push(`/products?${params.toString()}`);
     setShowDropdown(false);
+    
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -92,6 +93,7 @@ export default function ProductSearchBar({ className }: ProductSearchBarProps) {
         size={20}
         onClick={handleSearch}
       />
+      
 
       {showDropdown && suggestions.length > 0 && (
         <div className="absolute z-50 mt-1 w-full bg-white border rounded-md shadow-lg max-h-64 overflow-auto">

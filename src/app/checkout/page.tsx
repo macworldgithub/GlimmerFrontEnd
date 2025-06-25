@@ -125,117 +125,114 @@ export default function Checkout() {
     return valid;
   };
 
- const handleOrder = async () => {
-  try {
-    if (!validateForm()) {
-      return;
-    }
+  const handleOrder = async () => {
+    try {
+      if (!validateForm()) {
+        return;
+      }
 
-    const paymentMethodSelected = formData.paymentMethod;
+      const paymentMethodSelected = formData.paymentMethod;
 
-    if (paymentMethodSelected === "JazzCash") {
-      await handleJazzCashPayment();
-      return;
-    } else if (paymentMethodSelected === "Bank Alfalah") {
-      await handleBankAlfalahPayment();
-      return;
-    }
+      if (paymentMethodSelected === "JazzCash") {
+        await handleJazzCashPayment();
+        return;
+      } else if (paymentMethodSelected === "Bank Alfalah") {
+        await handleBankAlfalahPayment();
+        return;
+      }
 
-    const orderData = {
-      customerName: formData.fullName,
-      customerEmail: formData.email,
-      productList: cart.ProductList.map((productItem) => ({
-        product: {
-          _id: productItem.product._id,
-          name: productItem.product.name,
-          base_price: productItem.product.base_price,
-          discounted_price: productItem.product.discounted_price,
-          description: productItem.product.description,
-          image1: productItem.product.image1,
-          image2: productItem.product.image2 || "",
-          image3: productItem.product.image3 || "",
-          status: productItem.product.status,
-          type: (productItem.product.type || []).map((t) => ({
-            id: t.id || "",
-            value: t.value || "-",
-          })),
-          size: (productItem.product.size || []).map((s) => ({
-            id: s.id || "",
-            value: s.value || "-",
-            unit: s.unit || "-",
-          })),
-          rate_of_salon: productItem.product.rate_of_salon,
-          ref_of_salon: productItem.product.ref_of_salon,
-        },
-        storeId: productItem.product.store,
-        quantity: productItem.quantity,
-        total_price:
-          productItem.quantity * productItem.product.discounted_price,
-      })),
-      total: cart.total,
-      discountedTotal: cart.discountedTotal || cart.total,
-      paymentMethod: "Cash on Delivery",
-      ShippingInfo: formData,
-     
-      payment: {
-        transactionId: `COD-${Date.now()}`,
-        status: "PENDING",
-        gateway: "Cash on Delivery",
-      },
-    };
-
-    const res = await createOrder(orderData, credentials.token);
-
-    if (res?.order) {
-      const emailPayload = {
-        to: formData.email,
-        viewModel: {
-          customer: {
-            name: formData.fullName,
-            email: formData.email,
-          },
-          order: {
-            id: res.order._id,
-            date: new Date().toLocaleDateString(),
-            items: res.order.productList.map((productItem: any) => ({
-              productId: productItem.product._id,
-              storeId: productItem.product.store,
-              name: productItem.product.name,
-              image: productItem.product.image1,
-              quantity: productItem.quantity,
-              price: productItem.product.discounted_price,
+      const orderData = {
+        customerName: formData.fullName,
+        customerEmail: formData.email,
+        productList: cart.ProductList.map((productItem) => ({
+          product: {
+            _id: productItem.product._id,
+            name: productItem.product.name,
+            base_price: productItem.product.base_price,
+            discounted_price: productItem.product.discounted_price,
+            description: productItem.product.description,
+            image1: productItem.product.image1,
+            image2: productItem.product.image2 || "",
+            image3: productItem.product.image3 || "",
+            status: productItem.product.status,
+            type: (productItem.product.type || []).map((t) => ({
+              id: t.id || "",
+              value: t.value || "-",
             })),
-            subtotal: res.order.total,
-            shipping: 5,
-            total: res.order.discountedTotal,
+            size: (productItem.product.size || []).map((s) => ({
+              id: s.id || "",
+              value: s.value || "-",
+              unit: s.unit || "-",
+            })),
+            rate_of_salon: productItem.product.rate_of_salon,
+            ref_of_salon: productItem.product.ref_of_salon,
           },
+          storeId: productItem.product.store,
+          quantity: productItem.quantity,
+          total_price:
+            productItem.quantity * productItem.product.discounted_price,
+        })),
+        total: cart.total,
+        discountedTotal: cart.discountedTotal || cart.total,
+        paymentMethod: "Cash on Delivery",
+        ShippingInfo: formData,
+
+        payment: {
+          transactionId: `COD-${Date.now()}`,
+          status: "Pending",
+          gateway: "Cash on Delivery",
         },
       };
 
-      await fetch(`${BACKEND_URL}/admin/send-order-confirmation-email`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${credentials.token}`,
-        },
-        body: JSON.stringify(emailPayload),
-      });
+      const res = await createOrder(orderData, credentials.token);
 
-      toast.success(
-        "Order has been confirmed! You will receive an email shortly."
-      );
+      if (res?.order) {
+        const emailPayload = {
+          to: formData.email,
+          viewModel: {
+            customer: {
+              name: formData.fullName,
+              email: formData.email,
+            },
+            order: {
+              id: res.order._id,
+              date: new Date().toLocaleDateString(),
+              items: res.order.productList.map((productItem: any) => ({
+                productId: productItem.product._id,
+                storeId: productItem.product.store,
+                name: productItem.product.name,
+                image: productItem.product.image1,
+                quantity: productItem.quantity,
+                price: productItem.product.discounted_price,
+              })),
+              subtotal: res.order.total,
+              shipping: 5,
+              total: res.order.discountedTotal,
+            },
+          },
+        };
 
-      dispatch(clearCart());
+        await fetch(`${BACKEND_URL}/admin/send-order-confirmation-email`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${credentials.token}`,
+          },
+          body: JSON.stringify(emailPayload),
+        });
+
+        toast.success(
+          "Order has been confirmed! You will receive an email shortly."
+        );
+
+        dispatch(clearCart());
+      }
+    } catch (error) {
+      toast.error("Failed to place order. Please try again.");
+      console.error("Order Error:", error);
     }
-  } catch (error) {
-    toast.error("Failed to place order. Please try again.");
-    console.error("Order Error:", error);
-  }
-};
+  };
 
-
-
-  
   const handleJazzCashPayment = async () => {
     try {
       setLoading(true);

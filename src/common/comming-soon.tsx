@@ -34,6 +34,7 @@ const ComingSoon: React.FC = () => {
         </h1>
         <p className="text-2xl mb-6 animate__animated animate__fadeIn animate__delay-2s">
           We're working hard to bring you something amazing.
+        
         </p>
         <div className="text-3xl font-semibold animate__animated animate__fadeIn animate__delay-3s">
           <span>{timeLeft}</span>
