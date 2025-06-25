@@ -47,6 +47,8 @@ const RegisterGymModal = ({ visible, onCancel, onSubmit }: any) => {
           name="gymName"
           rules={[{ required: true, message: "Please enter your gym name" }]}
         >
+
+    
           <Input />
         </Form.Item>
 
