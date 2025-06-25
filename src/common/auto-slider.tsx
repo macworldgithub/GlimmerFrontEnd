@@ -11,12 +11,24 @@ import "swiper/css/effect-fade";
 
 type Props = {
   srcs?: string[];
-  type?: "slide" | "fade" | "cube" | "coverflow" | "flip" | "creative" | "cards";
+  type?:
+    | "slide"
+    | "fade"
+    | "cube"
+    | "coverflow"
+    | "flip"
+    | "creative"
+    | "cards";
   delay?: number | null;
   onBannerClick?: () => void; // 👈 Add this
 };
 
-const AutoSlider = ({ srcs = [], type = "slide", delay = 3000, onBannerClick }: Props) => {
+const AutoSlider = ({
+  srcs = [],
+  type = "slide",
+  delay = 3000,
+  onBannerClick,
+}: Props) => {
   const _srcs = srcs.length > 0 ? srcs : [HeroImg1.src, HeroImg2.src];
   const modules = [];
   if (delay) modules.push(Autoplay);
@@ -31,14 +43,13 @@ const AutoSlider = ({ srcs = [], type = "slide", delay = 3000, onBannerClick }: 
         effect={type}
         autoplay={delay ? { delay: delay as number } : undefined}
         loop={true}
-        //  simulateTouch={false} 
+        simulateTouch={false}
         cssMode={true}
         className="w-full"
       >
         {_srcs.map((s, index) => (
           <SwiperSlide key={s}>
             {onBannerClick ? (
-              // 👇 If onBannerClick is passed (from GymBanner), make image clickable
               <img
                 src={s}
                 onClick={onBannerClick}
@@ -46,7 +57,6 @@ const AutoSlider = ({ srcs = [], type = "slide", delay = 3000, onBannerClick }: 
                 alt="Swiper Carousel component"
               />
             ) : (
-              // 👇 Default behavior: clickable image with link
               <Link href={index === 0 ? "/salons" : "/products"}>
                 <img
                   src={s}
@@ -63,3 +73,4 @@ const AutoSlider = ({ srcs = [], type = "slide", delay = 3000, onBannerClick }: 
 };
 
 export default AutoSlider;
+

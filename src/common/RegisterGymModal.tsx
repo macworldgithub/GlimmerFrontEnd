@@ -1,37 +1,49 @@
 "use client";
-import { Modal, Form, Input, Button, message } from "antd";
+import { Modal, Form, Input, Button, message, Typography } from "antd";
 import React from "react";
+
+const { Title, Text } = Typography;
 
 const RegisterGymModal = ({ visible, onCancel, onSubmit }: any) => {
   const [form] = Form.useForm();
 
   const handleFinish = (values: any) => {
-    // Step 1: Show success message
     message.success("Our team will contact you soon!");
-
-    // Step 2: Delay for 2 seconds, then:
     setTimeout(() => {
-      form.resetFields();   // Clear the form
-      onSubmit(values);     // Submit data
-      onCancel();           // Close modal
+      form.resetFields();
+      onSubmit(values);
+      onCancel();
     }, 2000);
   };
 
   return (
     <Modal
-      title="Register Your Gym"
       open={visible}
       onCancel={onCancel}
       footer={null}
-      width={500}
+      width={520}
+      centered
+      bodyStyle={{ padding: "32px" }}
     >
-      <Form layout="vertical" form={form} onFinish={handleFinish}>
+      <div className="text-center mb-6">
+        <Title level={3} style={{ marginBottom: "8px", color: "#1677ff" }}>
+          Register Your Gym
+        </Title>
+        <Text type="secondary">Fill the form below and we'll contact you shortly.</Text>
+      </div>
+
+      <Form
+        layout="vertical"
+        form={form}
+        onFinish={handleFinish}
+        size="large"
+      >
         <Form.Item
-          label="Name"
+          label="Your Name"
           name="name"
           rules={[{ required: true, message: "Please enter your name" }]}
         >
-          <Input />
+          <Input placeholder="John Doe" />
         </Form.Item>
 
         <Form.Item
@@ -39,7 +51,7 @@ const RegisterGymModal = ({ visible, onCancel, onSubmit }: any) => {
           name="phone"
           rules={[{ required: true, message: "Please enter your phone number" }]}
         >
-          <Input />
+          <Input placeholder="+92 300 1234567" />
         </Form.Item>
 
         <Form.Item
@@ -47,17 +59,15 @@ const RegisterGymModal = ({ visible, onCancel, onSubmit }: any) => {
           name="gymName"
           rules={[{ required: true, message: "Please enter your gym name" }]}
         >
-
-    
-          <Input />
+          <Input placeholder="Alpha Fitness Club" />
         </Form.Item>
 
         <Form.Item label="Email (Optional)" name="email">
-          <Input />
+          <Input placeholder="you@example.com" />
         </Form.Item>
 
         <Button type="primary" htmlType="submit" block>
-          Send Request
+           Send Request
         </Button>
       </Form>
     </Modal>
