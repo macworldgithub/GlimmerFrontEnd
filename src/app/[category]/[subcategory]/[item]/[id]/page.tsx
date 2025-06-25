@@ -1,4 +1,3 @@
-
 "use client";
 import {
   getAllProducts,
@@ -97,7 +96,7 @@ const ProductDisplay = () => {
       setProduct(res);
     } catch (error) {
       console.error("Error Fetching Product by Id", error);
-    }   
+    }
   };
 
   const fetchRatings = async (id: string) => {
@@ -284,8 +283,6 @@ const ProductDisplay = () => {
         <CategoryNavMenu />
       </div>
 
-
-
       <div className="breadcrumbs mb-4 text-xl lg:text-xl px-10">
         <Link
           href="/"
@@ -315,7 +312,7 @@ const ProductDisplay = () => {
           <>
             <span className="mx-2 text-purple-800 text-base lg:text-xl">/</span>
             <span className="text-purple-800 font-medium text-base lg:text-xl">
-              Detail 
+              Detail
             </span>
           </>
         )}
@@ -333,7 +330,7 @@ const ProductDisplay = () => {
               }}
               loop={images.length > 1}
               className="w-full h-full"
-              onSwiper={(swiper) => (swiperRef.current = swiper)} 
+              onSwiper={(swiper) => (swiperRef.current = swiper)}
             >
               {images.map((image, i) => (
                 <SwiperSlide key={i}>
@@ -348,7 +345,6 @@ const ProductDisplay = () => {
                 </SwiperSlide>
               ))}
             </Swiper>
-
           </div>
           <div className="mt-10 flex items-center justify-center w-full max-w-[500px]">
             <button className="custom-prev p-2 text-gray-500">
@@ -357,15 +353,14 @@ const ProductDisplay = () => {
             <div className="flex gap-2 overflow-hidden">
               {isMobile
                 ? images.length > 0 && (
-                    <div
-                      className="mx-4 w-[120px] h-[120px] sm:w-[140px] sm:h-[140px] flex items-center justify-center overflow-hidden rounded-md shadow bg-gray-100 border cursor-pointer border-purple-900"
-                    >
+                    <div className="mx-4 w-[120px] h-[120px] sm:w-[140px] sm:h-[140px] flex items-center justify-center overflow-hidden rounded-md shadow bg-gray-100 border cursor-pointer border-purple-900">
                       <img
                         src={images[0]}
                         alt={`Thumbnail 1`}
                         className="w-full h-full object-cover"
                         onError={(e) =>
-                          (e.currentTarget.src = "/assets/images/default_image.jpg")
+                          (e.currentTarget.src =
+                            "/assets/images/default_image.jpg")
                         }
                       />
                     </div>
@@ -385,7 +380,8 @@ const ProductDisplay = () => {
                         alt={`Thumbnail ${i + 1}`}
                         className="w-full h-full object-cover"
                         onError={(e) =>
-                          (e.currentTarget.src = "/assets/images/default_image.jpg")
+                          (e.currentTarget.src =
+                            "/assets/images/default_image.jpg")
                         }
                       />
                     </div>
@@ -493,32 +489,35 @@ const ProductDisplay = () => {
         </div>
         <div className="flex flex-col gap-4 relative lg:w-[35%] w-full">
           <h1 className="font-semibold text-2xl">{product?.name}</h1>
-          <div className="font-semibold text-4xl">
-            {product?.discounted_price > 0 ? (
+          <div className="font-semibold text-4xl relative">
+            {product?.discounted_price > 0 &&
+            product?.discounted_price < product?.base_price ? (
               <>
                 <span className="text-[#583FA8]">
-                  {(
-                    product?.base_price -
-                    (product?.base_price * product?.discounted_price) / 100
-                  ).toFixed(2)}{" "}
-                  PKR
+                  {product?.discounted_price.toFixed(2)} PKR
                 </span>
-                {product?.base_price > product?.discounted_price && (
-                  <span className="text-gray-500 line-through ml-2 mr-2 text-xl">
-                    {product?.base_price} PKR
-                  </span>
-                )}
+                <span className="text-gray-500 line-through ml-2 mr-2 text-xl">
+                  {product?.base_price.toFixed(2)} PKR
+                </span>
+
                 <div className="w-12 h-12 text-sm absolute right-0 flex justify-center items-center">
                   <img src="/assets/addtoBag/discount.png" alt="Discount" />
                   <span className="absolute text-center text-sm text-white font-bold">
-                    {`${product?.discounted_price}% OFF`}
+                    {`${Math.round(
+                      ((product.base_price - product.discounted_price) /
+                        product.base_price) *
+                        100
+                    )}% OFF`}
                   </span>
                 </div>
               </>
             ) : (
-              <span className="text-[#583FA8]">{product?.base_price} PKR</span>
+              <span className="text-[#583FA8]">
+                {product?.base_price.toFixed(2)} PKR
+              </span>
             )}
           </div>
+
           <div className="flex items-center mt-2">
             {[...Array(5)].map((_, index) => (
               <svg
@@ -545,77 +544,77 @@ const ProductDisplay = () => {
           </div>
           <hr className="my-2.5 border-t border-gray-400 dark:text-gray-500 w-full" />
 
-         {Array.isArray(product?.size) &&
-  product.size.flat().filter((s: any) => s?.value)?.length > 0 ? (
-  <div className="grid grid-cols-2 gap-3 mt-3">
-    <div className="flex items-center font-semibold text-gray-700 dark:text-gray-700">
-      <span>Size:</span>
-    </div>
-    <div className="text-gray-600 dark:text-gray-400 flex gap-2 flex-wrap ">
-      {product.size
-        .flat()
-        .filter((s: any) => s?.value)
-        .map((s: any) => (
-          <span
-            key={s.id}
-            onClick={() => handleSize(product?.id, s)}
-            className={`${
-              //@ts-ignore
-              selectedSize?.id === s?.id
-                ? "bg-[#6B21A8] text-white"
-                : "bg-white"
-            } px-2 py-1 border hover:bg-[#6B21A8] hover:text-white cursor-pointer border-gray-300 dark:border-gray-600 rounded-md text-sm `}
-          >
-            {s?.value} {s?.unit}
-          </span>
-        ))}
-    </div>
-  </div>
-) : null}
+          {Array.isArray(product?.size) &&
+          product.size.flat().filter((s: any) => s?.value)?.length > 0 ? (
+            <div className="grid grid-cols-2 gap-3 mt-3">
+              <div className="flex items-center font-semibold text-gray-700 dark:text-gray-700">
+                <span>Size:</span>
+              </div>
+              <div className="text-gray-600 dark:text-gray-400 flex gap-2 flex-wrap ">
+                {product.size
+                  .flat()
+                  .filter((s: any) => s?.value)
+                  .map((s: any) => (
+                    <span
+                      key={s.id}
+                      onClick={() => handleSize(product?.id, s)}
+                      className={`${
+                        //@ts-ignore
+                        selectedSize?.id === s?.id
+                          ? "bg-[#6B21A8] text-white"
+                          : "bg-white"
+                      } px-2 py-1 border hover:bg-[#6B21A8] hover:text-white cursor-pointer border-gray-300 dark:border-gray-600 rounded-md text-sm `}
+                    >
+                      {s?.value} {s?.unit}
+                    </span>
+                  ))}
+              </div>
+            </div>
+          ) : null}
 
-
-
-         <div className="flex flex-col items-stretch gap-y-4 mt-4 w-full">
-           <div className="flex items-center gap-4">
-  <button
-    className={`flex-1 flex items-center justify-center text-xs font-semibold gap-2 py-3 xl:px-6 px-4 
+          <div className="flex flex-col items-stretch gap-y-4 mt-4 w-full">
+            <div className="flex items-center gap-4">
+              <button
+                className={`flex-1 flex items-center justify-center text-xs font-semibold gap-2 py-3 xl:px-6 px-4 
       rounded-md bg-purple-800 text-white hover:bg-purple-900`}
-    onClick={() => {
-      // Only increase quantity if it's zero
-      if (quantity === 0) {
-        updateQuantity(1);
-      }
-      handleAddToCart();
-    }}
-  >
-    <Image
-      alt="cart-icon"
-      width={15}
-      height={15}
-      src="/assets/addtoBag/cart-icon.png"
-    />
-    ADD TO BAG 
-  </button>
+                onClick={() => {
+                  // Only increase quantity if it's zero
+                  if (quantity === 0) {
+                    updateQuantity(1);
+                  }
+                  handleAddToCart();
+                }}
+              >
+                <Image
+                  alt="cart-icon"
+                  width={15}
+                  height={15}
+                  src="/assets/addtoBag/cart-icon.png"
+                />
+                ADD TO BAG
+              </button>
 
-  {/* + - Quantity Controller */}
-  <div className="flex items-center border border-gray-300 rounded-md">
-    <button
-      onClick={() => updateQuantity(quantity > 0 ? quantity - 1 : 0)}
-      className="px-3 py-1 text-xl font-bold text-gray-700 hover:text-purple-800"
-    >
-      −
-    </button>
-    <div className="px-4 py-1 text-lg font-semibold text-gray-800">
-      {quantity}
-    </div>
-    <button
-      onClick={() => updateQuantity(quantity + 1)}
-      className="px-3 py-1 text-xl font-bold text-gray-700 hover:text-purple-800"
-    >
-      +
-    </button>
-  </div>
-</div>
+              {/* + - Quantity Controller */}
+              <div className="flex items-center border border-gray-300 rounded-md">
+                <button
+                  onClick={() =>
+                    updateQuantity(quantity > 0 ? quantity - 1 : 0)
+                  }
+                  className="px-3 py-1 text-xl font-bold text-gray-700 hover:text-purple-800"
+                >
+                  −
+                </button>
+                <div className="px-4 py-1 text-lg font-semibold text-gray-800">
+                  {quantity}
+                </div>
+                <button
+                  onClick={() => updateQuantity(quantity + 1)}
+                  className="px-3 py-1 text-xl font-bold text-gray-700 hover:text-purple-800"
+                >
+                  +
+                </button>
+              </div>
+            </div>
 
             <button
               className={`w-full flex items-center justify-center text-xs font-semibold gap-2 py-3 xl:px-6 px-4 
@@ -668,6 +667,7 @@ const ProductDisplay = () => {
                 >
                   <p className="text-lg font-semibold text-gray-800">
                     Product is added to the cart!
+                    
                   </p>
                 </motion.div>
               </div>
@@ -685,6 +685,7 @@ const ProductDisplay = () => {
                   </h2>
                   <p className="text-sm text-gray-600 mb-4">
                     Share your details below, and our team will get in touch!
+                  
                   </p>
                   <div className="space-y-3">
                     <input
@@ -720,6 +721,7 @@ const ProductDisplay = () => {
                     className="mt-4 w-full py-2 px-6 bg-purple-800 text-white font-semibold rounded-md hover:bg-purple-900 transition duration-200"
                   >
                     Submit
+                
                   </button>
                   <button
                     onClick={() => setIsBulkModalOpen(false)}
@@ -867,6 +869,7 @@ const ProductDisplay = () => {
                 Oops! No items to display in this category
               </div>
             </div>
+
           )}
         </div>
       </div>

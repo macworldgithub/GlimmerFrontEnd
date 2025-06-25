@@ -143,7 +143,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product }) => {
             className="btn btn-secondary btn-wide"
             onClick={handleAddToCart}
           >
-            Add to Cart
+            Add to Cart 
           </button>
 
           <p

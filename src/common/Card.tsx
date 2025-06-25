@@ -149,16 +149,17 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
     : path;
 
   // Calculate the final price with defensive checks
-  const basePrice = Number(item.base_price) || 0;
-  const discountedPrice = Number(item.discounted_price) || 0;
-  let finalPrice = "N/A";
+ const basePrice = Number(item.base_price) || 0;
+const discountedPrice = Number(item.discounted_price) || 0;
 
-  if (basePrice > 0) {
-    finalPrice =
-      discountedPrice > 0
-        ? (basePrice - (basePrice * discountedPrice) / 100).toFixed(2)
-        : basePrice.toFixed(2);
-  }
+let finalPrice = "N/A";
+if (basePrice > 0) {
+  finalPrice =
+    discountedPrice > 0 && discountedPrice < basePrice
+      ? discountedPrice.toFixed(2)
+      : basePrice.toFixed(2);
+}
+
 
   return (
     <div
@@ -197,7 +198,7 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
               className="text-white max-lg:h-5 max-lg:w-5 max-md:w-7 max-md:h-7"
             />
             <p className="text-white text-[12px] mt-1 max-xl:text-[8px] max-lg:text-6px max-sm:text-[9px] max-md:hidden">
-              ADD TO BAG
+              ADD TO BAG 
             </p>
           </button>
 
@@ -206,19 +207,24 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
           </div>
         </div>
 
-        {discountedPrice > 0 && basePrice > 0 && (
-          <div className="absolute -top-3 -right-3 w-10 h-10 z-10">
-            <img
-              src="/assets/addtoBag/discount.png"
-              alt="Discount"
-              className="w-full h-full"
-            />
-            <span className="absolute inset-0 flex flex-col items-center justify-center text-white text-xs leading-tight font-bold">
-              <span>{`${discountedPrice}%`}</span>
-              <span className="text-[8px] font-normal">OFF</span>
-            </span>
-          </div>
-        )}
+ {discountedPrice > 0 && discountedPrice < basePrice && (
+  <div className="absolute -top-3 -right-3 w-10 h-10 z-10">
+    <img
+      src="/assets/addtoBag/discount.png"
+      alt="Discount"
+      className="w-full h-full"
+    />
+    <span className="absolute inset-0 flex flex-col items-center justify-center text-white text-xs leading-tight font-bold">
+      <span>
+        {`${Math.round(
+          ((basePrice - discountedPrice) / basePrice) * 100
+        )}%`}
+      </span>
+      <span className="text-[8px] font-normal">OFF</span>
+    </span>
+  </div>
+)}
+
       </div>
 
       {/* Bottom half content */}
