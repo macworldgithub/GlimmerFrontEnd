@@ -34,7 +34,9 @@ const OfferPictures = () => {
               <h2 className="text-white text-2xl font-bold leading-tight mt-2">
                 Save 20%
               </h2>
-              <button className="mt-2 bg-[#4B2994] text-white text-sm px-6 py-4 rounded">
+             
+            
+              <button className="mt-2 bg-[#4B2994] text-white text-sm px-5 py-3 rounded">
                 on Skincare Products
               </button>
             </div>

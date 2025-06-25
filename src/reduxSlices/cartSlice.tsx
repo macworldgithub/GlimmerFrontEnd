@@ -121,7 +121,7 @@ const CartSlice = createSlice({
     const product = item.product.id;
     if (product=== _id) {
       item.quantity = qty;
-      break; // quantity updated, no need to continue loop
+      break; 
     }
   }
 

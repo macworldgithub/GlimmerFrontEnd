@@ -44,6 +44,8 @@ const ProductDisplay = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [isBulkModalOpen, setIsBulkModalOpen] = useState(false);
+  const [fullImage, setFullImage] = useState<string | null>(null);
+
   const [bulkForm, setBulkForm] = useState({ name: "", phone: "", email: "" });
   const [ratings, setRatings] = useState<{
     average_rating: number;
@@ -242,7 +244,7 @@ const ProductDisplay = () => {
     typeof window !== "undefined" && window.innerWidth < 768
   );
 
-  const swiperRef = useRef<any>(null); // Ref to access Swiper instance
+  const swiperRef = useRef<any>(null);
 
   useEffect(() => {
     const handleResize = () => {
@@ -279,6 +281,27 @@ const ProductDisplay = () => {
 
   return (
     <>
+      {fullImage && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-[9999]"
+          onClick={() => setFullImage(null)}
+        >
+          <div className="relative" onClick={(e) => e.stopPropagation()}>
+            <img
+              src={fullImage}
+              alt="Full View"
+              className="max-w-full max-h-[90vh] object-contain"
+            />
+            <button
+              onClick={() => setFullImage(null)}
+              className="absolute top-[-10px] right-5 text-black text-5xl font-bold"
+            >
+              ×
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="w-full mb-4">
         <CategoryNavMenu />
       </div>
@@ -337,7 +360,8 @@ const ProductDisplay = () => {
                   <img
                     src={image}
                     alt={`${product?.name} ${i + 1}`}
-                    className="w-full h-full object-cover rounded-md"
+                    className="w-full h-full object-cover rounded-md cursor-pointer"
+                    onClick={() => setFullImage(image)}
                     onError={(e) =>
                       (e.currentTarget.src = "/assets/images/default_image.jpg")
                     }
@@ -667,7 +691,6 @@ const ProductDisplay = () => {
                 >
                   <p className="text-lg font-semibold text-gray-800">
                     Product is added to the cart!
-                    
                   </p>
                 </motion.div>
               </div>
@@ -685,8 +708,8 @@ const ProductDisplay = () => {
                   </h2>
                   <p className="text-sm text-gray-600 mb-4">
                     Share your details below, and our team will get in touch!
-                  
                   </p>
+
                   <div className="space-y-3">
                     <input
                       type="text"
@@ -721,7 +744,6 @@ const ProductDisplay = () => {
                     className="mt-4 w-full py-2 px-6 bg-purple-800 text-white font-semibold rounded-md hover:bg-purple-900 transition duration-200"
                   >
                     Submit
-                
                   </button>
                   <button
                     onClick={() => setIsBulkModalOpen(false)}
@@ -869,7 +891,6 @@ const ProductDisplay = () => {
                 Oops! No items to display in this category
               </div>
             </div>
-
           )}
         </div>
       </div>

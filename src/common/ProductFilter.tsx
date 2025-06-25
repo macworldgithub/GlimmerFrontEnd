@@ -42,7 +42,9 @@ const ProductFilter = () => {
 
 
         {/* Card 2 */}
-        <div className="bg-[#FFF1C8] rounded-[10px] p-6 flex flex-col justify-between w-full max-w-[700px] min-h-[570px] mx-auto transition-transform duration-300 ease-in-out hover:scale-105">
+        <div className="bg-[#FFF1C8] rounded-[10px] p-6 flex flex-col justify-between w-full max-w-[700px] min-h-[570px] mx-auto transition-transform duration-300 ease-in-out hover:scale-105"
+         onClick={() => router.push("/salons")}>
+          
           <div>
             <h2 className="text-2xl font-bold text-gray-900 mb-1">
               Spa Booking
@@ -60,11 +62,14 @@ const ProductFilter = () => {
         </div>
 
         {/* Card 3 */}
-        <div className="bg-[#FFF1C8] rounded-[10px] p-6 flex flex-col justify-between w-full max-w-[700px] min-h-[570px] mx-auto transition-transform duration-300 ease-in-out hover:scale-105">
+        <div className="bg-[#FFF1C8] rounded-[10px] p-6 flex flex-col justify-between w-full max-w-[700px] min-h-[570px] mx-auto transition-transform duration-300 ease-in-out hover:scale-105"
+         onClick={() => router.push("/products")}>
           <div>
             <h2 className="text-2xl font-bold text-gray-900 mb-1">
-              Aesthetic Clinic Appointments
+        Selfcare Items
             </h2>
+             <p className="text-sm text-gray-700">Starting from</p>
+            <p className="text-lg font-bold text-[#D92C59]">$28.99</p>
           </div>
           <div className="mt-4 w-full h-[342px] overflow-hidden rounded-[10px]">
             <img

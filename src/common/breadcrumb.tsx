@@ -18,6 +18,10 @@ const Breadcrumbs = () => {
         Home 
       </Link>
 
+
+
+
+
     
 
       {/* Static Selfcare Products Link */}
@@ -29,8 +33,9 @@ const Breadcrumbs = () => {
         Selfcare Products
       </Link>
 
+    
 
-
+     
       {/* When Category, SubCategory, or Item is Selected, Show "Products" */}
       {(category || subCategory || item) && (
         <>

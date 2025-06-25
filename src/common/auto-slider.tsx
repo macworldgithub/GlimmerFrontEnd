@@ -20,7 +20,7 @@ type Props = {
     | "creative"
     | "cards";
   delay?: number | null;
-  onBannerClick?: () => void; // 👈 Add this
+  onBannerClick?: () => void; 
 };
 
 const AutoSlider = ({
@@ -64,6 +64,8 @@ const AutoSlider = ({
                   alt="Swiper Carousel component"
                 />
               </Link>
+
+              
             )}
           </SwiperSlide>
         ))}
