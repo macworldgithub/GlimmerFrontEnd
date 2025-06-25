@@ -27,37 +27,37 @@ export default function ProductSearchBar({ className }: ProductSearchBarProps) {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const fetchSuggestions = async (query: string) => {
-  if (!query.trim()) {
-    setSuggestions([]);
-    return;
-  }
+    if (!query.trim()) {
+      setSuggestions([]);
+      return;
+    }
 
-  try {
-    const res = await getAllProducts("", "", "", query.trim()); 
-    setSuggestions(res.products.slice(0, 5));
-  } catch (error) {
-    console.error("Error fetching suggestions:", error);
-    setSuggestions([]);
-  }
-};
+    try {
+      const res = await getAllProducts("", "", "", query.trim());
+      setSuggestions(res.products.slice(0, 5));
+    } catch (error) {
+      console.error("Error fetching suggestions:", error);
+      setSuggestions([]);
+    }
+  };
 
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
       fetchSuggestions(searchTerm);
-    }, 300); 
+    }, 300);
 
     return () => clearTimeout(delayDebounce);
   }, [searchTerm]);
 
   const handleSearch = () => {
     const params = new URLSearchParams();
-    params.set("page","1");
+    params.set("page", "1");
     if (searchTerm.trim()) {
       params.set("name", searchTerm.trim());
     }
     router.push(`/products?${params.toString()}`);
     setShowDropdown(false);
-    
+    setSearchTerm("");
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -65,7 +65,10 @@ export default function ProductSearchBar({ className }: ProductSearchBarProps) {
   };
 
   const handleClickOutside = (e: MouseEvent) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(e.target as Node)
+    ) {
       setShowDropdown(false);
     }
   };
@@ -76,7 +79,10 @@ export default function ProductSearchBar({ className }: ProductSearchBarProps) {
   }, []);
 
   return (
-    <div className={cn("relative w-full max-w-md", className)} ref={dropdownRef}>
+    <div
+      className={cn("relative w-full max-w-md", className)}
+      ref={dropdownRef}
+    >
       <input
         type="text"
         placeholder="Search products..."
@@ -93,7 +99,6 @@ export default function ProductSearchBar({ className }: ProductSearchBarProps) {
         size={20}
         onClick={handleSearch}
       />
-      
 
       {showDropdown && suggestions.length > 0 && (
         <div className="absolute z-50 mt-1 w-full bg-white border rounded-md shadow-lg max-h-64 overflow-auto">
@@ -102,10 +107,11 @@ export default function ProductSearchBar({ className }: ProductSearchBarProps) {
               key={product._id}
               className="flex items-center gap-2 p-2 hover:bg-gray-100 cursor-pointer"
               onClick={() => {
-                router.push(`/${product.category}/${product.sub_category}/${product.item}/${product._id}`);
+                router.push(
+                  `/${product.category}/${product.sub_category}/${product.item}/${product._id}`
+                );
                 setShowDropdown(false);
-                setSearchTerm(""); 
-                
+                setSearchTerm("");
               }}
             >
               {product.image1 && (
@@ -123,3 +129,4 @@ export default function ProductSearchBar({ className }: ProductSearchBarProps) {
     </div>
   );
 }
+
