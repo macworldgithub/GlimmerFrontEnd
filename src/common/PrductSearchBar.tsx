@@ -100,7 +100,7 @@ export default function ProductSearchBar({ className }: ProductSearchBarProps) {
         onClick={handleSearch}
       />
 
-      {showDropdown && suggestions.length > 0 && (
+       {showDropdown && suggestions.length > 0 && (
         <div className="absolute z-50 mt-1 w-full bg-white border rounded-md shadow-lg max-h-64 overflow-auto">
           {suggestions.map((product) => (
             <div
@@ -129,4 +129,3 @@ export default function ProductSearchBar({ className }: ProductSearchBarProps) {
     </div>
   );
 }
-

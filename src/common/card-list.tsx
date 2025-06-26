@@ -126,3 +126,4 @@ const Card = ({ card }: { card: CardType }) => {
 		</div>
 	);
 };
+

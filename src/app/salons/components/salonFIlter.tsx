@@ -58,11 +58,21 @@ const Salonfilter: React.FC = () => {
           setIsOpen={setIsServiceMenuOpen}
         />
 
-        <SearchInput placeholder="Price" value={price} onChange={setPrice} icon={<IoMdPricetags className="size-5" />} />
-        <GenderDropdown gender={gender} setGender={setGender} isOpen={isGenderOpen} setIsOpen={setIsGenderOpen} />
+        <SearchInput
+          placeholder="Price"
+          value={price}
+          onChange={setPrice}
+          icon={<IoMdPricetags className="size-5" />}
+        />
+        <GenderDropdown
+          gender={gender}
+          setGender={setGender}
+          isOpen={isGenderOpen}
+          setIsOpen={setIsGenderOpen}
+        />
 
         <button className="btn btn-neutral btn-block" onClick={handleSearch}>
-          Search
+          Search 
         </button>
       </div>
 
@@ -78,10 +88,23 @@ const Salonfilter: React.FC = () => {
         />
         <HorizontalDivider className="hidden lg:block" />
         <HorizontalDivider className="hidden lg:block" />
-        <SearchInput placeholder="Price" value={price} onChange={setPrice} icon={<IoMdPricetags className="size-5" />} />
+        <SearchInput
+          placeholder="Price"
+          value={price}
+          onChange={setPrice}
+          icon={<IoMdPricetags className="size-5" />}
+        />
         <HorizontalDivider className="hidden lg:block" />
-        <GenderDropdown gender={gender} setGender={setGender} isOpen={isGenderOpen} setIsOpen={setIsGenderOpen} />
-        <button className="btn btn-neutral rounded-full w-[150px] h-[70px] mr-[-36px]" onClick={handleSearch}>
+        <GenderDropdown
+          gender={gender}
+          setGender={setGender}
+          isOpen={isGenderOpen}
+          setIsOpen={setIsGenderOpen}
+        />
+        <button
+          className="btn btn-neutral rounded-full w-[150px] h-[70px] mr-[-36px]"
+          onClick={handleSearch}
+        >
           Search
         </button>
       </div>
@@ -115,7 +138,6 @@ const SearchInput = ({
   </div>
 );
 
-
 const GenderDropdown = ({
   gender,
   setGender,
@@ -137,7 +159,10 @@ const GenderDropdown = ({
       <span>{gender || "Select Gender"}</span>
     </label>
     {isOpen && (
-      <ul tabIndex={0} className="dropdown-content menu top-16 z-[1] w-full rounded-box border border-base-300 bg-base-100 shadow lg:w-72">
+      <ul
+        tabIndex={0}
+        className="dropdown-content menu top-16 z-[1] w-full rounded-box border border-base-300 bg-base-100 shadow lg:w-72"
+      >
         {["Male", "Female", "Kids"].map((g) => (
           <li key={g}>
             <button

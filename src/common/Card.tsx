@@ -239,12 +239,13 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
             <span className="text-md font-bold text-gray-800">
               {finalPrice} {finalPrice !== "N/A" && "PKR"}
             </span>
-            {discountedPrice > 0 && basePrice > 0 && (
+            {discountedPrice > 0 && discountedPrice < basePrice && (
               <span className="text-gray-400 text-md line-through">
                 {basePrice.toFixed(2)} PKR
               </span>
             )}
           </div>
+
           <div className="flex mt-2">
             <Rating
               size={20}

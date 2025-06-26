@@ -1,7 +1,11 @@
 "use client";
 
 import { getAllServices, getAllServicesById } from "@/api/salon";
-import { faChevronDown, faChevronUp, faSearch } from "@fortawesome/free-solid-svg-icons";
+import {
+  faChevronDown,
+  faChevronUp,
+  faSearch,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { message } from "antd";
 import { useState, useEffect, useRef } from "react";
@@ -19,15 +23,28 @@ const ServiceNavMenu = ({
   onSubSubCategorySelect,
   onNameTermChange,
 }: ServiceNavMenuProps) => {
-  const [services, setServices] = useState<{ _id: string; category: string }[]>([]);
-  const [subServices, setSubservices] = useState<{ [key: string]: string[] }>({});
+  const [services, setServices] = useState<{ _id: string; category: string }[]>(
+    []
+  );
+  const [subServices, setSubservices] = useState<{ [key: string]: string[] }>(
+    {}
+  );
   const [productItems, setProductItems] = useState<string[]>([]);
-  const [selectedService, setSelectedService] = useState<{ _id: string; category: string } | null>(null);
-  const [selectedSubservice, setSelectedSubservice] = useState<string | null>(null);
+  const [selectedService, setSelectedService] = useState<{
+    _id: string;
+    category: string;
+  } | null>(null);
+  const [selectedSubservice, setSelectedSubservice] = useState<string | null>(
+    null
+  );
   const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [expandedServices, setExpandedServices] = useState<{ [key: string]: boolean }>({});
-  const [expandedSubservices, setExpandedSubservices] = useState<{ [key: string]: boolean }>({});
+  const [expandedServices, setExpandedServices] = useState<{
+    [key: string]: boolean;
+  }>({});
+  const [expandedSubservices, setExpandedSubservices] = useState<{
+    [key: string]: boolean;
+  }>({});
   const [searchTerm, setSearchTerm] = useState("");
 
   const wrapperRef = useRef<HTMLDivElement | null>(null);
@@ -42,7 +59,10 @@ const ServiceNavMenu = ({
   // Close dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
+      if (
+        wrapperRef.current &&
+        !wrapperRef.current.contains(event.target as Node)
+      ) {
         setIsDropdownOpen(false);
       }
     };
@@ -172,7 +192,9 @@ const ServiceNavMenu = ({
                 className="p-3 cursor-pointer hover:bg-gray-100 flex justify-between items-center rounded-md transition-all ease-in-out duration-200"
                 onClick={() => handleServiceClick(service)}
               >
-                <span className="text-gray-800 font-semibold">{service.category}</span>
+                <span className="text-gray-800 font-semibold">
+                  {service.category}
+                </span>
                 <button className="text-blue-500 hover:text-blue-700 transition-colors duration-300">
                   {expandedServices[service._id] ? (
                     <FontAwesomeIcon icon={faChevronUp} />
@@ -183,58 +205,71 @@ const ServiceNavMenu = ({
               </div>
 
               {/* Subservices or Direct Products */}
-              {selectedService?._id === service._id && expandedServices[service._id] && (
-                <div className="pl-4">
-                  {Object.keys(subServices).length > 0
-                    ? Object.keys(subServices)
-                        .filter((subservice) =>
-                          subservice.toLowerCase().includes(searchTerm.toLowerCase())
-                        )
-                        .map((subservice) => (
-                          <div key={subservice}>
-                            <div
-                              className="p-3 cursor-pointer hover:bg-gray-100 flex justify-between items-center rounded-md transition-all ease-in-out duration-200"
-                              onClick={() => handleSubserviceClick(subservice)}
-                            >
-                              <span className="text-gray-700">{subservice}</span>
-                              <button className="text-blue-500 hover:text-blue-700 transition-colors duration-300">
-                                {expandedSubservices[subservice] ? (
-                                  <FontAwesomeIcon icon={faChevronUp} />
-                                ) : (
-                                  <FontAwesomeIcon icon={faChevronDown} />
-                                )}
-                              </button>
-                            </div>
+              {selectedService?._id === service._id &&
+                expandedServices[service._id] && (
+                  <div className="pl-4">
+                    {Object.keys(subServices).length > 0
+                      ? Object.keys(subServices)
+                          .filter((subservice) =>
+                            subservice
+                              .toLowerCase()
+                              .includes(searchTerm.toLowerCase())
+                          )
+                          .map((subservice) => (
+                            <div key={subservice}>
+                              <div
+                                className="p-3 cursor-pointer hover:bg-gray-100 flex justify-between items-center rounded-md transition-all ease-in-out duration-200"
+                                onClick={() =>
+                                  handleSubserviceClick(subservice)
+                                }
+                              >
+                                <span className="text-gray-700">
+                                  {subservice}
+                                </span>
+                                <button className="text-blue-500 hover:text-blue-700 transition-colors duration-300">
+                                  {expandedSubservices[subservice] ? (
+                                    <FontAwesomeIcon icon={faChevronUp} />
+                                  ) : (
+                                    <FontAwesomeIcon icon={faChevronDown} />
+                                  )}
+                                </button>
+                              </div>
 
-                            {/* Products under subservice */}
-                            {selectedSubservice === subservice &&
-                              expandedSubservices[subservice] &&
-                              subServices[subservice].map((product, index) => (
-                                <div
-                                  key={`${subservice}-${index}`}
-                                  className="p-3 cursor-pointer"
-                                  onClick={() => handleProductClick(product)}
-                                >
-                                  {product}
-                                </div>
-                              ))}
-                          </div>
-                        ))
-                    : productItems
-                        .filter((product) =>
-                          product.toLowerCase().includes(searchTerm.toLowerCase())
-                        )
-                        .map((product, index) => (
-                          <div
-                            key={`${service._id}-${index}`}
-                            className="p-3 cursor-pointer hover:bg-gray-100 rounded-md transition-all ease-in-out duration-200"
-                            onClick={() => handleProductClick(product)}
-                          >
-                            {product}
-                          </div>
-                        ))}
-                </div>
-              )}
+                              {/* Products under subservice */}
+                              {selectedSubservice === subservice &&
+                                expandedSubservices[subservice] &&
+                                subServices[subservice].map(
+                                  (product, index) => (
+                                    <div
+                                      key={`${subservice}-${index}`}
+                                      className="p-3 cursor-pointer"
+                                      onClick={() =>
+                                        handleProductClick(product)
+                                      }
+                                    >
+                                      {product}
+                                    </div>
+                                  )
+                                )}
+                            </div>
+                          ))
+                      : productItems
+                          .filter((product) =>
+                            product
+                              .toLowerCase()
+                              .includes(searchTerm.toLowerCase())
+                          )
+                          .map((product, index) => (
+                            <div
+                              key={`${service._id}-${index}`}
+                              className="p-3 cursor-pointer hover:bg-gray-100 rounded-md transition-all ease-in-out duration-200"
+                              onClick={() => handleProductClick(product)}
+                            >
+                              {product}
+                            </div>
+                          ))}
+                  </div>
+                )}
             </div>
           ))}
         </div>

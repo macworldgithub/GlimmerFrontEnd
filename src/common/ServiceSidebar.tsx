@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import { message } from "antd";
-import { getAllServices, getAllServicesById, getServicesBySearch } from "@/api/salon";
+import {
+  getAllServices,
+  getAllServicesById,
+  getServicesBySearch,
+} from "@/api/salon";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
@@ -21,7 +25,9 @@ const ServiceSidebar = () => {
     null
   );
   const [subCategoryName, setSubCategoryName] = useState<string | null>(null);
-  const [subSubCategoryName, setSubSubCategoryName] = useState<string | null>(null);
+  const [subSubCategoryName, setSubSubCategoryName] = useState<string | null>(
+    null
+  );
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -64,14 +70,17 @@ const ServiceSidebar = () => {
   };
 
   const handleProductClick = (product: string) => {
-    setSubSubCategoryName(product); 
+    setSubSubCategoryName(product);
     updateUrlWithFilters(subCategoryName, product);
   };
-  
-  const updateUrlWithFilters = (subCategory: string | null, subSubCategory: string | null) => {
+
+  const updateUrlWithFilters = (
+    subCategory: string | null,
+    subSubCategory: string | null
+  ) => {
     const params = new URLSearchParams();
-    if (subCategory) params.set('gender', subCategory);
-    if (subSubCategory) params.set('serviceTerm', subSubCategory);
+    if (subCategory) params.set("gender", subCategory);
+    if (subSubCategory) params.set("serviceTerm", subSubCategory);
 
     router.push(`?${params.toString()}`, { scroll: false });
   };
@@ -87,19 +96,18 @@ const ServiceSidebar = () => {
       } = {
         page_no: 1,
       };
-      
+
       if (subCategoryName) filters.gender = subCategoryName;
       if (subSubCategoryName) filters.serviceTerm = subSubCategoryName;
-  
+
       const result = await dispatch(getServicesBySearch(filters));
       if (result.payload) {
         console.log("Fetched filtered services:", result.payload);
       }
     };
-  
+
     fetchFilteredServices();
   }, [subCategoryName, subSubCategoryName, dispatch]);
-  
 
   return (
     <div className="p-6 border-r bg-[#FDF3D2] shadow-md hidden md:block w-72">
@@ -120,7 +128,9 @@ const ServiceSidebar = () => {
               />
               <span
                 className={`w-5 h-5 border-2 rounded-full flex items-center justify-center mr-3 ${
-                  selectedService === service._id ? 'border-purple-700' : 'border-gray-400'
+                  selectedService === service._id
+                    ? "border-purple-700"
+                    : "border-gray-400"
                 }`}
               >
                 {selectedService === service._id && (
@@ -149,7 +159,9 @@ const ServiceSidebar = () => {
                           />
                           <span
                             className={`w-5 h-5 border-2 rounded-full flex items-center justify-center mr-3 ${
-                              selectedSubservice === sub ? 'border-purple-700' : 'border-gray-400'
+                              selectedSubservice === sub
+                                ? "border-purple-700"
+                                : "border-gray-400"
                             }`}
                           >
                             {selectedSubservice === sub && (

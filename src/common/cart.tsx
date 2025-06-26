@@ -11,7 +11,9 @@ import CategoryNavMenu from "./category-nav-menu";
 const Cart = () => {
   const dispatch = useDispatch();
   const Cart = useSelector((state: RootState) => state.cart);
-  const [bulkProducts, setBulkProducts] = useState<{ [key: string]: boolean }>({});  // Track bulk state globally
+  const [bulkProducts, setBulkProducts] = useState<{ [key: string]: boolean }>(
+    {}
+  ); // Track bulk state globally
 
   const updateQuantity = (id: string, newQuantity: number) => {
     dispatch(updateQty({ _id: id, qty: newQuantity }));
@@ -22,7 +24,10 @@ const Cart = () => {
   };
 
   // Handle the bulk checkbox
-  const handleBulkCheckbox = (e: React.ChangeEvent<HTMLInputElement>, id: string) => {
+  const handleBulkCheckbox = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    id: string
+  ) => {
     const isChecked = e.target.checked;
     setBulkProducts((prev) => ({
       ...prev,
@@ -79,7 +84,8 @@ const Cart = () => {
               <tbody>
                 {Cart.ProductList.map((item) => {
                   const disableMinus = item.quantity === 1;
-                  const disablePlus = item.quantity === 5 && !bulkProducts[item.product.id];
+                  const disablePlus =
+                    item.quantity === 5 && !bulkProducts[item.product.id];
 
                   return (
                     <tr key={item.product.id}>
@@ -90,12 +96,13 @@ const Cart = () => {
                           className="h-16 w-16 rounded-md object-cover"
                         />
                         <div>
-                          <p className="font-semibold flex-none">{item.product.name}</p>
+                          <p className="font-semibold flex-none">
+                            {item.product.name}
+                          </p>
                         </div>
                       </td>
                       <td className="text-nowrap">
-                        {item.product.base_price * item.quantity}{" "}
-                        PKR
+                        {item.product.base_price * item.quantity} PKR
                       </td>
                       <td className="text-nowrap">
                         {item.product.discounted_price === 0
@@ -131,11 +138,15 @@ const Cart = () => {
                             <input
                               type="checkbox"
                               checked={bulkProducts[item.product.id] || false}
-                              onChange={(e) => handleBulkCheckbox(e, item.product.id)}
+                              onChange={(e) =>
+                                handleBulkCheckbox(e, item.product.id)
+                              }
                               id={`bulk-${item.product.id}`}
                               className="mr-2"
                             />
-                            <label htmlFor={`bulk-${item.product.id}`}>Bulk of Bag</label>
+                            <label htmlFor={`bulk-${item.product.id}`}>
+                              Bulk of Bag
+                            </label>
                           </div>
                         )}
                       </td>
@@ -162,7 +173,7 @@ const Cart = () => {
           {/* Apply Coupon */}
           <div className="rounded-lg bg-gray-100 p-4">
             <h3 className="mb-2 font-semibold text-lg">Apply Coupon</h3>
-      
+
             <input
               type="text"
               placeholder="Coupon code"
@@ -186,20 +197,17 @@ const Cart = () => {
               <span>Delivery Charges</span>
               <span>{100} PKR</span>
             </div>
-            <div className="flex justify-between">
-            </div>
+            <div className="flex justify-between"></div>
             <hr className="my-2" />
             <div className="flex justify-between font-semibold">
               <span>Subtotal</span>
               <span>{Cart.discountedTotal + 100} PKR</span>
             </div>
 
-
-
-
-         
             <Link href={"/checkout"}>
-              <button className="btn btn-secondary mt-4 w-full">Checkout</button>
+              <button className="btn btn-secondary mt-4 w-full">
+                Checkout
+              </button>
             </Link>
           </div>
         </div>

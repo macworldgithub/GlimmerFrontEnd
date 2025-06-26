@@ -12,7 +12,6 @@ import { MenuOutlined } from "@ant-design/icons";
 import Link from "next/link";
 import { DownOutlined } from "@ant-design/icons";
 
-
 type Item = {
   _id: string;
   name: string;
@@ -201,21 +200,20 @@ const CategoryNavMenu = ({ className }: { className?: string }) => {
           isProductsPage ? "bg-white border-[1px] border-black" : "bg-[#FBE8A5]"
         } ${className}`}
       >
-  <div className="flex gap-12 items-center">
-  {categories.map((item: any, index: number) => (
-    <div
-      key={index}
-      className="cursor-pointer hover:text-purple-900 hover:font-medium transition-all duration-500 flex items-center gap-1 select-none"
-      onClick={() => HandleSelectCategory(item?.sub_categories)}
-    >
-      <span>{item?.product_category?.name}</span>
-      {item?.sub_categories && item.sub_categories.length > 0 && (
-        <DownOutlined className="text-[12px] text-black" />
-      )}
-    </div>
-  ))}
-</div>
-
+        <div className="flex gap-12 items-center">
+          {categories.map((item: any, index: number) => (
+            <div
+              key={index}
+              className="cursor-pointer hover:text-purple-900 hover:font-medium transition-all duration-500 flex items-center gap-1 select-none"
+              onClick={() => HandleSelectCategory(item?.sub_categories)}
+            >
+              <span>{item?.product_category?.name}</span>
+              {item?.sub_categories && item.sub_categories.length > 0 && (
+                <DownOutlined className="text-[12px] text-black" />
+              )}
+            </div>
+          ))}
+        </div>
 
         {/* Menu is below which need to appear smoothly */}
         <div
