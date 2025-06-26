@@ -212,6 +212,7 @@ const Footer = () => {
         </div>
       </footer>
 
+
       {/* ✅ Correct Modal Implementation */}
       <RegisterGymModal
         visible={showGymModal}

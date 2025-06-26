@@ -662,13 +662,6 @@ const ProductsList = () => {
               >
                 Selfcare Products
               </Link>
-               
-
-
-
-
-
-
 
               {(categoryFilter ||
                 subCategoryFilter ||

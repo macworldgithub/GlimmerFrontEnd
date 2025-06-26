@@ -49,9 +49,6 @@ const CookieBanner = () => {
 					I Decline
 				</button>
 			</div>
-			{/* <button className="mt-2 text-sm text-gray-300 underline">
-				Change my preferences
-			</button> */}
 		</div>
 	);
 };
