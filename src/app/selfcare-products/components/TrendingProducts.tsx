@@ -28,12 +28,11 @@ const TrendingProducts = () => {
   }, []);
 
   const handleClick = () => {
-    setShowProducts((prev) => !prev); // ✅ toggle visibility
+    setShowProducts((prev) => !prev);
   };
 
   return (
     <div className="px-2 w-[99vw] flex flex-col justify-center items-center">
-      {/* Styled heading (same as before), now clickable */}
       <h2
         className="text-4xl mb-4 cursor-pointer select-none"
         onClick={handleClick}

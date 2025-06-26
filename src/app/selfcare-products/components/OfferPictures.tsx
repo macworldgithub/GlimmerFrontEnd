@@ -2,7 +2,7 @@ import React from "react";
 
 const OfferPictures = () => {
   return (
-    <div className="w-full py-10 ml-1">
+    <div className="w-full py-10 ">
       <div className="max-w-7xl mx-auto px-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {/* Card 1 */}
