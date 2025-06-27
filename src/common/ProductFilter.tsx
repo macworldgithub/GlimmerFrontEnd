@@ -23,11 +23,11 @@ const ProductFilter = () => {
             className="bg-[#FFF1C8] rounded-[10px] p-6 flex flex-col justify-between w-full max-w-[700px] min-h-[570px] mx-auto transition-transform duration-300 ease-in-out hover:scale-x-105"
           >
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-1">
+              <h2 className="text-4xl font-bold text-gray-900 mb-1">
                 Salon Booking
               </h2>
-              <p className="text-sm text-gray-700">Starting from</p>
-              <p className="text-lg font-bold text-[#D92C59]">$29.99</p>
+              <p className="text-lg text-gray-700">Starting from</p>
+              <p className="text-2xl font-bold text-[#D92C59]">Rs: 200</p>
             </div>
             <div className="mt-4 w-full h-[358px] overflow-hidden rounded-[10px]">
               <img
@@ -44,11 +44,11 @@ const ProductFilter = () => {
             onClick={() => router.push("/salons")}
           >
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-1">
+              <h2 className="text-4xl font-bold text-gray-900 mb-1">
                 Spa Booking
               </h2>
-              <p className="text-sm text-gray-700">Starting from</p>
-              <p className="text-lg font-bold text-[#D92C59]">$24.99</p>
+              <p className="text-lg text-gray-700">Starting from</p>
+              <p className="text-2xl font-bold text-[#D92C59]">Rs: 700</p>
             </div>
             <div className="mt-4 w-full h-[358px] overflow-hidden rounded-[10px]">
               <img
@@ -65,11 +65,11 @@ const ProductFilter = () => {
             onClick={() => router.push("/products")}
           >
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-1">
+              <h2 className="text-4xl font-bold text-gray-900 mb-1">
                 Selfcare Items
               </h2>
-              <p className="text-sm text-gray-700">Starting from</p>
-              <p className="text-lg font-bold text-[#D92C59]">$28.99</p>
+              <p className="text-lg text-gray-700">Starting from</p>
+              <p className="text-2xl font-bold text-[#D92C59]">Rs: 120</p>
             </div>
             <div className="mt-4 w-full h-[342px] overflow-hidden rounded-[10px]">
               <img
@@ -86,12 +86,12 @@ const ProductFilter = () => {
             className="bg-[#FFF1C8] rounded-[10px] p-6 flex flex-col justify-between w-full max-w-[700px] min-h-[570px] mx-auto transition-transform duration-300 ease-in-out hover:scale-105"
           >
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-1">
+              <h2 className="text-4xl font-bold text-gray-900 mb-1">
                 Gym Memberships
               </h2>
-              <p className="text-sm text-gray-700">MAKEUP</p>
-              <p className="text-sm text-gray-700">Ultimate Beauty Kit</p>
-              <p className="text-lg font-bold text-[#D92C59]">$49.99</p>
+              {/* <p className="text-sm text-gray-700">MAKEUP</p> */}
+              <p className="text-lg text-gray-700">Coming Soon</p>
+              <p className="text-2xl font-bold text-[#D92C59]">Sign Up Now</p>
             </div>
             <div className="mt-4 w-full h-[342px] overflow-hidden rounded-[10px]">
               <img
