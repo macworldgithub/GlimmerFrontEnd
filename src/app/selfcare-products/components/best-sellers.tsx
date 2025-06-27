@@ -28,7 +28,7 @@ const BestSellers = () => {
   }, []);
 
   const handleClick = () => {
-    setShowProducts((prev) => !prev); // 👈 Toggle visibility
+    setShowProducts(true); // always show, never hide
   };
 
   return (

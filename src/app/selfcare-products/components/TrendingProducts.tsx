@@ -27,9 +27,10 @@ const TrendingProducts = () => {
     fetchTrendingProducts();
   }, []);
 
-  const handleClick = () => {
-    setShowProducts((prev) => !prev);
-  };
+ const handleClick = () => {
+  setShowProducts(true); // always show, never hide
+};
+
 
   return (
     <div className="px-2 w-[99vw] flex flex-col justify-center items-center">
@@ -37,7 +38,7 @@ const TrendingProducts = () => {
         className="text-4xl mb-4 cursor-pointer select-none"
         onClick={handleClick}
       >
-        TRENDING
+        TRENDING 
       </h2>
 
       {loading && <div>Loading...</div>}

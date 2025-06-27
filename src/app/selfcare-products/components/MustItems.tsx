@@ -27,9 +27,10 @@ const MustItems = () => {
     fetchYouMustHaveThisProducts();
   }, []);
 
-  const handleClick = () => {
-    setShowProducts((prev) => !prev); // 👈 toggle show/hide
-  };
+ const handleClick = () => {
+  setShowProducts(true); // always show, never hide
+};
+
 
   return (
     <div className="px-2 w-[99vw] flex flex-col items-center">

@@ -29,8 +29,9 @@ const AllProducts = () => {
   }, [page]);
 
   const handleClick = () => {
-    setShowProducts((prev) => !prev);
-  };
+  setShowProducts(true); 
+};
+
 
   return (
     <div className="px-2 w-[99vw] flex flex-col justify-center items-center">
@@ -38,7 +39,7 @@ const AllProducts = () => {
         className="text-4xl mb-4 cursor-pointer select-none"
         onClick={handleClick}
       >
-        ALL PRODUCTS
+        ALL PRODUCTS 
       </h2>
 
       {loading && <div>Loading...</div>}
