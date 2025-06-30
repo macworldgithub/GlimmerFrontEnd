@@ -336,7 +336,7 @@ const SearchResultsPage = () => {
                     }}
                     className="block w-full text-left px-5 py-3 text-lg font-medium hover:bg-gray-200"
                   >
-                    Low to High
+                    Low to High 
                   </button>
                   <button
                     onClick={() => {
