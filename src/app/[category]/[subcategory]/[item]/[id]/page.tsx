@@ -22,6 +22,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   MdKeyboardArrowRight,
   MdOutlineKeyboardArrowLeft,
@@ -33,6 +34,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 
 const ProductDisplay = () => {
   const Cart = useSelector((state: RootState) => state.cart);
+    const router = useRouter();
   const token = useSelector((state: RootState) => state.login.token);
   const dispatch = useDispatch();
   const searchParams = useSearchParams();
@@ -45,6 +47,9 @@ const ProductDisplay = () => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [isBulkModalOpen, setIsBulkModalOpen] = useState(false);
   const [fullImage, setFullImage] = useState<string | null>(null);
+    const handleBuyNow = () => {
+    router.push("/checkout");
+  };
 
   const [bulkForm, setBulkForm] = useState({ name: "", phone: "", email: "" });
   const [ratings, setRatings] = useState<{
@@ -640,24 +645,24 @@ const ProductDisplay = () => {
               </div>
             </div>
 
-            <button
-              className={`w-full flex items-center justify-center text-xs font-semibold gap-2 py-3 xl:px-6 px-4 
-                rounded-md border border-purple-800 text-purple-800 hover:bg-purple-50 
-                ${
-                  isButtonDisabled &&
-                  "border-gray-300 text-gray-500 cursor-not-allowed hover:bg-transparent"
-                }`}
-              onClick={handleAddToCart}
-              disabled={isButtonDisabled}
-            >
-              <Image
-                alt="cart-icon"
-                width={15}
-                height={15}
-                src="/assets/addtoBag/cart-icon.png"
-              />
-              BUY NOW
-            </button>
+           <button
+      className={`w-full flex items-center justify-center text-xs font-semibold gap-2 py-3 xl:px-6 px-4 
+        rounded-md border border-purple-800 text-purple-800 hover:bg-purple-50 
+        ${
+          isButtonDisabled &&
+          "border-gray-300 text-gray-500 cursor-not-allowed hover:bg-transparent"
+        }`}
+      onClick={handleBuyNow}
+      disabled={isButtonDisabled}
+    >
+      <Image
+        alt="cart-icon"
+        width={15}
+        height={15}
+        src="/assets/addtoBag/cart-icon.png"
+      />
+      BUY NOW
+    </button>
             <div className="flex items-center gap-4 w-full">
               <button
                 onClick={handleBulkBuy}

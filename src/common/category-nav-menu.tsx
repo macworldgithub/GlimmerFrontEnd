@@ -222,7 +222,7 @@ const CategoryNavMenu = ({ className }: { className?: string }) => {
             selectedSubCategory.length > 0
               ? "opacity-100 translate-y-0"
               : "opacity-0 -translate-y-5 pointer-events-none"
-          }`}
+          } overflow-y-auto max-h-[300px]`} 
         >
           {selectedSubCategory?.map((item: any, index: number) => (
             <div className="flex flex-col" key={index}>
@@ -254,7 +254,7 @@ const CategoryNavMenu = ({ className }: { className?: string }) => {
         </div>
         <Link href="/salons" className="flex">
           <div className="flex text-white bg-[#583FA8] ml-12 px-6 py-2 rounded-md shadow-md hover:bg-[#452d88] transition-all duration-300">
-            <button>Book Salon Now</button>
+            <button>Book Salon Now </button>
           </div>
         </Link>
       </div>
