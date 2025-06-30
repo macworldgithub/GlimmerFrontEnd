@@ -25,8 +25,9 @@ const Hero = () => {
 
   return (
     <div className="w-screen max-w-none overflow-hidden mx-0 px-0">
+      
+  <AutoSlider srcs={slides.map(slide => slide.src)} />
 
-      <AutoSlider slides={slides} />
     </div>
   );
 };

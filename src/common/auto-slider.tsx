@@ -8,6 +8,7 @@ import { Autoplay, EffectFade } from "swiper/modules";
 import Link from "next/link";
 import "swiper/css";
 import "swiper/css/effect-fade";
+import { Poppins } from 'next/font/google';
 
 type Props = {
   srcs?: string[];

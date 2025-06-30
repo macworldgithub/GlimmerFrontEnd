@@ -87,7 +87,7 @@ const ProductFilter = () => {
           >
             <div>
               <h2 className="text-4xl font-bold text-gray-900 mb-1">
-                Gym Memberships
+                Gym Membership
               </h2>
               {/* <p className="text-sm text-gray-700">MAKEUP</p> */}
               <p className="text-lg text-gray-700">Coming Soon</p>
