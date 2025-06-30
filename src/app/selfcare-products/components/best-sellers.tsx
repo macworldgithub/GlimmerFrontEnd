@@ -4,11 +4,12 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { BACKEND_URL } from "@/api/config";
 import ProductCard from "@/common/ProductCard";
+import { useRouter } from "next/navigation";
 
 const BestSellers = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [showProducts, setShowProducts] = useState(true); // 👈 Show by default
+  const router = useRouter();
 
   const fetchBestSellerProducts = async () => {
     try {
@@ -28,14 +29,14 @@ const BestSellers = () => {
   }, []);
 
   const handleClick = () => {
-    setShowProducts(true); // always show, never hide
+    router.push("/product_highlights?filter=best_seller");
   };
 
   return (
     <div className="px-2 w-[99vw] flex flex-col items-center">
       {/* Clickable heading */}
       <h2
-        className="text-4xl mb-4 cursor-pointer select-none"
+        className="text-4xl mb-4 cursor-pointer select-none hover:underline"
         onClick={handleClick}
       >
         BEST SELLER
@@ -43,7 +44,7 @@ const BestSellers = () => {
 
       {loading && <div>Loading...</div>}
 
-      {showProducts && !loading && (
+      {!loading && (
         <ProductCard
           title="" // 👈 Avoid duplicate heading
           productProp={products}

@@ -4,11 +4,12 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { BACKEND_URL } from "@/api/config";
 import ProductCards from "@/common/ProductCard";
+import { useRouter } from "next/navigation";
 
 const TrendingProducts = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [showProducts, setShowProducts] = useState(true); // ✅ default = true
+  const router = useRouter();
 
   const fetchTrendingProducts = async () => {
     try {
@@ -27,23 +28,22 @@ const TrendingProducts = () => {
     fetchTrendingProducts();
   }, []);
 
- const handleClick = () => {
-  setShowProducts(true); // always show, never hide
-};
-
+  const handleClick = () => {
+    router.push("/product_highlights?filter=trending_product");
+  };
 
   return (
     <div className="px-2 w-[99vw] flex flex-col justify-center items-center">
       <h2
-        className="text-4xl mb-4 cursor-pointer select-none"
+        className="text-4xl mb-4 cursor-pointer select-none hover:underline"
         onClick={handleClick}
       >
-        TRENDING 
+        TRENDING
       </h2>
 
       {loading && <div>Loading...</div>}
 
-      {showProducts && !loading && (
+      {!loading && (
         <ProductCards
           title="" // don't repeat heading
           productProp={products}

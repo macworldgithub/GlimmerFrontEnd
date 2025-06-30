@@ -130,3 +130,16 @@ export const getUserRating = async (productId: string, token: string) => {
     throw error;
   }
 };
+
+export const getAllProductHighlights = createAsyncThunk<any, { filter?: string }>(
+  "products/getAllProductHighlights",
+  async ({ filter }, { rejectWithValue }) => {
+    try {
+      const query = filter ? `?filter=${filter}` : "";
+      const response = await axios.get(`${BACKEND_URL}/admin/product-highlights${query}`);
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data || "Failed to fetch products");
+    }
+  }
+);
