@@ -255,7 +255,7 @@ const CategoryNavMenu = ({ className }: { className?: string }) => {
         <Link href="/salons" className="flex">
           <div className="flex text-white bg-[#583FA8] ml-12 px-6 py-2 rounded-md shadow-md hover:bg-[#452d88] transition-all duration-300">
             <button>Book Salon Now </button>
-          </div>
+          </div>  
         </Link>
       </div>
 
@@ -272,6 +272,7 @@ const CategoryNavMenu = ({ className }: { className?: string }) => {
           onClose={() => setOpen(false)}
           open={open}
           width={"60%"}
+          
         >
           {/* Ant Design Menu inside Drawer */}
           <Menu mode="inline" items={menuItems} onClick={onMenuClick} />

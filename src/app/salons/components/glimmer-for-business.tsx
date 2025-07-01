@@ -33,7 +33,7 @@ const GlimmerForBusiness = () => {
           <p className="text-blue-900 text-[10px] sm:text-sm md:text-base lg:text-lg font-medium leading-tight sm:leading-snug max-w-[95%] sm:max-w-none">
             Join Glimmer to showcase your services
             <br />
-            and attract more clients effortlessly
+            attract more clients effortlessly
           </p>
 
           <button
