@@ -41,16 +41,16 @@ const BottomSlider = ({ srcs = [] }: Props) => {
               className="w-full object-cover"
             />
             {index === 0 && (
-              <div className="absolute top-[15%] left-[5%] sm:top-[18%] sm:left-[7%] md:top-[25%] md:left-[10%] max-w-[90%] sm:max-w-[80%] md:max-w-[50%] flex flex-col items-start gap-3 sm:gap-4 md:gap-6 z-10">
-                <div className="text-purple-800 font-bold text-2xl sm:text-3xl md:text-5xl leading-snug">
+              <div className="absolute top-[10%] sm:top-[14%] md:top-[18%] lg:top-[25%] left-4 sm:left-8 lg:left-[10%] max-w-[90%] sm:max-w-[80%] lg:max-w-[50%] flex flex-col items-start gap-2 sm:gap-3 lg:gap-6 z-10">
+                <div className="text-purple-800 font-bold text-[14px] sm:text-base md:text-xl lg:text-5xl leading-snug">
                   Reliable delivery
                   <br />
                   at your finger tips
                 </div>
-                <div className="text-purple-700 text-base sm:text-lg md:text-2xl">
+                <div className="text-purple-700 text-[12px] sm:text-sm md:text-base lg:text-2xl">
                   Order now, Enjoy soon...
                 </div>
-                <button className="bg-purple-800 text-white px-6 py-2 sm:px-8 sm:py-3 rounded-full text-sm sm:text-base md:text-lg hover:bg-purple-900 transition">
+                <button className="bg-purple-800 text-white px-4 py-1.5 sm:px-6 sm:py-2 lg:px-8 lg:py-3 rounded-full text-xs sm:text-sm md:text-base lg:text-lg hover:bg-purple-900 transition">
                   Shop Now
                 </button>
               </div>

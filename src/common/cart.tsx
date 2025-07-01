@@ -195,13 +195,13 @@ const Cart = () => {
             </div>
             <div className="flex justify-between">
               <span>Delivery Charges</span>
-              <span>{100} PKR</span>
+              <span>{200} PKR</span>
             </div>
             <div className="flex justify-between"></div>
             <hr className="my-2" />
             <div className="flex justify-between font-semibold">
               <span>Subtotal</span>
-              <span>{Cart.discountedTotal + 100} PKR</span>
+              <span>{Cart.discountedTotal + 200} PKR</span>
             </div>
 
             <Link href={"/checkout"}>

@@ -678,11 +678,11 @@ export default function Checkout() {
                 </div>
                 <div className="flex justify-between">
                   <span>Delivery Charges</span>
-                  <span>{100} PKR</span>
+                  <span>{200} PKR</span>
                 </div>
                 <div className="flex justify-between font-semibold">
                   <span>SubTotal</span>
-                  <span>{cart.discountedTotal + 100} PKR</span>
+                  <span>{cart.discountedTotal + 200} PKR</span>
                 </div>
               </div>
               <button
