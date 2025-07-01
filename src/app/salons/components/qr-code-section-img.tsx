@@ -16,19 +16,19 @@ const QrCodeSection = () => {
           priority
         />
 
-        {/* Text + QR Image in right section center */}
-        <div className="absolute top-1/2 right-[10%] transform -translate-y-1/2 flex flex-col items-center text-gray-500 space-y-4">
+        {/* Text + QR Image block — right center */}
+        <div className="absolute top-1/2 -translate-y-1/2 right-4 md:right-12 lg:right-20 xl:right-24 flex flex-col items-end text-gray-500 space-y-5 text-right w-[90%] max-w-[350px] md:max-w-none">
           {/* Text */}
-          <div className="text-4xl md:text-5xl font-extrabold leading-tight drop-shadow-lg text-center">
-            <p>Scan the QR Code to</p>
-            <p>explore our website</p>
-          </div>
+          <p className="text-xs md:text-base lg:text-3xl xl:text-5xl font-extrabold leading-tight drop-shadow-lg">
+            Scan the QR Code to
+            <br /> explore our website
+          </p>
 
           {/* QR Code Image */}
           <Image
             src={QrCode}
             alt="QR Code Icon"
-            className="w-36 md:w-40 h-auto"
+            className="w-20 md:w-24 lg:w-32 xl:w-48 h-auto"
           />
         </div>
       </div>

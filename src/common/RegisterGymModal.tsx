@@ -69,6 +69,8 @@ const RegisterGymModal = ({ visible, onCancel, onSubmit }: any) => {
         <Button type="primary" htmlType="submit" block>
            Send Request
         </Button>
+
+      
       </Form>
     </Modal>
   );
