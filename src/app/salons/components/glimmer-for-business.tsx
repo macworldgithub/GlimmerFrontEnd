@@ -3,6 +3,7 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import Img from "@/assets/images/admin-pannel-img.png";
+import { handleLogout } from "@/lib/session";
 
 const GlimmerForBusiness = () => {
   const router = useRouter();
@@ -13,7 +14,10 @@ const GlimmerForBusiness = () => {
 
   return (
     <div className="flex justify-center px-2 sm:px-6 md:px-10 lg:px-[8rem] pb-16 md:pb-20 lg:pb-[8rem] w-[99vw]">
-      <div className="relative w-full">
+      <div
+        className="relative w-full cursor-pointer"
+        onClick={handleRegisterClick}
+      >
         {/* Image */}
         <img
           src={Img.src}
@@ -33,7 +37,10 @@ const GlimmerForBusiness = () => {
           </p>
 
           <button
-            onClick={handleRegisterClick}
+            onClick={(e) => {
+              e.stopPropagation(); // prevent parent click
+              handleRegisterClick();
+            }}
             className="bg-gray-600 text-white py-1.5 sm:py-3 md:py-4 rounded hover:bg-gray-800 transition w-28 sm:w-44 md:w-60 text-[11px] sm:text-sm md:text-base"
           >
             Register Now
