@@ -11,6 +11,11 @@ import CategoryNavMenu from "./category-nav-menu";
 const Cart = () => {
   const dispatch = useDispatch();
   const Cart = useSelector((state: RootState) => state.cart);
+  console.log(Cart);
+
+  const deliveryCharge = Cart?.shippingInfo?.city?.toLowerCase() === "karachi" ? 200 : 300;
+  const subtotal = (Cart?.discountedTotal || 0) + deliveryCharge;
+
   const [bulkProducts, setBulkProducts] = useState<{ [key: string]: boolean }>(
     {}
   ); // Track bulk state globally
@@ -195,13 +200,13 @@ const Cart = () => {
             </div>
             <div className="flex justify-between">
               <span>Delivery Charges</span>
-              <span>{200} PKR</span>
+              <span>{deliveryCharge} PKR</span>
             </div>
             <div className="flex justify-between"></div>
             <hr className="my-2" />
             <div className="flex justify-between font-semibold">
               <span>Subtotal</span>
-              <span>{Cart.discountedTotal + 200} PKR</span>
+              <span>{subtotal} PKR</span>
             </div>
 
             <Link href={"/checkout"}>

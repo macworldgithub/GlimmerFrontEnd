@@ -43,6 +43,8 @@ export default function Checkout() {
     agree: false,
   });
 
+  const [deliveryCharge, setDeliveryCharge] = useState(200);
+
   const [cartItems, setCartItems] = useState([
     { id: 1, name: "DuoComfort Sofa Premium", price: 20, image: selfcare_1 },
     { id: 2, name: "IronOne Desk", price: 25, image: selfcare_2 },
@@ -67,13 +69,28 @@ export default function Checkout() {
     agree: "",
   });
 
-  const handleInputChange = (e: any) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
-    setFormData({
+    const newFormData = {
       ...formData,
       [name]: type === "checkbox" ? checked : value,
-    });
+    };
+    
+    if (name === "city") {
+      const cityLower = value.trim().toLowerCase();
+      if (cityLower === "karachi") {
+        setDeliveryCharge(200);
+      } else if (cityLower) {
+        setDeliveryCharge(300);
+      } else {
+        setDeliveryCharge(0); 
+      }
+    }
+
+    setFormData(newFormData);
   };
+
+  const subtotal = (cart?.discountedTotal || 0) + deliveryCharge;
 
   const total = cart.total;
 
@@ -170,9 +187,9 @@ export default function Checkout() {
           storeId: productItem.product.store,
           quantity: productItem.quantity,
           total_price:
-            productItem.quantity * productItem.product.discounted_price,
+            subtotal,
         })),
-        total: cart.total,
+        total: subtotal,
         discountedTotal: cart.discountedTotal || cart.total,
         paymentMethod: "Cash on Delivery",
         ShippingInfo: formData,
@@ -183,7 +200,6 @@ export default function Checkout() {
           gateway: "Cash on Delivery",
         },
       };
-
       const res = await createOrder(orderData, credentials.token);
 
       if (res?.order) {
@@ -280,7 +296,7 @@ export default function Checkout() {
       const orderDto = {
         customerName: formData.fullName,
         customerEmail: formData.email,
-        total: cart.total,
+        total: subtotal,
         discountedTotal: cart.discountedTotal,
         payment: {
           status: "Pending",
@@ -380,7 +396,7 @@ export default function Checkout() {
           quantity: item.quantity,
           total_price: item.quantity * item.product.discounted_price,
         })),
-        total: cart.total,
+        total: subtotal,
         discountedTotal: cart.discountedTotal || cart.total,
       };
       const { data } = await axios.post(
@@ -519,10 +535,9 @@ export default function Checkout() {
                   <div className="flex gap-4 flex-wrap">
                     <label
                       className={`flex items-center justify-center gap-2 px-4 py-3 rounded-lg border cursor-pointer transition-all
-                        ${
-                          formData.paymentMethod === "Cash on Delivery"
-                            ? "border-blue-500 bg-blue-50"
-                            : "border-gray-300"
+                        ${formData.paymentMethod === "Cash on Delivery"
+                          ? "border-blue-500 bg-blue-50"
+                          : "border-gray-300"
                         }`}
                     >
                       <input
@@ -538,10 +553,9 @@ export default function Checkout() {
                     </label>
                     <label
                       className={`flex items-center justify-center gap-2 px-4 py-3 rounded-lg border cursor-pointer transition-all
-                        ${
-                          formData.paymentMethod === "JazzCash"
-                            ? "border-blue-500 bg-blue-50"
-                            : "border-gray-300"
+                        ${formData.paymentMethod === "JazzCash"
+                          ? "border-blue-500 bg-blue-50"
+                          : "border-gray-300"
                         }`}
                       onClick={() => {
                         setFormData({ ...formData, paymentMethod: "JazzCash" });
@@ -560,10 +574,9 @@ export default function Checkout() {
                     </label>
                     <label
                       className={`flex items-center justify-center gap-2 px-4 py-3 rounded-lg border cursor-pointer transition-all
-                        ${
-                          formData.paymentMethod === "Bank Alfalah"
-                            ? "border-blue-500 bg-blue-50"
-                            : "border-gray-300"
+                        ${formData.paymentMethod === "Bank Alfalah"
+                          ? "border-blue-500 bg-blue-50"
+                          : "border-gray-300"
                         }`}
                       onClick={() => {
                         setFormData({
@@ -650,11 +663,11 @@ export default function Checkout() {
                 </div>
                 <div className="flex justify-between">
                   <span>Delivery Charges</span>
-                  <span>{200} PKR</span>
+                  <span>{deliveryCharge} PKR</span>
                 </div>
                 <div className="flex justify-between font-semibold">
                   <span>SubTotal</span>
-                  <span>{cart.discountedTotal + 200} PKR</span>
+                  <span>{subtotal} PKR</span>
                 </div>
               </div>
               <button
