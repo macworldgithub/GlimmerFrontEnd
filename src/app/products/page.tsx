@@ -538,14 +538,7 @@ const ProductsList = () => {
             : new Date(a.created_at).getTime() -
                 new Date(b.created_at).getTime();
         });
-      } else if (activeSort === "Price") {
-        filteredProducts.sort((a: any, b: any) => {
-          return sortOrder === "desc"
-            ? Number(b.finalPrice) - Number(a.finalPrice)
-            : Number(a.finalPrice) - Number(b.finalPrice);
-        });
-      }
-
+      } 
       setData(filteredProducts);
       setTotal(res.total || filteredProducts.length);
     } catch (error) {
