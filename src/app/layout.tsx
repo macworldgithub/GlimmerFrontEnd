@@ -8,6 +8,7 @@ import { CartStoreProvider } from "@/store/cartStoreContext";
 import CookieBanner from "@/common/cookie-banner";
 import ClientLayout from "@/common/client-layout";
 import FloatingWhatsApp from "@/common/FloatingWhatsApp"; 
+import ChatbotWidget from "@/common/ChatbotWidget";
 // import FloatingChatbot from '@/common/FloatingChatbot'; 
 
 const prompt = Prompt({
@@ -39,6 +40,7 @@ export default function RootLayout({
           <ClientLayout>{children}</ClientLayout>
           <CookieBanner />
           <FloatingWhatsApp /> 
+          <ChatbotWidget/>
         </CartStoreProvider>
       
       </body>
