@@ -5,6 +5,7 @@ import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, X } from "lucide-react";
+import { BACKEND_URL } from "@/api/config";
 
 export default function ChatbotWidget() {
   const [isOpen, setIsOpen] = useState(false);
@@ -39,7 +40,7 @@ export default function ChatbotWidget() {
     setInput("");
 
     try {
-      const res = await axios.post("http://localhost:3000/chat/message", {
+      const res = await axios.post(`${BACKEND_URL}/chat/message`, {
         sessionId,
         message: input,
       });
@@ -63,7 +64,7 @@ export default function ChatbotWidget() {
 
   const submitLead = async () => {
     try {
-      await axios.post("http://localhost:3000/chat/lead", lead);
+      await axios.post(`${BACKEND_URL}/chat/lead`, lead);
       setMessages((prev) => [
         ...prev,
         { from: "bot", text: "Thanks! Our team will contact you soon." },
