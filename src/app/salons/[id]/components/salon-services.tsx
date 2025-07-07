@@ -18,7 +18,9 @@ const SalonServices = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const token = useSelector((state: RootState) => state.login.token);
-  const { services: selectedServices } = useSelector((state: RootState) => state.serviceCart);
+  const { services: selectedServices } = useSelector(
+    (state: RootState) => state.serviceCart
+  );
 
   const [services, setServices] = useState<any[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -58,10 +60,13 @@ const SalonServices = () => {
       return;
     }
 
-    const alreadyInCart = selectedServices.some((s) => s.service._id === service._id);
+    const alreadyInCart = selectedServices.some(
+      (s) => s.service._id === service._id
+    );
     if (!alreadyInCart) {
       const discountedPrice =
-        service.adminSetPrice - (service.adminSetPrice * service.discountPercentage) / 100;
+        service.adminSetPrice -
+        (service.adminSetPrice * service.discountPercentage) / 100;
 
       dispatch(
         addService({
@@ -106,11 +111,14 @@ const SalonServices = () => {
     try {
       for (const { service } of selectedServices) {
         try {
-          const response = await createBooking({
-            ...bulkForm,
-            serviceId: service._id,
-            finalPrice: service.discounted_price,
-          }, token);
+          const response = await createBooking(
+            {
+              ...bulkForm,
+              serviceId: service._id,
+              finalPrice: service.discounted_price,
+            },
+            token
+          );
 
           const emailPayload = {
             to: response.customerEmail,
@@ -131,12 +139,16 @@ const SalonServices = () => {
             body: JSON.stringify(emailPayload),
           });
         } catch (error) {
-          console.error("Booking or email failed for service:", service._id, error);
+          console.error(
+            "Booking or email failed for service:",
+            service._id,
+            error
+          );
         }
       }
 
       dispatch(clearServiceCart());
-      localStorage.removeItem('serviceCart');
+      localStorage.removeItem("serviceCart");
       alert("Booking confirmed!");
       setIsCheckoutModalOpen(false);
       window.location.reload();
@@ -174,14 +186,19 @@ const SalonServices = () => {
       <div className="relative p-5 bg-[#FBE8A5]">
         <Swiper
           slidesPerView="auto"
-          breakpoints={{ 280: { slidesPerView: 3 }, 768: { slidesPerView: 10 } }}
+          breakpoints={{
+            280: { slidesPerView: 3 },
+            768: { slidesPerView: 10 },
+          }}
         >
           {services.map((item) => (
             <SwiperSlide
               key={item._id}
-              className="p-4 text-center hover:bg-black hover:text-white rounded-md"
+              className="!w-auto px-3 py-2 text-center hover:bg-black hover:text-white rounded-md"
             >
-              <p className="font-bold">{item.name}</p>
+              <p className="font-medium text-xs sm:text-sm md:text-base whitespace-nowrap">
+                {item.name}
+              </p>
             </SwiperSlide>
           ))}
         </Swiper>
@@ -189,7 +206,9 @@ const SalonServices = () => {
 
       <div className="p-5 bg-[#FBE8A5]">
         {services.length === 0 ? (
-          <div className="text-center text-lg">No services found for this salon.</div>
+          <div className="text-center text-lg">
+            No services found for this salon.
+          </div>
         ) : (
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             {services.map((item) => (
@@ -202,11 +221,18 @@ const SalonServices = () => {
                   )
                 }
               >
-                <div className="flex justify-between items-center mb-2">
-                  <div className="font-semibold">{item.name}</div>
-                  <div className="text-sm">{item.duration} mins</div>
-                  <div className="text-sm">{item.actualPrice} PKR</div>
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 mb-2">
+                  <div className="font-semibold text-sm sm:text-base">
+                    {item.name}
+                  </div>
+                  <div className="text-sm text-gray-700">
+                    {item.duration} mins
+                  </div>
+                  <div className="text-sm text-gray-700">
+                    {item.actualPrice} PKR
+                  </div>
                 </div>
+
                 <div className="flex justify-end">
                   <button
                     onClick={(e) => {

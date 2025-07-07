@@ -38,7 +38,7 @@ const GlimmerForBusiness = () => {
 
           <button
             onClick={(e) => {
-              e.stopPropagation(); // prevent parent click
+              e.stopPropagation(); 
               handleRegisterClick();
             }}
             className="bg-gray-600 text-white py-1.5 sm:py-3 md:py-4 rounded hover:bg-gray-800 transition w-28 sm:w-44 md:w-60 text-[11px] sm:text-sm md:text-base"

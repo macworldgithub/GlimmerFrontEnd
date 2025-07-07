@@ -19,7 +19,9 @@ const SalonDetailsPage = () => {
   const [error, setError] = useState<string | null>(null);
 
   const [showAllImages, setShowAllImages] = useState(false);
-  const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
+  const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(
+    null
+  );
   const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
 
   useEffect(() => {
@@ -47,7 +49,12 @@ const SalonDetailsPage = () => {
     return `${formattedHour}:${minute} ${suffix}`;
   };
 
-  const images = [salonData?.image1, salonData?.image2, salonData?.image3, salonData?.image4].filter(Boolean);
+  const images = [
+    salonData?.image1,
+    salonData?.image2,
+    salonData?.image3,
+    salonData?.image4,
+  ].filter(Boolean);
 
   if (loading) {
     return (
@@ -79,7 +86,9 @@ const SalonDetailsPage = () => {
         <div className="flex flex-col mt-0">
           <div className="flex justify-between items-center">
             <div className="prose">
-              <h2 className="text-5xl">{salonData.salon_name || "Glimmer's Saloon"}</h2>
+              <h2 className="text-5xl">
+                {salonData.salon_name || "Glimmer's Saloon"}
+              </h2>
             </div>
             <div>
               <MdOutlineIosShare size={30} />
@@ -89,10 +98,14 @@ const SalonDetailsPage = () => {
           <div className="flex flex-row items-center mb-3 text-2xl">
             <p className="mr-1">{"Mon-Fri"}</p>
             <p className="mr-1">
-              {salonData.openingHour ? `(${formatTime(salonData.openingHour)}` : "(10:00 am"}
+              {salonData.openingHour
+                ? `(${formatTime(salonData.openingHour)}`
+                : "(10:00 am"}
             </p>
             <p className="mr-1">
-              {salonData.closingHour ? ` - ${formatTime(salonData.closingHour)})` : " - 10:00 pm)"}
+              {salonData.closingHour
+                ? ` - ${formatTime(salonData.closingHour)})`
+                : " - 10:00 pm)"}
             </p>
           </div>
         </div>
@@ -124,31 +137,31 @@ const SalonDetailsPage = () => {
             </div>
           )}
 
-         {showAllImages && images.length > 1 && (
-  <div className="flex justify-center mt-6">
-    <div className="flex gap-4 overflow-x-auto max-w-screen-md px-2">
-      {images.map((src, index) => (
-        <div
-          key={index}
-          className={`min-w-[200px] h-[140px] flex-shrink-0 rounded-lg overflow-hidden bg-gray-100 cursor-pointer border-2 ${
-            currentImageIndex === index ? "border-black" : "border-transparent"
-          }`}
-          onClick={() => {
-            setCurrentImageIndex(index); // ✅ change top image
-          }}
-        >
-          <img
-            src={src}
-            alt={`salon image ${index + 1}`}
-            className="w-full h-full object-cover"
-          />
-        </div>
-      ))}
-    </div>
-  </div>
-)}
-
-          
+          {showAllImages && images.length > 1 && (
+            <div className="flex justify-center mt-6">
+              <div className="flex gap-4 overflow-x-auto w-full px-2 scrollbar-hide">
+                {images.map((src, index) => (
+                  <div
+                    key={index}
+                    className={`w-[70vw] sm:w-[200px] h-[40vw] sm:h-[140px] flex-shrink-0 rounded-lg overflow-hidden bg-gray-100 cursor-pointer border-2 ${
+                      currentImageIndex === index
+                        ? "border-black"
+                        : "border-transparent"
+                    }`}
+                    onClick={() => {
+                      setCurrentImageIndex(index); // ✅ change top image
+                    }}
+                  >
+                    <img
+                      src={src}
+                      alt={`salon image ${index + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -173,14 +186,10 @@ const SalonDetailsPage = () => {
               ‹
             </button>
 
-              
-
-
-
             <img
               src={images[selectedImageIndex]}
               alt="Fullscreen"
-              className="max-w-[95vw] max-h-[95vh] object-contain rounded-lg"
+              className="w-full h-full object-contain rounded-lg"
               onClick={(e) => e.stopPropagation()}
             />
 
@@ -219,4 +228,3 @@ const SalonDetailsPage = () => {
 };
 
 export default SalonDetailsPage;
-

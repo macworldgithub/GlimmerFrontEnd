@@ -240,7 +240,7 @@ const ServiceList = () => {
           href="/salons/services"
           className="text-purple-800 font-medium text-base lg:text-xl"
         >
-          Services
+          Services 
         </Link>
       </div>
 

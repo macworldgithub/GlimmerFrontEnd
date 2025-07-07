@@ -96,11 +96,11 @@ const Page = () => {
             alt=""
           />
         </div>
-        <div className="w-[99vw] flex flex-col items-center justify-center pt-[6rem] text-center px-[10rem]">
+        <div className="w-[99vw] flex flex-col items-center justify-center pt-[6rem] text-center px-4 sm:px-12 md:px-[10rem]">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold">
             One platform, infinite possibilities
           </h1>
-          <p className="mt-2 text-base sm:text-lg md:text-xl">
+          <p className="mt-2 text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed max-w-[600px]">
             Everything you need to grow and thrive. Glimmer is packed with tools
             to boost sales, provide services, and retain clients, so you can
             focus on what you do best.
@@ -115,6 +115,7 @@ const Page = () => {
             </button>
           </div>
         </div>
+
         {/* Modal for Form */}
         <Modal
           title="Register your Salon"
@@ -123,10 +124,7 @@ const Page = () => {
           footer={null}
           width={500}
         >
-          <Form
-            layout="vertical"
-            onFinish={handleSubmit}
-          >
+          <Form layout="vertical" onFinish={handleSubmit}>
             <Form.Item
               label="Name"
               name="name"
@@ -138,7 +136,9 @@ const Page = () => {
             <Form.Item
               label="Phone Number"
               name="phone"
-              rules={[{ required: true, message: "Please enter your phone number" }]}
+              rules={[
+                { required: true, message: "Please enter your phone number" },
+              ]}
             >
               <Input />
             </Form.Item>
@@ -146,15 +146,14 @@ const Page = () => {
             <Form.Item
               label="Salon Name"
               name="salonName"
-              rules={[{ required: true, message: "Please enter your salon name" }]}
+              rules={[
+                { required: true, message: "Please enter your salon name" },
+              ]}
             >
               <Input />
             </Form.Item>
 
-            <Form.Item
-              label="Email (Optional)"
-              name="email"
-            >
+            <Form.Item label="Email (Optional)" name="email">
               <Input />
             </Form.Item>
 
@@ -163,11 +162,7 @@ const Page = () => {
             </p>
 
             <div className="text-center mt-4">
-              <Button
-                type="primary"
-                htmlType="submit"
-                className="w-full"
-              >
+              <Button type="primary" htmlType="submit" className="w-full">
                 Send Request
               </Button>
             </div>

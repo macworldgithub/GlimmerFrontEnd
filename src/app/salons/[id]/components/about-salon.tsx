@@ -1,8 +1,6 @@
 "use client";
 
-
 import Link from "next/link";
-
 import React from "react";
 
 interface Props {
@@ -16,9 +14,8 @@ const AboutSalon = ({ description }: Props) => {
 				<div className="prose lg:prose-lg">
 					<h2 className="mb-2 md:mb-3">About Salon</h2>
 				</div>
-				<p className="text-2xl break-words max-w-[50%]">
-					{description ||
-						"No description provided."}
+				<p className="text-2xl break-words max-w-full md:max-w-[50%]">
+					{description || "No description provided."}
 				</p>
 			</div>
 		</>

@@ -315,7 +315,7 @@ const ServiceDetails = () => {
           href="/salons/services"
           className="text-gray-500 font-medium text-base lg:text-xl"
         >
-          Services
+          Services 
         </Link>
         {service && (
           <>

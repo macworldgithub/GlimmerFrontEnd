@@ -121,7 +121,7 @@ const SelfcareCardList = () => {
           onClick={handleViewMore}
           className="bg-[#583FA8] text-white py-2 px-6 rounded-lg hover:bg-[#472c9f]"
         >
-          View More
+          View More 
         </button>
       </div>
     </div>
