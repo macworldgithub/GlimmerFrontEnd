@@ -7,9 +7,9 @@ import "swiper/css/bundle";
 import { CartStoreProvider } from "@/store/cartStoreContext";
 import CookieBanner from "@/common/cookie-banner";
 import ClientLayout from "@/common/client-layout";
-import FloatingWhatsApp from "@/common/FloatingWhatsApp"; 
+import FloatingWhatsApp from "@/common/FloatingWhatsApp";
 import ChatbotWidget from "@/common/ChatbotWidget";
-// import FloatingChatbot from '@/common/FloatingChatbot'; 
+// import FloatingChatbot from '@/common/FloatingChatbot';
 
 const prompt = Prompt({
   subsets: ["latin"],
@@ -39,8 +39,7 @@ export default function RootLayout({
           <Navbar />
           <ClientLayout>{children}</ClientLayout>
           <CookieBanner />
-          <FloatingWhatsApp /> 
-          <ChatbotWidget/>
+          <ChatbotWidget />
         </CartStoreProvider>
       
       </body>

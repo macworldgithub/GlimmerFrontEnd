@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, X } from "lucide-react";
 import { BACKEND_URL } from "@/api/config";
+import { WhatsAppOutlined } from "@ant-design/icons";
 
 export default function ChatbotWidget() {
   const [isOpen, setIsOpen] = useState(false);
@@ -30,7 +31,6 @@ export default function ChatbotWidget() {
   }, [messages]);
 
   const sendMessage = async () => {
-      console.log("34343")
     if (!input.trim()) return;
     const userMsg: { from: "user" | "bot"; text: string } = {
       from: "user",
@@ -45,11 +45,7 @@ export default function ChatbotWidget() {
         message: input,
       });
       const botReply = res.data.reply;
-      const botMsg: { from: "user" | "bot"; text: string } = {
-        from: "bot",
-        text: botReply,
-      };
-      setMessages((prev) => [...prev, botMsg]);
+      setMessages((prev) => [...prev, { from: "bot", text: botReply }]);
       if (/provide.*(name|email|phone)/i.test(botReply)) {
         setShowLeadForm(true);
       }
@@ -85,7 +81,7 @@ export default function ChatbotWidget() {
   };
 
   return (
-    <div className="fixed bottom-6 right-20 z-40">
+    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3">
       {/* Floating Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
@@ -98,47 +94,57 @@ export default function ChatbotWidget() {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
-            transition={{ duration: 0.3 }}
-            className="mt-3 w-[360px] max-h-[520px] bg-white rounded-2xl shadow-2xl flex flex-col border border-gray-200 overflow-hidden"
+            exit={{ opacity: 0, y: 30 }}
+            transition={{ duration: 0.25 }}
+           className="w-[90vw] sm:w-[360px] min-h-[300px] max-h-[80vh] bg-white rounded-2xl shadow-2xl flex flex-col border border-gray-200 overflow-hidden"
           >
-            <div className="bg-purple-600 text-white px-4 py-3 font-semibold text-lg rounded-t-2xl">
+            {/* Header */}
+            <div className="bg-purple-600 text-white px-5 py-4 text-lg font-semibold rounded-t-2xl">
               Glimmer Assistant
             </div>
 
-            <div className="flex-1 px-3 py-2 overflow-y-auto text-sm scrollbar-thin scrollbar-thumb-purple-300 scrollbar-track-gray-100">
+            {/* Chat Messages */}
+            <div className="flex-1 px-3 py-2 overflow-y-auto text-sm space-y-1 scrollbar-thin scrollbar-thumb-purple-300 scrollbar-track-gray-100">
               {messages.map((msg, idx) => (
-                <div
+                <motion.div
                   key={idx}
-                  className={`my-1 ${
-                    msg.from === "user" ? "text-right" : "text-left"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.2, delay: idx * 0.03 }}
+                  className={`flex ${
+                    msg.from === "user" ? "justify-end" : "justify-start"
                   }`}
                 >
-                  <span
-                    className={`inline-block px-3 py-1 rounded-xl max-w-[80%] ${
+                  <div
+                    className={`px-4 py-2 rounded-xl max-w-[85%] ${
                       msg.from === "user" ? "bg-purple-100" : "bg-gray-100"
                     }`}
                   >
                     {msg.text}
-                  </span>
-                </div>
+                  </div>
+                </motion.div>
               ))}
 
               {/* Lead Form */}
               {showLeadForm && (
-                <div className="my-3 space-y-2 text-sm">
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.3 }}
+                  className="space-y-2 mt-3"
+                >
                   <input
                     type="text"
-                    className="w-full px-3 py-1 border rounded-full"
+                    className="w-full px-4 py-2 border rounded-full text-sm focus:outline-purple-500"
                     placeholder="Your Name"
                     value={lead.name}
                     onChange={(e) => setLead({ ...lead, name: e.target.value })}
                   />
                   <input
                     type="email"
-                    className="w-full px-3 py-1 border rounded-full"
+                    className="w-full px-4 py-2 border rounded-full text-sm focus:outline-purple-500"
                     placeholder="Your Email"
                     value={lead.email}
                     onChange={(e) =>
@@ -147,7 +153,7 @@ export default function ChatbotWidget() {
                   />
                   <input
                     type="tel"
-                    className="w-full px-3 py-1 border rounded-full"
+                    className="w-full px-4 py-2 border rounded-full text-sm focus:outline-purple-500"
                     placeholder="Your Phone"
                     value={lead.phone}
                     onChange={(e) =>
@@ -155,23 +161,23 @@ export default function ChatbotWidget() {
                     }
                   />
                   <button
-                    className="w-full px-3 py-1 bg-purple-600 text-white rounded-full hover:bg-purple-700"
+                    className="w-full py-2 bg-purple-600 text-white rounded-full hover:bg-purple-700 transition"
                     onClick={submitLead}
                   >
                     Submit
                   </button>
-                </div>
+                </motion.div>
               )}
 
               <div ref={messagesEndRef} />
             </div>
 
-            {/* Chat input */}
+            {/* Chat Input */}
             {!showLeadForm && (
-              <div className="border-t px-2 py-2 flex items-center">
+              <div className="border-t px-3 py-3 flex items-center gap-2 bg-white">
                 <input
                   type="text"
-                  className="flex-1 px-3 py-1 text-sm border rounded-full focus:outline-none focus:ring"
+                  className="flex-1 px-4 py-2 text-sm border rounded-full focus:outline-none focus:ring-2 focus:ring-purple-500"
                   placeholder="Type your message..."
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
@@ -179,7 +185,7 @@ export default function ChatbotWidget() {
                 />
                 <button
                   onClick={sendMessage}
-                  className="ml-2 px-3 py-1 text-sm bg-purple-600 text-white rounded-full hover:bg-purple-700"
+                  className="px-4 py-2 text-sm bg-purple-600 text-white rounded-full hover:bg-purple-700 transition"
                 >
                   Send
                 </button>
@@ -188,6 +194,14 @@ export default function ChatbotWidget() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* WhatsApp Button */}
+      <div
+        className="w-14 h-14 bg-[#25D366] text-white rounded-full shadow-md flex items-center justify-center cursor-pointer hover:scale-105 transition-transform"
+        onClick={() => window.open("https://wa.me/923312062376", "_blank")}
+      >
+        <WhatsAppOutlined style={{ fontSize: "26px" }} />
+      </div>
     </div>
   );
 }
