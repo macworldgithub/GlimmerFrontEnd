@@ -31,8 +31,8 @@ const ServiceCard: FC<ServiceCardProps> = ({ item, salonId, salonName, onAddToCa
   };
 
   return (
-    <div
-      className="w-[280px] h-[320px] sm:w-[300px] sm:h-[350px] md:max-w-[320px] md:h-[370px] bg-white rounded-xl border border-gray-200 shadow hover:shadow-lg transition duration-300 cursor-pointer snap-start shrink-0 relative overflow-visible"
+    <div className="w-full max-w-[300px] h-[350px] md:h-[370px] bg-white rounded-xl border border-gray-200 shadow hover:shadow-lg transition duration-300 cursor-pointer snap-start relative"
+
       onClick={handleClick}
     >
       {/* Top half - Image */}
@@ -49,7 +49,7 @@ const ServiceCard: FC<ServiceCardProps> = ({ item, salonId, salonName, onAddToCa
             onClick={handleAddToCart}
           >
             <RiShoppingBag4Line size={20} className="text-white" />
-            <p className="text-white text-[12px] mt-1 max-xl:text-[8px] max-md:hidden">ADD TO BAG</p>
+            <p className="text-white text-[12px] mt-1 max-xl:text-[8px] max-md:hidden">ADD TO BAG  </p>
           </button>
 
           <div className="md:h-8 mt-1 px-2 border-[#583FA8] border bg-white flex justify-center items-center rounded-md">

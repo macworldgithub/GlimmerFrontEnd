@@ -10,7 +10,11 @@ import {
 } from "react-icons/md";
 import "swiper/css";
 import "swiper/css/navigation";
-import { createBooking, getAllActiveServices, getServiceById } from "@/api/salon";
+import {
+  createBooking,
+  getAllActiveServices,
+  getServiceById,
+} from "@/api/salon";
 import { useSearchParams } from "next/navigation";
 import { DatePicker, Modal, TimePicker } from "antd";
 import { AppDispatch, RootState } from "@/store/reduxStore";
@@ -46,7 +50,9 @@ const ServiceDetails = () => {
   const searchParams = useSearchParams();
   const dispatch = useDispatch<AppDispatch>();
   const token = useSelector((state: RootState) => state.login.token);
-  const { services: selectedServices } = useSelector((state: RootState) => state.serviceCart);
+  const { services: selectedServices } = useSelector(
+    (state: RootState) => state.serviceCart
+  );
 
   const serviceId = searchParams.get("serviceId");
   const salonIdFilter = searchParams.get("salonId") ?? "";
@@ -57,7 +63,6 @@ const ServiceDetails = () => {
   // Parse those into dayjs
   const opening = dayjs(openingHour, "h:mm a");
   const closing = dayjs(closingHour, "h:mm a");
-
 
   // Helper to disable hours outside opening-closing
   const disabledHours = () => {
@@ -84,7 +89,7 @@ const ServiceDetails = () => {
             salonId: salonIdFilter,
           })
         );
-        console.log(result)
+        console.log(result);
         if (result.payload) {
           setData(result.payload.services);
         }
@@ -99,7 +104,6 @@ const ServiceDetails = () => {
       fetchData();
     }
   }, [page, salonIdFilter]);
-
 
   useEffect(() => {
     if (!serviceId) return;
@@ -181,17 +185,17 @@ const ServiceDetails = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-  
+
     if (!validateForm()) return;
-  
+
     const bookingData = {
       ...bulkForm,
       serviceId: serviceId,
       finalPrice: discountedPrice,
     };
-  
+
     console.log("Submitting Booking Data:", bookingData);
-  
+
     try {
       const response = await createBooking(bookingData, token);
       const emailPayload = {
@@ -203,7 +207,7 @@ const ServiceDetails = () => {
           booking: response,
         },
       };
-  
+
       await fetch(`${BACKEND_URL}/admin/send-booking-confirmation-email`, {
         method: "POST",
         headers: {
@@ -212,16 +216,15 @@ const ServiceDetails = () => {
         },
         body: JSON.stringify(emailPayload),
       });
-  
+
       alert("Booking Confirmed!");
-  
+
       setIsCheckoutModalOpen(false); // Close modal only on success
     } catch (error) {
       console.error("Booking Failed:", error);
       alert("Failed to book service. Please try again.");
     }
   };
-  
 
   const handleAddToCart = (item: any) => {
     const newSalonId = item.salonId;
@@ -234,7 +237,8 @@ const ServiceDetails = () => {
       return;
     }
     const discountedPrice = item.hasDiscount
-      ? item.adminSetPrice - (item.adminSetPrice * (item.discountPercentage || 0)) / 100
+      ? item.adminSetPrice -
+        (item.adminSetPrice * (item.discountPercentage || 0)) / 100
       : item.adminSetPrice;
     dispatch(
       addService({
@@ -262,9 +266,8 @@ const ServiceDetails = () => {
       })
     );
     setSelectedItem(item); // Set the selected item when added to cart
-    setIsCartModalOpen(true);  // Open the modal
+    setIsCartModalOpen(true); // Open the modal
   };
-
 
   const handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setBulkForm({ ...bulkForm, [e.target.name]: e.target.value });
@@ -278,17 +281,20 @@ const ServiceDetails = () => {
     try {
       for (const { service } of selectedServices) {
         try {
-          await createBooking({
-            ...bulkForm,
-            serviceId: service._id,
-            finalPrice: service.discounted_price,
-          }, token);
+          await createBooking(
+            {
+              ...bulkForm,
+              serviceId: service._id,
+              finalPrice: service.discounted_price,
+            },
+            token
+          );
         } catch (error) {
           console.error("Booking failed for service:", service._id, error);
         }
       }
       dispatch(clearServiceCart());
-      localStorage.removeItem('serviceCart');
+      localStorage.removeItem("serviceCart");
       alert("Booking confirmed!");
       setIsCheckoutModalOpen(false);
       window.location.reload();
@@ -315,7 +321,7 @@ const ServiceDetails = () => {
           href="/salons/services"
           className="text-gray-500 font-medium text-base lg:text-xl"
         >
-          Services 
+          Services
         </Link>
         {service && (
           <>
@@ -330,7 +336,9 @@ const ServiceDetails = () => {
         {/* Floating Cart Conflict Warning */}
         {showCartConflictWarning && (
           <div className="fixed bottom-6 right-6 bg-white/80 backdrop-blur-md border border-red-400 shadow-lg rounded-lg p-4 z-50 w-[300px] animate-fade-in">
-            <h4 className="text-red-600 font-semibold mb-2">Conflict Detected</h4>
+            <h4 className="text-red-600 font-semibold mb-2">
+              Conflict Detected
+            </h4>
             <p className="text-sm text-gray-700 mb-3">
               You cannot add services from different salons in the same booking.
             </p>
@@ -367,39 +375,40 @@ const ServiceDetails = () => {
             <div className="flex gap-2 overflow-hidden">
               {isMobile
                 ? [images[index]].map((image, i) => (
-                  <div
-                    key={i}
-                    className="mx-4 w-[120px] h-[120px] sm:w-[140px] sm:h-[140px] flex items-center justify-center overflow-hidden rounded-md shadow bg-gray-100 border cursor-pointer border-purple-900"
-                  >
-                    <img
-                      src={image}
-                      alt={`Thumbnail ${i + 1}`}
-                      className="w-full h-full object-cover"
-                      onError={(e) =>
-                      (e.currentTarget.src =
-                        "/assets/images/default_image.jpg")
-                      }
-                    />
-                  </div>
-                ))
+                    <div
+                      key={i}
+                      className="mx-4 w-[120px] h-[120px] sm:w-[140px] sm:h-[140px] flex items-center justify-center overflow-hidden rounded-md shadow bg-gray-100 border cursor-pointer border-purple-900"
+                    >
+                      <img
+                        src={image}
+                        alt={`Thumbnail ${i + 1}`}
+                        className="w-full h-full object-cover"
+                        onError={(e) =>
+                          (e.currentTarget.src =
+                            "/assets/images/default_image.jpg")
+                        }
+                      />
+                    </div>
+                  ))
                 : images.map((image, i) => (
-                  <div
-                    key={i}
-                    className={`mx-4 md:w-[90px] md:h-[90px] flex items-center justify-center overflow-hidden rounded-md shadow bg-gray-100 border border-gray-300 cursor-pointer ${i === index ? "border-purple-900" : ""
+                    <div
+                      key={i}
+                      className={`mx-4 md:w-[90px] md:h-[90px] flex items-center justify-center overflow-hidden rounded-md shadow bg-gray-100 border border-gray-300 cursor-pointer ${
+                        i === index ? "border-purple-900" : ""
                       }`}
-                    onClick={() => setIndex(i)}
-                  >
-                    <img
-                      src={image}
-                      alt={`Thumbnail ${i + 1}`}
-                      className="w-full h-full object-cover"
-                      onError={(e) =>
-                      (e.currentTarget.src =
-                        "/assets/images/default_image.jpg")
-                      }
-                    />
-                  </div>
-                ))}
+                      onClick={() => setIndex(i)}
+                    >
+                      <img
+                        src={image}
+                        alt={`Thumbnail ${i + 1}`}
+                        className="w-full h-full object-cover"
+                        onError={(e) =>
+                          (e.currentTarget.src =
+                            "/assets/images/default_image.jpg")
+                        }
+                      />
+                    </div>
+                  ))}
             </div>
 
             {/* Right Arrow Button */}
@@ -418,10 +427,11 @@ const ServiceDetails = () => {
               {[...Array(5)].map((_, index) => (
                 <svg
                   key={index}
-                  className={`w-5 h-5 ms-1 ${service?.ratings && index < Math.round(service.ratings)
-                    ? "text-purple-800"
-                    : "text-gray-300"
-                    }`}
+                  className={`w-5 h-5 ms-1 ${
+                    service?.ratings && index < Math.round(service.ratings)
+                      ? "text-purple-800"
+                      : "text-gray-300"
+                  }`}
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
@@ -440,8 +450,9 @@ const ServiceDetails = () => {
               return (
                 <div
                   key={star}
-                  className={`flex items-center gap-3 ${index < 4 ? "mb-4" : ""
-                    }`}
+                  className={`flex items-center gap-3 ${
+                    index < 4 ? "mb-4" : ""
+                  }`}
                 >
                   <span className="text-purple-800">{star} ★</span>
                   <div className="w-full bg-gray-200 rounded-md h-3 flex-1">
@@ -572,7 +583,7 @@ const ServiceDetails = () => {
                 height={15}
                 src={"/assets/addtoBag/cart-icon.png"}
               />
-              ADD TO BAG 
+              ADD TO BAG
             </button>
             <button
               onClick={() => setIsWishlisted(!isWishlisted)}
@@ -659,7 +670,9 @@ const ServiceDetails = () => {
                       disabledHours={disabledHours}
                       disabledMinutes={() => {
                         const allowed = [0, 30];
-                        return Array.from({ length: 60 }, (_, i) => i).filter((min) => !allowed.includes(min));
+                        return Array.from({ length: 60 }, (_, i) => i).filter(
+                          (min) => !allowed.includes(min)
+                        );
                       }}
                       hideDisabledOptions
                       showNow={false}
@@ -677,8 +690,9 @@ const ServiceDetails = () => {
                       name={name}
                       value={(bulkForm as Record<string, string>)[name] || ""}
                       onChange={handleChange}
-                      className={`w-full p-3 border ${error ? "border-red-500" : "border-gray-300"
-                        } rounded-md focus:ring-2 focus:ring-purple-500 outline-none`}
+                      className={`w-full p-3 border ${
+                        error ? "border-red-500" : "border-gray-300"
+                      } rounded-md focus:ring-2 focus:ring-purple-500 outline-none`}
                       required
                     />
                   )}
@@ -734,10 +748,11 @@ const ServiceDetails = () => {
                 <button
                   key={tab.title}
                   onClick={() => setActiveTab(tab.title)}
-                  className={`flex-1 py-2 px-4 font-semibold ${activeTab === tab.title
-                    ? "text-purple-800 border-b-2 border-purple-800"
-                    : "text-gray-600"
-                    }`}
+                  className={`flex-1 py-2 px-4 font-semibold ${
+                    activeTab === tab.title
+                      ? "text-purple-800 border-b-2 border-purple-800"
+                      : "text-gray-600"
+                  }`}
                 >
                   {tab.title}
                 </button>
@@ -760,10 +775,11 @@ const ServiceDetails = () => {
               {[...Array(5)].map((_, index) => (
                 <svg
                   key={index}
-                  className={`w-5 h-5 ms-1 ${service?.ratings && index < Math.round(service.ratings)
-                    ? "text-purple-800"
-                    : "text-gray-300"
-                    }`}
+                  className={`w-5 h-5 ms-1 ${
+                    service?.ratings && index < Math.round(service.ratings)
+                      ? "text-purple-800"
+                      : "text-gray-300"
+                  }`}
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
@@ -782,8 +798,9 @@ const ServiceDetails = () => {
               return (
                 <div
                   key={star}
-                  className={`flex items-center gap-3 ${index < 4 ? "mb-4" : ""
-                    }`}
+                  className={`flex items-center gap-3 ${
+                    index < 4 ? "mb-4" : ""
+                  }`}
                 >
                   <span className="text-purple-800">{star} ★</span>
                   <div className="w-full bg-gray-200 rounded-md h-3 flex-1">
@@ -838,7 +855,9 @@ const ServiceDetails = () => {
               form={bulkForm}
               errors={errors}
               onChange={handleFormChange}
-              onDateChange={(name: any, value: any) => setBulkForm((prev) => ({ ...prev, [name]: value }))}
+              onDateChange={(name: any, value: any) =>
+                setBulkForm((prev) => ({ ...prev, [name]: value }))
+              }
               onClose={() => setIsCheckoutModalOpen(false)}
               onSubmit={handleBooking}
             />
