@@ -81,7 +81,8 @@ export default function ChatbotWidget() {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3">
+    <div className="fixed bottom-4 right-0 left-0 sm:bottom-6 sm:right-6 sm:left-auto z-50 flex flex-col items-center sm:items-end gap-3 w-full">
+
       {/* Floating Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
@@ -98,7 +99,8 @@ export default function ChatbotWidget() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 30 }}
             transition={{ duration: 0.25 }}
-           className="w-[90vw] sm:w-[360px] min-h-[300px] max-h-[80vh] bg-white rounded-2xl shadow-2xl flex flex-col border border-gray-200 overflow-hidden"
+          className="w-[95vw] sm:w-[360px] min-h-[300px] max-h-[80vh] bg-white rounded-2xl shadow-2xl flex flex-col border border-gray-200 overflow-hidden"
+
           >
             {/* Header */}
             <div className="bg-purple-600 text-white px-5 py-4 text-lg font-semibold rounded-t-2xl">
@@ -172,25 +174,26 @@ export default function ChatbotWidget() {
               <div ref={messagesEndRef} />
             </div>
 
-            {/* Chat Input */}
-            {!showLeadForm && (
-              <div className="border-t px-3 py-3 flex items-center gap-2 bg-white">
-                <input
-                  type="text"
-                  className="flex-1 px-4 py-2 text-sm border rounded-full focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  placeholder="Type your message..."
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                />
-                <button
-                  onClick={sendMessage}
-                  className="px-4 py-2 text-sm bg-purple-600 text-white rounded-full hover:bg-purple-700 transition"
-                >
-                  Send
-                </button>
-              </div>
-            )}
+           {/* Chat Input */}
+{!showLeadForm && (
+  <div className="border-t px-3 py-3 flex flex-wrap sm:flex-nowrap items-center gap-2 bg-white">
+    <input
+      type="text"
+      className="flex-1 min-w-0 px-4 py-2 text-sm border rounded-full focus:outline-none focus:ring-2 focus:ring-purple-500"
+      placeholder="Type your message..."
+      value={input}
+      onChange={(e) => setInput(e.target.value)}
+      onKeyDown={handleKeyDown}
+    />
+    <button
+      onClick={sendMessage}
+      className="px-4 py-2 text-sm bg-purple-600 text-white rounded-full hover:bg-purple-700 transition w-full sm:w-auto"
+    >
+      Send
+    </button>
+  </div>
+)}
+
           </motion.div>
         )}
       </AnimatePresence>
