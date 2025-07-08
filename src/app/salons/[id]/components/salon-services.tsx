@@ -210,7 +210,8 @@ const SalonServices = () => {
             No services found for this salon.
           </div>
         ) : (
-          <div className="flex flex-wrap justify-center gap-6">
+         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
 
             {services.map((item) => (
               <div
@@ -242,7 +243,7 @@ const SalonServices = () => {
                     }}
                     className="w-[200px] py-2 text-black border-2 border-black rounded-lg font-medium hover:bg-black hover:text-white transition duration-200"
                   >
-                    Add to Cart
+                    Add to Cart 
                   </button>
                 </div>
               </div>
