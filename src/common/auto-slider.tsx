@@ -8,7 +8,7 @@ import { Autoplay, EffectFade } from "swiper/modules";
 import Link from "next/link";
 import "swiper/css";
 import "swiper/css/effect-fade";
-import { Poppins } from 'next/font/google';
+import { Poppins } from "next/font/google";
 
 type Props = {
   srcs?: string[];
@@ -61,7 +61,7 @@ const AutoSlider = ({
         autoplay={delay ? { delay: delay as number } : undefined}
         loop={true}
         simulateTouch={false}
-        cssMode={true}
+        cssMode={false}
         className="w-full"
       >
         {_srcs.map((s, index) => {
@@ -74,12 +74,15 @@ const AutoSlider = ({
             <SwiperSlide key={s} className="relative">
               {onBannerClick ? (
                 <>
-                  <img
-                    src={s}
-                    onClick={onBannerClick}
-                    className="w-full h-full cursor-pointer max-xl:object-cover rounded-lg transition-transform duration-500 hover:scale-105 hover:brightness-110"
-                    alt="Swiper Carousel component"
-                  />
+                  <div className="w-full h-full overflow-hidden">
+                    <img
+                      src={s}
+                      loading="eager"
+                      onClick={onBannerClick}
+                      className="w-full h-full cursor-pointer max-xl:object-cover rounded-lg transition-transform duration-500 hover:scale-105 hover:brightness-110"
+                      alt="Swiper Carousel component"
+                    />
+                  </div>
                   {overlay && (
                     <div className="absolute inset-0 px-4 md:px-16 flex justify-start items-start pt-28">
                       <div className="flex flex-col items-start text-left space-y-4 max-w-[80%]">
@@ -100,9 +103,7 @@ const AutoSlider = ({
                             <div
                               key={i}
                               className={`text-3xl md:text-5xl font-bold ${
-                                isFirstImage
-                                  ? "text-black"
-                                  : "text-green-500"
+                                isFirstImage ? "text-black" : "text-green-500"
                               }`}
                             >
                               {line}
@@ -131,7 +132,7 @@ const AutoSlider = ({
                   >
                     <img
                       src={s}
-                      className="w-full h-full max-xl:object-cover rounded-lg transition-transform duration-500 hover:scale-105 hover:brightness-110"
+                      className="w-full h-full object-fill rounded-lg transition-transform duration-500 hover:scale-105 hover:brightness-110"
                       alt="Swiper Carousel component"
                     />
                   </Link>
@@ -155,9 +156,7 @@ const AutoSlider = ({
                             <div
                               key={i}
                               className={`font-bold break-words ${
-                                isFirstImage
-                                  ? "text-black"
-                                  : "text-green-500"
+                                isFirstImage ? "text-black" : "text-green-500"
                               } text-xl sm:text-2xl md:text-4xl lg:text-5xl`}
                             >
                               {line}
