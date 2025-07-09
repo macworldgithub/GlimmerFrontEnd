@@ -26,7 +26,7 @@ const Loading = () => (
 const ServiceList = () => {
   const [activeSort, setActiveSort] = useState("Date");
   const [showPriceDropdown, setShowPriceDropdown] = useState(false);
-  const [sortOrder, setSortOrder] = useState("desc");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
 
   const [salonData, setSalonData] = useState<any>(null);
 
@@ -54,7 +54,9 @@ const ServiceList = () => {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const token = useSelector((state: RootState) => state.login.token);
-  const { services: selectedServices } = useSelector((state: RootState) => state.serviceCart);
+  const { services: selectedServices } = useSelector(
+    (state: RootState) => state.serviceCart
+  );
 
   const categoryIdFilter = searchParams.get("categoryId") ?? "";
   const salonIdFilter = searchParams.get("salonId") ?? "";
@@ -66,6 +68,14 @@ const ServiceList = () => {
 
   const fetchData = async () => {
     try {
+      let sort_by: string | undefined;
+      if (activeSort === "Price") {
+        sort_by = "price";
+      } else if (activeSort === "Date") {
+        sort_by = "createdAt";
+      } else {
+        sort_by = undefined;
+      }
       const result = await dispatch(
         getAllActiveServices({
           page_no: page,
@@ -73,10 +83,22 @@ const ServiceList = () => {
           salonId: salonIdFilter,
           subCategoryName: subCategoryNameFilter,
           subSubCategoryName: subSubCategoryNameFilter,
+          sortBy: sort_by,
+          order: sortOrder,
         })
       );
       if (result.payload) {
-        setData(result.payload.services);
+        let services = result.payload.services;
+        if (activeSort === "Name") {
+          services = [...services].sort((a, b) => {
+            const nameA = a.name?.toLowerCase() || "";
+            const nameB = b.name?.toLowerCase() || "";
+            return sortOrder === "desc"
+              ? nameB.localeCompare(nameA)
+              : nameA.localeCompare(nameB);
+          });
+        }
+        setData(services);
         setTotal(result.payload.total);
       }
     } catch (error) {
@@ -137,7 +159,8 @@ const ServiceList = () => {
           image1: item.image1,
           base_price: item.adminSetPrice,
           discounted_price: item.hasDiscount
-            ? item.adminSetPrice - (item.adminSetPrice * item.discountPercentage) / 100
+            ? item.adminSetPrice -
+              (item.adminSetPrice * item.discountPercentage) / 100
             : item.adminSetPrice,
           rate_of_salon: item.rate_of_salon,
           ref_of_salon: item.ref_of_salon,
@@ -156,7 +179,7 @@ const ServiceList = () => {
       })
     );
     setSelectedItem(item); // Set the selected item when added to cart
-    setIsCartModalOpen(true);  // Open the modal
+    setIsCartModalOpen(true); // Open the modal
   };
 
   const validateForm = () => {
@@ -181,11 +204,14 @@ const ServiceList = () => {
     try {
       for (const { service } of selectedServices) {
         try {
-          const response = await createBooking({
-            ...bulkForm,
-            serviceId: service._id,
-            finalPrice: service.discounted_price,
-          }, token);
+          const response = await createBooking(
+            {
+              ...bulkForm,
+              serviceId: service._id,
+              finalPrice: service.discounted_price,
+            },
+            token
+          );
 
           const emailPayload = {
             to: response.customerEmail,
@@ -206,12 +232,16 @@ const ServiceList = () => {
             body: JSON.stringify(emailPayload),
           });
         } catch (error) {
-          console.error("Booking or email failed for service:", service._id, error);
+          console.error(
+            "Booking or email failed for service:",
+            service._id,
+            error
+          );
         }
       }
 
       dispatch(clearServiceCart());
-      localStorage.removeItem('serviceCart');
+      localStorage.removeItem("serviceCart");
       alert("Booking confirmed!");
       setIsCheckoutModalOpen(false);
       window.location.reload();
@@ -240,7 +270,7 @@ const ServiceList = () => {
           href="/salons/services"
           className="text-purple-800 font-medium text-base lg:text-xl"
         >
-          Services 
+          Services
         </Link>
       </div>
 
@@ -248,7 +278,9 @@ const ServiceList = () => {
         {/* Floating Cart Conflict Warning */}
         {showCartConflictWarning && (
           <div className="fixed bottom-6 right-6 bg-white border border-red-400 shadow-lg rounded-lg p-4 z-50 w-[300px] animate-fade-in">
-            <h4 className="text-red-600 font-semibold mb-2">Conflict Detected</h4>
+            <h4 className="text-red-600 font-semibold mb-2">
+              Conflict Detected
+            </h4>
             <p className="text-sm text-gray-700 mb-3">
               You cannot add services from different salons in the same booking.
             </p>
@@ -293,36 +325,39 @@ const ServiceList = () => {
           transition={{ duration: 0.5 }}
           className="w-full"
         >
-          {/* Sort UI */}
-          <div className="flex flex-wrap items-center gap-4 px-4 pt-4 pb-6">
+          <div className="flex flex-wrap md:flex-row sm:flex-col items-center gap-4 sm:gap-6 px-4 sm:px-6 md:px-8 pt-4 sm:pt-6 md:pt-8 pb-4 sm:pb-6 md:pb-8">
             <span className="text-gray-700 text-[20px]">Sort by</span>
-
             <button
               onClick={() => {
                 setActiveSort("Date");
                 setSortOrder(sortOrder === "desc" ? "asc" : "desc");
               }}
-              className={`border px-6 py-2 rounded-md text-lg font-medium transition ${activeSort === "Date"
-                ? "border-purple-800 text-purple-800 bg-purple-100"
-                : "border-gray-400 text-gray-700 hover:bg-[#FDF3D2]"
-                }`}
+              className={`border px-6 py-2 rounded-md text-lg font-medium transition duration-300 ease-in-out ${
+                activeSort === "Date"
+                  ? "border-purple-800 text-purple-800 bg-purple-100"
+                  : "border-gray-400 text-gray-700 hover:bg-[#FDF3D2]"
+              }`}
             >
-              Date {activeSort === "Date" ? (sortOrder === "desc" ? "↓" : "↑") : ""}
+              Date{" "}
+              {activeSort === "Date" ? (sortOrder === "desc" ? "↓" : "↑") : ""}
             </button>
-
             <div className="relative">
               <button
                 onClick={() => setShowPriceDropdown(!showPriceDropdown)}
-                className={`flex items-center gap-2 border px-6 py-2 rounded-md text-lg font-medium transition ${activeSort === "Price"
-                  ? "border-purple-800 text-purple-800 bg-purple-100"
-                  : "border-gray-400 text-gray-700 hover:bg-[#FDF3D2]"
-                  }`}
+                className={`flex items-center gap-2 border px-6 py-2 rounded-md text-lg font-medium transition duration-300 ease-in-out ${
+                  activeSort === "Price"
+                    ? "border-purple-800 text-purple-800 bg-purple-100"
+                    : "border-gray-400 text-gray-700 hover:bg-[#FDF3D2]"
+                }`}
               >
                 Price{" "}
-                {activeSort === "Price" ? (sortOrder === "desc" ? "↓" : "↑") : ""}{" "}
+                {activeSort === "Price"
+                  ? sortOrder === "desc"
+                    ? "↓"
+                    : "↑"
+                  : ""}{" "}
                 <BiChevronDown size={20} />
               </button>
-
               {showPriceDropdown && (
                 <div className="absolute z-50 left-0 mt-2 w-44 bg-white border border-gray-300 rounded-lg shadow-lg">
                   <button
@@ -333,7 +368,7 @@ const ServiceList = () => {
                     }}
                     className="block w-full text-left px-5 py-3 text-lg font-medium hover:bg-gray-200"
                   >
-                    Low to High 
+                    Low to High
                   </button>
                   <button
                     onClick={() => {
@@ -354,8 +389,17 @@ const ServiceList = () => {
           <div className="w-full h-max grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-x-8 gap-y-10 p-6">
             {data.length ? (
               data.map((item) => (
-                <motion.div key={item._id} whileHover={{ scale: 1.02 }} className="flex">
-                  <ServiceCard salonId={salonData._id} salonName={salonData?.salon_name} item={item} onAddToCart={handleAddToCart} />
+                <motion.div
+                  key={item._id}
+                  whileHover={{ scale: 1.02 }}
+                  className="flex"
+                >
+                  <ServiceCard
+                    salonId={salonData._id}
+                    salonName={salonData?.salon_name}
+                    item={item}
+                    onAddToCart={handleAddToCart}
+                  />
                 </motion.div>
               ))
             ) : (
@@ -407,7 +451,9 @@ const ServiceList = () => {
             form={bulkForm}
             errors={errors}
             onChange={handleFormChange}
-            onDateChange={(name: any, value: any) => setBulkForm((prev) => ({ ...prev, [name]: value }))}
+            onDateChange={(name: any, value: any) =>
+              setBulkForm((prev) => ({ ...prev, [name]: value }))
+            }
             onClose={() => setIsCheckoutModalOpen(false)}
             onSubmit={handleBooking}
           />

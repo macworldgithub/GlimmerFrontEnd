@@ -36,6 +36,8 @@ export const getAllActiveServices = createAsyncThunk(
       salonId?: string;
       subCategoryName?: string;
       subSubCategoryName?: string;
+      sortBy?: string,
+      order?: 'asc' | 'desc'
     },
     { rejectWithValue, getState }
   ) => {
@@ -50,6 +52,8 @@ export const getAllActiveServices = createAsyncThunk(
       if (payload.salonId) params.append("salonId", payload.salonId);  
       if (payload.subCategoryName) params.append("subCategoryName", payload.subCategoryName);
       if (payload.subSubCategoryName) params.append("subSubCategoryName", payload.subSubCategoryName);
+      if(payload.sortBy) params.append("sortBy", payload.sortBy);
+      if(payload.order) params.append("order", payload.order);
 
       const response = await axios.get(
         `${BACKEND_URL}/salon-services/getAllActiveServicesForWebiste?${params.toString()}`,
