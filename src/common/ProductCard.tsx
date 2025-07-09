@@ -58,7 +58,7 @@ const ProductCard: React.FC<{ products: RealCardItem; }> = ({ products }) => {
                    max-md:py-1  rounded-md max-lg:px-2 max-lg:gap-1 max-md:w-fit">
             <RiShoppingBag4Line size={20} className="text-white max-lg:h-5 max-lg:w-5 max-md:w-7 max-md:h-7" />
             <p className="text-white text-[12px] mt-1 max-xl:text-[8px] max-lg:text-6px max-sm:text-[9px] max-md:hidden">
-              ADD TO BAG
+              ADD TO BAG 
             </p>
           </button>
 

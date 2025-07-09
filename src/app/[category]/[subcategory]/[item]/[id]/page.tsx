@@ -620,7 +620,7 @@ const ProductDisplay = () => {
                   height={15}
                   src="/assets/addtoBag/cart-icon.png"
                 />
-                ADD TO BAG 
+                ADD TO BAG
               </button>
 
               {/* + - Quantity Controller */}
