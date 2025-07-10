@@ -224,7 +224,7 @@ const CategoryNavMenu = ({
         {/* Menu is below which need to appear smoothly */}
         <div
           ref={dropdownRef}
-          className={`w-full justify-between px-8 py-1 flex h-max bg-white absolute top-[70px] z-50 transition-all duration-500 ${
+          className={`w-full justify-between px-6 py-3 flex flex-wrap gap-6 bg-white absolute top-[70px] z-50 transition-all duration-500 shadow-xl rounded-lg ${
             selectedSubCategory.length > 0
               ? "opacity-100 translate-y-0"
               : "opacity-0 -translate-y-5 pointer-events-none"
@@ -266,10 +266,15 @@ const CategoryNavMenu = ({
       </div>
 
       {showAsDrawer ? (
-        <div className="my-4" /> 
+        <div className="my-4" />
       ) : (
         <div className="md:hidden px-4 pt-2">
-          <Menu mode="inline" items={menuItems} onClick={onMenuClick} />
+          <Menu
+            mode="inline"
+            items={menuItems}
+            onClick={onMenuClick}
+            className="bg-purple-100 rounded-lg p-2 transition-all duration-300 text-base font-normal"
+          />
         </div>
       )}
     </>

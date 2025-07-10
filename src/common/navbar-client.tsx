@@ -10,6 +10,7 @@ import SideMenu from "./side-menu";
 import CartNavbar from "./cart-navbar";
 import { useEffect, useState } from "react";
 import { getAllProductItem, getAllProducts } from "@/api/product";
+import { Calendar } from "lucide-react";
 
 interface CategorySelection {
   category_id: string;
@@ -31,6 +32,7 @@ const NavbarClient = ({
   session: any;
   handleLogout: () => void;
 }) => {
+  const router = useRouter();
   const pathname = usePathname();
   // const router = useRouter();
   const searchParams = useSearchParams();
@@ -96,6 +98,8 @@ const NavbarClient = ({
     fetchData();
   }, [searchParams]);
 
+  const handleBookAppointment = () => router.push("/salons");
+
   return (
     <>
       <div className="navbar bg-base-100 w-[99vw] sticky top-0 z-50">
@@ -151,8 +155,17 @@ const NavbarClient = ({
         </div>
       </div>
 
-      <div className="flex justify-center mb-5">
-        <ProductSearchBar className="md:hidden" />
+      <div className="flex justify-center mb-5 p-4 gap-2 bg-purple-100">
+        <div className="w-1/2">
+          <ProductSearchBar className="md:hidden w-full" />
+        </div>
+        <button
+          className="w-1/2 h-12 mt-2 p-4 rounded-md border hover:brightness-90 transition cursor-pointer bg-purple-800 text-white text-sm flex items-center justify-center gap-2 md:hidden"
+          onClick={handleBookAppointment}
+        >
+          <Calendar className="w-5 h-5" />
+          BOOK APPOINTMENT
+        </button>
       </div>
     </>
   );

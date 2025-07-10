@@ -80,13 +80,13 @@ export default function ProductSearchBar({ className }: ProductSearchBarProps) {
 
   return (
     <div
-      className={cn("relative w-full max-w-md", className)}
+      className={cn("relative w-full max-w-md mt-2", className)}
       ref={dropdownRef}
     >
       <input
         type="text"
         placeholder="Search products..."
-        className="input input-bordered w-full h-12 pl-5 pr-12 rounded-lg border border-gray-300 focus:ring-2 focus:ring-gray-200 focus:outline-none transition"
+        className="input input-bordered w-full h-12 pl-5 pr-12 rounded-lg border border-gray-500 focus:ring-2 focus:ring-purple-500 focus:outline-none transition"
         value={searchTerm}
         onChange={(e) => {
           setSearchTerm(e.target.value);

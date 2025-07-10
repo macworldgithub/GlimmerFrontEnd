@@ -26,6 +26,7 @@ const SideMenu = ({
   const dispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(false);
   const [showGymModal, setShowGymModal] = useState(false);
+  const [showCategoryMenu, setShowCategoryMenu] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -54,9 +55,26 @@ const SideMenu = ({
             <FaArrowRight className="size-4" /> Products
           </Link>
         </li>
-        <div className="lg:hidden w-full mb-4">
-          <CategoryNavMenu showAsDrawer={false} />
-        </div>
+        <li>
+          <div
+            className="flex items-center text-base font-sm cursor-pointer select-none"
+            onClick={() => setShowCategoryMenu(!showCategoryMenu)}
+          >
+            <FaArrowRight className="size-4 mr-2" />
+            Category
+          </div>
+
+          <div
+            className={`lg:hidden overflow-hidden transition-all duration-500 ease-in-out ${
+              showCategoryMenu
+                ? "max-h-[1000px] opacity-100"
+                : "max-h-0 opacity-0"
+            }`}
+          >
+            <CategoryNavMenu showAsDrawer={false} />
+          </div>
+        </li>
+
         <li>
           <Link
             className="text-base"
@@ -153,14 +171,26 @@ const SideMenu = ({
             <GiHamburgerMenu className="size-5" />
           </label>
         </div>
-        <div className="drawer-side">
+        <div className="drawer-side transition-transform duration-500 ease-in-out">
           <label
             htmlFor="my-drawer-2"
             aria-label="close sidebar"
             className="drawer-overlay"
           ></label>
-          <Menu className="menu bg-base-200 text-base-content min-h-full w-80 p-4" />
+
+          <div className="menu bg-purple-100 text-base-content min-h-full w-80 p-4 shadow-lg rounded-tr-xl rounded-br-xl relative">
+            {/* Close Button */}
+            <button
+              onClick={() => setIsOpen(false)}
+              className="absolute top-4 right-4 text-xl font-bold text-gray-700 hover:text-black transition"
+            >
+              ✕
+            </button>
+
+            <Menu className="mt-10" />
+          </div>
         </div>
+
         <RegisterGymModal
           visible={showGymModal}
           onCancel={() => setShowGymModal(false)}
