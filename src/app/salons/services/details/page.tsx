@@ -142,11 +142,6 @@ const ServiceDetails = () => {
     Boolean
   );
 
-  // Ensure at least 3 images (fallback for missing ones)
-  while (images.length < 3) {
-    images.push("/assets/images/default_image.jpg");
-  }
-
   // Handle Next Image
   const handleNext = () => {
     setIndex((prev) => (prev + 1) % images.length);
@@ -542,15 +537,16 @@ const ServiceDetails = () => {
                 "No duration"
               )}
             </div>
-
-            <div className="flex items-center font-semibold text-gray-700 dark:text-gray-700">
-              <span>Gender:</span>
-            </div>
-            <div className="text-gray-600 dark:text-gray-400">
-              {service?.subCategoryName
-                ? service.subCategoryName
-                : "No sub-category"}
-            </div>
+            {service?.subCategoryName && (
+              <>
+                <div className="flex items-center font-semibold text-gray-700 dark:text-gray-700">
+                  <span>Gender:</span>
+                </div>
+                <div className="text-gray-600 dark:text-gray-400">
+                  {service?.subCategoryName}
+                </div>
+              </>
+            )}
 
             <div className="flex items-center font-semibold text-gray-700 dark:text-gray-700">
               <span>Sub Service:</span>
@@ -583,7 +579,7 @@ const ServiceDetails = () => {
                 height={15}
                 src={"/assets/addtoBag/cart-icon.png"}
               />
-              ADD TO BAG 
+              ADD TO BAG
             </button>
             <button
               onClick={() => setIsWishlisted(!isWishlisted)}
