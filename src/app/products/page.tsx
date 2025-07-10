@@ -538,7 +538,7 @@ const ProductsList = () => {
             : new Date(a.created_at).getTime() -
                 new Date(b.created_at).getTime();
         });
-      } 
+      }
       setData(filteredProducts);
       setTotal(res.total || filteredProducts.length);
     } catch (error) {
@@ -630,9 +630,6 @@ const ProductsList = () => {
 
   return (
     <div className="flex flex-col w-[99vw] pb-[8rem]">
-      <div className="w-full mb-4">
-        <CategoryNavMenu />
-      </div>
       <div className="hidden md:block pt-[3rem] px-[1rem] sm:px-[2rem] md:px-[4rem] lg:px-[6rem] xl:px-[12rem]">
         <div className="w-full h-[50vh] sm:h-[50vh] md:h-[50vh] lg:h-[50vh] xl:h-[50vh] rounded-lg overflow-hidden relative group">
           <img
@@ -688,13 +685,13 @@ const ProductsList = () => {
           className="w-full"
         >
           <div className="flex flex-wrap md:flex-row sm:flex-col items-center gap-4 sm:gap-6 px-4 sm:px-6 md:px-8 pt-4 sm:pt-6 md:pt-8 pb-4 sm:pb-6 md:pb-8">
-            <span className="text-gray-700 text-[20px]">Sort by</span>
+            <span className="text-gray-700 text-lg md:px-6 md:py-2 md:text-xl">Sort by</span>
             <button
               onClick={() => {
                 setActiveSort("Date");
                 setSortOrder(sortOrder === "desc" ? "asc" : "desc");
               }}
-              className={`border px-6 py-2 rounded-md text-lg font-medium transition duration-300 ease-in-out ${
+              className={`border px-4 py-1.5 text-lg md:px-6 md:py-2 md:text-lg rounded-md font-medium transition duration-300 ease-in-out ${
                 activeSort === "Date"
                   ? "border-purple-800 text-purple-800 bg-purple-100"
                   : "border-gray-400 text-gray-700 hover:bg-[#FDF3D2]"
@@ -706,7 +703,7 @@ const ProductsList = () => {
             <div className="relative">
               <button
                 onClick={() => setShowPriceDropdown(!showPriceDropdown)}
-                className={`flex items-center gap-2 border px-6 py-2 rounded-md text-lg font-medium transition duration-300 ease-in-out ${
+                className={`flex items-center gap-2 border px-4 py-1.5 text-lg md:px-6 md:py-2 md:text-lg rounded-md font-medium transition duration-300 ease-in-out ${
                   activeSort === "Price"
                     ? "border-purple-800 text-purple-800 bg-purple-100"
                     : "border-gray-400 text-gray-700 hover:bg-[#FDF3D2]"
@@ -728,9 +725,9 @@ const ProductsList = () => {
                       setSortOrder("asc");
                       setShowPriceDropdown(false);
                     }}
-                    className="block w-full text-left px-5 py-3 text-lg font-medium hover:bg-gray-200"
+                    className="block w-full text-left px-5 py-3 text-sm md:text-lg font-medium hover:bg-gray-200"
                   >
-                    Low to High 
+                    Low to High
                   </button>
                   <button
                     onClick={() => {
@@ -738,7 +735,7 @@ const ProductsList = () => {
                       setSortOrder("desc");
                       setShowPriceDropdown(false);
                     }}
-                    className="block w-full text-left px-5 py-3 text-lg font-medium hover:bg-gray-200"
+                    className="block w-full text-left px-5 py-3 text-sm md:text-lg font-medium hover:bg-gray-200"
                   >
                     High to Low
                   </button>

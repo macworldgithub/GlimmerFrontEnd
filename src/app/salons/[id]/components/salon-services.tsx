@@ -210,7 +210,7 @@ const SalonServices = () => {
             No services found for this salon.
           </div>
         ) : (
-         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+         <div className="grid grid-cols-2 gap-4 sm:gap-6">
 
 
             {services.map((item) => (
@@ -224,7 +224,7 @@ const SalonServices = () => {
                 }
               >
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 mb-2">
-                  <div className="font-semibold text-sm sm:text-base">
+                  <div className="font-semibold text-sm sm:text-base break-words">
                     {item.name}
                   </div>
                   <div className="text-sm text-gray-700">

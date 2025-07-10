@@ -13,6 +13,7 @@ import { logout } from "@/reduxSlices/loginSlice";
 import { RootState } from "@/store/reduxStore";
 import { usePathname } from "next/navigation";
 import RegisterGymModal from "./RegisterGymModal";
+import CategoryNavMenu from "./category-nav-menu";
 
 const SideMenu = ({
   isLoggedIn,
@@ -26,7 +27,6 @@ const SideMenu = ({
   const [isOpen, setIsOpen] = useState(false);
   const [showGymModal, setShowGymModal] = useState(false);
   const pathname = usePathname();
-  
 
   useEffect(() => {
     setIsOpen(false);
@@ -48,19 +48,22 @@ const SideMenu = ({
         <li>
           <Link
             className="text-base"
-            href="/salons"
-            onClick={() => setIsOpen(false)}
-          >
-            <FaArrowRight className="size-4" /> Salons
-          </Link>
-        </li>
-        <li>
-          <Link
-            className="text-base"
             href="/selfcare-products"
             onClick={() => setIsOpen(false)}
           >
             <FaArrowRight className="size-4" /> Products
+          </Link>
+        </li>
+        <div className="lg:hidden w-full mb-4">
+          <CategoryNavMenu showAsDrawer={false} />
+        </div>
+        <li>
+          <Link
+            className="text-base"
+            href="/salons"
+            onClick={() => setIsOpen(false)}
+          >
+            <FaArrowRight className="size-4" /> Salons and Spa
           </Link>
         </li>
         {/* <li>
@@ -95,7 +98,7 @@ const SideMenu = ({
                   src={DefaultAvatar.src}
                 />
               </div>
-              Logout 
+              Logout
             </div>
           ) : (
             <Link
@@ -109,7 +112,7 @@ const SideMenu = ({
                   src={DefaultAvatar.src}
                 />
               </div>
-              Login 
+              Login
             </Link>
           )}
         </li>
@@ -169,4 +172,3 @@ const SideMenu = ({
 };
 
 export default SideMenu;
-

@@ -49,7 +49,13 @@ type MenuItem = {
   children?: MenuItem[];
 };
 
-const CategoryNavMenu = ({ className }: { className?: string }) => {
+const CategoryNavMenu = ({
+  className,
+  showAsDrawer = true,
+}: {
+  className?: string;
+  showAsDrawer?: boolean;
+}) => {
   const [categories, setCategories] = useState<any[]>([]);
   const router = useRouter();
   const pathname = usePathname();
@@ -222,7 +228,7 @@ const CategoryNavMenu = ({ className }: { className?: string }) => {
             selectedSubCategory.length > 0
               ? "opacity-100 translate-y-0"
               : "opacity-0 -translate-y-5 pointer-events-none"
-          } overflow-y-auto max-h-[300px]`} 
+          } overflow-y-auto max-h-[300px]`}
         >
           {selectedSubCategory?.map((item: any, index: number) => (
             <div className="flex flex-col" key={index}>
@@ -255,29 +261,17 @@ const CategoryNavMenu = ({ className }: { className?: string }) => {
         <Link href="/salons" className="flex">
           <div className="flex text-white bg-[#583FA8] ml-12 px-6 py-2 rounded-md shadow-md hover:bg-[#452d88] transition-all duration-300">
             <button>Book Salon Now </button>
-          </div>  
+          </div>
         </Link>
       </div>
 
-      <div className="md:hidden">
-        <MenuOutlined
-          onClick={() => setOpen(true)}
-          className="pl-2 w-[50px] "
-        />
-
-        {/* Ant Design Drawer */}
-        <Drawer
-          title="Product Categories"
-          placement="left"
-          onClose={() => setOpen(false)}
-          open={open}
-          width={"60%"}
-          
-        >
-          {/* Ant Design Menu inside Drawer */}
+      {showAsDrawer ? (
+        <div className="my-4" /> 
+      ) : (
+        <div className="md:hidden px-4 pt-2">
           <Menu mode="inline" items={menuItems} onClick={onMenuClick} />
-        </Drawer>
-      </div>
+        </div>
+      )}
     </>
   );
 };
