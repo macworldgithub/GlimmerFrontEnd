@@ -86,16 +86,16 @@ const SalonDetailsPage = () => {
         <div className="flex flex-col mt-0">
           <div className="flex justify-between items-center">
             <div className="prose">
-              <h2 className="text-5xl">
+              <h1>
                 {salonData.salon_name || "Glimmer's Saloon"}
-              </h2>
+              </h1>
             </div>
             <div>
               <MdOutlineIosShare size={30} />
             </div>
           </div>
 
-          <div className="flex flex-row items-center mb-3 text-2xl">
+          <div className="flex flex-row items-center mb-3 text-1xl">
             <p className="mr-1">{"Mon-Fri"}</p>
             <p className="mr-1">
               {salonData.openingHour

@@ -2,9 +2,22 @@
 
 import Image from "next/image";
 
-const categories = ["HAIR LUX", "INKLINE", "ARTISTRY", "LUMINA", "CHROMA", "HYDRALUX"];
+const categories = [
+  "HAIR LUX",
+  "INKLINE",
+  "ARTISTRY",
+  "LUMINA",
+  "CHROMA",
+  "HYDRALUX",
+];
 
-export default function DynamicBanner({ imageUrl, title }: { imageUrl: string; title: string }) {
+export default function DynamicBanner({
+  imageUrl,
+  title,
+}: {
+  imageUrl: string;
+  title: string;
+}) {
   return (
     <div className="max-md:mt-4 w-[99vw] lg:p-[4rem] flex flex-col items-center mb-12">
       <div className="relative flex w-full max-w-[65rem] ml-8 lg:h-96 max-lg:h-80 max-md:h-72 max-sm:h-60 rounded-lg overflow-hidden">
@@ -18,7 +31,6 @@ export default function DynamicBanner({ imageUrl, title }: { imageUrl: string; t
             objectFit="cover"
             className="absolute inset-0"
           />
-          
 
           {/* Left Sparkle SVG */}
           <Image
@@ -43,27 +55,35 @@ export default function DynamicBanner({ imageUrl, title }: { imageUrl: string; t
         </div>
         {/* Yellow SVG */}
         <div className="absolute lg:right-[20%] md:right-[14%] sm:right-[5%] top-0 sm:w-80 h-full z-10 max-sm:hidden ">
-          <Image src="/assets/Home/yellow.png" alt="Yellow Overlay" layout="fill" objectFit="cover" />
+          <Image
+            src="/assets/Home/yellow.png"
+            alt="Yellow Overlay"
+            layout="fill"
+            objectFit="cover"
+          />
         </div>
         {/* Right Gray Section */}
-        <div className="relative w-[40%] h-full bg-gray-300 rounded-xl -left-7 z-10">
-          {imageUrl && (
-            <Image src={imageUrl} alt="Banner Image" layout="fill" objectFit="cover" />
-          )}
+        <div className="relative w-[50%] h-full bg-gray-300 rounded-xl -left-7 z-10">
+          <Image
+            src="/assets/saloonPicture/productBanner2.png"
+            alt="Banner Image"
+            layout="fill"
+            objectFit="cover"
+          />
         </div>
       </div>
 
-      
-      
       {/* Category Links */}
-<div className="mt-10 mb-6 flex gap-4 text-[#d7d1ea] text-md max-sm:grid max-sm:grid-cols-2 max-sm:gap-X-10">
-  {categories.map((category, index) => (
-    <span key={index} className="cursor-pointer hover:text-[#583FA8] text-center">
-      {category}
-    </span>
-  ))}
-</div>
-
+      <div className="mt-10 mb-6 flex gap-4 text-[#d7d1ea] text-md max-sm:grid max-sm:grid-cols-2 max-sm:gap-X-10">
+        {categories.map((category, index) => (
+          <span
+            key={index}
+            className="cursor-pointer hover:text-[#583FA8] text-center"
+          >
+            {category}
+          </span>
+        ))}
+      </div>
     </div>
   );
 }
