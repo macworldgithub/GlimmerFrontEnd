@@ -8,6 +8,8 @@ import { FaHeart } from "react-icons/fa";
 import { RiShoppingBag4Line } from "react-icons/ri";
 import { Rating } from "react-simple-star-rating";
 import { getAllProducts, getAllProductsHighlights } from "@/api/product";
+import { addItem } from "@/reduxSlices/cartSlice";
+
 
 interface RealCardItem {
   _id: number;
@@ -25,95 +27,128 @@ interface RealCardItem {
   ref_of_salon: string;
 }
 
-const ProductCard: React.FC<{ products: RealCardItem; }> = ({ products }) => {
-  console.log(products);
+const ProductCard: React.FC<{ products: RealCardItem }> = ({ products }) => {
   const router = useRouter();
+  const dispatch = useDispatch();
+  const [showMessage, setShowMessage] = useState(false);
+  const [isFavorited, setIsFavorited] = useState(false);
+
+  const basePrice = Number(products.base_price) || 0;
+  const discountedPrice = Number(products.discounted_price) || 0;
+  const finalPrice =
+    discountedPrice > 0 && discountedPrice < basePrice
+      ? discountedPrice.toFixed(2)
+      : basePrice.toFixed(2);
+
   let queryParams = new URLSearchParams();
-
-  if (products.rate_of_salon) queryParams.append("rate", products.rate_of_salon.toString());
+  if (products.rate_of_salon)
+    queryParams.append("rate", products.rate_of_salon.toString());
   if (products.ref_of_salon) queryParams.append("ref", products.ref_of_salon);
-
   //@ts-ignore
   if (products.store) queryParams.append("storeId", products.store);
-
-  //@ts-ignore
   const path = `/${products.category}/${products.sub_category}/${products.item}/${products._id}`;
-  const finalPath = queryParams.toString() ? `${path}?${queryParams.toString()}` : path;
+  const finalPath = queryParams.toString()
+    ? `${path}?${queryParams.toString()}`
+    : path;
+
   return (
-    <div className="w-[280px] h-[320px] sm:w-[300px] sm:h-[350px] md:max-w-[320px] md:h-[370px] bg-white rounded-xl border border-gray-200 shadow hover:shadow-lg transition duration-300 cursor-pointer snap-start shrink-0 relative overflow-visible"
-      onClick={() => router.push(finalPath)}>
-      {/* Top 50% Image */}
-      <div className="relative w-full h-1/2">
+    <div
+      className="w-[220px] h-[310px] sm:w-[240px] sm:h-[320px] md:w-[260px] md:h-[340px] rounded-xl transition duration-300 cursor-pointer snap-start shrink-0 relative overflow-hidden flex flex-col items-center text-center"
+      onClick={() => router.push(finalPath)}
+    >
+      {/* Add to Cart Button (Top Left) */}
+      <div
+        className="absolute top-2 left-2 z-10"
+        onClick={(e) => {
+          e.stopPropagation();
+          const productWithQuantity = { ...products, quantity: 1 };
+          dispatch(addItem({ product: productWithQuantity, quantity: 1 }));
+          setShowMessage(true);
+          setTimeout(() => setShowMessage(false), 2000);
+        }}
+      >
+        <div className="w-7 h-7 rounded-full bg-purple-100 flex items-center justify-center">
+          <RiShoppingBag4Line className="text-[#583FA8] text-[13px]" />
+        </div>
+      </div>
+
+      {/* Heart Icon (Top Right) */}
+      <div
+        className="absolute top-2 right-2 z-10"
+        onClick={(e) => {
+          e.stopPropagation();
+          setIsFavorited((prev) => !prev);
+        }}
+      >
+        <div className="w-7 h-7 rounded-full bg-pink-100 flex items-center justify-center">
+          <FaHeart
+            className={`text-xs transition-colors duration-200 ${
+              isFavorited ? "text-pink-600" : "text-gray-400"
+            }`}
+          />
+        </div>
+      </div>
+
+      {/* Success Message */}
+      {showMessage && (
+        <div className="absolute top-12 left-1/2 transform -translate-x-1/2 bg-green-500 text-white text-xs px-3 py-1 rounded shadow-md z-50">
+          Added to cart
+        </div>
+      )}
+
+      {/* Product Image */}
+      <div className="h-1/2 w-full flex justify-center items-center">
         <img
           src={products.image1 || "/assets/images/default_image.jpg"}
           alt={products.name}
-          className="w-full h-full object-cover rounded-t-2xl"
+          className="h-full object-contain"
         />
+      </div>
 
-        {/* Discount badge */}
-        <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 flex gap-2 w-full 
-                 justify-center px-2 max-md:justify-between">
-          <button
-            className=" w-full py-2 max-xl:py-1 xl:gap-2 max-xl:gap-[2px] max-xl:px-1  gap-1 bg-[#583FA8]  flex justify-center items-center 
-                   max-md:py-1  rounded-md max-lg:px-2 max-lg:gap-1 max-md:w-fit">
-            <RiShoppingBag4Line size={20} className="text-white max-lg:h-5 max-lg:w-5 max-md:w-7 max-md:h-7" />
-            <p className="text-white text-[12px] mt-1 max-xl:text-[8px] max-lg:text-6px max-sm:text-[9px] max-md:hidden">
-              ADD TO BAG 
-            </p>
-          </button>
-
-          <div className="md:h-8 mt-1 px-2  border-[#583FA8] border border-solid bg-white flex justify-center items-center 
-                      max-md:h-[32px] max-sm:h-[30px] rounded-md ">
-            <FaHeart className="text-purple-300 hover:text-purple-800 text-base max-md:w-6  max-md:h-6 max-sm:text-xs" />
-          </div>
-        </div>
-        {products?.base_price > products?.discounted_price && products?.discounted_price > 0 && (
-          <div className="absolute -top-0 -right-3 w-10 h-10 z-10">
+      {/* Discount Badge */}
+      {products?.base_price > products?.discounted_price &&
+        products?.discounted_price > 0 && (
+          <div className="absolute top-0 -right-3 w-10 h-10 z-10">
             <img
               src="/assets/addtoBag/discount.png"
               alt="Discount"
               className="w-full h-full"
             />
-            <span className="absolute inset-0 flex flex-col items-center justify-center text-white text-xs leading-tight font-bold">
-              <span>{`${Math.round(((products.base_price - products.discounted_price) / products.base_price) * 100)}%`}</span>
+            <span className="absolute inset-0 flex flex-col items-center justify-center text-white text-xs font-bold">
+              <span>
+                {`${Math.round(
+                  ((products.base_price - products.discounted_price) /
+                    products.base_price) *
+                    100
+                )}%`}
+              </span>
               <span className="text-[8px] font-normal">OFF</span>
             </span>
           </div>
         )}
-      </div>
 
-      {/* Bottom 50% Content */}
-      <div className="p-4 h-1/2 flex flex-col justify-between">
-        <div>
-          <h3 className="text-lg font-semibold truncate mb-1">{products.name}</h3>
-          <p className="text-sm text-gray-600 truncate mb-1">{products.description}</p>
-        </div>
+      {/* Bottom Content */}
+      <div className="p-3 h-1/2 w-full flex flex-col justify-center items-center text-center gap-1">
+        {/* Name */}
+      <h3 className="text-sm font-medium text-center leading-tight line-clamp-2">{products.name}</h3>
 
-        <div>
-          <div className="flex justify-between items-center mt-4">
-            <span className="text-md font-bold text-gray-800">
-              {products.discounted_price > 0 ? products.discounted_price : products.base_price} PKR
+
+        {/* Price */}
+        <div className="flex justify-center items-center gap-2">
+          <span className="text-red-600 font-bold text-sm">
+            {finalPrice} PKR
+          </span>
+          {discountedPrice > 0 && discountedPrice < basePrice && (
+            <span className="text-gray-400 text-xs line-through">
+              {basePrice.toFixed(2)} PKR
             </span>
-            {products.discounted_price > 0 && products.base_price > products.discounted_price && (
-              <span className="text-gray-400 text-md line-through">
-                {products.base_price.toFixed(2)} PKR
-              </span>
-            )}
-          </div>
-          <div className="flex mt-2">
-            <Rating
-              size={20}
-              initialValue={3}
-              SVGstyle={{ display: "inline-flex" }}
-              allowHover={false}
-              fillColor="#583FA8"
-            />
-          </div>
+          )}
         </div>
       </div>
     </div>
   );
 };
+
 
 interface ProductCardsProps {
   title?: string;

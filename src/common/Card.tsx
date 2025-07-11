@@ -166,15 +166,15 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
       <div
         className="absolute top-2 left-2 z-10"
         onClick={(e) => {
-          e.stopPropagation();   
+          e.stopPropagation();
           const productWithQuantity = { ...item, quantity: 1 };
           dispatch(addItem({ product: productWithQuantity, quantity: 1 }));
           setShowMessage(true);
           setTimeout(() => setShowMessage(false), 2000);
         }}
       >
-        <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center">
-          <RiShoppingBag4Line className="text-[#583FA8] text-[16px]" />
+        <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center">
+          <RiShoppingBag4Line className="text-[#583FA8] text-[14px]" />
         </div>
       </div>
 
@@ -186,7 +186,7 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
           setIsFavorited((prev) => !prev);
         }}
       >
-        <div className="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center">
+        <div className="w-8 h-8 rounded-full bg-pink-100 flex items-center justify-center">
           <FaHeart
             className={`text-sm transition-colors duration-200 ${
               isFavorited ? "text-pink-600" : "text-gray-400"

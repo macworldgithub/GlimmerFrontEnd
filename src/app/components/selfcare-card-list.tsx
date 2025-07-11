@@ -15,6 +15,7 @@ const SelfcareCardList = () => {
   const [startIndex, setStartIndex] = useState(0);
   const [cardsToShow, setCardsToShow] = useState(4);
   const [isSmallScreen, setIsSmallScreen] = useState(false);
+  const [showAll, setShowAll] = useState(false); // New state to control view more on mobile
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -23,8 +24,7 @@ const SelfcareCardList = () => {
         const response = await getAllProducts();
 
         if (response && Array.isArray(response.products)) {
-          const randomProducts = getRandomProducts(response.products, 4);
-          setProducts(randomProducts);
+          setProducts(response.products); // full list
         } else {
           setError("Failed to load products, unexpected response format.");
         }
@@ -69,7 +69,13 @@ const SelfcareCardList = () => {
     return shuffled.slice(0, count);
   };
 
-  const handleViewMore = () => router.push("/products");
+  const handleViewMore = () => {
+    if (isSmallScreen) {
+      setShowAll(true); // Show all cards in horizontal scroll
+    } else {
+      router.push("/products");
+    }
+  };
 
   return (
     <div className="w-full max-w-[82rem] px-4 md:px-1 mx-auto py-10">
@@ -90,17 +96,11 @@ const SelfcareCardList = () => {
       {isSmallScreen ? (
         // Horizontal scroll for mobile
         <div className="flex gap-8 overflow-x-auto snap-x snap-mandatory pb-4 px-4 scroll-smooth scrollbar-hide">
-          {products.length > 0 ? (
-            products.map((product) => (
-              <div key={product._id} className="shrink-0 w-[270px] snap-start">
-                <Card item={product} />
-              </div>
-            ))
-          ) : (
-            <p className="text-center text-gray-500 w-full">
-              No products available
-            </p>
-          )}
+          {(showAll ? products : products.slice(0, 4)).map((product) => (
+            <div key={product._id} className="shrink-0 w-[270px] snap-start">
+              <Card item={product} />
+            </div>
+          ))}
         </div>
       ) : (
         // Grid for desktop
@@ -121,7 +121,7 @@ const SelfcareCardList = () => {
           onClick={handleViewMore}
           className="bg-[#583FA8] text-white py-2 px-6 rounded-lg hover:bg-[#472c9f]"
         >
-          View More 
+          View More
         </button>
       </div>
     </div>
