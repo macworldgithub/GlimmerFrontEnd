@@ -183,7 +183,7 @@ const SalonServices = () => {
         </div>
       )}
 
-      <div className="relative p-5 bg-[#FBE8A5]">
+      {/* <div className="relative p-5 bg-[#FBE8A5]">
         <Swiper
           slidesPerView="auto"
           breakpoints={{
@@ -202,7 +202,7 @@ const SalonServices = () => {
             </SwiperSlide>
           ))}
         </Swiper>
-      </div>
+      </div> */}
 
       <div className="p-5 bg-[#FBE8A5]">
         {services.length === 0 ? (

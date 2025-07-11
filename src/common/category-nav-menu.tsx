@@ -51,10 +51,10 @@ type MenuItem = {
 
 const CategoryNavMenu = ({
   className,
-  showAsDrawer = true,
+  forceMobileStyle = false,
 }: {
   className?: string;
-  showAsDrawer?: boolean;
+  forceMobileStyle?: boolean;
 }) => {
   const [categories, setCategories] = useState<any[]>([]);
   const router = useRouter();
@@ -201,79 +201,81 @@ const CategoryNavMenu = ({
   };
   return (
     <>
-      <div
-        className={`max-md:hidden relative h-[60px] w-[99vw] flex justify-center py-2 ${
-          isProductsPage ? "bg-white border-[1px] border-black" : "bg-[#FBE8A5]"
-        } ${className}`}
-      >
-        <div className="flex gap-12 items-center">
-          {categories.map((item: any, index: number) => (
-            <div
-              key={index}
-              className="cursor-pointer hover:text-purple-900 hover:font-medium transition-all duration-500 flex items-center gap-1 select-none"
-              onClick={() => HandleSelectCategory(item?.sub_categories)}
-            >
-              <span>{item?.product_category?.name}</span>
-              {item?.sub_categories && item.sub_categories.length > 0 && (
-                <DownOutlined className="text-[12px] text-black" />
-              )}
-            </div>
-          ))}
-        </div>
-
-        {/* Menu is below which need to appear smoothly */}
+      {!forceMobileStyle && (
         <div
-          ref={dropdownRef}
-          className={`w-full justify-between px-6 py-3 flex flex-wrap gap-6 bg-white absolute top-[70px] z-50 transition-all duration-500 shadow-xl rounded-lg ${
-            selectedSubCategory.length > 0
-              ? "opacity-100 translate-y-0"
-              : "opacity-0 -translate-y-5 pointer-events-none"
-          } overflow-y-auto max-h-[300px]`}
+          className={`max-md:hidden relative h-[60px] w-[99vw] flex justify-center py-2 ${
+            isProductsPage
+              ? "bg-white border-[1px] border-black"
+              : "bg-[#FBE8A5]"
+          } ${className}`}
         >
-          {selectedSubCategory?.map((item: any, index: number) => (
-            <div className="flex flex-col" key={index}>
-              <p
-                onClick={() =>
-                  HandlePath(`${item?.product_category}-${item?._id}`)
-                }
-                className="font-semibold text-[16px] cursor-pointer"
+          <div className="flex gap-12 items-center">
+            {categories.map((item: any, index: number) => (
+              <div
+                key={index}
+                className="cursor-pointer hover:text-purple-900 hover:font-medium transition-all duration-500 flex items-center gap-1 select-none"
+                onClick={() => HandleSelectCategory(item?.sub_categories)}
               >
-                {item?.name}
-              </p>
-              <div className="flex flex-col gap-2">
-                {item?.items?.map((product: any, i: number) => (
-                  <p
-                    onClick={() =>
-                      HandlePath(
-                        `${item?.product_category}-${item?._id}-${product?._id}`
-                      )
-                    }
-                    className="text-[12px] sm:text-[11px] text-black hover:text-gray-900 transition-all duration-200 cursor-pointer w-[120px] sm:w-[160px] break-words whitespace-normal"
-                    key={i}
-                  >
-                    {product?.name}
-                  </p>
-                ))}
+                <span>{item?.product_category?.name}</span>
+                {item?.sub_categories && item.sub_categories.length > 0 && (
+                  <DownOutlined className="text-[12px] text-black" />
+                )}
               </div>
-            </div>
-          ))}
-        </div>
-        <Link href="/salons" className="flex">
-          <div className="flex text-white bg-[#583FA8] ml-12 px-6 py-2 rounded-md shadow-md hover:bg-[#452d88] transition-all duration-300">
-            <button>Book Salon Now </button>
+            ))}
           </div>
-        </Link>
-      </div>
 
-      {showAsDrawer ? (
-        <div className="my-4" />
-      ) : (
-        <div className="md:hidden px-4 pt-2">
+          <div
+            ref={dropdownRef}
+            className={`w-full justify-between px-6 py-3 flex flex-wrap gap-6 bg-white absolute top-[70px] z-50 transition-all duration-500 shadow-xl rounded-lg ${
+              selectedSubCategory.length > 0
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 -translate-y-5 pointer-events-none"
+            } overflow-y-auto max-h-[300px]`}
+          >
+            {selectedSubCategory?.map((item: any, index: number) => (
+              <div className="flex flex-col" key={index}>
+                <p
+                  onClick={() =>
+                    HandlePath(`${item?.product_category}-${item?._id}`)
+                  }
+                  className="font-semibold text-[16px] cursor-pointer"
+                >
+                  {item?.name}
+                </p>
+                <div className="flex flex-col gap-2">
+                  {item?.items?.map((product: any, i: number) => (
+                    <p
+                      onClick={() =>
+                        HandlePath(
+                          `${item?.product_category}-${item?._id}-${product?._id}`
+                        )
+                      }
+                      className="text-[12px] sm:text-[11px] text-black hover:text-gray-900 transition-all duration-200 cursor-pointer w-[120px] sm:w-[160px] break-words whitespace-normal"
+                      key={i}
+                    >
+                      {product?.name}
+                    </p>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <Link href="/salons" className="flex">
+            <div className="flex text-white bg-[#583FA8] ml-12 px-6 py-2 rounded-md shadow-md hover:bg-[#452d88] transition-all duration-300">
+              <button>Book Salon Now </button>
+            </div>
+          </Link>
+        </div>
+      )}
+
+      {forceMobileStyle && (
+        <div className="px-4 pt-2">
           <Menu
             mode="inline"
             items={menuItems}
             onClick={onMenuClick}
-            className="bg-purple-100 rounded-lg p-2 transition-all duration-300 text-base font-normal"
+            className="bg-purple-100 md:bg-transparent rounded-lg p-2 transition-all duration-300 text-base font-normal"
           />
         </div>
       )}

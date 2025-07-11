@@ -15,85 +15,68 @@ const ProductFilter = () => {
 
   return (
     <>
-      <div className="w-full flex justify-center px-4 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-[1220px]">
-          {/* Card 1 */}
-          <div
-            onClick={() => router.push("/salons")}
-            className="bg-[#FFF1C8] rounded-[10px] p-6 flex flex-col justify-between w-full max-w-[700px] min-h-[570px] mx-auto transition-transform duration-300 ease-in-out hover:scale-x-105"
-          >
-            <div>
-              <h2 className="text-4xl font-bold text-gray-900 mb-1">
-                Salon Booking
-              </h2>
-              <p className="text-lg text-gray-700">Starting from</p>
-              <p className="text-2xl font-bold text-[#D92C59]">Rs: 200</p>
+      <div className="w-full flex justify-center px-2 sm:px-4 py-6 sm:py-8">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-4 sm:gap-6 w-full max-w-[1220px] cursor-pointer">
+          {[
+            {
+              title: "Salon Booking",
+              price: "Rs: 200",
+              image: "/assets/saloonPicture/salon.png",
+              link: "/salons",
+            },
+            {
+              title: "Spa Booking",
+              price: "Rs: 700",
+              image: "/assets/saloonPicture/spa.png",
+              link: "/salons",
+            },
+            {
+              title: "Selfcare Items",
+              price: "Rs: 120",
+              image: "/assets/saloonPicture/clinic.png",
+              link: "/products",
+            },
+          ].map((item, index) => (
+            <div
+              key={index}
+              onClick={() => router.push(item.link)}
+              className="bg-[#FFF1C8] rounded-[10px] p-4 sm:p-6 flex flex-col justify-between w-full max-w-[700px] min-h-[320px] sm:min-h-[570px] mx-auto transition-transform duration-300 ease-in-out hover:scale-105"
+            >
+              <div>
+                <h2 className="text-xl sm:text-4xl font-bold text-gray-900 mb-1">
+                  {item.title}
+                </h2>
+                <p className="text-sm sm:text-lg text-gray-700">
+                  Starting from
+                </p>
+                <p className="text-lg sm:text-2xl font-bold text-[#D92C59]">
+                  {item.price}
+                </p>
+              </div>
+              <div className="mt-4 w-full h-[200px] sm:h-[358px] overflow-hidden rounded-[10px]">
+                <img
+                  src={item.image}
+                  alt={item.title}
+                  className="w-full h-full object-cover"
+                />
+              </div>
             </div>
-            <div className="mt-4 w-full h-[358px] overflow-hidden rounded-[10px]">
-              <img
-                src="/assets/saloonPicture/salon.png"
-                alt="Salon Booking"
-                className="w-full h-full object-cover"
-              />
-            </div>
-          </div>
+          ))}
 
-          {/* Card 2 */}
-          <div
-            className="bg-[#FFF1C8] rounded-[10px] p-6 flex flex-col justify-between w-full max-w-[700px] min-h-[570px] mx-auto transition-transform duration-300 ease-in-out hover:scale-105"
-            onClick={() => router.push("/salons")}
-          >
-            <div>
-              <h2 className="text-4xl font-bold text-gray-900 mb-1">
-                Spa Booking
-              </h2>
-              <p className="text-lg text-gray-700">Starting from</p>
-              <p className="text-2xl font-bold text-[#D92C59]">Rs: 700</p>
-            </div>
-            <div className="mt-4 w-full h-[358px] overflow-hidden rounded-[10px]">
-              <img
-                src="/assets/saloonPicture/spa.png"
-                alt="Spa Booking"
-                className="w-full h-full object-cover"
-              />
-            </div>
-          </div>
-
-          {/* Card 3 */}
-          <div
-            className="bg-[#FFF1C8] rounded-[10px] p-6 flex flex-col justify-between w-full max-w-[700px] min-h-[570px] mx-auto transition-transform duration-300 ease-in-out hover:scale-105"
-            onClick={() => router.push("/products")}
-          >
-            <div>
-              <h2 className="text-4xl font-bold text-gray-900 mb-1">
-                Selfcare Items
-              </h2>
-              <p className="text-lg text-gray-700">Starting from</p>
-              <p className="text-2xl font-bold text-[#D92C59]">Rs: 120</p>
-            </div>
-            <div className="mt-4 w-full h-[342px] overflow-hidden rounded-[10px]">
-              <img
-                src="/assets/saloonPicture/clinic.png"
-                alt="Clinic"
-                className="w-full h-full object-cover"
-              />
-            </div>
-          </div>
-
-          {/* Card 4 */}
           <div
             onClick={() => setModalVisible(true)}
-            className="bg-[#FFF1C8] rounded-[10px] p-6 flex flex-col justify-between w-full max-w-[700px] min-h-[570px] mx-auto transition-transform duration-300 ease-in-out hover:scale-105"
+            className="bg-[#FFF1C8] rounded-[10px] p-4 sm:p-6 flex flex-col justify-between w-full max-w-[700px] min-h-[420px] sm:min-h-[570px] mx-auto transition-transform duration-300 ease-in-out hover:scale-105"
           >
             <div>
-              <h2 className="text-4xl font-bold text-gray-900 mb-1">
+              <h2 className="text-xl sm:text-4xl font-bold text-gray-900 mb-1">
                 Gym Membership
               </h2>
-              {/* <p className="text-sm text-gray-700">MAKEUP</p> */}
-              <p className="text-lg text-gray-700">Coming Soon</p>
-              <p className="text-2xl font-bold text-[#D92C59]">Sign Up Now</p>
+              <p className="text-sm sm:text-lg text-gray-700">Coming Soon</p>
+              <p className="text-lg sm:text-2xl font-bold text-[#D92C59]">
+                Sign Up Now
+              </p>
             </div>
-            <div className="mt-4 w-full h-[342px] overflow-hidden rounded-[10px]">
+            <div className="mt-4 w-full h-[200px] sm:h-[342px] overflow-hidden rounded-[10px]">
               <img
                 src="/assets/saloonPicture/gym.png"
                 alt="Gym"
