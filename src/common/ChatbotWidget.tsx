@@ -55,24 +55,36 @@ export default function ChatbotWidget() {
     setMessages((prev) => [...prev, userMsg]);
     setInput("");
 
-    try {
-      const res = await axios.post(`${BACKEND_URL}/chat/message`, {
-        sessionId,
-        message: input,
-      });
-      const botReply = res.data.reply;
-      setMessages((prev) => [...prev, { from: "bot", text: botReply }]);
-      if (/provide.*(name|email|phone)/i.test(botReply)) {
-        setShowLeadForm(true);
-      }
-    } catch (err) {
-      console.error("Chatbot error:", err);
-      setMessages((prev) => [
-        ...prev,
-        { from: "bot", text: "Oops! Something went wrong." },
-      ]);
-    }
+    const extractKeyword = (text: string) => {
+    const words = text.toLowerCase().match(/\b(\w+)\b/g) || [];
+    const stopwords = ["what", "how", "is", "do", "can", "you", "i", "a", "the", "my", "are", "your"];
+    const keywords = words.filter((word) => !stopwords.includes(word));
+    return keywords[0] || "";
   };
+
+  const keyword = extractKeyword(input);
+
+  try {
+    const res = await axios.post(`${BACKEND_URL}/chat/message`, {
+      sessionId,
+      message: input,
+      keyword, 
+    });
+
+    const botReply = res.data.reply;
+    setMessages((prev) => [...prev, { from: "bot", text: botReply }]);
+
+    if (/provide.*(name|email|phone)/i.test(botReply)) {
+      setShowLeadForm(true);
+    }
+  } catch (err) {
+    console.error("Chatbot error:", err);
+    setMessages((prev) => [
+      ...prev,
+      { from: "bot", text: "Oops! Something went wrong." },
+    ]);
+  }
+};
 
   const submitLead = async () => {
     try {
