@@ -38,17 +38,32 @@ const SideMenu = ({
     setShowGymModal(false);
   };
 
-  const Menu = ({ className }: { className?: string }) => {
+  const Menu = ({
+    className,
+    isMobile,
+  }: {
+    className?: string;
+    isMobile: boolean;
+  }) => {
     return (
-      <ul tabIndex={0} className={cn("", className)}>
+      <ul
+        tabIndex={0}
+        className={cn("space-y-3 text-base font-medium", className)}
+      >
         <li>
-          <Link className="text-base" href="/" onClick={() => setIsOpen(false)}>
+          <Link
+            className="flex items-center gap-2 hover:text-primary transition"
+            href="/"
+            onClick={() => {
+              if (isMobile) setIsOpen(false);
+            }}
+          >
             <FaArrowRight className="size-4" /> Home
           </Link>
         </li>
         <li>
           <Link
-            className="text-base"
+            className="flex items-center gap-2 hover:text-primary transition"
             href="/selfcare-products"
             onClick={() => setIsOpen(false)}
           >
@@ -57,27 +72,31 @@ const SideMenu = ({
         </li>
         <li>
           <div
-            className="flex items-center text-base font-sm cursor-pointer select-none"
-            onClick={() => setShowCategoryMenu(!showCategoryMenu)}
+            className="flex items-center gap-2 cursor-pointer select-none hover:text-primary transition"
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowCategoryMenu(!showCategoryMenu);
+            }}
           >
             <FaArrowRight className="size-4 mr-2" />
             Category
           </div>
 
           <div
-            className={`lg:hidden overflow-hidden transition-all duration-500 ease-in-out ${
+            className={cn(
+              "overflow-hidden transition-all duration-500 ease-in-out",
               showCategoryMenu
                 ? "max-h-[1000px] opacity-100"
                 : "max-h-0 opacity-0"
-            }`}
+            )}
           >
-            <CategoryNavMenu showAsDrawer={false} />
+            <CategoryNavMenu forceMobileStyle={true} />
           </div>
         </li>
 
         <li>
           <Link
-            className="text-base"
+            className="flex items-center gap-2 hover:text-primary transition md:mt-[-1rem]"
             href="/salons"
             onClick={() => setIsOpen(false)}
           >
@@ -108,7 +127,7 @@ const SideMenu = ({
               onClick={() => {
                 dispatch(logout());
               }}
-              className="text-base cursor-pointer"
+              className="flex items-center gap-2 cursor-pointer hover:text-primary transition"
             >
               <div className="w-7 rounded-full mr-2">
                 <img
@@ -120,16 +139,15 @@ const SideMenu = ({
             </div>
           ) : (
             <Link
-              className="text-base"
+              className="flex items-center gap-2 hover:text-primary transition"
               href="/login"
               onClick={() => setIsOpen(false)}
             >
-              <div className="w-7 rounded-full mr-2">
-                <img
-                  alt="Tailwind CSS Navbar component"
-                  src={DefaultAvatar.src}
-                />
-              </div>
+              <img
+                className="w-7 h-7 rounded-full"
+                alt="Tailwind CSS Navbar component"
+                src={DefaultAvatar.src}
+              />
               Login
             </Link>
           )}
@@ -140,7 +158,7 @@ const SideMenu = ({
   return (
     <>
       {/* desktop */}
-      <div className="dropdown menu-dropdown-show hidden md:block">
+      <div className="dropdown menu-dropdown-show hidden md:block relative z-50">
         <div
           tabIndex={0}
           role="button"
@@ -148,7 +166,10 @@ const SideMenu = ({
         >
           <GiHamburgerMenu className="size-5" />
         </div>
-        <Menu className="menu dropdown-content z-[9999] mt-3 w-64 rounded-box bg-base-100 p-2 shadow" />
+        <Menu
+          className="menu dropdown-content z-[9999] mt-3 w-96 rounded-xl bg-base-100 p-4 shadow-xl border border-gray-200"
+          isMobile={true}
+        />
       </div>
 
       {/* mobile */}
@@ -178,7 +199,7 @@ const SideMenu = ({
             className="drawer-overlay"
           ></label>
 
-          <div className="menu bg-purple-100 text-base-content min-h-full w-80 p-4 shadow-lg rounded-tr-xl rounded-br-xl relative">
+           <div className="bg-purple-100 text-base-content min-h-full w-80 p-6 shadow-2xl rounded-tr-xl rounded-br-xl relative">
             {/* Close Button */}
             <button
               onClick={() => setIsOpen(false)}
@@ -187,7 +208,9 @@ const SideMenu = ({
               ✕
             </button>
 
-            <Menu className="mt-10" />
+             <div className="mt-12">
+              <Menu isMobile={true} />
+            </div>
           </div>
         </div>
 

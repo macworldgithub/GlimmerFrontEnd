@@ -155,7 +155,7 @@ const NavbarClient = ({
         </div>
       </div>
 
-      <div className="flex justify-center mb-5 p-4 gap-2 bg-purple-100">
+      <div className="flex justify-center mb-5 p-4 gap-2 bg-purple-100 md:bg-transparent">
         <div className="w-1/2">
           <ProductSearchBar className="md:hidden w-full" />
         </div>
