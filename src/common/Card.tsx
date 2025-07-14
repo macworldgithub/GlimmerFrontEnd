@@ -160,7 +160,7 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
 
   return (
     <div
-      className="w-full max-w-[300px] h-[370px] bg-transparent rounded-xl transition duration-300 cursor-pointer relative flex flex-col items-center text-center"
+      className="w-full max-w-[300px] h-[300px] bg-transparent rounded-xl transition duration-300 cursor-pointer relative flex flex-col items-center text-center"
       onClick={() => router.push(finalPath)}
     >
       <div

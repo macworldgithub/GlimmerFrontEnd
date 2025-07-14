@@ -93,16 +93,17 @@ const SelfcareCardList = () => {
       {error && <p className="text-center text-red-500">{error}</p>}
 
       {/* Product Grid / Carousel */}
-   {isSmallScreen ? (
- <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-6 px-4 scroll-smooth">
-
-    {(showAll ? products : products.slice(0, 4)).map((product) => (
-      <div key={product._id} className="shrink-0 w-1/2 snap-start">
-        <Card item={product} />
-      </div>
-    ))}
-  </div>
-) : (
+      {isSmallScreen ? (
+        <div className="px-4">
+          <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory mb-4 scroll-smooth">
+            {(showAll ? products : products.slice(0, 4)).map((product) => (
+              <div key={product._id} className="shrink-0 w-1/2 snap-start">
+                <Card item={product} />
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : (
         <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {products.length > 0 ? (
             products
@@ -113,16 +114,15 @@ const SelfcareCardList = () => {
           )}
         </div>
       )}
-
       {/* View More Button */}
-<div className="text-center -mt-10 md:mt-6">
-  <button
-    onClick={handleViewMore}
-    className="bg-[#583FA8] text-white py-2 px-6 rounded-lg hover:bg-[#472c9f]"
-  >
-    View More
-  </button>
-</div>
+      <div className="text-center">
+        <button
+          onClick={handleViewMore}
+          className="bg-[#583FA8] text-white py-2 px-6 rounded-lg hover:bg-[#472c9f]"
+        >
+          View More
+        </button>
+      </div>
     </div>
   );
 };
