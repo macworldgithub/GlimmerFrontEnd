@@ -71,18 +71,18 @@ const ServiceCard: FC<ServiceCardProps> = ({ item, salonId, salonName, onAddToCa
       {/* Bottom half - Content */}
       <div className="p-4 h-1/2 flex flex-col justify-between">
         <div>
+          <h4 className="text-lg font-bold text-gray-800 truncate mb-1">
+            {item.name ? item.name.slice(0, 40) : "Service Name"}
+          </h4>
           {item.salonId === salonId && salonName && (
-            <h3 className="text-lg font-semibold truncate mb-2">
+            <h3 className="text-lg truncate mb-2">
               {salonName}
             </h3>
           )}
 
-          <h4 className="text-base font-medium text-gray-800 truncate mb-1">
-            {item.name ? item.name.slice(0, 40) : "Service Name"}
-          </h4>
 
           {item.duration && (
-            <p className="text-sm text-gray-500 italic mt-2">
+            <p className="text-sm text-gray-500 italic mt-2 hidden md:block">
               Duration: {item.duration} min
             </p>
           )}
@@ -100,7 +100,7 @@ const ServiceCard: FC<ServiceCardProps> = ({ item, salonId, salonName, onAddToCa
             )}
           </div>
         </div>
-        <p className="text-sm text-gray-600 truncate mt-1">
+        <p className="text-sm text-gray-600 truncate mt-1 hidden md:block">
           {item.description || "No description available"}
         </p>
       </div>

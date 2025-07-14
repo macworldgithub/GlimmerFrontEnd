@@ -107,7 +107,6 @@ const ProductHighlights = () => {
           initial={{ x: -100, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           transition={{ duration: 1 }}
-          className="w-full md:w-[30%] p-6"
         >
           <ProductSidebar onFilterChange={handleFilterChange} />
         </motion.aside>

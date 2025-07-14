@@ -314,7 +314,6 @@ const ServiceList = () => {
           initial={{ x: -100, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           transition={{ duration: 1 }}
-          className="w-full md:w-[30%] p-6"
         >
           <ServiceSidebar />
         </motion.aside>
@@ -326,13 +325,13 @@ const ServiceList = () => {
           className="w-full"
         >
           <div className="flex flex-wrap md:flex-row sm:flex-col items-center gap-4 sm:gap-6 px-4 sm:px-6 md:px-8 pt-4 sm:pt-6 md:pt-8 pb-4 sm:pb-6 md:pb-8">
-            <span className="text-gray-700 text-[20px]">Sort by</span>
+            <span className="text-gray-700 text-lg md:px-6 md:py-2 md:text-xl">Sort by</span>
             <button
               onClick={() => {
                 setActiveSort("Date");
                 setSortOrder(sortOrder === "desc" ? "asc" : "desc");
               }}
-              className={`border px-6 py-2 rounded-md text-lg font-medium transition duration-300 ease-in-out ${
+              className={`border px-4 py-1.5 text-lg md:px-6 md:py-2 md:text-lg rounded-md font-medium transition duration-300 ease-in-out ${
                 activeSort === "Date"
                   ? "border-purple-800 text-purple-800 bg-purple-100"
                   : "border-gray-400 text-gray-700 hover:bg-[#FDF3D2]"
@@ -344,7 +343,7 @@ const ServiceList = () => {
             <div className="relative">
               <button
                 onClick={() => setShowPriceDropdown(!showPriceDropdown)}
-                className={`flex items-center gap-2 border px-6 py-2 rounded-md text-lg font-medium transition duration-300 ease-in-out ${
+                className={`flex items-center gap-2 border px-4 py-1.5 text-lg md:px-6 md:py-2 md:text-lg rounded-md font-medium transition duration-300 ease-in-out ${
                   activeSort === "Price"
                     ? "border-purple-800 text-purple-800 bg-purple-100"
                     : "border-gray-400 text-gray-700 hover:bg-[#FDF3D2]"
