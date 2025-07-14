@@ -86,9 +86,7 @@ const SalonDetailsPage = () => {
         <div className="flex flex-col mt-0">
           <div className="flex justify-between items-center">
             <div className="prose">
-              <h1>
-                {salonData.salon_name || "Glimmer's Saloon"}
-              </h1>
+              <h1>{salonData.salon_name || "Glimmer's Saloon"}</h1>
             </div>
             <div>
               <MdOutlineIosShare size={30} />
@@ -114,7 +112,7 @@ const SalonDetailsPage = () => {
         <div className="mt-6 mb-8 max-w-screen-xl mx-auto px-4">
           {images.length > 0 && (
             <div
-              className="w-full h-[65vh] overflow-hidden rounded-lg bg-gray-100 flex items-center justify-center cursor-pointer"
+              className="w-full max-h-[55vh] sm:max-h-[500px] overflow-hidden rounded-lg bg-gray-100 flex items-center justify-center cursor-pointer"
               onClick={() => setSelectedImageIndex(currentImageIndex)}
             >
               <img
@@ -132,7 +130,7 @@ const SalonDetailsPage = () => {
                 onClick={() => setShowAllImages(true)}
                 className="bg-black text-white px-6 py-2 rounded-md hover:bg-gray-800 transition"
               >
-                View More 
+                View More
               </button>
             </div>
           )}
@@ -143,7 +141,7 @@ const SalonDetailsPage = () => {
                 {images.map((src, index) => (
                   <div
                     key={index}
-                    className={`w-[70vw] sm:w-[200px] h-[40vw] sm:h-[140px] flex-shrink-0 rounded-lg overflow-hidden bg-gray-100 cursor-pointer border-2 ${
+                    className={`w-[48vw] sm:w-[200px] h-[30vw] sm:h-[140px] flex-shrink-0 rounded-lg overflow-hidden bg-gray-100 cursor-pointer border-2 ${
                       currentImageIndex === index
                         ? "border-black"
                         : "border-transparent"

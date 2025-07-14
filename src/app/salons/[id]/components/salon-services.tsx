@@ -183,26 +183,6 @@ const SalonServices = () => {
         </div>
       )}
 
-      {/* <div className="relative p-5 bg-[#FBE8A5]">
-        <Swiper
-          slidesPerView="auto"
-          breakpoints={{
-            280: { slidesPerView: 3 },
-            768: { slidesPerView: 10 },
-          }}
-        >
-          {services.map((item) => (
-            <SwiperSlide
-              key={item._id}
-              className="!w-auto px-3 py-2 text-center hover:bg-black hover:text-white rounded-md"
-            >
-              <p className="font-medium text-xs sm:text-sm md:text-base whitespace-nowrap">
-                {item.name}
-              </p>
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </div> */}
 
       <div className="p-5 bg-[#FBE8A5]">
         {services.length === 0 ? (
@@ -210,9 +190,7 @@ const SalonServices = () => {
             No services found for this salon.
           </div>
         ) : (
-         <div className="grid grid-cols-2 gap-4 sm:gap-6">
-
-
+          <div className="grid grid-cols-2 gap-4 sm:gap-6">
             {services.map((item) => (
               <div
                 key={item._id}
@@ -243,7 +221,7 @@ const SalonServices = () => {
                     }}
                     className="w-[200px] py-2 text-black border-2 border-black rounded-lg font-medium hover:bg-black hover:text-white transition duration-200"
                   >
-                    Add to Cart 
+                    Add to Cart
                   </button>
                 </div>
               </div>

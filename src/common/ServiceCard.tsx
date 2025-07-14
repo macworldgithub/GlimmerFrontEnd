@@ -31,10 +31,11 @@ const ServiceCard: FC<ServiceCardProps> = ({ item, salonId, salonName, onAddToCa
   };
 
   return (
-    <div className="w-full max-w-[300px] h-[350px] md:h-[370px] bg-white rounded-xl border border-gray-200 shadow hover:shadow-lg transition duration-300 cursor-pointer snap-start relative"
+    <div
+  className="w-full max-w-[300px] h-[350px] md:w-full md:max-w-[300px] md:h-[370px] bg-white rounded-xl border border-gray-200 shadow hover:shadow-lg transition duration-300 cursor-pointer snap-start relative"
+  onClick={handleClick}
+>
 
-      onClick={handleClick}
-    >
       {/* Top half - Image */}
       <div className="relative w-full h-1/2">
         <img
