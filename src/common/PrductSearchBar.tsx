@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { Search } from "lucide-react";
+import { Search, X } from "lucide-react";
 import { getAllProducts } from "@/api/product";
 
 interface Product {
@@ -94,13 +94,24 @@ export default function ProductSearchBar({ className }: ProductSearchBarProps) {
         }}
         onKeyDown={handleKeyDown}
       />
+      {searchTerm && (
+        <button
+          type="button"
+          onClick={() => setSearchTerm("")}
+          aria-label="Clear input"
+          className="absolute right-10 top-1/2 -translate-y-1/2 flex items-center justify-center w-7 h-7 aspect-square text-gray-500 hover:text-red-500 bg-white rounded-full shadow-sm border border-gray-300 transition-all duration-200 hover:scale-110"
+        >
+          <X className="w-4 h-4" />
+        </button>
+      )}
+
       <Search
         className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer hover:text-primary transition"
         size={20}
         onClick={handleSearch}
       />
       {showDropdown && suggestions.length > 0 && (
-        <div className="absolute z-50 mt-1 w-full bg-white border rounded-md shadow-lg max-h-64 overflow-auto">
+        <div className="absolute z-50 mt-1 w-[91vw] lg:w-[450px] bg-white border rounded-md shadow-lg max-h-64 overflow-auto">
           {suggestions.map((product) => (
             <div
               key={product._id}
