@@ -47,9 +47,9 @@ const Salonfilter: React.FC = () => {
   return (
     <>
       {/* Mobile View */}
-      <div className="flex flex-col p-10 gap-2 rounded-md bg-white lg:hidden">
+      <div className="flex flex-col gap-4 p-6 rounded-2xl bg-white/80 shadow-[0_8px_30px_rgba(0,0,0,0.12)] border border-gray-200 backdrop-blur-md transition-all duration-500 lg:hidden">
         <ServiceNavMenu
-          className="w-full"
+          className=""
           onSubCategorySelect={setGender}
           onSubSubCategorySelect={setServiceTerm}
           onNameTermChange={setNameTerm}
@@ -62,7 +62,7 @@ const Salonfilter: React.FC = () => {
           placeholder="Price"
           value={price}
           onChange={setPrice}
-          icon={<IoMdPricetags className="size-5" />}
+          icon={<IoMdPricetags className="text-indigo-500 size-5" />}
         />
         <GenderDropdown
           gender={gender}
@@ -71,13 +71,16 @@ const Salonfilter: React.FC = () => {
           setIsOpen={setIsGenderOpen}
         />
 
-        <button className="btn btn-neutral btn-block" onClick={handleSearch}>
-          Search 
+        <button
+          className="w-full py-3 rounded-xl text-white text-lg font-semibold bg-gradient-to-r from-blue-500 to-purple-500 shadow-lg hover:brightness-110 active:scale-95 transition-all duration-300"
+          onClick={handleSearch}
+        >
+          Search Services
         </button>
       </div>
 
       {/* Desktop View */}
-      <div className="hidden items-center px-10 justify-between rounded-full bg-white lg:flex">
+      <div className="hidden items-center px-12 justify-between rounded-full bg-white lg:flex">
         <ServiceNavMenu
           onSubCategorySelect={setGender}
           onSubSubCategorySelect={setServiceTerm}
@@ -92,7 +95,7 @@ const Salonfilter: React.FC = () => {
           placeholder="Price"
           value={price}
           onChange={setPrice}
-          icon={<IoMdPricetags className="size-5" />}
+          icon={<IoMdPricetags className="text-indigo-500 size-5" />}
         />
         <HorizontalDivider className="hidden lg:block" />
         <GenderDropdown
@@ -102,7 +105,7 @@ const Salonfilter: React.FC = () => {
           setIsOpen={setIsGenderOpen}
         />
         <button
-          className="btn btn-neutral rounded-full w-[150px] h-[70px] mr-[-36px]"
+          className="btn btn-neutral rounded-full w-[150px] h-[70px] mr-[-50px]"
           onClick={handleSearch}
         >
           Search
@@ -149,36 +152,53 @@ const GenderDropdown = ({
   isOpen: boolean;
   setIsOpen: (val: boolean) => void;
 }) => (
-  <div className="dropdown w-full lg:w-[20%]">
-    <label
+ <div className="dropdown w-full lg:w-[20%] relative">
+  <label
+    tabIndex={0}
+    onClick={() => setIsOpen(!isOpen)}
+    className={`
+      input input-bordered flex h-12 lg:h-14 items-center gap-3 cursor-pointer
+      rounded-xl border border-gray-300
+      bg-white/70 backdrop-blur-md
+      transition-all duration-300 ease-in-out
+      hover:shadow-md active:scale-[0.98]
+    `}
+  >
+    <FaPerson className="text-indigo-500 size-5" />
+    <span className="text-gray-700 font-medium">
+      {gender || "Select Gender"}
+    </span>
+  </label>
+
+  {isOpen && (
+    <ul
       tabIndex={0}
-      onClick={() => setIsOpen(!isOpen)}
-      className="input input-bordered flex h-12 items-center gap-2 lg:h-14 cursor-pointer"
+      className={`
+        dropdown-content z-50 mt-2 w-full lg:w-72
+        rounded-xl border border-gray-200
+        bg-white/90 backdrop-blur-lg
+        shadow-xl animate-fadeInDown
+        transition-all duration-300 ease-out
+      `}
     >
-      <FaPerson className="size-5" />
-      <span>{gender || "Select Gender"}</span>
-    </label>
-    {isOpen && (
-      <ul
-        tabIndex={0}
-        className="dropdown-content menu top-16 z-[1] w-full rounded-box border border-base-300 bg-base-100 shadow lg:w-72"
-      >
-        {["Male", "Female", "Kids"].map((g) => (
-          <li key={g}>
-            <button
-              type="button"
-              onClick={() => {
-                setGender(g);
-                setIsOpen(false);
-              }}
-            >
-              {g}
-            </button>
-          </li>
-        ))}
-      </ul>
-    )}
-  </div>
+      {["Male", "Female", "Kids"].map((g) => (
+        <li key={g}>
+          <button
+            type="button"
+            className="w-full text-left px-4 py-3 hover:bg-indigo-50 text-gray-800 transition-all duration-200"
+            onClick={() => {
+              setGender(g);
+              setIsOpen(false);
+            }}
+          >
+            {g}
+          </button>
+        </li>
+      ))}
+    </ul>
+  )}
+</div>
+
 );
 
 // Divider remains unchanged

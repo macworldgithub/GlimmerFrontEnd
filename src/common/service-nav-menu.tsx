@@ -158,99 +158,97 @@ const ServiceNavMenu = ({
     "Search Services";
 
   return (
-    <div ref={wrapperRef} className={`relative w-80 ${className}`}>
-      {/* Dropdown Trigger */}
+    <div ref={wrapperRef} className={`relative ${className}`}>
+      {/* Trigger Bar */}
       <div
-        className="flex justify-between items-center p-3 cursor-pointer transition-all ease-in-out duration-300"
         onClick={toggleDropdown}
+        className="flex justify-between items-center px-4 py-3 bg-gradient-to-r from-indigo-100 to-white shadow-inner border border-indigo-200 rounded-xl cursor-pointer active:scale-[0.98] transition-all duration-300"
       >
-        <div className="p-2 flex items-center gap-2">
-          <FontAwesomeIcon icon={faSearch} className="text-gray-500" />
+        <div className="flex items-center gap-3 w-full">
+          <FontAwesomeIcon
+            icon={faSearch}
+            className="text-indigo-500 text-lg"
+          />
           <input
             type="text"
             placeholder={selectedLabel}
             value={searchTerm}
             onChange={(e) => handleSearchTermChange(e.target.value)}
-            className="w-full p-2 border-none outline-none"
+            className="w-full bg-transparent outline-none placeholder:text-indigo-400 text-sm"
           />
         </div>
-        <button className="text-blue-500 hover:text-blue-700 transition-colors duration-300">
-          {isDropdownOpen ? (
-            <FontAwesomeIcon icon={faChevronUp} />
-          ) : (
-            <FontAwesomeIcon icon={faChevronDown} />
-          )}
-        </button>
+        <FontAwesomeIcon
+          icon={isDropdownOpen ? faChevronUp : faChevronDown}
+          className="text-indigo-500"
+        />
       </div>
 
-      {/* Dropdown Content */}
+      {/* Dropdown */}
       {isDropdownOpen && (
-        <div className="absolute z-10 bg-white rounded-lg mt-2 w-full max-h-80 overflow-y-auto shadow-lg transition-all ease-in-out duration-300">
+        <div
+          className="absolute z-10 w-full max-h-80 overflow-y-auto 
+      rounded-xl bg-white/90 backdrop-blur-lg shadow-xl
+      transition-all duration-300 animate-fadeInDown"
+        >
           {filteredServices.map((service) => (
             <div key={service._id}>
               <div
-                className="p-3 cursor-pointer hover:bg-gray-100 flex justify-between items-center rounded-md transition-all ease-in-out duration-200"
+                className="p-3 cursor-pointer hover:bg-indigo-50 flex justify-between items-center 
+    rounded-md transition duration-200 ease-in-out"
                 onClick={() => handleServiceClick(service)}
               >
-                <span className="text-gray-800 font-semibold">
+                <span className="text-gray-800 font-medium text-sm">
                   {service.category}
                 </span>
-                <button className="text-blue-500 hover:text-blue-700 transition-colors duration-300">
-                  {expandedServices[service._id] ? (
-                    <FontAwesomeIcon icon={faChevronUp} />
-                  ) : (
-                    <FontAwesomeIcon icon={faChevronDown} />
-                  )}
-                </button>
+                <FontAwesomeIcon
+                  icon={
+                    expandedServices[service._id] ? faChevronUp : faChevronDown
+                  }
+                  className="text-indigo-400"
+                />
               </div>
 
-              {/* Subservices or Direct Products */}
+              {/* Subservices */}
               {selectedService?._id === service._id &&
                 expandedServices[service._id] && (
-                  <div className="pl-4">
+                  <div className="bg-indigo-50/60">
                     {Object.keys(subServices).length > 0
                       ? Object.keys(subServices)
-                          .filter((subservice) =>
-                            subservice
-                              .toLowerCase()
-                              .includes(searchTerm.toLowerCase())
+                          .filter((sub) =>
+                            sub.toLowerCase().includes(searchTerm.toLowerCase())
                           )
-                          .map((subservice) => (
-                            <div key={subservice}>
+                          .map((sub) => (
+                            <div key={sub} className="pl-4">
                               <div
-                                className="p-3 cursor-pointer hover:bg-gray-100 flex justify-between items-center rounded-md transition-all ease-in-out duration-200"
-                                onClick={() =>
-                                  handleSubserviceClick(subservice)
-                                }
+                                className="p-3 cursor-pointer hover:bg-indigo-50 flex justify-between items-center 
+    rounded-md transition duration-200"
+                                onClick={() => handleSubserviceClick(sub)}
                               >
-                                <span className="text-gray-700">
-                                  {subservice}
+                                <span className="text-indigo-800 text-sm">
+                                  {sub}
                                 </span>
-                                <button className="text-blue-500 hover:text-blue-700 transition-colors duration-300">
-                                  {expandedSubservices[subservice] ? (
-                                    <FontAwesomeIcon icon={faChevronUp} />
-                                  ) : (
-                                    <FontAwesomeIcon icon={faChevronDown} />
-                                  )}
-                                </button>
+                                <FontAwesomeIcon
+                                  icon={
+                                    expandedSubservices[sub]
+                                      ? faChevronUp
+                                      : faChevronDown
+                                  }
+                                  className="text-indigo-400"
+                                />
                               </div>
 
-                              {/* Products under subservice */}
-                              {selectedSubservice === subservice &&
-                                expandedSubservices[subservice] &&
-                                subServices[subservice].map(
-                                  (product, index) => (
-                                    <div
-                                      key={`${subservice}-${index}`}
-                                      className="p-3 cursor-pointer"
-                                      onClick={() =>
-                                        handleProductClick(product)
-                                      }
-                                    >
-                                      {product}
-                                    </div>
-                                  )
-                                )}
+                              {/* Products */}
+                              {selectedSubservice === sub &&
+                                expandedSubservices[sub] &&
+                                subServices[sub].map((product, i) => (
+                                  <div
+                                    key={`${sub}-${i}`}
+                                    className="pl-8 py-1 text-sm text-gray-700 hover:text-indigo-600 cursor-pointer transition-all"
+                                    onClick={() => handleProductClick(product)}
+                                  >
+                                    • {product}
+                                  </div>
+                                ))}
                             </div>
                           ))
                       : productItems
@@ -259,13 +257,13 @@ const ServiceNavMenu = ({
                               .toLowerCase()
                               .includes(searchTerm.toLowerCase())
                           )
-                          .map((product, index) => (
+                          .map((product, i) => (
                             <div
-                              key={`${service._id}-${index}`}
-                              className="p-3 cursor-pointer hover:bg-gray-100 rounded-md transition-all ease-in-out duration-200"
+                              key={`${service._id}-${i}`}
+                              className="pl-6 py-2 text-sm text-gray-700 hover:text-indigo-600 cursor-pointer transition-all"
                               onClick={() => handleProductClick(product)}
                             >
-                              {product}
+                              • {product}
                             </div>
                           ))}
                   </div>
