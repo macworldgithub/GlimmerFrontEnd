@@ -1,17 +1,16 @@
 "use client";
 import React, { useState } from "react";
 import Card from "@/common/Card";
-import { useRouter } from "next/navigation";  // Import useRouter from Next.js
+import { useRouter } from "next/navigation"; // Import useRouter from Next.js
 
 const CardSlider = ({ ProductList }: { ProductList: any }) => {
   const [showAll, setShowAll] = useState(false);
-  const router = useRouter();  // Initialize the router
+  const router = useRouter(); // Initialize the router
 
   // Display only the first 5 products if showAll is false
   const displayedProducts = showAll ? ProductList : ProductList.slice(0, 5);
 
   const handleViewMore = () => {
-   
     router.push("/products");
   };
 
@@ -29,7 +28,7 @@ const CardSlider = ({ ProductList }: { ProductList: any }) => {
       {/* View More Button */}
       <div className="mt-4 text-center">
         <button
-          onClick={handleViewMore}  // Call the handleViewMore function to navigate
+          onClick={handleViewMore} // Call the handleViewMore function to navigate
           className="px-6 py-2 bg-[#583FA8] text-white rounded-md"
         >
           View More
@@ -40,4 +39,3 @@ const CardSlider = ({ ProductList }: { ProductList: any }) => {
 };
 
 export default CardSlider;
-

@@ -34,7 +34,7 @@ const AllProducts = () => {
         onClick={() => router.push("/products")} 
         className="text-4xl mb-4 cursor-pointer select-none hover:underline"
       >
-        ALL PRODUCTS
+        ALL PRODUCTS 
       </h2>
 
       {loading ? (

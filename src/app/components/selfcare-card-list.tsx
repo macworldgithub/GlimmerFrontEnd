@@ -78,7 +78,7 @@ const SelfcareCardList = () => {
   };
 
   return (
-    <div className="w-full max-w-[82rem] px-4 md:px-1 mx-auto py-10">
+    <div className="w-full max-w-[82rem] px-4 md:px-1 mx-auto py-6 md:py-10">
       {/* Title */}
       <Link href="/selfcare-products" className="block">
         <h2 className="text-2xl sm:text-2xl md:text-3xl font-semibold mb-8">
@@ -93,17 +93,16 @@ const SelfcareCardList = () => {
       {error && <p className="text-center text-red-500">{error}</p>}
 
       {/* Product Grid / Carousel */}
-      {isSmallScreen ? (
-        // Horizontal scroll for mobile
-        <div className="flex gap-8 overflow-x-auto snap-x snap-mandatory pb-4 px-4 scroll-smooth scrollbar-hide">
-          {(showAll ? products : products.slice(0, 4)).map((product) => (
-            <div key={product._id} className="shrink-0 w-[270px] snap-start">
-              <Card item={product} />
-            </div>
-          ))}
-        </div>
-      ) : (
-        // Grid for desktop
+   {isSmallScreen ? (
+ <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-6 px-4 scroll-smooth">
+
+    {(showAll ? products : products.slice(0, 4)).map((product) => (
+      <div key={product._id} className="shrink-0 w-1/2 snap-start">
+        <Card item={product} />
+      </div>
+    ))}
+  </div>
+) : (
         <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {products.length > 0 ? (
             products
@@ -116,14 +115,14 @@ const SelfcareCardList = () => {
       )}
 
       {/* View More Button */}
-      <div className="text-center mt-6">
-        <button
-          onClick={handleViewMore}
-          className="bg-[#583FA8] text-white py-2 px-6 rounded-lg hover:bg-[#472c9f]"
-        >
-          View More
-        </button>
-      </div>
+<div className="text-center -mt-10 md:mt-6">
+  <button
+    onClick={handleViewMore}
+    className="bg-[#583FA8] text-white py-2 px-6 rounded-lg hover:bg-[#472c9f]"
+  >
+    View More
+  </button>
+</div>
     </div>
   );
 };

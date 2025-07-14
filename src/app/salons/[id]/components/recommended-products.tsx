@@ -51,7 +51,7 @@ const RecommendedProducts = () => {
   };
 
   return (
-    <div className="w-[99vw] px-4 md:px-10 py-10">
+    <div className="w-[99vw] px-4 md:px-10 py-8">
       {/* Title */}
       <Link href="/selfcare-products" className="block">
         <h2 className="text-2xl sm:text-2xl md:text-3xl font-semibold mb-8">
@@ -82,16 +82,17 @@ const RecommendedProducts = () => {
       {/* Product Display */}
       {isSmallScreen ? (
         // Horizontal scroll for mobile
-        <div className="flex gap-8 overflow-x-auto snap-x snap-mandatory pb-2 scroll-smooth scrollbar-hide px-4">
+        <div className="flex gap-6 overflow-x-auto snap-x snap-mandatory pb-0 mb-0 mt-0 scroll-smooth scrollbar-hide px-4">
           {products.length > 0 ? (
             products.map((product) => (
-              <div key={product._id} className="shrink-0 w-[270px] snap-start">
+              <div key={product._id} className="shrink-0 w-[48%] snap-start">
                 <Card item={product} />
               </div>
             ))
           ) : (
-            <p className="text-center text-gray-500 w-full">No products available</p>
-            
+            <p className="text-center text-gray-500 w-full">
+              No products available
+            </p>
           )}
         </div>
       ) : (
@@ -104,7 +105,6 @@ const RecommendedProducts = () => {
           ) : (
             <p className="text-center text-gray-500 w-full col-span-4">
               No products available
-              
             </p>
           )}
         </div>
@@ -113,4 +113,4 @@ const RecommendedProducts = () => {
   );
 };
 
-export default RecommendedProducts; 
+export default RecommendedProducts;

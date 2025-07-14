@@ -132,7 +132,7 @@ const SalonDetailsPage = () => {
                 onClick={() => setShowAllImages(true)}
                 className="bg-black text-white px-6 py-2 rounded-md hover:bg-gray-800 transition"
               >
-                View More
+                View More 
               </button>
             </div>
           )}

@@ -52,8 +52,9 @@ const ProductCard: React.FC<{ products: RealCardItem }> = ({ products }) => {
     : path;
 
   return (
-    <div
-      className="w-[220px] h-[310px] sm:w-[240px] sm:h-[320px] md:w-[260px] md:h-[340px] rounded-xl transition duration-300 cursor-pointer snap-start shrink-0 relative overflow-hidden flex flex-col items-center text-center"
+   <div
+  className="w-[48%] sm:w-[48%] md:w-[31%] lg:w-[23%] xl:w-[18%] h-[310px] sm:h-[320px] md:h-[340px] rounded-xl transition duration-300 cursor-pointer snap-start shrink-0 relative overflow-hidden flex flex-col items-center text-center m-1"
+
       onClick={() => router.push(finalPath)}
     >
       {/* Add to Cart Button (Top Left) */}
