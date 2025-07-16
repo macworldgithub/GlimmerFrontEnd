@@ -85,8 +85,8 @@ export default function ProductSearchBar({ className }: ProductSearchBarProps) {
     >
       <input
         type="text"
-        placeholder="Search products..."
-        className="input input-bordered w-full h-12 pl-5 pr-12 rounded-lg border border-gray-500 focus:ring-2 focus:ring-purple-500 focus:outline-none transition"
+        placeholder="Search"
+        className="input input-bordered w-full h-12 pl-5 pr-12 rounded-md border border-gray-500 focus:ring-2 focus:ring-purple-500 focus:outline-none transition"
         value={searchTerm}
         onChange={(e) => {
           setSearchTerm(e.target.value);

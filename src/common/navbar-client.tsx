@@ -131,14 +131,22 @@ const NavbarClient = ({
           }
         )}
       >
-        <div className="flex flex-1">
+        <div className="flex flex-1 ml-4 md:ml-0">
           <SideMenu
             isLoggedIn={!!session?.userId}
             handleLogout={handleLogout}
           />
-          <Link className="btn btn-ghost text-xl h-16" href="/">
-            <img src={Logo.src} alt="logo" className="h-16" />
+          <Link
+            href="/"
+            className="btn btn-ghost text-xl flex justify-center items-center h-16 w-full md:w-auto"
+          >
+            <img
+              src={Logo.src}
+              alt="logo"
+              className="h-12 md:h-16 mx-auto"
+            />
           </Link>
+
           {!isSalonPage && (
             <div
               className={cn("flex flex-col w-full", {

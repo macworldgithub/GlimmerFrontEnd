@@ -72,6 +72,7 @@ const SelfcareCardList = () => {
   const handleViewMore = () => {
     if (isSmallScreen) {
       setShowAll(true); // Show all cards in horizontal scroll
+      router.push("/products");
     } else {
       router.push("/products");
     }

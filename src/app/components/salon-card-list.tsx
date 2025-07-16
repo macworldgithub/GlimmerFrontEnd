@@ -4,7 +4,7 @@ import SalonCards from "@/common/salon-cards";
 const SalonCardList = () => {
   return (
     <div>
-      <SalonCards title="Salons" showButton={true} />
+      <SalonCards title="Salons and Spa" showButton={true} />
     </div>
   );
 };
