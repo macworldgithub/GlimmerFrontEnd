@@ -21,7 +21,8 @@ const Assurity = () => {
     );
   }
   return (
-    <div className="w-[99vw]  px-[8rem] py-6 flex justify-center items-center max-md:flex-col h-max">
+  <div className="hidden md:flex w-[99vw] px-[8rem] py-6 justify-center items-center flex-col md:flex-row h-max">
+
       {assurances.map((assurance, index) => (
         <div key={index} className="flex gap-2 items-center max-md:flex-col">
           <Image
