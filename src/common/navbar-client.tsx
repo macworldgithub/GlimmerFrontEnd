@@ -131,7 +131,7 @@ const NavbarClient = ({
           }
         )}
       >
-        <div className="flex flex-1 ml-4 md:ml-0">
+        <div className="flex flex-1 ml-10 md:ml-0">
           <SideMenu
             isLoggedIn={!!session?.userId}
             handleLogout={handleLogout}
