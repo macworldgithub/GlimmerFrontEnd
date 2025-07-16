@@ -207,7 +207,7 @@ const ProductCards: React.FC<ProductCardsProps> = ({
   if (error) return <p className="text-center text-red-500">{error}</p>;
 
   return (
-    <div className={`w-full max-w-[82rem] px-4 md:px-1 mx-auto py-10 ${className}`}>
+    <div className={`w-full max-w-[82rem] px-4 md:px-1 mx-auto py-0 md:py-10 ${className}`}>
       <h1 className="flex justify-center text-[24px] md:text-[34px] max-md:text-center mb-8">{title}</h1>
       <div className="flex overflow-x-auto gap-6 pb-4 px-4 snap-x snap-mandatory scroll-smooth scrollbar-hide">
         {products.map((product) => (

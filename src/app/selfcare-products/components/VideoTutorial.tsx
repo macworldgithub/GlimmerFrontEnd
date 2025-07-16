@@ -3,19 +3,19 @@ import React from "react";
 const VideoTutorial = () => {
   return (
     <div className="flex flex-col justify-center items-center p-5 md:px-[5rem] w-[99vw] max-md:text-center">
-      <h1 className="text-[24px] md:text-[34px] max-md:text-center">
+      <h2 className="text-2xl lg:text-4xl max-md:text-center mb-6">
         DISCOVER THE SECRETS OF GLOWING SKIN
-      </h1>
-      <iframe
-        width="100%"
-        height="500px"
-        src="https://www.youtube.com/embed/LS_-kL8OqT4"
-        title="YouTube video player"
-        frameBorder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowFullScreen
-        className="w-[80%] h-[500px] rounded-lg "
-      ></iframe>
+      </h2>
+      <div className="w-full max-w-[800px] aspect-[4/3] md:aspect-[16/9] mx-auto rounded-lg overflow-hidden">
+        <iframe
+          src="https://www.youtube.com/embed/LS_-kL8OqT4"
+          title="YouTube video player"
+          frameBorder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+          className="w-full h-full"
+        ></iframe>
+      </div>
     </div>
   );
 };

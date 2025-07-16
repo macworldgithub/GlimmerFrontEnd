@@ -35,7 +35,7 @@ const TrendingProducts = () => {
   return (
     <div className="px-2 w-[99vw] flex flex-col justify-center items-center">
       <h2
-        className="text-4xl mb-4 cursor-pointer select-none hover:underline"
+        className="text-2xl lg:text-4xl mb-4 cursor-pointer select-none hover:underline"
         onClick={handleClick}
       >
         TRENDING

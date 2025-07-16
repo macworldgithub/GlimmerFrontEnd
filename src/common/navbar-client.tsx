@@ -44,6 +44,9 @@ const NavbarClient = ({
   const [products, setProducts] = useState<any[]>([]);
   const [total, setTotal] = useState(0);
 
+  const [showNavbar, setShowNavbar] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
   useEffect(() => {
     const fetchSelections = async () => {
       try {
@@ -100,15 +103,39 @@ const NavbarClient = ({
 
   const handleBookAppointment = () => router.push("/salons");
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      if (window.innerWidth < 768) {
+        if (currentScrollY > lastScrollY && currentScrollY > 50) {
+          setShowNavbar(false);
+        } else {
+          setShowNavbar(true);
+        }
+        setLastScrollY(currentScrollY);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [lastScrollY]);
+
   return (
     <>
-      <div className="navbar bg-base-100 w-[99vw] sticky top-0 z-50">
+      <div
+        className={cn(
+          "navbar bg-base-100 w-[99vw] sticky top-0 z-50 transition-transform duration-300 ease-in-out",
+          {
+            "-translate-y-full": !showNavbar,
+          }
+        )}
+      >
         <div className="flex flex-1">
           <SideMenu
             isLoggedIn={!!session?.userId}
             handleLogout={handleLogout}
           />
-
           <Link className="btn btn-ghost text-xl h-16" href="/">
             <img src={Logo.src} alt="logo" className="h-16" />
           </Link>
@@ -119,28 +146,6 @@ const NavbarClient = ({
               })}
             >
               <ProductSearchBar className="max-md:hidden" />
-
-              {/* Desktop-only navigation links below the search bar
-              <div className="hidden md:flex justify-center gap-8 mt-2  ml-24 mr-auto">
-                <Link
-                  href="/"
-                  className="text-center font-bold text-gray-700 hover:text-primary"
-                >
-                  Home
-                </Link>
-                <Link
-                  href="/salons"
-                  className="text-center font-bold text-gray-700 hover:text-primary"
-                >
-                  Salons
-                </Link>
-                <Link
-                  href="/selfcare-products"
-                  className="text-center font-bold text-gray-700 hover:text-primary"
-                >
-                  Products
-                </Link>
-              </div> */}
             </div>
           )}
         </div>
@@ -148,14 +153,18 @@ const NavbarClient = ({
         <div className="flex-none">
           <ShowUser />
           <CartNavbar />
-          {/* <SideMenu
-            isLoggedIn={!!session?.userId}
-            handleLogout={handleLogout}
-          /> */}
         </div>
       </div>
 
-      <div className="flex justify-center mb-5 p-4 gap-2 bg-purple-100 md:bg-transparent">
+      {/* Mobile Book Appointment + Search */}
+      <div
+        className={cn(
+          "flex justify-center mb-5 p-4 gap-2 bg-purple-100 md:bg-transparent transition-transform duration-300 ease-in-out md:translate-y-0",
+          {
+            "translate-y-full": !showNavbar, // hide when scrolling down
+          }
+        )}
+      >
         <div className="w-1/2">
           <ProductSearchBar className="md:hidden w-full" />
         </div>

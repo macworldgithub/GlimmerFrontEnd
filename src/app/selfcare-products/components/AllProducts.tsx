@@ -31,10 +31,10 @@ const AllProducts = () => {
   return (
     <div className="px-2 w-[99vw] flex flex-col justify-center items-center overflow-hidden">
       <h2
-        onClick={() => router.push("/products")} 
-        className="text-4xl mb-4 cursor-pointer select-none hover:underline"
+        onClick={() => router.push("/products")}
+        className="text-2xl lg:text-4xl mb-2 lg:mb-4 cursor-pointer select-none hover:underline"
       >
-        ALL PRODUCTS 
+        ALL PRODUCTS
       </h2>
 
       {loading ? (
