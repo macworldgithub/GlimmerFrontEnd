@@ -551,7 +551,7 @@ export default function Checkout() {
                       <span>💵</span>
                       <span className="font-medium">Cash on Delivery</span>
                     </label>
-                    <label
+                    {/* <label
                       className={`flex items-center justify-center gap-2 px-4 py-3 rounded-lg border cursor-pointer transition-all
                         ${formData.paymentMethod === "JazzCash"
                           ? "border-blue-500 bg-blue-50"
@@ -595,7 +595,7 @@ export default function Checkout() {
                       />
                       <span>🏦</span>
                       <span className="font-medium">Bank Alfalah</span>
-                    </label>
+                    </label> */}
                   </div>
                 </div>
                 <label className="flex items-center space-x-2">
