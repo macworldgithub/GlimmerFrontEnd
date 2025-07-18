@@ -37,8 +37,8 @@ const ProductCard: React.FC<{ products: RealCardItem }> = ({ products }) => {
   const discountedPrice = Number(products.discounted_price) || 0;
   const finalPrice =
     discountedPrice > 0 && discountedPrice < basePrice
-      ? discountedPrice.toFixed(2)
-      : basePrice.toFixed(2);
+      ? discountedPrice
+      : basePrice;
 
   let queryParams = new URLSearchParams();
   if (products.rate_of_salon)
