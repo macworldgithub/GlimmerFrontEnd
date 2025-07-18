@@ -167,7 +167,7 @@ const NavbarClient = ({
       {/* Mobile Book Appointment + Search */}
       <div
         className={cn(
-          "flex justify-center mb-5 p-4 gap-2 bg-purple-100 md:bg-transparent transition-transform duration-300 ease-in-out md:translate-y-0",
+          "flex justify-center mb-5 p-2 gap-2 bg-purple-100 md:bg-transparent transition-transform duration-300 ease-in-out md:translate-y-0",
           {
             "translate-y-full": !showNavbar, // hide when scrolling down
           }
@@ -177,7 +177,7 @@ const NavbarClient = ({
           <ProductSearchBar className="md:hidden w-full" />
         </div>
         <button
-          className="w-1/2 h-12 mt-2 p-4 rounded-md border hover:brightness-90 transition cursor-pointer bg-purple-800 text-white text-sm flex items-center justify-center gap-2 md:hidden"
+          className="w-1/2 h-12 p-4 rounded-md border hover:brightness-90 transition cursor-pointer bg-purple-800 text-white text-sm flex items-center justify-center gap-2 md:hidden"
           onClick={handleBookAppointment}
         >
           <Calendar className="w-5 h-5" />

@@ -148,14 +148,15 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
     : path;
 
   const basePrice = Number(item.base_price) || 0;
+  console.log(basePrice)
   const discountedPrice = Number(item.discounted_price) || 0;
 
   let finalPrice = "N/A";
   if (basePrice > 0) {
     finalPrice =
       discountedPrice > 0 && discountedPrice < basePrice
-        ? discountedPrice.toFixed(2)
-        : basePrice.toFixed(2);
+        ? discountedPrice.toFixed(0)
+        : basePrice.toFixed(0);
   }
 
   return (
@@ -223,7 +224,7 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
         </span>
         {discountedPrice > 0 && discountedPrice < basePrice && (
           <span className="text-gray-400 text-sm line-through">
-            {basePrice.toFixed(2)} PKR
+            {basePrice} PKR
           </span>
         )}
       </div>

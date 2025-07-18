@@ -141,7 +141,7 @@ const ProductCard: React.FC<{ products: RealCardItem }> = ({ products }) => {
           </span>
           {discountedPrice > 0 && discountedPrice < basePrice && (
             <span className="text-gray-400 text-xs line-through">
-              {basePrice.toFixed(2)} PKR
+              {basePrice} PKR
             </span>
           )}
         </div>

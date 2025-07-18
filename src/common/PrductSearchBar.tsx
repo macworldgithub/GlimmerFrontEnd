@@ -80,7 +80,7 @@ export default function ProductSearchBar({ className }: ProductSearchBarProps) {
 
   return (
     <div
-      className={cn("relative w-full max-w-md mt-2", className)}
+      className={cn("relative w-full max-w-md", className)}
       ref={dropdownRef}
     >
       <input
