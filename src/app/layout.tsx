@@ -21,7 +21,7 @@ const prompt = Prompt({
 
 export const metadata: Metadata = {
   title:
-    "Make an online salon appointment at The Best Prices Online Cosmetics Store in Pakistan by visiting glimmer.com.pk.",
+    "www.glimmer.com.pk",
   description:
     "Make an online salon appointment at The Best Prices Online Cosmetics Store in Pakistan by visiting glimmer.com.pk.",
     
