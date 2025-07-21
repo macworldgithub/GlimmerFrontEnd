@@ -5,6 +5,7 @@ import { RealCardItem } from "@/data";
 import { getAllProducts } from "@/api/product";
 import Card from "@/common/Card";
 import { useRouter } from "next/navigation";
+import { Puff } from "react-loader-spinner";
 
 const SelfcareCardList = () => {
   const router = useRouter();
@@ -17,11 +18,24 @@ const SelfcareCardList = () => {
   const [isSmallScreen, setIsSmallScreen] = useState(false);
   const [showAll, setShowAll] = useState(false); // New state to control view more on mobile
 
+  console.log(startIndex);
+  console.log(cardsToShow);
   useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true);
       try {
-        const response = await getAllProducts();
+        const response = await getAllProducts(
+          undefined, 
+          undefined, 
+          undefined, 
+          undefined, 
+          undefined, 
+          undefined,
+          1, 
+          undefined, 
+          undefined, 
+          20 
+        );
 
         if (response && Array.isArray(response.products)) {
           setProducts(response.products); // full list
@@ -89,7 +103,9 @@ const SelfcareCardList = () => {
 
       {/* Loading & Error */}
       {loading && (
-        <p className="text-center text-gray-500">Loading products...</p>
+        <div className="flex justify-center items-center">
+          <Puff height="50" width="50" color="purple" ariaLabel="Loading" />
+        </div>
       )}
       {error && <p className="text-center text-red-500">{error}</p>}
 
@@ -97,7 +113,7 @@ const SelfcareCardList = () => {
       {isSmallScreen ? (
         <div className="px-4">
           <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory mb-4 scroll-smooth">
-            {(showAll ? products : products.slice(0, 4)).map((product) => (
+            {(showAll ? products : products.slice(0, 20)).map((product) => (
               <div key={product._id} className="shrink-0 w-1/2 snap-start">
                 <Card item={product} />
               </div>
@@ -108,7 +124,6 @@ const SelfcareCardList = () => {
         <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {products.length > 0 ? (
             products
-              .slice(startIndex, startIndex + cardsToShow)
               .map((product) => <Card key={product._id} item={product} />)
           ) : (
             <p className="text-center text-gray-500">No products available</p>

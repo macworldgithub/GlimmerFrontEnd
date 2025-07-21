@@ -441,7 +441,7 @@ const ProductsList = () => {
   const [showRatingDropdown, setShowRatingDropdown] = useState(false);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [ratingFilter, setRatingFilter] = useState<number | null>(null);
-  const pageSize = 8;
+  const pageSize = 20;
 
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -497,7 +497,8 @@ const ProductsList = () => {
         maxPriceFilter,
         page,
         sort_by,
-        sortOrder
+        sortOrder,
+        pageSize
       );
 
       // Calculate final price for each product
@@ -685,7 +686,9 @@ const ProductsList = () => {
           className="w-full"
         >
           <div className="flex flex-wrap md:flex-row sm:flex-col items-center gap-4 sm:gap-6 px-4 sm:px-6 md:px-8 pt-4 sm:pt-6 md:pt-8 pb-4 sm:pb-6 md:pb-8">
-            <span className="text-gray-700 text-lg md:px-6 md:py-2 md:text-xl">Sort by</span>
+            <span className="text-gray-700 text-lg md:px-6 md:py-2 md:text-xl">
+              Sort by
+            </span>
             <button
               onClick={() => {
                 setActiveSort("Date");
@@ -743,8 +746,7 @@ const ProductsList = () => {
               )}
             </div>
           </div>
-        <div className="w-full h-max grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-x-8 gap-y-10 p-6">
-
+          <div className="w-full h-max grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-8 gap-y-10 p-6">
             {data.length ? (
               data.map((item) => (
                 <motion.div

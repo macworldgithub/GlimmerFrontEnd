@@ -13,7 +13,8 @@ export const getAllProducts = async (
   maxPrice?: number,
   page?: number,
   sortBy?: string,
-  order?: 'asc' | 'desc'
+  order?: 'asc' | 'desc',
+  limit?: number,
 ) => {
   try {
     // Start building the URL with the base endpoint
@@ -28,6 +29,7 @@ export const getAllProducts = async (
     if (maxPrice) url += `&maxPrice=${maxPrice}`;
     if (sortBy) url += `&sortBy=${sortBy}`;
     if (order) url += `&order=${order}`;
+    if (limit) url += `&limit=${limit}`;
 
   
     const res = await axios.get(url);

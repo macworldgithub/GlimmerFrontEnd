@@ -14,7 +14,7 @@ const AllProducts = () => {
   const fetchAllProducts = async () => {
     try {
       const response = await axios.get(
-        `${BACKEND_URL}/product/get_all_products?page_no=1`
+        `${BACKEND_URL}/product/get_all_products?page_no=1&limit=20`
       );
       setProducts(response.data?.products || []);
     } catch (error) {
