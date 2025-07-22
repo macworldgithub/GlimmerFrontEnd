@@ -877,51 +877,30 @@ const ProductDisplay = () => {
           </div>
         </div>
       </div>
-      {/* <div className="w-[99vw] p-10 justify-center md:mb-5 md:flex-row md:gap-1">
-        <h2 className="text-4xl font-semibold">Related Products</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 pt-10">
-          {data.length ? (
-            data.map((item) => (
-              <motion.div
-                key={item._id}
-                whileHover={{ scale: 1.02 }}
-                className="flex"
-              >
-                <Card item={item} />
-              </motion.div>
-            ))
-          ) : (
-            <div className="col-span-full flex justify-center items-center min-h-[70vh]">
-              <div className="text-center font-bold text-3xl">
-                Oops! No items to display in this category
-              </div>
-            </div>
-          )}
-        </div>
-      </div> */}
+<div className="p-10 max-w-7xl mx-auto">
+  <h2 className="text-4xl font-semibold mb-6">Related Products</h2>
 
-      <div className="p-10">
-        <h2 className="text-4xl font-semibold mb-6">Related Products</h2>
-
-        <div className="overflow-x-auto">
-          <div className="flex gap-6 min-w-max pl-4">
-            {" "}
-            {/* pl-4 se thoda left padding */}
-            {data.length > 4 ? (
-              data.slice(4).map((item) => (
-                <div key={item._id} className="min-w-[250px] flex-shrink-0">
-                  <Card item={item} />
-                </div>
-              ))
-            ) : (
-              <p className="text-center w-full">
-                {" "}
-                Oops! No items to display in this category
-              </p>
-            )}
+  <div className="overflow-x-auto">
+    <div className="flex gap-3 min-w-max pl-4">
+      {data.length > 4 ? (
+        data.slice(4).map((item) => (
+          <div
+            key={item._id}
+            className="flex-shrink-0 w-[38vw] sm:w-[280px] md:w-[320px]"
+          >
+            <Card item={item} />
           </div>
-        </div>
-      </div>
+        ))
+      ) : (
+        <p className="text-center w-full">
+          Oops! No items to display in this category
+        </p>
+      )}
+    </div>
+  </div>
+</div>
+
+
     </>
   );
 };
