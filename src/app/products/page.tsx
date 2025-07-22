@@ -410,6 +410,7 @@ import Sidebar from "@/common/Sidebar";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { BiChevronDown } from "react-icons/bi";
+import { Puff } from "react-loader-spinner";
 
 interface CategorySelection {
   category_id: string;
@@ -433,6 +434,7 @@ const Loading = () => (
 );
 
 const ProductsList = () => {
+  const [loading, setLoading] = useState(false);
   const [data, setData] = useState<any[]>([]);
   const [total, setTotal] = useState(0);
   const [selections, setSelections] = useState<CategorySelection[]>([]);
@@ -486,6 +488,7 @@ const ProductsList = () => {
   }
 
   const fetchData = async () => {
+    setLoading(true);
     try {
       const sort_by = activeSort === "Price" ? "price" : undefined;
       const res = await getAllProducts(
@@ -544,6 +547,8 @@ const ProductsList = () => {
       setTotal(res.total || filteredProducts.length);
     } catch (error) {
       console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -747,7 +752,16 @@ const ProductsList = () => {
             </div>
           </div>
           <div className="w-full h-max grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-8 gap-y-10 p-6">
-            {data.length ? (
+            {loading ? (
+              <div className="col-span-full flex justify-center items-center min-h-[70vh]">
+                <Puff
+                  height="60"
+                  width="60"
+                  color="purple"
+                  ariaLabel="loading"
+                />
+              </div>
+            ) : data.length > 0 ? (
               data.map((item) => (
                 <motion.div
                   key={item.id}

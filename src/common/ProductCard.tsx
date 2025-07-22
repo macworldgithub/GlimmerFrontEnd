@@ -9,7 +9,7 @@ import { RiShoppingBag4Line } from "react-icons/ri";
 import { Rating } from "react-simple-star-rating";
 import { getAllProducts, getAllProductsHighlights } from "@/api/product";
 import { addItem } from "@/reduxSlices/cartSlice";
-
+import { Puff } from "react-loader-spinner";
 
 interface RealCardItem {
   _id: number;
@@ -52,9 +52,8 @@ const ProductCard: React.FC<{ products: RealCardItem }> = ({ products }) => {
     : path;
 
   return (
-   <div
-  className="w-[48%] sm:w-[48%] md:w-[31%] lg:w-[23%] xl:w-[18%] h-[310px] sm:h-[320px] md:h-[340px] rounded-xl transition duration-300 cursor-pointer snap-start shrink-0 relative overflow-hidden flex flex-col items-center text-center m-1"
-
+    <div
+      className="w-[48%] sm:w-[48%] md:w-[31%] lg:w-[23%] xl:w-[18%] h-[310px] sm:h-[320px] md:h-[340px] rounded-xl transition duration-300 cursor-pointer snap-start shrink-0 relative overflow-hidden flex flex-col items-center text-center m-1"
       onClick={() => router.push(finalPath)}
     >
       {/* Add to Cart Button (Top Left) */}
@@ -131,8 +130,9 @@ const ProductCard: React.FC<{ products: RealCardItem }> = ({ products }) => {
       {/* Bottom Content */}
       <div className="p-3 h-1/2 w-full flex flex-col justify-center items-center text-center gap-1">
         {/* Name */}
-      <h3 className="text-sm font-medium text-center leading-tight line-clamp-2">{products.name}</h3>
-
+        <h3 className="text-sm font-medium text-center leading-tight line-clamp-2">
+          {products.name}
+        </h3>
 
         {/* Price */}
         <div className="flex justify-center items-center gap-2">
@@ -149,7 +149,6 @@ const ProductCard: React.FC<{ products: RealCardItem }> = ({ products }) => {
     </div>
   );
 };
-
 
 interface ProductCardsProps {
   title?: string;
@@ -182,11 +181,13 @@ const ProductCards: React.FC<ProductCardsProps> = ({
       } else {
         let result;
         if (filter) {
-          result = await dispatch(getAllProductsHighlights({ filter })).unwrap();
-          console.log(result)
+          result = await dispatch(
+            getAllProductsHighlights({ filter })
+          ).unwrap();
+          console.log(result);
           setProducts(result[filter] || []);
         } else {
-          result = await (getAllProducts());
+          result = await getAllProducts();
           if (result && Array.isArray(result.products)) {
             setProducts(result.products);
           } else {
@@ -202,13 +203,21 @@ const ProductCards: React.FC<ProductCardsProps> = ({
     }
   };
 
-
-  if (loading) return <p className="text-center text-gray-500">Loading salons...</p>;
+  if (loading)
+    return (
+      <div className="flex justify-center items-center">
+        <Puff height="50" width="50" color="purple" ariaLabel="Loading" />
+      </div>
+    );
   if (error) return <p className="text-center text-red-500">{error}</p>;
 
   return (
-    <div className={`w-full max-w-[82rem] px-4 md:px-1 mx-auto py-0 md:py-10 ${className}`}>
-      <h1 className="flex justify-center text-[24px] md:text-[34px] max-md:text-center mb-8">{title}</h1>
+    <div
+      className={`w-full max-w-[82rem] px-4 md:px-1 mx-auto py-0 md:py-10 ${className}`}
+    >
+      <h1 className="flex justify-center text-[24px] md:text-[34px] max-md:text-center mb-8">
+        {title}
+      </h1>
       <div className="flex overflow-x-auto gap-6 pb-4 px-4 snap-x snap-mandatory scroll-smooth scrollbar-hide">
         {products.map((product) => (
           <ProductCard key={product._id} products={product} />
@@ -218,11 +227,4 @@ const ProductCards: React.FC<ProductCardsProps> = ({
   );
 };
 
-
 export default ProductCards;
-
-
-
-
-
-

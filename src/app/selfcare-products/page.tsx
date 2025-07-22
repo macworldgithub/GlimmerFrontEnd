@@ -1,3 +1,4 @@
+"use client";
 import CategoryNavMenu from "@/common/category-nav-menu";
 import BestSellers from "./components/best-sellers";
 import BrandProductImages from "./components/brand-product-images";
@@ -12,7 +13,7 @@ import TrendingProducts from "./components/TrendingProducts";
 import VideoTutorial from "./components/VideoTutorial";
 import MustItems from "./components/MustItems";
 import SaloonPictures from "@/common/SaloonPictures";
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 import Breadcrumbs from "@/common/breadcrumb";
 import Faq from "./components/Faq";
 
@@ -21,11 +22,18 @@ import DynamicBanner from "./components/Banner";
 import ProductFilter from "@/common/ProductFilter";
 import ProductCards from "@/common/ProductCard";
 import AllProducts from "./components/AllProducts";
+import FullScreenLoader from "@/common/loader";
 
-export default async function Home() {
+export default function Home() {
+  const [isAppLoading, setIsAppLoading] = useState(true);
+
+  const handleChildLoaded = () => {
+    setIsAppLoading(false);
+  };
   return (
     <>
-      <Suspense fallback={<div>Loading...</div>}>
+      {isAppLoading && <FullScreenLoader />}
+      <Suspense fallback={null}>
         <CategoryNavMenu className="mb-4" />
         <Breadcrumbs />
         {/* HERO KO PEHLE DIKHAAO (Suspense ke bahar) */}
@@ -36,8 +44,8 @@ export default async function Home() {
 
       <Assurity />
       <OfferPictures />
-      <AllProducts />
-      <TrendingProducts />
+       <AllProducts onLoaded={handleChildLoaded} />
+      <TrendingProducts onLoaded={handleChildLoaded} />
       <MustItems />
       <BestSellers />
       <VideoTutorial />

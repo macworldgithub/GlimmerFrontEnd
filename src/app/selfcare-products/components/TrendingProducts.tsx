@@ -6,7 +6,11 @@ import { BACKEND_URL } from "@/api/config";
 import ProductCards from "@/common/ProductCard";
 import { useRouter } from "next/navigation";
 
-const TrendingProducts = () => {
+interface AllProductsProps {
+  onLoaded?: () => void;
+}
+
+const TrendingProducts = ({ onLoaded }: AllProductsProps) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
@@ -21,6 +25,7 @@ const TrendingProducts = () => {
       console.error("Failed to fetch products:", error);
     } finally {
       setLoading(false);
+      onLoaded?.();
     }
   };
 
@@ -32,6 +37,8 @@ const TrendingProducts = () => {
     router.push("/product_highlights?filter=trending_product");
   };
 
+  if (loading) return null;
+
   return (
     <div className="px-2 w-[99vw] flex flex-col justify-center items-center">
       <h2
@@ -41,7 +48,6 @@ const TrendingProducts = () => {
         TRENDING
       </h2>
 
-      {loading && <div>Loading...</div>}
 
       {!loading && (
         <ProductCards

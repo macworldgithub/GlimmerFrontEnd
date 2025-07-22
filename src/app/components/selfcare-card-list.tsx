@@ -121,10 +121,10 @@ const SelfcareCardList = () => {
           </div>
         </div>
       ) : (
-        <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory mb-4 scroll-smooth">
           {products.length > 0 ? (
-            products
-              .map((product) => <Card key={product._id} item={product} />)
+            products.slice(0, 20)
+              .map((product) => <div className="shrink-0 w-1/4 snap-start"> <Card key={product._id} item={product} /></div>)
           ) : (
             <p className="text-center text-gray-500">No products available</p>
           )}

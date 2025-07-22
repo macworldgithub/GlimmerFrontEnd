@@ -6,7 +6,11 @@ import { BACKEND_URL } from "@/api/config";
 import ProductCard from "@/common/ProductCard";
 import { useRouter } from "next/navigation";
 
-const BestSellers = () => {
+interface AllProductsProps {
+  onLoaded?: () => void;
+}
+
+const BestSellers = ({ onLoaded }: AllProductsProps) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
@@ -21,6 +25,7 @@ const BestSellers = () => {
       console.error("Failed to fetch products:", error);
     } finally {
       setLoading(false);
+      onLoaded?.();
     }
   };
 
@@ -32,6 +37,8 @@ const BestSellers = () => {
     router.push("/product_highlights?filter=best_seller");
   };
 
+  if (loading) return null;
+
   return (
     <div className="px-2 w-[99vw] flex flex-col items-center">
       {/* Clickable heading */}
@@ -42,7 +49,6 @@ const BestSellers = () => {
         BEST SELLER
       </h2>
 
-      {loading && <div>Loading...</div>}
 
       {!loading && (
         <ProductCard

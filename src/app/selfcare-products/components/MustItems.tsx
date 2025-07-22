@@ -6,7 +6,11 @@ import { BACKEND_URL } from "@/api/config";
 import ProductCard from "@/common/ProductCard";
 import { useRouter } from "next/navigation";
 
-const MustItems = () => {
+interface AllProductsProps {
+  onLoaded?: () => void;
+}
+
+const MustItems = ({ onLoaded }: AllProductsProps) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
@@ -21,6 +25,7 @@ const MustItems = () => {
       console.error("Failed to fetch products:", error);
     } finally {
       setLoading(false);
+      onLoaded?.();
     }
   };
 
@@ -32,6 +37,8 @@ const MustItems = () => {
     router.push("/product_highlights?filter=you_must_have_this");
   };
 
+  if (loading) return null;
+  
   return (
     <div className="px-2 w-[99vw] flex flex-col items-center">
       {/* Heading (same look, just clickable) */}
@@ -42,7 +49,6 @@ const MustItems = () => {
         YOU MUST HAVE SEE THIS
       </h2>
 
-      {loading && <div>Loading...</div>}
 
       {!loading && (
         <ProductCard
