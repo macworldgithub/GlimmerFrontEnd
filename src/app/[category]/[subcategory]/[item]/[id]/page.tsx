@@ -34,7 +34,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 
 const ProductDisplay = () => {
   const Cart = useSelector((state: RootState) => state.cart);
-    const router = useRouter();
+  const router = useRouter();
   const token = useSelector((state: RootState) => state.login.token);
   const dispatch = useDispatch();
   const searchParams = useSearchParams();
@@ -47,7 +47,7 @@ const ProductDisplay = () => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [isBulkModalOpen, setIsBulkModalOpen] = useState(false);
   const [fullImage, setFullImage] = useState<string | null>(null);
-    const handleBuyNow = () => {
+  const handleBuyNow = () => {
     router.push("/checkout");
   };
 
@@ -620,7 +620,7 @@ const ProductDisplay = () => {
                   height={15}
                   src="/assets/addtoBag/cart-icon.png"
                 />
-                ADD TO BAG 
+                ADD TO BAG
               </button>
 
               {/* + - Quantity Controller */}
@@ -645,24 +645,24 @@ const ProductDisplay = () => {
               </div>
             </div>
 
-           <button
-      className={`w-full flex items-center justify-center text-xs font-semibold gap-2 py-3 xl:px-6 px-4 
+            <button
+              className={`w-full flex items-center justify-center text-xs font-semibold gap-2 py-3 xl:px-6 px-4 
         rounded-md border border-purple-800 text-purple-800 hover:bg-purple-50 
         ${
           isButtonDisabled &&
           "border-gray-300 text-gray-500 cursor-not-allowed hover:bg-transparent"
         }`}
-      onClick={handleBuyNow}
-      disabled={isButtonDisabled}
-    >
-      <Image
-        alt="cart-icon"
-        width={15}
-        height={15}
-        src="/assets/addtoBag/cart-icon.png"
-      />
-      BUY NOW
-    </button>
+              onClick={handleBuyNow}
+              disabled={isButtonDisabled}
+            >
+              <Image
+                alt="cart-icon"
+                width={15}
+                height={15}
+                src="/assets/addtoBag/cart-icon.png"
+              />
+              BUY NOW
+            </button>
             <div className="flex items-center gap-4 w-full">
               <button
                 onClick={handleBulkBuy}
@@ -877,7 +877,7 @@ const ProductDisplay = () => {
           </div>
         </div>
       </div>
-      <div className="w-[99vw] p-10 justify-center md:mb-5 md:flex-row md:gap-1">
+      {/* <div className="w-[99vw] p-10 justify-center md:mb-5 md:flex-row md:gap-1">
         <h2 className="text-4xl font-semibold">Related Products</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 pt-10">
           {data.length ? (
@@ -897,6 +897,29 @@ const ProductDisplay = () => {
               </div>
             </div>
           )}
+        </div>
+      </div> */}
+
+      <div className="p-10">
+        <h2 className="text-4xl font-semibold mb-6">Related Products</h2>
+
+        <div className="overflow-x-auto">
+          <div className="flex gap-6 min-w-max pl-4">
+            {" "}
+            {/* pl-4 se thoda left padding */}
+            {data.length > 4 ? (
+              data.slice(4).map((item) => (
+                <div key={item._id} className="min-w-[250px] flex-shrink-0">
+                  <Card item={item} />
+                </div>
+              ))
+            ) : (
+              <p className="text-center w-full">
+                {" "}
+                Oops! No items to display in this category
+              </p>
+            )}
+          </div>
         </div>
       </div>
     </>
