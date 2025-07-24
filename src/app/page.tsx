@@ -1,5 +1,7 @@
 "use client";
 
+import Head from "next/head";
+import Script from "next/script";
 import BottomSlider from "./components/bottom-slider";
 import GymBanner from "./components/gym-banner";
 import Hero from "./components/hero";
@@ -10,25 +12,26 @@ import BoxContainer from "@/common/box-container";
 import Footer from "@/common/footer";
 import ProductFilter from "@/common/ProductFilter";
 import HairBanner from "./components/hair-banner";
-import Script from "next/script";
 
 export default function Home() {
   return (
     <>
-      <head>
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-HG69Q30FKD"
-          strategy="afterInteractive"
-        />
-        <Script id="gtag-init" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-HG69Q30FKD');
-          `}
-        </Script>
-      </head>
+      <Head>
+        <title>Glimmer Website</title>
+      </Head>
+
+      <Script
+        src="https://www.googletagmanager.com/gtag/js?id=G-HG69Q30FKD"
+        strategy="afterInteractive"
+      />
+      <Script id="gtag-init" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-HG69Q30FKD');
+        `}
+      </Script>
 
       <div className="w-[99vw]">
         <Hero />
