@@ -525,10 +525,10 @@ const ServiceDetails = () => {
 
           {/* Duration, Gender, Sub service */}
           <div className="grid grid-cols-2 gap-3 mt-3">
-            <div className="flex items-center font-semibold text-gray-700 dark:text-gray-700">
+            {/* <div className="flex items-center font-semibold text-gray-700 dark:text-gray-700">
               <span>Duration:</span>
-            </div>
-            <div className="text-gray-600 dark:text-gray-400 flex gap-2 flex-wrap">
+            </div> */}
+            {/* <div className="text-gray-600 dark:text-gray-400 flex gap-2 flex-wrap">
               {service?.duration ? (
                 <span className="px-2 py-1 border bg-white hover:bg-[#6B21A8] hover:text-white cursor-pointer border-gray-300 dark:border-gray-600 rounded-md text-sm">
                   {service.duration} mins
@@ -536,7 +536,7 @@ const ServiceDetails = () => {
               ) : (
                 "No duration"
               )}
-            </div>
+            </div> */}
             {service?.subCategoryName && (
               <>
                 <div className="flex items-center font-semibold text-gray-700 dark:text-gray-700">
@@ -559,44 +559,47 @@ const ServiceDetails = () => {
           </div>
 
           {/* Buttons Section */}
-          <div className="flex items-center gap-4 mt-4">
-            <button
-              className={`flex-1 w-full flex items-center text-xs justify-center gap-2 py-3 xl:px-6 px-4 border text-purple-800 font-semibold rounded-md`}
-              onClick={handleBuy}
-            >
-              BOOK NOW
-            </button>
-            <button
-              className={`flex-1 w-full flex items-center text-xs justify-center gap-2 py-3 xl:px-6 px-4 border bg-[#583FA8] text-white font-semibold rounded-md`}
-              onClick={() => {
-                if (!service) return;
-                handleAddToCart(service);
-              }}
-            >
-              <Image
-                alt="cart-icon"
-                width={15}
-                height={15}
-                src={"/assets/addtoBag/cart-icon.png"}
-              />
-              ADD TO BAG 
-            </button>
-            <button
-              onClick={() => setIsWishlisted(!isWishlisted)}
-              className="px-3 border border-[#583FA8] text-[#583FA8 ] h-11 rounded-md"
-            >
-              <Image
-                src={
-                  isWishlisted
-                    ? "/assets/addtoBag/heart-filled.png"
-                    : "/assets/addtoBag/heart.png"
-                }
-                alt="wishlist"
-                width={20}
-                height={20}
-              />
-            </button>
-          </div>
+        <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 mt-4 w-full">
+  <button
+    className="w-full flex items-center justify-center gap-2 py-3 px-4 border text-purple-800 font-semibold rounded-md text-sm"
+    onClick={handleBuy}
+  >
+    BOOK NOW
+  </button>
+
+  <button
+    className="w-full flex items-center justify-center gap-2 py-3 px-4 border bg-[#583FA8] text-white font-semibold rounded-md text-sm"
+    onClick={() => {
+      if (!service) return;
+      handleAddToCart(service);
+    }}
+  >
+    <Image
+      alt="cart-icon"
+      width={16}
+      height={16}
+      src="/assets/addtoBag/cart-icon.png"
+    />
+    ADD TO BAG
+  </button>
+
+  <button
+    onClick={() => setIsWishlisted(!isWishlisted)}
+    className="w-full sm:w-auto px-4 py-3 border border-[#583FA8] text-[#583FA8] rounded-md flex items-center justify-center"
+  >
+    <Image
+      src={
+        isWishlisted
+          ? "/assets/addtoBag/heart-filled.png"
+          : "/assets/addtoBag/heart.png"
+      }
+      alt="wishlist"
+      width={20}
+      height={20}
+    />
+  </button>
+</div>
+
           <Modal
             title={
               <h2 className="text-xl font-bold text-gray-800">

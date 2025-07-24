@@ -877,30 +877,29 @@ const ProductDisplay = () => {
           </div>
         </div>
       </div>
-<div className="p-10 max-w-7xl mx-auto">
-  <h2 className="text-4xl font-semibold mb-6">Related Products</h2>
+      <div className="p-10 max-w-7xl mx-auto">
+        <h2 className="text-4xl font-semibold mb-6">Related Products</h2>
 
-  <div className="overflow-x-auto">
-    <div className="flex gap-3 min-w-max pl-4">
-      {data.length > 4 ? (
-        data.slice(4).map((item) => (
-          <div
-            key={item._id}
-            className="flex-shrink-0 w-[38vw] sm:w-[280px] md:w-[320px]"
-          >
-            <Card item={item} />
+        {/* Scrollable wrapper */}
+        <div className="overflow-x-auto scrollbar-hide">
+          <div className="flex gap-4 w-max px-2">
+            {data.length > 4 ? (
+              data.slice(4).map((item) => (
+                <div
+                  key={item._id}
+                  className="shrink-0 w-[38vw] sm:w-[260px] md:w-[300px] lg:w-[320px]"
+                >
+                  <Card item={item} />
+                </div>
+              ))
+            ) : (
+              <p className="text-center w-full">
+                Oops! No items to display in this category
+              </p>
+            )}
           </div>
-        ))
-      ) : (
-        <p className="text-center w-full">
-          Oops! No items to display in this category
-        </p>
-      )}
-    </div>
-  </div>
-</div>
-
-
+        </div>
+      </div>
     </>
   );
 };

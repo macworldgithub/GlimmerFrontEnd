@@ -2,14 +2,10 @@
 
 import Image from "next/image";
 
-const categories = [
-  "HAIR LUX",
-  "INKLINE",
-  "ARTISTRY",
-  "LUMINA",
-  "CHROMA",
-  "HYDRALUX",
-];
+// const categories = [
+
+ 
+// ];
 
 export default function DynamicBanner({
   imageUrl,
@@ -74,7 +70,7 @@ export default function DynamicBanner({
       </div>
 
       {/* Category Links */}
-      <div className="mt-10 mb-6 flex gap-4 text-[#d7d1ea] text-md max-sm:grid max-sm:grid-cols-2 max-sm:gap-X-10">
+      {/* <div className="mt-10 mb-6 flex gap-4 text-[#d7d1ea] text-md max-sm:grid max-sm:grid-cols-2 max-sm:gap-X-10">
         {categories.map((category, index) => (
           <span
             key={index}
@@ -83,7 +79,7 @@ export default function DynamicBanner({
             {category}
           </span>
         ))}
-      </div>
+      </div> */}
     </div>
   );
 }

@@ -419,7 +419,7 @@ const ServiceList = () => {
                 disabled={page === 1}
                 className="px-4 py-2 bg-gray-200 text-gray-500 rounded-md hover:bg-gray-300 disabled:opacity-50"
               >
-                Previous
+                Previous 
               </button>
               <span className="text-lg text-gray-600">
                 Page {page} of {Math.ceil(total / pageSize)}
