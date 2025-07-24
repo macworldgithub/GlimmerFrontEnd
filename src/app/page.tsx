@@ -10,28 +10,25 @@ import BoxContainer from "@/common/box-container";
 import Footer from "@/common/footer";
 import ProductFilter from "@/common/ProductFilter";
 import HairBanner from "./components/hair-banner";
-import Head from "next/head";
+import Script from "next/script";
 
 export default function Home() {
   return (
     <>
-      <Head>
-        {/* Google tag (gtag.js) */}
-        <script
-          async
+      <head>
+        <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-HG69Q30FKD"
-        ></script>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-HG69Q30FKD');
-        `,
-          }}
+          strategy="afterInteractive"
         />
-      </Head>
+        <Script id="gtag-init" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-HG69Q30FKD');
+          `}
+        </Script>
+      </head>
 
       <div className="w-[99vw]">
         <Hero />
