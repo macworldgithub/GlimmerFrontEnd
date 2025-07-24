@@ -26,13 +26,17 @@ const SalonCard: React.FC<{ salons: Salon; onClick: () => void }> = ({
   onClick,
 }) => (
   <div
-    className="w-[48%] sm:w-[300px] md:max-w-[320px] h-[320px] sm:h-[350px] md:h-[370px] bg-white rounded-xl border border-gray-200 shadow hover:shadow-lg transition duration-300 overflow-hidden cursor-pointer snap-start shrink-0"
+    className="w-full bg-white rounded-xl border border-gray-200 shadow hover:shadow-lg transition duration-300 overflow-hidden cursor-pointer"
     onClick={onClick}
   >
-    <div className="h-[50%] relative rounded-t-xl overflow-hidden">
+    <div className="relative rounded-t-xl overflow-hidden aspect-[4/3]">
       {salons.image1 ? (
         <Image
-          src={salons.image1.startsWith("http") ? salons.image1 : `/${salons.image1}`}
+          src={
+            salons.image1.startsWith("http")
+              ? salons.image1
+              : `/${salons.image1}`
+          }
           alt={salons.salon_name}
           fill
           className="object-cover rounded-t-xl"
@@ -50,14 +54,13 @@ const SalonCard: React.FC<{ salons: Salon; onClick: () => void }> = ({
     </div>
 
     <div className="h-[50%] px-5 py-4 flex flex-col justify-between bg-gradient-to-b from-white to-gray-100">
-      <h3 className="text-lg font-semibold truncate mb-1">{salons.salon_name}</h3>
+      <h3 className="text-lg font-semibold truncate mb-1">
+        {salons.salon_name}
+      </h3>
 
       <Tooltip title={salons.address}>
-        <p className="text-sm text-gray-600 line-clamp-2 md:line-clamp-1 mb-1">
-          {salons.address}
-        </p>
+        <p className="text-sm text-gray-600 mb-1">{salons.address}</p>
       </Tooltip>
-
 
       {salons.openingHour && salons.closingHour ? (
         <span className="text-[8px] sm:text-xs bg-green-100 text-green-700 px-2 sm:px-4 py-0.5 sm:py-1 rounded-full w-fit mb-1 border border-green-300">
@@ -68,9 +71,10 @@ const SalonCard: React.FC<{ salons: Salon; onClick: () => void }> = ({
           24/7 Available
         </span>
       )}
-
       <Tooltip title={salons.about}>
-        <p className="text-xs text-gray-500 truncate mt-2">{salons.about}</p>
+        <p className="text-xs text-gray-500 line-clamp-2 md:line-clamp-3 lg:line-clamp-4 mt-2">
+          {salons.about}
+        </p>
       </Tooltip>
     </div>
   </div>
@@ -106,7 +110,7 @@ const SalonCards: React.FC<SalonCardsProps> = ({
     const fetchSalons = async () => {
       try {
         const result = await dispatch(getAllSalons(1)).unwrap();
-        setSalons((result.salons));
+        setSalons(result.salons);
       } catch {
         setError("Failed to load salons");
       } finally {
@@ -141,24 +145,29 @@ const SalonCards: React.FC<SalonCardsProps> = ({
   }, []);
 
   const handleViewMore = () => router.push("/salons/all_salons");
-  const handleSalonClick = (id: number) => router.push(`/salons/details/?salonId=${id}`);
+  const handleSalonClick = (id: number) =>
+    router.push(`/salons/details/?salonId=${id}`);
 
-  if (loading) return <p className="text-center text-gray-500">Loading salons...</p>;
+  if (loading)
+    return <p className="text-center text-gray-500">Loading salons...</p>;
   if (error) return <p className="text-center text-red-500">{error}</p>;
 
   return (
-    <div className={`w-full max-w-[82rem] px-4 md:px-1 mx-auto py-0 md:py-10 ${className}`}>
+    <div
+      className={`w-full max-w-[82rem] px-4 md:px-1 mx-auto py-0 md:py-10 ${className}`}
+    >
       <Link href="/salons" className="block">
-        <h2 className="text-2xl sm:text-2xl md:text-3xl font-semibold mb-8">{title}
-
+        <h2 className="text-2xl sm:text-2xl md:text-3xl font-semibold mb-8">
+          {title}
         </h2>
       </Link>
 
       <div
-        className={`${isSmallScreen
-          ? "flex overflow-x-auto gap-6 pb-4 px-4 snap-x snap-mandatory scroll-smooth scrollbar-hide"
-          : "grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
-          }`}
+        className={`${
+          isSmallScreen
+            ? "flex overflow-x-auto gap-6 pb-4 px-4 snap-x snap-mandatory scroll-smooth scrollbar-hide"
+            : "grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+        }`}
       >
         {salons
           .slice(0, isSmallScreen ? salons.length : cardsToShow)

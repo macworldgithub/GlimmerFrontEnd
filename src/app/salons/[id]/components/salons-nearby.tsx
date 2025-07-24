@@ -7,7 +7,7 @@ const SalonsNearby = () => {
   return (
     <div className="px-4 lg:px-10 xl:px-24 mt-0 pt-0 !mt-[-35px] !pt-0">
       <SalonCards
-        title="Other Salons"
+        title="Other Salons "
         showButton={true}
         className="w-full max-w-[1200px] mx-auto !mt-0 !pt-0"
       />
