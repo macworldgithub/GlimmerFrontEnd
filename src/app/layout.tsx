@@ -10,9 +10,20 @@ import ClientLayout from "@/common/client-layout";
 import FloatingWhatsApp from "@/common/FloatingWhatsApp";
 import ChatbotWidget from "@/common/ChatbotWidget";
 
+
 const prompt = Prompt({
   subsets: ["latin"],
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  weight: [
+    "100",
+    "200",
+    "300",
+    "400",
+    "500",
+    "600",
+    "700",
+    "800",
+    "900",
+  ],
   display: "swap",
   variable: "--font-prompt",
 });
@@ -29,11 +40,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <CartStoreProvider>
-      <Navbar />
-      <ClientLayout>{children}</ClientLayout>
-      <CookieBanner />
-      <ChatbotWidget />
-    </CartStoreProvider>
+    
+
+        <CartStoreProvider>
+          <Navbar />
+          <ClientLayout>{children}</ClientLayout>
+          <CookieBanner />
+          <ChatbotWidget />
+        </CartStoreProvider>
+   
   );
 }
