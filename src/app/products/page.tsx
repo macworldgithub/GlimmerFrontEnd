@@ -701,7 +701,7 @@ const ProductsList = () => {
               }}
               className={`border px-4 py-1.5 text-lg md:px-6 md:py-2 md:text-lg rounded-md font-medium transition duration-300 ease-in-out ${
                 activeSort === "Date"
-                  ? "border-purple-800 text-purple-800 bg-purple-100"
+                  ? "border-gray-400 text-gray-700 bg-white"
                   : "border-gray-400 text-gray-700 hover:bg-[#FDF3D2]"
               }`}
             >

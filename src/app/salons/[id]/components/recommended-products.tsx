@@ -60,7 +60,7 @@ const RecommendedProducts = () => {
       </Link>
 
       {/* Swiper Controls (only show on desktop) */}
-      {!isSmallScreen && (
+      {/* {!isSmallScreen && (
         <div className="flex justify-between items-center mb-6">
           <button
             onClick={handlePrev}
@@ -77,7 +77,7 @@ const RecommendedProducts = () => {
             →
           </button>
         </div>
-      )}
+      )} */}
 
       {/* Product Display */}
       {isSmallScreen ? (
