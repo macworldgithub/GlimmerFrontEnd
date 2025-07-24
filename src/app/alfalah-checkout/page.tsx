@@ -16,8 +16,9 @@ export default function AlfalahCheckoutPage() {
 
     // Dynamically inject the Mastercard script
     const script = document.createElement("script");
+    // script.src = "https://test-bankalfalah.gateway.mastercard.com/static/checkout/checkout.min.js";
     script.src =
-      "https://test-bankalfalah.gateway.mastercard.com/static/checkout/checkout.min.js";
+      "https://bankalfalah.gateway.mastercard.com/static/checkout/checkout.min.js";
     script.setAttribute("data-error", "errorCallback");
     script.setAttribute("data-cancel", "cancelCallback");
     script.setAttribute("data-complete", "completeCallback");
