@@ -106,6 +106,9 @@ const SalonDetailsPage = () => {
                 : " - 10:00 pm)"}
             </p>
           </div>
+          {salonData.address && (
+            <p className="text-sm text-gray-500 mt-1">{salonData.address}</p>
+          )}
         </div>
 
         {/* ✅ Top Image Display */}
