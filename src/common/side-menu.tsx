@@ -158,7 +158,7 @@ const SideMenu = ({
   return (
     <>
       {/* desktop */}
-      <div className="dropdown menu-dropdown-show hidden md:block relative z-50">
+      {/* <div className="dropdown menu-dropdown-show hidden md:block relative z-50">
         <div
           tabIndex={0}
           role="button"
@@ -170,7 +170,7 @@ const SideMenu = ({
           className="menu dropdown-content z-[9999] mt-3 w-96 rounded-xl bg-base-100 p-4 shadow-xl border border-gray-200"
           isMobile={true}
         />
-      </div>
+      </div> */}
 
       {/* mobile */}
       <div className="drawer z-50 md:hidden">
