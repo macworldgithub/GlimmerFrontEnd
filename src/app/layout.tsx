@@ -9,6 +9,7 @@ import CookieBanner from "@/common/cookie-banner";
 import ClientLayout from "@/common/client-layout";
 import FloatingWhatsApp from "@/common/FloatingWhatsApp";
 import ChatbotWidget from "@/common/ChatbotWidget";
+import CategoryNavMenu from "@/common/category-nav-menu";
 // import FloatingChatbot from '@/common/FloatingChatbot';
 
 const prompt = Prompt({
@@ -37,6 +38,7 @@ export default function RootLayout({
       <body className={`${prompt.variable} container bg-base-100 antialiased`}>
         <CartStoreProvider>
           <Navbar />
+          <CategoryNavMenu/>
           <ClientLayout>{children}</ClientLayout>
           <CookieBanner />
           <ChatbotWidget />

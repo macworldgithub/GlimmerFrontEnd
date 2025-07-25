@@ -325,7 +325,9 @@ const ServiceList = () => {
           className="w-full"
         >
           <div className="flex flex-wrap md:flex-row sm:flex-col items-center gap-4 sm:gap-6 px-4 sm:px-6 md:px-8 pt-4 sm:pt-6 md:pt-8 pb-4 sm:pb-6 md:pb-8">
-            <span className="text-gray-700 text-lg md:px-6 md:py-2 md:text-xl">Sort by</span>
+            <span className="text-gray-700 text-lg md:px-6 md:py-2 md:text-xl">
+              Sort by
+            </span>
             <button
               onClick={() => {
                 setActiveSort("Date");
@@ -386,7 +388,6 @@ const ServiceList = () => {
 
           {/* Service Grid */}
           <div className="w-full h-max grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-x-4 gap-y-6 p-4">
-
             {data.length ? (
               data.map((item) => (
                 <motion.div
@@ -419,7 +420,7 @@ const ServiceList = () => {
                 disabled={page === 1}
                 className="px-4 py-2 bg-gray-200 text-gray-500 rounded-md hover:bg-gray-300 disabled:opacity-50"
               >
-                Previous 
+                Previous
               </button>
               <span className="text-lg text-gray-600">
                 Page {page} of {Math.ceil(total / pageSize)}

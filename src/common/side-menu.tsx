@@ -157,8 +157,8 @@ const SideMenu = ({
   };
   return (
     <>
-      {/* desktop */}
-      {/* <div className="dropdown menu-dropdown-show hidden md:block relative z-50">
+      {/* desktop */} 
+       {/* <div className="dropdown menu-dropdown-show hidden md:block relative z-50">
         <div
           tabIndex={0}
           role="button"
