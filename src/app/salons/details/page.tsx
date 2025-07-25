@@ -150,7 +150,7 @@ const SalonDetailsPage = () => {
                         : "border-transparent"
                     }`}
                     onClick={() => {
-                      setCurrentImageIndex(index); // ✅ change top image
+                      setCurrentImageIndex(index); 
                     }}
                   >
                     <img

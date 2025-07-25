@@ -112,7 +112,10 @@ const SelfcareCardList = () => {
       {/* Product Grid / Carousel */}
       {isSmallScreen ? (
         <div className="px-2">
-          <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory mb-4 scroll-smooth scrollbar-hide">
+         <div
+  className="horizontal-scroll flex gap-4 overflow-x-auto snap-x snap-mandatory mb-4 scroll-smooth"
+>
+
             {(showAll ? products : products.slice(0, 20)).map((product) => (
               <div
                 key={product._id}
@@ -147,7 +150,7 @@ const SelfcareCardList = () => {
           onClick={handleViewMore}
           className="bg-[#583FA8] text-white py-2 px-6 rounded-lg hover:bg-[#472c9f]"
         >
-          View More 
+          View More
         </button>
       </div>
     </div>
