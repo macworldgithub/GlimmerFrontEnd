@@ -307,9 +307,7 @@ const ProductDisplay = () => {
         </div>
       )}
 
-      <div className="w-full mb-4">
-        <CategoryNavMenu />
-      </div>
+      <div className="w-full mb-4">{/* <CategoryNavMenu /> */}</div>
 
       <div className="breadcrumbs mb-4 text-xl lg:text-xl px-10">
         <Link
@@ -620,7 +618,7 @@ const ProductDisplay = () => {
                   height={15}
                   src="/assets/addtoBag/cart-icon.png"
                 />
-                ADD TO BAG 
+                ADD TO BAG
               </button>
 
               {/* + - Quantity Controller */}
