@@ -2,6 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Fix for iOS scroll issues */
+.ios-scroll-fix {
+  -webkit-overflow-scrolling: touch;
+  overflow-x: scroll;
+}
+
+.ios-scroll-fix::-webkit-scrollbar {
+  display: block;
+  height: 6px;
+}
+
+.ios-scroll-fix::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+}
+
+
+
+
+
 :root {
   /* light theme consts */
   /* --background: #ffffff;
