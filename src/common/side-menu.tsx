@@ -100,7 +100,7 @@ const SideMenu = ({
             href="/salons"
             onClick={() => setIsOpen(false)}
           >
-            <FaArrowRight className="size-4" /> Salons and Spa
+            <FaArrowRight className="size-4" /> Salons and Spa 
           </Link>
         </li>
         {/* <li>

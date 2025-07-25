@@ -186,7 +186,7 @@ const SalonCards: React.FC<SalonCardsProps> = ({
             className="bg-[#583FA8] text-white px-6 py-2 rounded-lg hover:bg-[#472c9f] transition"
             onClick={handleViewMore}
           >
-            View More
+            View More 
           </button>
         </div>
       )}
