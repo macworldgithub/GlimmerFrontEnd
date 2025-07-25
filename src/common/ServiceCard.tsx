@@ -109,11 +109,12 @@ const ServiceCard: FC<ServiceCardProps> = ({
       <span className="text-sm font-bold text-gray-900">
         {discountedPrice.toFixed(2)} PKR
       </span>
-      {item.hasDiscount && (
-        <span className="text-gray-400 text-xs line-through">
-          {item.adminSetPrice.toFixed(2)} PKR
-        </span>
-      )}
+    {item.hasDiscount && item.discountPercentage > 0 && (
+  <span className="text-gray-400 text-xs line-through">
+    {item.adminSetPrice.toFixed(2)} PKR
+  </span>
+)}
+
     </div>
   </div>
 </div>

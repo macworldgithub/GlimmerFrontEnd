@@ -580,7 +580,7 @@ const ServiceDetails = () => {
       height={16}
       src="/assets/addtoBag/cart-icon.png"
     />
-    ADD TO BAG 
+    ADD TO BAG
   </button>
 
   <button
