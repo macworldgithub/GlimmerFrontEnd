@@ -162,13 +162,7 @@ const SalonCards: React.FC<SalonCardsProps> = ({
         </h2>
       </Link>
 
-      <div
-        className={`${
-          isSmallScreen
-            ? "flex overflow-x-auto gap-6 pb-4 px-4 snap-x snap-mandatory scroll-smooth scrollbar-hide"
-            : "grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
-        }`}
-      >
+      <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {salons
           .slice(0, isSmallScreen ? salons.length : cardsToShow)
           .map((salon) => (
@@ -186,7 +180,7 @@ const SalonCards: React.FC<SalonCardsProps> = ({
             className="bg-[#583FA8] text-white px-6 py-2 rounded-lg hover:bg-[#472c9f] transition"
             onClick={handleViewMore}
           >
-            View More 
+            View More
           </button>
         </div>
       )}

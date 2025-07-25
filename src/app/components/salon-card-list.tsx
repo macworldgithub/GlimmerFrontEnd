@@ -1,4 +1,3 @@
-
 import SalonCards from "@/common/salon-cards";
 
 const SalonCardList = () => {
