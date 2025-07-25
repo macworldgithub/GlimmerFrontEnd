@@ -64,6 +64,12 @@ const SalonsList = () => {
     const params = new URLSearchParams(searchParams);
     params.set("page_no", newPage.toString());
     router.push(`${pathname}?${params.toString()}`, { scroll: false });
+
+    // Scroll to top
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   };
 
   const handleFilterChange = (filterId: string) => {

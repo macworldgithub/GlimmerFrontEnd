@@ -569,7 +569,7 @@ const ProductsList = () => {
   const handlePageChange = (newPage: number) => {
     const params = new URLSearchParams(searchParams);
     params.set("page", newPage.toString());
-    router.push(`${pathname}?${params.toString()}`, { scroll: false });
+    router.push(`${pathname}?${params.toString()}`, { scroll: true });
   };
 
   const handleFilterChange = (newFilters: {
@@ -631,7 +631,7 @@ const ProductsList = () => {
       }
     }
 
-    router.push(`${pathname}?${params.toString()}`, { scroll: false });
+    router.push(`${pathname}?${params.toString()}`, { scroll: true });
   };
 
   return (

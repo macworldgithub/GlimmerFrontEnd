@@ -11,6 +11,7 @@ import { Menu, Drawer, Button } from "antd";
 import { MenuOutlined } from "@ant-design/icons";
 import Link from "next/link";
 import { DownOutlined } from "@ant-design/icons";
+import { FaArrowRight } from "react-icons/fa";
 
 type Item = {
   _id: string;
@@ -222,6 +223,15 @@ const CategoryNavMenu = ({
                 )}
               </div>
             ))}
+
+            {/* ✅ Added Salons and Spa inside the same flex row */}
+            <Link
+              href="/salons"
+              onClick={() => setOpen(false)}
+              className="cursor-pointer hover:text-purple-900 hover:font-medium transition-all duration-500 flex items-center gap-1 select-none"
+            >
+              Salons and Spa
+            </Link>
           </div>
 
           <div

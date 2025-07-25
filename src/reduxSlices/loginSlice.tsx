@@ -48,6 +48,19 @@ const LoginSlice = createSlice({
       // Clears user data
       return { ...initialState };
     },
+
+    // ✅ Step 1: Added reducer to handle signup login data
+    setLoginData: (
+      state,
+      action: PayloadAction<{ customer: any; token: string; role: string }>
+    ) => {
+      const { customer, token, role } = action.payload;
+      state.email = customer.email;
+      state.name = customer.name;
+      state.role = role;
+      state.token = token;
+      Cookies.set("token", token, { expires: 7 });
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(LoginApi.pending, (state) => {
@@ -76,7 +89,13 @@ const LoginSlice = createSlice({
   },
 });
 
-export const { updateEmail, updatePassword, resetStatus, logout } =
-  LoginSlice.actions;
+// ✅ Step 2: Export the new reducer as well
+export const {
+  updateEmail,
+  updatePassword,
+  resetStatus,
+  logout,
+  setLoginData,
+} = LoginSlice.actions;
 
 export default LoginSlice;

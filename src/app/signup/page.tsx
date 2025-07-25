@@ -16,10 +16,14 @@ import { RootState } from "@/store/reduxStore";
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
+import { setLoginData } from "@/reduxSlices/loginSlice";
+
 
 export default function SignUpForm() {
   const router = useRouter();
   const token = useSelector((state: RootState) => state.login.token);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (token) {
@@ -44,22 +48,27 @@ export default function SignUpForm() {
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      const res = await SignUpCustomer(formData);
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  try {
+    const res = await SignUpCustomer(formData);
 
-      if (res?.success) {
-        // Adjust based on your API response structure
-        toast.success("Account Created Successfully!");
-      } else {
-        toast.error(res?.message || "Signup Failed. Please Try Again.");
-      }
-    } catch (error: any) {
-      toast.error(error.message || "An error occurred. Please try again.");
-      console.error("Signup Error:", error);
+    if (res?.token) {
+      toast.success("Account Created Successfully!");
+
+      // ✅ Store token & user data in Redux and cookie
+      dispatch(setLoginData(res));
+
+      // ✅ Redirect
+      router.push("/");
+    } else {
+      toast.error(res?.message || "Signup Failed. Please Try Again.");
     }
-  };
+  } catch (error: any) {
+    toast.error(error.message || "An error occurred. Please try again.");
+    console.error("Signup Error:", error);
+  }
+};
   return (
     <>
       <Toaster />
@@ -67,7 +76,7 @@ export default function SignUpForm() {
         <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-2xl">
           <div className="flex justify-evenly">
             <h2 className="text-3xl font-bold text-center text-[#333] mb-6">
-              Sign up
+              Sign up 
             </h2>
             <img src={Logo.src} alt="logo" className="h-10 hidden md:block " />
           </div>
