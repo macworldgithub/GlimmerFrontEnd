@@ -20,17 +20,18 @@ export const getAllProducts = async (
     // Start building the URL with the base endpoint
     let url = `${BACKEND_URL}/product/get_all_products?page_no=${page || 1}`;
 
-    // Add filters to the URL only if they are provided
+    // Add filters to the URL only if they are provided and not 0
     if (category) url += `&category=${category}`;
     if (subcategory) url += `&sub_category=${subcategory}`;
     if (item) url += `&item=${item}`;
     if (name) url += `&name=${name}`;
-    if (minPrice) url += `&minPrice=${minPrice}`;
-    if (maxPrice) url += `&maxPrice=${maxPrice}`;
+    if (minPrice && minPrice > 0) url += `&minPrice=${minPrice}`;
+    if (maxPrice && maxPrice > 0) url += `&maxPrice=${maxPrice}`;
     if (sortBy) url += `&sortBy=${sortBy}`;
     if (order) url += `&order=${order}`;
     if (limit) url += `&limit=${limit}`;
 
+    console.log("API URL:", url); // Debug log
   
     const res = await axios.get(url);
 

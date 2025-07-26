@@ -453,10 +453,20 @@ const ProductsList = () => {
   const subCategoryFilter = searchParams.get("sub_category") ?? "";
   const itemFilter = searchParams.get("item") ?? "";
   const nameFilter = searchParams.get("name") ?? "";
-  const minPriceFilter = Number(searchParams.get("minPrice")) ?? 0;
-  const maxPriceFilter = Number(searchParams.get("maxPrice")) ?? 0;
+  const minPriceFilter = searchParams.get("minPrice") ? Number(searchParams.get("minPrice")) : 0;
+  const maxPriceFilter = searchParams.get("maxPrice") ? Number(searchParams.get("maxPrice")) : 0;
   const createdAtFilter = searchParams.get("created_at");
   const page = Number(searchParams.get("page")) || 1;
+  
+  console.log("URL Parameters:", {
+    categoryFilter,
+    subCategoryFilter,
+    itemFilter,
+    nameFilter,
+    minPriceFilter,
+    maxPriceFilter,
+    page
+  });
 
   useEffect(() => {
     const fetchSelections = async () => {
@@ -504,27 +514,65 @@ const ProductsList = () => {
         pageSize
       );
 
+      console.log("API Response:", res); // Debug API response
+      console.log("Category Filter:", categoryFilter); // Debug category filter
+      console.log("Price Filters:", { minPriceFilter, maxPriceFilter }); // Debug price filters
+      
       // Calculate final price for each product
       const filteredProducts = res.products
-        .map((product: any) => ({
-          ...product,
-          finalPrice:
-            product.discounted_price > 0
-              ? (
-                  product.base_price -
-                  (product.base_price * product.discounted_price) / 100
-                ).toFixed(2)
-              : product.base_price.toFixed(2),
-        }))
-        .filter((product: any) => {
+        .map((product: any) => {
+          // Handle different price structures
+          let finalPrice = 0;
+          
+          console.log("Product price calculation:", {
+            name: product.name,
+            base_price: product.base_price,
+            discounted_price: product.discounted_price,
+            price: product.price
+          });
+          
+          if (product.discounted_price && product.discounted_price > 0 && product.base_price) {
+            // Discount calculation - discounted_price is percentage
+            const discountAmount = (product.base_price * product.discounted_price) / 100;
+            finalPrice = product.base_price - discountAmount;
+          } else if (product.base_price) {
+            finalPrice = product.base_price;
+          } else if (product.price) {
+            finalPrice = product.price;
+          }
+          
+          // Ensure price is never negative
+          finalPrice = Math.max(0, finalPrice);
+          
+          return {
+            ...product,
+            finalPrice: finalPrice.toFixed(2),
+          };
+        })
+        .filter((product: any, index: number) => {
           const productName = product.name?.toLowerCase() || "";
           const productPrice = Number(product.finalPrice) || 0;
           const productCreatedAt = new Date(product.created_at);
-          const min = minPriceFilter ? Number(minPriceFilter) : undefined;
-          const max = maxPriceFilter ? Number(maxPriceFilter) : undefined;
+          const min = minPriceFilter && minPriceFilter > 0 ? Number(minPriceFilter) : undefined;
+          const max = maxPriceFilter && maxPriceFilter > 0 ? Number(maxPriceFilter) : undefined;
+          
+          console.log("Filtering product:", {
+            name: productName,
+            price: productPrice,
+            min,
+            max,
+            matchesPrice: (min !== undefined ? productPrice >= min : true) && (max !== undefined ? productPrice <= max : true)
+          });
+          
           const matchesPrice =
             (min !== undefined ? productPrice >= min : true) &&
             (max !== undefined ? productPrice <= max : true);
+          
+          // Show all products if price is negative or 0 (temporary fix)
+          if (productPrice <= 0) {
+            console.log("Skipping product with invalid price:", productName, productPrice);
+            return true; // Show products with invalid prices for now
+          }
           const matchesName = nameFilter
             ? productName.includes(nameFilter.toLowerCase())
             : true;
@@ -543,6 +591,10 @@ const ProductsList = () => {
                 new Date(b.created_at).getTime();
         });
       }
+      console.log("Final filtered products count:", filteredProducts.length);
+      console.log("Sample filtered product:", filteredProducts[0]);
+      console.log("All products from API:", res.products?.length || 0);
+      
       setData(filteredProducts);
       setTotal(res.total || filteredProducts.length);
     } catch (error) {

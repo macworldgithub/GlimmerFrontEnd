@@ -49,15 +49,18 @@ const Sidebar = ({
   };
 
   const handlePriceChange = () => {
-    const min = Number(minPrice);
-    const max = Number(maxPrice);
+    const min = minPrice ? Number(minPrice) : undefined;
+    const max = maxPrice ? Number(maxPrice) : undefined;
+    
+    console.log("Price filter applied:", { min, max }); // Debug log
+    
     onFilterChange({
       category: selectedCategory,
       sub_category: selectedSubCategory,
       item: selectedItem,
       name: itemName,
-      minPrice: min,
-      maxPrice: max,
+      minPrice: min?.toString() || "",
+      maxPrice: max?.toString() || "",
     });
   };
 
