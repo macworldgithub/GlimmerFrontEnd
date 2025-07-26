@@ -9,6 +9,7 @@ import Link from "next/link";
 import "swiper/css";
 import "swiper/css/effect-fade";
 import { Poppins } from "next/font/google";
+import { useRouter } from "next/navigation";
 
 type Props = {
   srcs?: string[];
@@ -30,6 +31,7 @@ const AutoSlider = ({
   delay = 3000,
   onBannerClick,
 }: Props) => {
+  const router = useRouter();
   const _srcs = srcs.length > 0 ? srcs : [HeroImg1.src, HeroImg2.src];
   const modules = [];
   if (delay) modules.push(Autoplay);
@@ -116,6 +118,7 @@ const AutoSlider = ({
                               ? "bg-purple-600 text-white"
                               : "bg-green-600 text-white"
                           }`}
+                          onClick={() => router.push(overlay.link)}
                         >
                           {overlay.buttonText}
                         </button>
@@ -169,6 +172,7 @@ const AutoSlider = ({
                               ? "bg-purple-600 text-white"
                               : "bg-green-600 text-white"
                           }`}
+                          onClick={() => router.push(overlay.link)}
                         >
                           {overlay.buttonText}
                         </button>
