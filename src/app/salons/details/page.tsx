@@ -82,7 +82,7 @@ const SalonDetailsPage = () => {
 
   return (
     <>
-      <div className="mb-6 w-[99vw] md:mb-8 pt-0 pb-10 px-10">
+      <div className="mb-6 w-[99vw] md:mb-8 pt-11 pb-10 px-10">
         <div className="flex flex-col mt-0">
           <div className="flex justify-between items-center">
             <div className="prose">
@@ -150,7 +150,7 @@ const SalonDetailsPage = () => {
                         : "border-transparent"
                     }`}
                     onClick={() => {
-                      setCurrentImageIndex(index); 
+                      setCurrentImageIndex(index);
                     }}
                   >
                     <img

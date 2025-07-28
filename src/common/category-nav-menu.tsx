@@ -330,9 +330,6 @@
 
 // export default CategoryNavMenu;
 
-
-
-
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
@@ -546,7 +543,9 @@ const CategoryNavMenu = ({
   const router = useRouter();
   const pathname = usePathname();
   const isProductsPage = pathname === "/products";
-  const [selectedSubCategory, setSelectedSubCategory] = useState<SubCategory[]>([]);
+  const [selectedSubCategory, setSelectedSubCategory] = useState<SubCategory[]>(
+    []
+  );
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -604,10 +603,11 @@ const CategoryNavMenu = ({
     <>
       {!forceMobileStyle && (
         <div
-          className={`max-md:hidden relative h-[60px] w-[99vw] flex justify-center py-2 ${isProductsPage
-            ? "bg-white border-[1px] border-black"
-            : "bg-[#f0efed]"
-            } ${className}`}
+          className={`max-md:hidden relative h-[60px] w-[99vw] flex justify-center py-2 ${
+            isProductsPage
+              ? "bg-white border-[1px] border-black"
+              : "bg-[#f0efed]"
+          } ${className}`}
           onMouseLeave={() => setDropdownOpen(false)}
         >
           {/* ---- Top Navbar ---- */}
@@ -630,15 +630,18 @@ const CategoryNavMenu = ({
           {/* ---- Dropdown ---- */}
           <div
             ref={dropdownRef}
-            className={`w-full justify-between px-6 py-3 flex flex-wrap gap-6 bg-white absolute top-[58px] z-50 transition-all duration-500 shadow-xl rounded-lg ${dropdownOpen
+            className={`w-full justify-between px-6 py-3 flex flex-wrap gap-6 bg-white absolute top-[58px] z-50 transition-all duration-500 shadow-xl rounded-lg ${
+              dropdownOpen
                 ? "opacity-100 translate-y-0"
                 : "opacity-0 -translate-y-5 pointer-events-none"
-              } overflow-y-auto max-h-[300px]`}
+            } overflow-y-auto max-h-[300px]`}
           >
             {selectedSubCategory?.map((item, index) => (
               <div className="flex flex-col" key={index}>
                 <p
-                  onClick={() => HandlePath(`${item?.product_category}-${item?._id}`)}
+                  onClick={() =>
+                    HandlePath(`${item?.product_category}-${item?._id}`)
+                  }
                   className="font-semibold text-[16px] cursor-pointer"
                 >
                   {item?.name}
