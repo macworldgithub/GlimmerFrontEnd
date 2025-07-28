@@ -603,7 +603,7 @@ const CategoryNavMenu = ({
     <>
       {!forceMobileStyle && (
         <div
-          className={`max-md:hidden relative h-[60px] w-[99vw] flex justify-center py-2 ${
+          className={`max-md:hidden relative h-[60px] w-screen flex justify-center py-2 ${
             isProductsPage
               ? "bg-white border-[1px] border-black"
               : "bg-[#f0efed]"
@@ -628,15 +628,14 @@ const CategoryNavMenu = ({
           </div>
 
           {/* ---- Dropdown ---- */}
-        <div
-  ref={dropdownRef}
-  className={`absolute top-[58px] left-1/2 -translate-x-1/2 z-50 bg-white shadow-xl rounded-lg px-6 py-4 transition-all duration-500 flex flex-wrap gap-6 justify-between max-w-[1200px] w-full ${
-    dropdownOpen
-      ? "opacity-100 translate-y-0"
-      : "opacity-0 -translate-y-5 pointer-events-none"
-  }`}
->
-
+          <div
+            ref={dropdownRef}
+            className={`absolute top-[58px] left-1/2 -translate-x-1/2 z-50 bg-white shadow-xl rounded-lg px-6 py-4 transition-all duration-500 flex flex-wrap gap-6 justify-between max-w-[1200px] w-full ${
+              dropdownOpen
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 -translate-y-5 pointer-events-none"
+            }`}
+          >
             {selectedSubCategory?.map((item, index) => (
               <div className="flex flex-col" key={index}>
                 <p
