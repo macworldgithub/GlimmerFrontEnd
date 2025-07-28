@@ -116,10 +116,11 @@ const SelfcareCardList = () => {
             {(showAll ? products : products.slice(0, 20)).map((product) => (
               <div
                 key={product._id}
-                className={`shrink-0 snap-start ${isSmallScreen
+                className={`shrink-0 snap-start ${
+                  isSmallScreen
                     ? "w-1/2"
                     : "w-[260px] md:w-[280px] lg:w-[300px]"
-                  }`}
+                }`}
               >
                 <Card item={product} />
               </div>
@@ -145,7 +146,7 @@ const SelfcareCardList = () => {
         </div>
       )}
       {/* View More Button */}
-      <div className="text-center">
+      <div className="text-center mt-8">
         <button
           onClick={handleViewMore}
           className="bg-[#583FA8] text-white py-2 px-6 rounded-lg hover:bg-[#472c9f]"
