@@ -56,6 +56,10 @@ export default function AlfalahCheckoutPage() {
       resultIndicator: string,
       sessionVersion: string
     ) {
+      console.log("✅ Payment completed with result:", {
+        resultIndicator,
+        sessionVersion,
+      });
       alert("✅ Payment Completed!\nResult Indicator: " + resultIndicator);
     };
 

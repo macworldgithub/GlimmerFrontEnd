@@ -606,7 +606,7 @@ const CategoryNavMenu = ({
         <div
           className={`max-md:hidden relative h-[60px] w-[99vw] flex justify-center py-2 ${isProductsPage
             ? "bg-white border-[1px] border-black"
-            : "bg-[#FBE8A5]"
+            : "bg-[#f0efed]"
             } ${className}`}
           onMouseLeave={() => setDropdownOpen(false)}
         >

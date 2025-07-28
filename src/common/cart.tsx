@@ -49,7 +49,7 @@ const Cart = () => {
   if (Cart.ProductList.length === 0)
     return (
       <>
-        <CategoryNavMenu />
+        {/* <CategoryNavMenu /> */}
         <div className="hero min-h-screen w-[99vw] bg-base-200">
           <div className="hero-content text-center">
             <div className="max-w-md">
@@ -58,7 +58,7 @@ const Cart = () => {
                 Your cart is empty. Please add items to your cart.
               </p>
               <Link href={"/selfcare-products"}>
-                <button className="btn btn-secondary">Continue Shopping</button>
+                <button className="btn btn-secondary">Continue Shopping </button>
               </Link>
             </div>
           </div>
