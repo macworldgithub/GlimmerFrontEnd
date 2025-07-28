@@ -88,9 +88,15 @@ const SalonDetailsPage = () => {
             <div className="prose">
               <h1>{salonData.salon_name || "Glimmer's Saloon"}</h1>
             </div>
-            <div>
+            <button
+              onClick={() => {
+                navigator.clipboard.writeText(window.location.href);
+                alert("Link copied to clipboard!");
+              }}
+              className="text-gray-600 hover:text-black"
+            >
               <MdOutlineIosShare size={30} />
-            </div>
+            </button>
           </div>
 
           <div className="flex flex-row items-center mb-3 text-1xl">
