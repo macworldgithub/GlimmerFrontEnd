@@ -100,7 +100,7 @@ const SideMenu = ({
             href="/salons"
             onClick={() => setIsOpen(false)}
           >
-            <FaArrowRight className="size-4" /> Salons and Spa 
+            <FaArrowRight className="size-4" /> Salons and Spa
           </Link>
         </li>
         {/* <li>
@@ -157,8 +157,8 @@ const SideMenu = ({
   };
   return (
     <>
-      {/* desktop */} 
-       {/* <div className="dropdown menu-dropdown-show hidden md:block relative z-50">
+      {/* desktop */}
+      {/* <div className="dropdown menu-dropdown-show hidden md:block relative z-50">
         <div
           tabIndex={0}
           role="button"
@@ -199,7 +199,7 @@ const SideMenu = ({
             className="drawer-overlay"
           ></label>
 
-           <div className="bg-purple-100 text-base-content min-h-full w-80 p-6 shadow-2xl rounded-tr-xl rounded-br-xl relative">
+          <div className="bg-purple-100 text-base-content min-h-full w-80 p-6 shadow-2xl rounded-tr-xl rounded-br-xl relative">
             {/* Close Button */}
             <button
               onClick={() => setIsOpen(false)}
@@ -208,7 +208,7 @@ const SideMenu = ({
               ✕
             </button>
 
-             <div className="mt-12">
+            <div className="mt-12">
               <Menu isMobile={true} />
             </div>
           </div>
