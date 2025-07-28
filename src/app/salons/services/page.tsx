@@ -47,7 +47,7 @@ const ServiceList = () => {
   });
   const [errors, setErrors] = useState<any>({});
 
-  const pageSize = 8;
+  const pageSize = 20;
 
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -335,7 +335,7 @@ const ServiceList = () => {
               }}
               className={`border px-4 py-1.5 text-lg md:px-6 md:py-2 md:text-lg rounded-md font-medium transition duration-300 ease-in-out ${
                 activeSort === "Date"
-                  ? "border-purple-800 text-purple-800 bg-purple-100"
+                  ? "border-gray-400 text-gray-700 bg-white"
                   : "border-gray-400 text-gray-700 hover:bg-[#FDF3D2]"
               }`}
             >
@@ -387,7 +387,8 @@ const ServiceList = () => {
           </div>
 
           {/* Service Grid */}
-          <div className="w-full h-max grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-x-4 gap-y-6 p-4">
+          <div className="w-full h-max grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-x-4 gap-y-6 p-4">
+
             {data.length ? (
               data.map((item) => (
                 <motion.div
