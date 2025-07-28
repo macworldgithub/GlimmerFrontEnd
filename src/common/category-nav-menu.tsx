@@ -628,15 +628,15 @@ const CategoryNavMenu = ({
           </div>
 
           {/* ---- Dropdown ---- */}
-          <div
-            ref={dropdownRef}
-           className={`w-full justify-between px-6 py-3 flex flex-wrap gap-6 bg-white absolute top-[58px] z-50 transition-all duration-500 shadow-xl rounded-lg ${
-  dropdownOpen
-    ? "opacity-100 translate-y-0"
-    : "opacity-0 -translate-y-5 pointer-events-none"
-} overflow-visible`}
+        <div
+  ref={dropdownRef}
+  className={`absolute top-[58px] left-1/2 -translate-x-1/2 z-50 bg-white shadow-xl rounded-lg px-6 py-4 transition-all duration-500 flex flex-wrap gap-6 justify-between max-w-[1200px] w-full ${
+    dropdownOpen
+      ? "opacity-100 translate-y-0"
+      : "opacity-0 -translate-y-5 pointer-events-none"
+  }`}
+>
 
-          >
             {selectedSubCategory?.map((item, index) => (
               <div className="flex flex-col" key={index}>
                 <p
