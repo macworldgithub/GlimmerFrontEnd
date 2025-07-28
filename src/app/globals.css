@@ -2,21 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Fix for iOS scroll issues */
-.ios-scroll-fix {
-  -webkit-overflow-scrolling: touch;
-  overflow-x: scroll;
+/* Force horizontal scrollbar visibility */
+.scrollbar-visible {
+  overflow-x: scroll !important;
+  scrollbar-width: auto; /* For Firefox */
 }
 
-.ios-scroll-fix::-webkit-scrollbar {
-  display: block;
-  height: 6px;
+.scrollbar-visible::-webkit-scrollbar {
+  -webkit-appearance: none;
+  height: 8px; /* Adjust scrollbar height */
 }
 
-.ios-scroll-fix::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.3);
+.scrollbar-visible::-webkit-scrollbar-thumb {
+  background-color: rgba(100, 100, 100, 0.5);
   border-radius: 4px;
 }
+
+.scrollbar-visible::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+}
+
 
 
 

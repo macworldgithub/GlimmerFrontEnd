@@ -97,7 +97,7 @@ const SelfcareCardList = () => {
       {/* Title */}
       <Link href="/selfcare-products" className="block">
         <h2 className="text-2xl sm:text-2xl md:text-3xl font-semibold mb-8">
-          Self-Care Items 
+          Self-Care Items
         </h2>
       </Link>
 
@@ -112,15 +112,14 @@ const SelfcareCardList = () => {
       {/* Product Grid / Carousel */}
       {isSmallScreen ? (
         <div className="px-2">
-          <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory mb-4 scroll-smooth scrollbar-hide ios-scroll-fix">
+          <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory mb-4 scroll-smooth scrollbar-visible ios-scroll-fix">
             {(showAll ? products : products.slice(0, 20)).map((product) => (
               <div
                 key={product._id}
-                className={`shrink-0 snap-start ${
-                  isSmallScreen
+                className={`shrink-0 snap-start ${isSmallScreen
                     ? "w-1/2"
                     : "w-[260px] md:w-[280px] lg:w-[300px]"
-                }`}
+                  }`}
               >
                 <Card item={product} />
               </div>
@@ -128,22 +127,22 @@ const SelfcareCardList = () => {
           </div>
         </div>
       ) : (
-       <div className="overflow-x-auto scroll-smooth">
-  <div className="flex gap-4 min-w-max snap-x snap-mandatory mb-4">
-    {products.length > 0 ? (
-      products.slice(0, 20).map((product) => (
-        <div
-          key={product._id}
-          className="shrink-0 snap-start w-[280px]"
-        >
-          <Card item={product} />
+        <div className="overflow-x-auto scroll-smooth scrollbar-visible">
+          <div className="flex gap-4 min-w-max snap-x snap-mandatory mb-4">
+            {products.length > 0 ? (
+              products.slice(0, 20).map((product) => (
+                <div
+                  key={product._id}
+                  className="shrink-0 snap-start w-[280px]"
+                >
+                  <Card item={product} />
+                </div>
+              ))
+            ) : (
+              <p className="text-center text-gray-500">No products available</p>
+            )}
+          </div>
         </div>
-      ))
-    ) : (
-      <p className="text-center text-gray-500">No products available</p>
-    )}
-  </div>
-</div>
       )}
       {/* View More Button */}
       <div className="text-center">
