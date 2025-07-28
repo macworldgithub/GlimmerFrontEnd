@@ -388,7 +388,6 @@ const ServiceList = () => {
 
           {/* Service Grid */}
           <div className="w-full h-max grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-x-4 gap-y-6 p-4">
-
             {data.length ? (
               data.map((item) => (
                 <motion.div
