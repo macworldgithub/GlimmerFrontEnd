@@ -127,7 +127,7 @@ const SelfcareCardList = () => {
           </div>
         </div>
       ) : (
-        <div className="overflow-x-auto scroll-smooth scrollbar-visible">
+        <div className="overflow-x-scroll scroll-smooth scrollbar-visible">
           <div className="flex gap-4 min-w-max snap-x snap-mandatory mb-4">
             {products.length > 0 ? (
               products.slice(0, 20).map((product) => (
