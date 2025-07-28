@@ -34,14 +34,9 @@ export default function Home() {
     <>
       {isAppLoading && <FullScreenLoader />}
       <Suspense fallback={null}>
-        <CategoryNavMenu className="mb-4" />
         <Breadcrumbs />
-        {/* HERO KO PEHLE DIKHAAO (Suspense ke bahar) */}
         <Hero />
       </Suspense>
-
-      {/* Baaki sab Suspense ke andar jaise already tha */}
-
       <Assurity />
       <OfferPictures />
        <AllProducts onLoaded={handleChildLoaded} />

@@ -323,7 +323,7 @@ const ProductDisplay = () => {
           href="/selfcare-products"
           className="text-gray-500 font-medium text-base lg:text-xl"
         >
-          Selfcare Products
+          Selfcare Products 
         </Link>
         <span className="mx-2 text-gray-500 font-medium text-base lg:text-xl">
           /
