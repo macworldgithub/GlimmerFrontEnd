@@ -118,7 +118,7 @@ const Page = () => {
 
         {/* Modal for Form */}
         <Modal
-          title="Register your Salon"
+          title="Register your Salon "
           visible={isModalVisible}
           onCancel={handleCancel}
           footer={null}
@@ -153,7 +153,11 @@ const Page = () => {
               <Input />
             </Form.Item>
 
-            <Form.Item label="Email (Optional)" name="email">
+            <Form.Item
+              label="Email"
+              name="email"
+              rules={[{ required: true, message: "Please enter your email" }]}
+            >
               <Input />
             </Form.Item>
 
