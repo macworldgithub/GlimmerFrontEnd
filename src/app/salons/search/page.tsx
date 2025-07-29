@@ -290,7 +290,9 @@ const SearchResultsPage = () => {
         >
           {/* Sort UI */}
           <div className="flex flex-wrap items-center gap-4 px-4 pt-4 pb-6">
-            <span className="text-gray-700 text-lg md:px-6 md:py-2 md:text-xl">Sort by</span>
+            <span className="text-gray-700 text-lg md:px-6 md:py-2 md:text-xl">
+              Sort by
+            </span>
 
             <button
               onClick={() => {
@@ -335,7 +337,7 @@ const SearchResultsPage = () => {
                     }}
                     className="block w-full text-left px-5 py-3 text-lg font-medium hover:bg-gray-200"
                   >
-                    Low to High 
+                    Low to High
                   </button>
                   <button
                     onClick={() => {

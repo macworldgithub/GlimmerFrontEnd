@@ -590,14 +590,20 @@ const CategoryNavMenu = ({
     }
   };
 
-  const handleCategoryClick = (subCategories: SubCategory[]) => {
-    if (dropdownOpen && selectedSubCategory === subCategories) {
-      setDropdownOpen(false);
-      setSelectedSubCategory([]);
-    } else {
-      HandleSelectCategory(subCategories);
-    }
-  };
+  const handleCategoryClick = (
+  subCategories: SubCategory[],
+  categoryId: string
+) => {
+  HandlePath(categoryId); // Go to /products?category=<id>
+
+  if (dropdownOpen && selectedSubCategory === subCategories) {
+    setDropdownOpen(false);
+    setSelectedSubCategory([]);
+  } else {
+    HandleSelectCategory(subCategories);
+  }
+};
+
 
   return (
     <>
@@ -616,7 +622,8 @@ const CategoryNavMenu = ({
               <div
                 key={index}
                 className="cursor-pointer hover:text-purple-900 hover:font-medium transition-all duration-500 flex items-center gap-1 select-none"
-                onClick={() => handleCategoryClick(item?.sub_categories)}
+               onClick={() => handleCategoryClick(item?.sub_categories, item?._id)}
+
                 onMouseEnter={() => HandleSelectCategory(item?.sub_categories)}
               >
                 <span>{item?.product_category?.name}</span>
