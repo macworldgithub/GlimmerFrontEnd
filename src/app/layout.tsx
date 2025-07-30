@@ -14,18 +14,15 @@ import CategoryNavMenu from "@/common/category-nav-menu";
 
 const prompt = Prompt({
   subsets: ["latin"],
-  weight: ["100", "200", "300", "400", "500", "600", "700","800","900"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
   display: "swap",
   variable: "--font-prompt",
 });
 
-
 export const metadata: Metadata = {
-  title:
-    "www.glimmer.com.pk",
+  title: "Pakistan’s Online Beauty Salons Booking & Beauty Products Store",
   description:
-    "Make an online salon appointment at The Best Prices Online Cosmetics Store in Pakistan by visiting glimmer.com.pk.",
-    
+    "Glimmer, Pakistan’s top platform for beauty salons & beauty products. Book salons, shop premium cosmetics, skincare, haircare & self‑care products.",
 };
 
 export default function RootLayout({
@@ -38,12 +35,11 @@ export default function RootLayout({
       <body className={`${prompt.variable} container bg-base-100 antialiased`}>
         <CartStoreProvider>
           <Navbar />
-          <CategoryNavMenu/>
+          <CategoryNavMenu />
           <ClientLayout>{children}</ClientLayout>
           <CookieBanner />
           <ChatbotWidget />
         </CartStoreProvider>
-      
       </body>
     </html>
   );
