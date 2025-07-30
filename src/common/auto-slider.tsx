@@ -42,13 +42,13 @@ const AutoSlider = ({
     { heading: string[]; buttonText: string; link: string }
   > = {
     [HeroImg1.src]: {
-      heading: ["Book Salon Appointments"],
-      buttonText: "Book Now",
+      heading: [""],
+      buttonText: "",
       link: "/salons",
     },
     [HeroImg2.src]: {
-      heading: ["We have handpicked", "products for you"],
-      buttonText: "Shop Now",
+      heading: [""],
+      buttonText: "",
       link: "/products",
     },
   };
@@ -95,8 +95,8 @@ const AutoSlider = ({
                                 key={i}
                                 className="font-bold break-words text-3xl md:text-5xl text-green-500"
                               >
-                                We have{" "}
-                                <span className="text-white">handpicked</span>
+                                {" "}
+                                <span className="text-white"></span>
                               </div>
                             );
                           }
@@ -149,8 +149,8 @@ const AutoSlider = ({
                                 key={i}
                                 className="font-bold break-words text-xl sm:text-2xl md:text-4xl lg:text-5xl text-green-500"
                               >
-                                We have{" "}
-                                <span className="text-white">handpicked</span>
+                                {" "}
+                                <span className="text-white"></span>
                               </div>
                             );
                           }
@@ -166,7 +166,7 @@ const AutoSlider = ({
                             </div>
                           );
                         })}
-                        <button
+                        {/* <button
                           className={`px-5 py-2 rounded hover:brightness-90 transition cursor-pointer ${
                             isFirstImage
                               ? "bg-purple-600 text-white"
@@ -175,7 +175,7 @@ const AutoSlider = ({
                           onClick={() => router.push(overlay.link)}
                         >
                           {overlay.buttonText}
-                        </button>
+                        </button> */}
                       </div>
                     </div>
                   )}

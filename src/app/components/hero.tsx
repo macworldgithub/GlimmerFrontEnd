@@ -13,21 +13,19 @@ const Hero = () => {
   const slides: SlideContent[] = [
     {
       src: HeroImg1.src,
-      heading: "Book Salon Appointments",
-      buttonText: "Book Now",
+      heading: "",
+      buttonText: "",
     },
     {
       src: HeroImg2.src,
-      heading: "We have handpicked products for you",
-      buttonText: "Shop Now",
+      heading: "",
+      buttonText: "",
     },
   ];
 
   return (
     <div className="w-screen max-w-none overflow-hidden mx-0 px-0">
-      
-  <AutoSlider srcs={slides.map(slide => slide.src)} />
-
+      <AutoSlider srcs={slides.map((slide) => slide.src)} />
     </div>
   );
 };

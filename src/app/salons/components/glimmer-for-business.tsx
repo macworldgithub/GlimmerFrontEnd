@@ -26,7 +26,7 @@ const GlimmerForBusiness = () => {
         />
 
         {/* Overlay Content inside image */}
-        <div className="absolute top-0 left-0 h-full flex flex-col justify-start pt-[6%] sm:pt-[10%] md:pt-[12%] lg:justify-center space-y-2 sm:space-y-3 md:space-y-4 pl-2 sm:pl-8 md:pl-12 max-w-[90%] sm:max-w-sm lg:max-w-md">
+        {/* <div className="absolute top-0 left-0 h-full flex flex-col justify-start pt-[6%] sm:pt-[10%] md:pt-[12%] lg:justify-center space-y-2 sm:space-y-3 md:space-y-4 pl-2 sm:pl-8 md:pl-12 max-w-[90%] sm:max-w-sm lg:max-w-md">
           <h2 className="text-gray-600 text-[14px] sm:text-2xl md:text-4xl lg:text-5xl font-semibold leading-snug">
             Glimmer For Business
           </h2>
@@ -45,7 +45,7 @@ const GlimmerForBusiness = () => {
           >
             Register Now
           </button>
-        </div>
+        </div> */}
       </div>
     </div>
   );

@@ -140,11 +140,7 @@ const NavbarClient = ({
             href="/"
             className="btn btn-ghost text-xl flex justify-center items-center h-16 w-full md:w-auto"
           >
-            <img
-              src={Logo.src}
-              alt="logo"
-              className="h-12 md:h-16 mx-auto"
-            />
+            <img src={Logo.src} alt="logo" className="h-12 md:h-16 mx-auto" />
           </Link>
 
           {!isSalonPage && (
@@ -176,6 +172,7 @@ const NavbarClient = ({
         <div className="w-1/2">
           <ProductSearchBar className="md:hidden w-full" />
         </div>
+
         <button
           className="w-1/2 h-12 p-4 rounded-md border hover:brightness-90 transition cursor-pointer bg-purple-800 text-white text-sm flex items-center justify-center gap-2 md:hidden"
           onClick={handleBookAppointment}

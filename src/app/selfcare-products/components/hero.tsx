@@ -3,7 +3,7 @@ import * as React from "react";
 import { useRouter } from "next/navigation";
 import HeroImg1 from "@/assets/selfcare-slider/selfcare-slider-1.png";
 import HeroImg2 from "@/assets/selfcare-slider/selfcare-slider-2.png";
-import HeroImg3 from "@/assets/selfcare-slider/selfcare-slider-3.png";
+// import HeroImg3 from "@/assets/selfcare-slider/selfcare-slider-3.png";
 import AutoSlider from "@/common/auto-slider";
 
 type Props = {
@@ -14,7 +14,7 @@ const Hero = ({ srcs = [] }: Props) => {
   const router = useRouter();
 
   const _srcs =
-    srcs.length > 0 ? srcs : [HeroImg1.src, HeroImg2.src, HeroImg3.src];
+    srcs.length > 0 ? srcs : [HeroImg1.src, HeroImg2.src];
 
   // Custom function to be passed only for first banner
   const handleFirstBannerClick = () => {
