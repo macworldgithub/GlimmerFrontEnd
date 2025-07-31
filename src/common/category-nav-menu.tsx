@@ -539,6 +539,12 @@ const CategoryNavMenu = ({
   const [categories, setCategories] = useState<Category[]>(
     sortCategories(fallbackCategories)
   );
+  const [expandedCategories, setExpandedCategories] = useState<{
+    [key: string]: boolean;
+  }>({});
+  const [expandedSubCategories, setExpandedSubCategories] = useState<{
+    [key: string]: boolean;
+  }>({});
 
   const router = useRouter();
   const pathname = usePathname();
@@ -591,22 +597,22 @@ const CategoryNavMenu = ({
   };
 
   const handleCategoryClick = (
-  subCategories: SubCategory[],
-  categoryId: string
-) => {
-  HandlePath(categoryId); // Go to /products?category=<id>
+    subCategories: SubCategory[],
+    categoryId: string
+  ) => {
+    HandlePath(categoryId); // Go to /products?category=<id>
 
-  if (dropdownOpen && selectedSubCategory === subCategories) {
-    setDropdownOpen(false);
-    setSelectedSubCategory([]);
-  } else {
-    HandleSelectCategory(subCategories);
-  }
-};
-
+    if (dropdownOpen && selectedSubCategory === subCategories) {
+      setDropdownOpen(false);
+      setSelectedSubCategory([]);
+    } else {
+      HandleSelectCategory(subCategories);
+    }
+  };
 
   return (
     <>
+      {/* ----- Desktop View ----- */}
       {!forceMobileStyle && (
         <div
           className={`max-md:hidden relative h-[60px] w-screen flex justify-center py-2 ${
@@ -622,8 +628,9 @@ const CategoryNavMenu = ({
               <div
                 key={index}
                 className="cursor-pointer hover:text-purple-900 hover:font-medium transition-all duration-500 flex items-center gap-1 select-none"
-               onClick={() => handleCategoryClick(item?.sub_categories, item?._id)}
-
+                onClick={() =>
+                  handleCategoryClick(item?.sub_categories, item?._id)
+                }
                 onMouseEnter={() => HandleSelectCategory(item?.sub_categories)}
               >
                 <span>{item?.product_category?.name}</span>
@@ -678,6 +685,74 @@ const CategoryNavMenu = ({
               <button>Book Salon & Spa Now</button>
             </div>
           </Link>
+        </div>
+      )}
+
+      {/* ----- Mobile View ----- */}
+      {forceMobileStyle && (
+        <div className="space-y-4 px-4">
+          {categories.map((category) => (
+            <div key={category._id}>
+              {/* Category row with arrow */}
+              <div
+                className="flex justify-between items-center font-bold text-lg cursor-pointer select-none"
+                onClick={() => {
+                  setExpandedCategories((prev) => ({
+                    ...prev,
+                    [category._id]: !prev[category._id],
+                  }));
+                }}
+              >
+                <span>{category.product_category.name}</span>
+                <span className="text-xl">
+                  {expandedCategories[category._id] ? "▾" : "▸"}
+                </span>
+              </div>
+
+              {/* Subcategories list */}
+              {expandedCategories[category._id] &&
+                category.sub_categories.map((sub) => (
+                  <div key={sub._id} className="ml-5 mt-2">
+                    {/* Subcategory row with arrow if items exist */}
+                    <div
+                      className="flex justify-between items-center font-semibold text-sm cursor-pointer select-none"
+                      onClick={() => {
+                        setExpandedSubCategories((prev) => ({
+                          ...prev,
+                          [sub._id]: !prev[sub._id],
+                        }));
+                      }}
+                    >
+                      <span>{sub.name}</span>
+                      {sub.items.length > 0 && (
+                        <span className="text-lg">
+                          {expandedSubCategories[sub._id] ? "▾" : "▸"}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Items list */}
+                    {expandedSubCategories[sub._id] && sub.items.length > 0 && (
+                      <ul className="ml-5 list-disc text-sm text-gray-700 mt-1">
+                        {sub.items.map((item) => (
+                          <li
+                            key={item._id}
+                            className="cursor-pointer hover:underline"
+                            onClick={() =>
+                              HandlePath(
+                                `${sub.product_category}-${sub._id}-${item._id}`
+                              )
+                            }
+                          >
+                            {item.name}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                ))}
+            </div>
+          ))}
         </div>
       )}
     </>

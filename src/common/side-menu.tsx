@@ -38,123 +38,55 @@ const SideMenu = ({
     setShowGymModal(false);
   };
 
-  const Menu = ({
-    className,
-    isMobile,
-  }: {
-    className?: string;
-    isMobile: boolean;
-  }) => {
+  const Menu = ({ className }: { className?: string }) => {
     return (
-      <ul
-        tabIndex={0}
-        className={cn("space-y-3 text-base font-medium", className)}
-      >
-        <li>
-          <Link
-            className="flex items-center gap-2 hover:text-primary transition"
-            href="/"
-            onClick={() => {
-              if (isMobile) setIsOpen(false);
-            }}
-          >
-            <FaArrowRight className="size-4" /> Home
-          </Link>
-        </li>
-        <li>
-          <Link
-            className="flex items-center gap-2 hover:text-primary transition"
-            href="/selfcare-products"
-            onClick={() => setIsOpen(false)}
-          >
-            <FaArrowRight className="size-4" /> Products
-          </Link>
-        </li>
-        <li>
-          <div
-            className="flex items-center gap-2 cursor-pointer select-none hover:text-primary transition"
-            onClick={(e) => {
-              e.stopPropagation();
-              setShowCategoryMenu(!showCategoryMenu);
-            }}
-          >
-            <FaArrowRight className="size-4 mr-2" />
-            Category
-          </div>
+      <div className={cn("space-y-3", className)}>
+        {/* FLASH SALE section */}
+        {/* <div className="border-b pb-2 mb-2">
+          <h2 className="text-[14px] font-bold text-red-600">
+            FLASH SUMMER SALE
+          </h2>
+          <p className="text-[12px] text-gray-500">UPTO 15% OFF</p>
+        </div> */}
 
-          <div
-            className={cn(
-              "overflow-hidden transition-all duration-500 ease-in-out",
-              showCategoryMenu
-                ? "max-h-[1000px] opacity-100"
-                : "max-h-0 opacity-0"
-            )}
-          >
-            <CategoryNavMenu forceMobileStyle={true} />
-          </div>
-        </li>
+        {/* Show Category Menu */}
+        <CategoryNavMenu forceMobileStyle={true} />
 
-        <li>
-          <Link
-            className="flex items-center gap-2 hover:text-primary transition md:mt-[-1rem]"
-            href="/salons"
-            onClick={() => setIsOpen(false)}
-          >
-            <FaArrowRight className="size-4" /> Salons and Spa
-          </Link>
-        </li>
-        {/* <li>
-          <Link
-            className="text-base"
-            href="/salons/business"
-            onClick={() => setIsOpen(false)}
-          >
-            <FaArrowRight className="size-4" /> Register your salon
-          </Link>
-        </li> */}
-        {/* <li>
-          <button
-            onClick={() => setShowGymModal(true)}
-            className="text-base flex items-center space-x-2"
-          >
-            <FaArrowRight className="size-4" />
-            <span>Register your gym</span>
-          </button>
-        </li> */}
-        <li>
+        {/* Optional: Login / Logout */}
+        <div className="pt-4 border-t">
           {credentials.token ? (
             <div
               onClick={() => {
                 dispatch(logout());
               }}
-              className="flex items-center gap-2 cursor-pointer hover:text-primary transition"
+              className="flex items-center gap-2 cursor-pointer hover:text-primary transition mt-3"
             >
-              <div className="w-7 rounded-full mr-2">
-                <img
-                  alt="Tailwind CSS Navbar component"
-                  src={DefaultAvatar.src}
-                />
-              </div>
+              <img
+                className="w-7 h-7 rounded-full"
+                alt="avatar"
+                src={DefaultAvatar.src}
+              />
               Logout
             </div>
           ) : (
             <Link
-              className="flex items-center gap-2 hover:text-primary transition"
+              className="flex items-center gap-2 hover:text-primary transition mt-3"
               href="/login"
               onClick={() => setIsOpen(false)}
             >
               <img
                 className="w-7 h-7 rounded-full"
-                alt="Tailwind CSS Navbar component"
+                alt="avatar"
                 src={DefaultAvatar.src}
               />
               Login
             </Link>
           )}
-        </li>
-      </ul>
+        </div>
+      </div>
     );
   };
+
   return (
     <>
       {/* desktop */}
@@ -209,7 +141,7 @@ const SideMenu = ({
             </button>
 
             <div className="mt-12">
-              <Menu isMobile={true} />
+              <Menu />
             </div>
           </div>
         </div>
