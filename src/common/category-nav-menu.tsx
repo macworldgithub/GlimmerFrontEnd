@@ -668,7 +668,7 @@ const CategoryNavMenu = ({
                           `${item?.product_category}-${item?._id}-${product?._id}`
                         )
                       }
-                      className="text-[12px] sm:text-[11px] text-black hover:text-gray-900 transition-all duration-200 cursor-pointer w-[120px] sm:w-[160px] break-words whitespace-normal"
+                      className="text-[12px] sm:text-[11px] text-black hover:text-gray-900 transition-all duration-200 cursor-pointer min-w-[140px] max-w-[180px] break-words whitespace-normal"
                       key={i}
                     >
                       {product?.name}

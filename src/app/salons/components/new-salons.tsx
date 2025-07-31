@@ -10,28 +10,34 @@ const NewSaloons = () => {
   const [loading, setLoading] = useState(true);
 
   const fetchNewToGlimmerSalons = async () => {
-	try {
-	  const response = await axios.get(`${BACKEND_URL}/admin/salon-highlights?filter=new-to-glimmer`);
-	  setSalons(response.data); 
-	} catch (error) {
-	  console.error("Failed to fetch salons:", error);
-	} finally {
-	  setLoading(false);
-	}
+    try {
+      const response = await axios.get(
+        `${BACKEND_URL}/admin/salon-highlights?filter=new-to-glimmer`
+      );
+      setSalons(response.data);
+    } catch (error) {
+      console.error("Failed to fetch salons:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
-	fetchNewToGlimmerSalons();
+    fetchNewToGlimmerSalons();
   }, []);
 
   if (loading) {
-	return <div>Loading...</div>; 
+    return <div>Loading...</div>;
   }
 
   return (
-	<div className="px-2 w-[99vw]">
-	  <SalonCards title="New to Glimmer" salonsProp={salons} showButton={false} />
-	</div>
+    <div className="px-2 w-[99vw]">
+      <SalonCards
+        title="New to Glimmer"
+        salonsProp={salons}
+        showButton={false}
+      />
+    </div>
   );
 };
 

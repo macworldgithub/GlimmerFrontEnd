@@ -69,18 +69,28 @@ const SideMenu = ({
               Logout
             </div>
           ) : (
-            <Link
-              className="flex items-center gap-2 hover:text-primary transition mt-3"
-              href="/login"
-              onClick={() => setIsOpen(false)}
-            >
-              <img
-                className="w-7 h-7 rounded-full"
-                alt="avatar"
-                src={DefaultAvatar.src}
-              />
-              Login
-            </Link>
+            <>
+              <Link
+                href="/salons"
+                onClick={() => setIsOpen(false)}
+                className="mt-3 block w-full px-4 py-2 bg-[#583FA8] text-white rounded text-center hover:bg-primary/90 transition"
+              >
+                Book Salon & Spa Now
+              </Link>
+
+              <Link
+                className="flex items-center gap-2 hover:text-primary transition mt-3"
+                href="/login"
+                onClick={() => setIsOpen(false)}
+              >
+                <img
+                  className="w-7 h-7 rounded-full"
+                  alt="avatar"
+                  src={DefaultAvatar.src}
+                />
+                Login
+              </Link>
+            </>
           )}
         </div>
       </div>
