@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
-import Img from "@/assets/images/admin-pannel-img.png";
+import Img from "@/assets/images/admin-pannel-img.webp";
 import { handleLogout } from "@/lib/session";
 
 const GlimmerForBusiness = () => {

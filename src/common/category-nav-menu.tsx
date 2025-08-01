@@ -539,6 +539,7 @@ const CategoryNavMenu = ({
   const [categories, setCategories] = useState<Category[]>(
     sortCategories(fallbackCategories)
   );
+
   const [expandedCategories, setExpandedCategories] = useState<{
     [key: string]: boolean;
   }>({});
@@ -562,11 +563,11 @@ const CategoryNavMenu = ({
         `${BACKEND_URL}/product_item/get_all_product_item`
       );
       if (response.data && response.data.length > 0) {
-        setCategories(sortCategories(response.data));
+        setCategories(sortCategories(response.data)); // ✅ Apply fixed sorting here
       }
     } catch (error) {
       console.error("Error fetching categories:", error);
-      setCategories(sortCategories(fallbackCategories));
+      setCategories(sortCategories(fallbackCategories)); // also sorted fallback
     }
   };
 
