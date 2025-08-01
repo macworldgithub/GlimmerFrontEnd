@@ -51,6 +51,13 @@ const SideMenu = ({
 
         {/* Show Category Menu */}
         <CategoryNavMenu forceMobileStyle={true} />
+         <Link
+                href="/salons"
+                onClick={() => setIsOpen(false)}
+                className="mt-3 block w-full px-4 py-2 bg-[#583FA8] text-white rounded text-center hover:bg-primary/90 transition"
+              >
+                Book Salon & Spa Now
+              </Link>
 
         {/* Optional: Login / Logout */}
         <div className="pt-4 border-t">
@@ -70,13 +77,13 @@ const SideMenu = ({
             </div>
           ) : (
             <>
-              <Link
+              {/* <Link
                 href="/salons"
                 onClick={() => setIsOpen(false)}
                 className="mt-3 block w-full px-4 py-2 bg-[#583FA8] text-white rounded text-center hover:bg-primary/90 transition"
               >
                 Book Salon & Spa Now
-              </Link>
+              </Link> */}
 
               <Link
                 className="flex items-center gap-2 hover:text-primary transition mt-3"
