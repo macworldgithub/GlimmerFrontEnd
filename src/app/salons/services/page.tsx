@@ -256,7 +256,7 @@ const ServiceList = () => {
         <Salonfilter />
       </div>
 
-      <div className="breadcrumbs mb-4 text-xl lg:text-xl px-10">
+      {/* <div className="breadcrumbs mb-4 text-xl lg:text-xl px-10">
         <Link
           href="/salons"
           className="text-gray-500 font-medium text-base lg:text-xl"
@@ -272,7 +272,7 @@ const ServiceList = () => {
         >
           Services
         </Link>
-      </div>
+      </div> */}
 
       <div className="hidden md:block pt-[3rem] px-[1rem] sm:px-[2rem] md:px-[4rem] lg:px-[6rem] xl:px-[12rem]">
         {/* Floating Cart Conflict Warning */}
@@ -301,10 +301,28 @@ const ServiceList = () => {
             alt="Banner"
             className="w-full h-full transition-transform duration-500"
           />
-          <div className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/20 transition-all duration-500 px-4 lg:p-[8rem]">
+          <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-all duration-500 px-4 lg:p-[8rem] flex flex-col items-center justify-center space-y-4">
             <h1 className="text-white text-2xl sm:text-3xl md:text-4xl font-bold text-center">
               Explore Our Best Collection
             </h1>
+
+            <div className="breadcrumbs text-xl lg:text-xl flex flex-wrap items-center justify-center text-center">
+              <Link
+                href="/salons"
+                className="text-gray-300 hover:text-white font-medium text-base lg:text-xl"
+              >
+                Salons
+              </Link>
+              <span className="mx-2 text-gray-300 font-medium text-base lg:text-xl">
+                /
+              </span>
+              <Link
+                href="/salons/services"
+                className="text-purple-300 hover:text-white font-medium text-base lg:text-xl"
+              >
+                Services
+              </Link>
+            </div>
           </div>
         </div>
       </div>
