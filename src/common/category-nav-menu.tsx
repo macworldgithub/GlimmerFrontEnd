@@ -372,6 +372,12 @@ const sortCategories = (categories: Category[]) => {
     return indexA - indexB;
   });
 };
+const sortSubCategories = (subCategories: SubCategory[]) => {
+  const bodyCare = subCategories.find(sub => sub.name.toLowerCase() === "body care");
+  const rest = subCategories.filter(sub => sub.name.toLowerCase() !== "body care");
+  return bodyCare ? [...rest, bodyCare] : subCategories;
+};
+
 
 const CategoryNavMenu = ({
   className,
@@ -563,11 +569,11 @@ const CategoryNavMenu = ({
         `${BACKEND_URL}/product_item/get_all_product_item`
       );
       if (response.data && response.data.length > 0) {
-        setCategories(sortCategories(response.data)); // ✅ Apply fixed sorting here
+        setCategories(sortCategories(response.data)); 
       }
     } catch (error) {
       console.error("Error fetching categories:", error);
-      setCategories(sortCategories(fallbackCategories)); // also sorted fallback
+      setCategories(sortCategories(fallbackCategories)); 
     }
   };
 
@@ -575,7 +581,7 @@ const CategoryNavMenu = ({
     get_all_categories();
   }, []);
 
-  // ---- STEP 3: Handle navigation ----
+
   function HandlePath(e: string) {
     let path = e.split("-");
     let str = "/products?";
@@ -587,15 +593,17 @@ const CategoryNavMenu = ({
     setDropdownOpen(false);
   }
 
-  const HandleSelectCategory = (subCategories: SubCategory[]) => {
-    if (subCategories.length > 0) {
-      setSelectedSubCategory(subCategories);
-      setDropdownOpen(true);
-    } else {
-      setSelectedSubCategory([]);
-      setDropdownOpen(false);
-    }
-  };
+const HandleSelectCategory = (subCategories: SubCategory[]) => {
+  if (subCategories.length > 0) {
+    const sortedSubCategories = sortSubCategories(subCategories);
+    setSelectedSubCategory(sortedSubCategories);
+    setDropdownOpen(true);
+  } else {
+    setSelectedSubCategory([]);
+    setDropdownOpen(false);
+  }
+};
+
 
   const handleCategoryClick = (
     subCategories: SubCategory[],
@@ -651,6 +659,7 @@ const CategoryNavMenu = ({
                 : "opacity-0 -translate-y-5 pointer-events-none"
             }`}
           >
+           
             {selectedSubCategory?.map((item, index) => (
               <div className="flex flex-col" key={index}>
                 <p
