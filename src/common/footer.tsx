@@ -52,7 +52,6 @@ const Footer = () => {
                   <li>
                     <a className="hover:text-white" href="DelieveryInfo">
                       Delivery Information & FAQ
-                    
                     </a>
                   </li>
                 </ul>
@@ -169,18 +168,15 @@ const Footer = () => {
             <hr className="my-6 border-t border-[#FBE8A5]" />
 
             <div className="flex flex-col md:flex-row justify-between items-center text-sm gap-3">
-              <div className="space-x-3">
-               {/* <span>|</span>  */}
-              </div>
-            
+              <div className="space-x-3">{/* <span>|</span>  */}</div>
 
-              <div className="text-center md:text-right">
+              {/* <div className="text-center md:text-right">
                 A-125 Gulshan-e-iqbal, Block 1, Karachi.{" "}
                  <span>|</span> 
               </div>
               <div className="text-center md:text-right">
                 Business Hours: Mon–Sat | 10:00 AM – 6:00 PM
-              </div>
+              </div> */}
               <div className="flex gap-4 mt-4 md:mt-0 md:ml-auto">
                 <a
                   href="https://www.google.com"
@@ -211,7 +207,6 @@ const Footer = () => {
           </footer>
         </div>
       </footer>
-
 
       {/* ✅ Correct Modal Implementation */}
       <RegisterGymModal
