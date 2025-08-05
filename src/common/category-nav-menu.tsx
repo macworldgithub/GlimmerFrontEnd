@@ -373,11 +373,14 @@ const sortCategories = (categories: Category[]) => {
   });
 };
 const sortSubCategories = (subCategories: SubCategory[]) => {
-  const bodyCare = subCategories.find(sub => sub.name.toLowerCase() === "body care");
-  const rest = subCategories.filter(sub => sub.name.toLowerCase() !== "body care");
+  const bodyCare = subCategories.find(
+    (sub) => sub.name.toLowerCase() === "body care"
+  );
+  const rest = subCategories.filter(
+    (sub) => sub.name.toLowerCase() !== "body care"
+  );
   return bodyCare ? [...rest, bodyCare] : subCategories;
 };
-
 
 const CategoryNavMenu = ({
   className,
@@ -569,18 +572,17 @@ const CategoryNavMenu = ({
         `${BACKEND_URL}/product_item/get_all_product_item`
       );
       if (response.data && response.data.length > 0) {
-        setCategories(sortCategories(response.data)); 
+        setCategories(sortCategories(response.data));
       }
     } catch (error) {
       console.error("Error fetching categories:", error);
-      setCategories(sortCategories(fallbackCategories)); 
+      setCategories(sortCategories(fallbackCategories));
     }
   };
 
   useEffect(() => {
     get_all_categories();
   }, []);
-
 
   function HandlePath(e: string) {
     let path = e.split("-");
@@ -593,17 +595,16 @@ const CategoryNavMenu = ({
     setDropdownOpen(false);
   }
 
-const HandleSelectCategory = (subCategories: SubCategory[]) => {
-  if (subCategories.length > 0) {
-    const sortedSubCategories = sortSubCategories(subCategories);
-    setSelectedSubCategory(sortedSubCategories);
-    setDropdownOpen(true);
-  } else {
-    setSelectedSubCategory([]);
-    setDropdownOpen(false);
-  }
-};
-
+  const HandleSelectCategory = (subCategories: SubCategory[]) => {
+    if (subCategories.length > 0) {
+      const sortedSubCategories = sortSubCategories(subCategories);
+      setSelectedSubCategory(sortedSubCategories);
+      setDropdownOpen(true);
+    } else {
+      setSelectedSubCategory([]);
+      setDropdownOpen(false);
+    }
+  };
 
   const handleCategoryClick = (
     subCategories: SubCategory[],
@@ -659,35 +660,38 @@ const HandleSelectCategory = (subCategories: SubCategory[]) => {
                 : "opacity-0 -translate-y-5 pointer-events-none"
             }`}
           >
-                         <div className="flex flex-wrap gap-8 justify-start">
-               {selectedSubCategory?.map((item, index) => (
-                 <div className="flex flex-col min-w-[180px] max-w-[220px]" key={index}>
-                   <p
-                     onClick={() =>
-                       HandlePath(`${item?.product_category}-${item?._id}`)
-                     }
-                     className="font-semibold text-[16px] cursor-pointer mb-3 text-gray-800 hover:text-purple-600 transition-colors"
-                   >
-                     {item?.name}
-                   </p>
-                   <div className="flex flex-col gap-2">
-                     {item?.items?.map((product, i) => (
-                       <p
-                         onClick={() =>
-                           HandlePath(
-                             `${item?.product_category}-${item?._id}-${product?._id}`
-                           )
-                         }
-                         className="text-[13px] text-gray-600 hover:text-gray-900 transition-all duration-200 cursor-pointer hover:underline"
-                         key={i}
-                       >
-                         {product?.name}
-                       </p>
-                     ))}
-                   </div>
-                 </div>
-               ))}
-             </div>
+            <div className="flex flex-wrap gap-8 justify-start">
+              {selectedSubCategory?.map((item, index) => (
+                <div
+                  className="flex flex-col min-w-[180px] max-w-[220px]"
+                  key={index}
+                >
+                  <p
+                    onClick={() =>
+                      HandlePath(`${item?.product_category}-${item?._id}`)
+                    }
+                    className="font-semibold text-[16px] cursor-pointer mb-3 text-gray-800 hover:text-purple-600 transition-colors"
+                  >
+                    {item?.name}
+                  </p>
+                  <div className="flex flex-col gap-2">
+                    {item?.items?.map((product, i) => (
+                      <p
+                        onClick={() =>
+                          HandlePath(
+                            `${item?.product_category}-${item?._id}-${product?._id}`
+                          )
+                        }
+                        className="text-[13px] text-gray-600 hover:text-gray-900 transition-all duration-200 cursor-pointer hover:underline"
+                        key={i}
+                      >
+                        {product?.name}
+                      </p>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* ---- Book Button ---- */}
