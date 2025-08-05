@@ -495,7 +495,7 @@ const ServiceDetails = () => {
           </div>
 
           {/* Star Rating */}
-          <div className="flex items-center mt-2">
+          {/* <div className="flex items-center mt-2">
             {[...Array(4)].map((_, index) => (
               <svg
                 key={index}
@@ -520,7 +520,7 @@ const ServiceDetails = () => {
             <h3 className="h-4 ms-1 text-gray-300 dark:text-gray-500">
               (4/5) <span className="mx-2">|</span> 201 reviews
             </h3>
-          </div>
+          </div> */}
           <hr className="my-2.5 border-t border-gray-400 dark:text-gray-500 w-full" />
 
           {/* Duration, Gender, Sub service */}
