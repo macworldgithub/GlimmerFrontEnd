@@ -653,20 +653,20 @@ const HandleSelectCategory = (subCategories: SubCategory[]) => {
           {/* ---- Dropdown ---- */}
           <div
             ref={dropdownRef}
-            className={`absolute top-[58px] left-1/2 -translate-x-1/2 z-50 bg-white shadow-xl rounded-lg px-6 py-4 transition-all duration-500 max-w-[1200px] w-full ${
+            className={`absolute top-[58px] left-1/2 -translate-x-1/2 z-50 bg-white shadow-xl rounded-lg px-6 py-4 transition-all duration-500 max-w-[1200px] w-full  ${
               dropdownOpen
                 ? "opacity-100 translate-y-0"
                 : "opacity-0 -translate-y-5 pointer-events-none"
             }`}
           >
-                         <div className="flex flex-wrap gap-8 justify-start">
+                         <div className="flex flex-wrap gap-6 justify-between">
                {selectedSubCategory?.map((item, index) => (
                  <div className="flex flex-col min-w-[180px] max-w-[220px]" key={index}>
                    <p
                      onClick={() =>
                        HandlePath(`${item?.product_category}-${item?._id}`)
                      }
-                     className="font-semibold text-[16px] cursor-pointer mb-3 text-gray-800 hover:text-purple-600 transition-colors"
+                     className="font-semibold text-[14px] cursor-pointer mb-3 text-gray-800 hover:text-purple-600 transition-colors"
                    >
                      {item?.name}
                    </p>
@@ -678,7 +678,7 @@ const HandleSelectCategory = (subCategories: SubCategory[]) => {
                              `${item?.product_category}-${item?._id}-${product?._id}`
                            )
                          }
-                         className="text-[13px] text-gray-600 hover:text-gray-900 transition-all duration-200 cursor-pointer hover:underline"
+                         className="text-[14px] text-gray-600 hover:text-gray-900 transition-all duration-200 cursor-pointer "
                          key={i}
                        >
                          {product?.name}
