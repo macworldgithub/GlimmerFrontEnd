@@ -653,40 +653,41 @@ const HandleSelectCategory = (subCategories: SubCategory[]) => {
           {/* ---- Dropdown ---- */}
           <div
             ref={dropdownRef}
-            className={`absolute top-[58px] left-1/2 -translate-x-1/2 z-50 bg-white shadow-xl rounded-lg px-6 py-4 transition-all duration-500 flex flex-wrap gap-6 justify-between max-w-[1200px] w-full ${
+            className={`absolute top-[58px] left-1/2 -translate-x-1/2 z-50 bg-white shadow-xl rounded-lg px-6 py-4 transition-all duration-500 max-w-[1200px] w-full ${
               dropdownOpen
                 ? "opacity-100 translate-y-0"
                 : "opacity-0 -translate-y-5 pointer-events-none"
             }`}
           >
-           
-            {selectedSubCategory?.map((item, index) => (
-              <div className="flex flex-col" key={index}>
-                <p
-                  onClick={() =>
-                    HandlePath(`${item?.product_category}-${item?._id}`)
-                  }
-                  className="font-semibold text-[16px] cursor-pointer"
-                >
-                  {item?.name}
-                </p>
-                <div className="flex flex-col gap-2">
-                  {item?.items?.map((product, i) => (
-                    <p
-                      onClick={() =>
-                        HandlePath(
-                          `${item?.product_category}-${item?._id}-${product?._id}`
-                        )
-                      }
-                      className="text-[12px] sm:text-[11px] text-black hover:text-gray-900 transition-all duration-200 cursor-pointer min-w-[140px] max-w-[180px] break-words whitespace-normal"
-                      key={i}
-                    >
-                      {product?.name}
-                    </p>
-                  ))}
-                </div>
-              </div>
-            ))}
+                         <div className="flex flex-wrap gap-8 justify-start">
+               {selectedSubCategory?.map((item, index) => (
+                 <div className="flex flex-col min-w-[180px] max-w-[220px]" key={index}>
+                   <p
+                     onClick={() =>
+                       HandlePath(`${item?.product_category}-${item?._id}`)
+                     }
+                     className="font-semibold text-[16px] cursor-pointer mb-3 text-gray-800 hover:text-purple-600 transition-colors"
+                   >
+                     {item?.name}
+                   </p>
+                   <div className="flex flex-col gap-2">
+                     {item?.items?.map((product, i) => (
+                       <p
+                         onClick={() =>
+                           HandlePath(
+                             `${item?.product_category}-${item?._id}-${product?._id}`
+                           )
+                         }
+                         className="text-[13px] text-gray-600 hover:text-gray-900 transition-all duration-200 cursor-pointer hover:underline"
+                         key={i}
+                       >
+                         {product?.name}
+                       </p>
+                     ))}
+                   </div>
+                 </div>
+               ))}
+             </div>
           </div>
 
           {/* ---- Book Button ---- */}
