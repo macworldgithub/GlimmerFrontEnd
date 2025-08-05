@@ -16,7 +16,7 @@ const QrCodeSection = () => {
           priority
         />
 
-        {/* Text + QR Image block — right center (fixed position) */}
+  
         <div className="absolute top-1/2 -translate-y-1/2 right-10 flex flex-col items-end text-gray-500 space-y-5 text-right w-[90%] max-w-[350px]">
           <p className="text-xs md:text-base lg:text-3xl xl:text-5xl font-extrabold leading-tight drop-shadow-lg">
             Scan the QR Code to
