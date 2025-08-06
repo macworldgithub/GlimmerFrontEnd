@@ -23,13 +23,26 @@ const CheckoutModal = ({
   const opening = dayjs(openingHour, "h:mm a");
   const closing = dayjs(closingHour, "h:mm a");
 
-   const disabledHours = () => {
-    const start = opening.hour();
-    const end = closing.hour();
+const disabledHours = () => {
+  const start = opening.hour();
+  const end = closing.hour();
 
-    const allHours = Array.from({ length: 24 }, (_, i) => i);
-    return allHours.filter((hour) => hour < start || hour > end);
-  };
+  if (isNaN(start) || isNaN(end)) return [];
+
+  const disabled = [];
+
+  for (let i = 0; i < 24; i++) {
+    // Disable hours outside of range
+    if (start < end) {
+      if (i < start || i >= end) disabled.push(i);
+    } else {
+      // If time range crosses midnight (e.g., 10 PM to 6 AM)
+      if (i < start && i >= end) disabled.push(i);
+    }
+  }
+
+  return disabled;
+};
 
   return (
     <motion.div
@@ -76,14 +89,8 @@ const CheckoutModal = ({
                 <TimePicker
                   use12Hours
                   format="h:mm A"
-                  minuteStep={30}
+                  minuteStep={1}
                   disabledHours={disabledHours}
-                  disabledMinutes={() => {
-                    const allowed = [0, 30];
-                    return Array.from({ length: 60 }, (_, i) => i).filter(
-                      (min) => !allowed.includes(min)
-                    );
-                  }}
                   hideDisabledOptions
                   showNow={false}
                   onChange={(date, dateStr) => onDateChange(name, dateStr)}

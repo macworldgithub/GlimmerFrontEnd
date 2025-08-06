@@ -15,6 +15,7 @@ interface ProductType {
   howToUse: string;
   maxAllowedInCart: number;
   rating: number;
+  quantity: number;
   price: number;
   discountPercent?: number;
   salonRefId?: string;
@@ -106,7 +107,12 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product }) => {
               ))}
             </div>
             <span className="text-gray-600">{product.rating} Rating</span>
-            <span className="text-green-600">In Stock</span>
+           {product.quantity > 0 ? (
+  <span className="text-green-600">In Stock</span>
+) : (
+  <span className="text-red-600 font-semibold">Out of Stock</span>
+)}
+
           </div>
 
           {/* Quantity Selector */}
