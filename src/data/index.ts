@@ -394,10 +394,11 @@ export interface RealCardItem {
   image3: string;
   base_price: number;
   discounted_price: number;
-  category:string;
-  sub_category:string;
-  item:string;
+  category: string;
+  sub_category: string;
+  item: string;
   rate_of_salon: number;
+    quantity?: number; 
   ref_of_salon: string;
 }
 

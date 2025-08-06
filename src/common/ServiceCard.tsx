@@ -83,42 +83,40 @@ const ServiceCard: FC<ServiceCardProps> = ({
 
       {/* Bottom half - Content */}
       <div className="p-4 h-1/2 flex flex-col justify-between overflow-hidden">
-  <div className="flex-grow overflow-y-auto no-scrollbar">
-    <h4 className="text-sm font-bold text-gray-800 mb-1 break-words leading-snug">
-      {item.name || "Service Name"}
-    </h4>
-    {item.salonId === salonId && salonName && (
-      <h3 className="text-sm text-gray-700 mb-1 break-words leading-snug">
-        {salonName}
-      </h3>
-    )}
+        <div className="flex-grow overflow-y-auto no-scrollbar">
+          <h4 className="text-sm font-bold text-gray-800 mb-1 break-words leading-snug">
+            {item.name || "Service Name"}
+          </h4>
+          {item.salonId === salonId && salonName && (
+            <h3 className="text-sm text-gray-700 mb-1 break-words leading-snug">
+              {salonName}
+            </h3>
+          )}
 
-    {item.duration && (
-      <p className="text-xs text-gray-500 italic mt-1">
-        Duration: {item.duration} min
-      </p>
-    )}
+          {item.duration && (
+            <p className="text-xs text-gray-500 italic mt-1">
+              Duration: {item.duration} min
+            </p>
+          )}
 
-    <p className="text-xs text-gray-600 mt-2 break-words leading-tight">
-      {item.description || "No description available"}
-    </p>
-  </div>
+          <p className="text-xs text-gray-600 mt-2 break-words leading-tight">
+            {item.description || "No description available"}
+          </p>
+        </div>
 
-  <div className="mt-2">
-    <div className="flex justify-between items-center">
-      <span className="text-sm font-bold text-gray-900">
-        {discountedPrice.toFixed(2)} PKR
-      </span>
-    {item.hasDiscount && item.discountPercentage > 0 && (
-  <span className="text-gray-400 text-xs line-through">
-    {item.adminSetPrice.toFixed(2)} PKR
-  </span>
-)}
-
-    </div>
-  </div>
-</div>
-
+        <div className="mt-2">
+          <div className="flex justify-between items-center">
+            <span className="text-sm font-bold text-gray-900">
+              {discountedPrice.toFixed(2)} PKR
+            </span>
+            {item.hasDiscount && item.discountPercentage > 0 && (
+              <span className="text-gray-400 text-xs line-through">
+                {item.adminSetPrice.toFixed(2)} PKR
+              </span>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
