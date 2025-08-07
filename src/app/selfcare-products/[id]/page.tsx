@@ -35,7 +35,7 @@ const Page = async ({ params }: { params: Promise<Params> }) => {
 	return (
 		<>
 			<CategoryNavMenu />
-			<ProductDetail product={product} />
+			{/* <ProductDetail product={product} /> */}
 		</>
 	);
 };
