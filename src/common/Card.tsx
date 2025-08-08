@@ -180,7 +180,7 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
       </div>
 
       {/* ❤️ Heart Icon - Top Right */}
-      <div
+      {/* <div
         className="absolute top-2 right-2 z-10"
         onClick={(e) => {
           e.stopPropagation();
@@ -194,7 +194,20 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
             }`}
           />
         </div>
-      </div>
+      </div> */}
+{/* 🟣 Discount Percentage Badge - Top Right */}
+{basePrice > 0 && discountedPrice > 0 && discountedPrice < basePrice && (
+  <div className="absolute top-2 right-2 z-20">
+    <div className="bg-[#583FA8] text-white text-[10px] font-semibold px-2 py-1 rounded-md shadow-md">
+      {`${Math.round(
+        ((basePrice - discountedPrice) / basePrice) * 100
+      )}% OFF`}
+    </div>
+  </div>
+)}
+
+
+         
 
       {/* ✅ Success Message */}
       {showMessage && (
