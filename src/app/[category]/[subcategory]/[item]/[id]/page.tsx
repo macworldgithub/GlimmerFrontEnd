@@ -363,7 +363,7 @@ const ProductDisplay = () => {
                   <img
                     src={image}
                     alt={`${product?.name} ${i + 1}`}
-                    className="w-full h-full object-cover rounded-md cursor-pointer"
+                    className="w-full h-full object-contain rounded-md cursor-pointer"
                     onClick={() => setFullImage(image)}
                     onError={(e) =>
                       (e.currentTarget.src = "/assets/images/default_image.jpg")
@@ -384,7 +384,7 @@ const ProductDisplay = () => {
                       <img
                         src={images[0]}
                         alt={`Thumbnail 1`}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-contain"
                         onError={(e) =>
                           (e.currentTarget.src =
                             "/assets/images/default_image.jpg")
@@ -405,7 +405,7 @@ const ProductDisplay = () => {
                       <img
                         src={image}
                         alt={`Thumbnail ${i + 1}`}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-contain"
                         onError={(e) =>
                           (e.currentTarget.src =
                             "/assets/images/default_image.jpg")
@@ -618,7 +618,7 @@ const ProductDisplay = () => {
                   height={15}
                   src="/assets/addtoBag/cart-icon.png"
                 />
-                ADD TO BAG 
+                ADD TO BAG
               </button>
 
               {/* + - Quantity Controller */}

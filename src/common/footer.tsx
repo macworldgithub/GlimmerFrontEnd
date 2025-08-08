@@ -54,6 +54,12 @@ const Footer = () => {
                       Delivery Information & FAQ
                     </a>
                   </li>
+
+                  <li>
+                    <a className="hover:text-white" href="Blogs">
+                      Blogs
+                    </a>
+                  </li>
                 </ul>
               </div>
 
