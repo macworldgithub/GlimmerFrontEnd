@@ -44,15 +44,15 @@ const ServiceCard: FC<ServiceCardProps> = ({
     >
       {/* Top half - Image */}
       <div className="relative w-full h-1/2">
-     <img
-  src={
-    item.image1?.startsWith("http")
-      ? item.image1
-      : "/assets/images/default_image.jpg"
-  }
-  alt={item?.name ?? "Service Image"}
-  className="w-full h-full object-cover rounded-t-2xl"
-/>
+        <img
+          src={
+            item.image1?.startsWith("http")
+              ? item.image1
+              : "/assets/images/default_image.jpg"
+          }
+          alt={item?.name ?? "Service Image"}
+          className="w-full h-full object-cover rounded-t-2xl"
+        />
 
         <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 flex gap-2 w-full justify-center px-2 max-md:justify-between">
           <button
@@ -89,27 +89,24 @@ const ServiceCard: FC<ServiceCardProps> = ({
       <div className="p-4 h-1/2 flex flex-col justify-between overflow-hidden">
         <div className="flex-grow overflow-y-auto no-scrollbar">
           <h4 className="text-sm font-bold text-gray-800 mb-1">
-  {item?.name ?? "No Name"}
-</h4>
+            {item?.name ?? "No Name"}
+          </h4>
 
-{salonName && (
-  <h3 className="text-sm text-gray-700 mb-1">
-    {salonName}
-  </h3>
-)}
+          {salonName && (
+            <h3 className="text-sm text-gray-700 mb-1">{salonName}</h3>
+          )}
 
-{item?.duration ? (
-  <p className="text-xs text-gray-500 italic mt-1">
-    Duration: {item.duration} min
-  </p>
-) : (
-  <p className="text-xs text-gray-400 italic mt-1">No duration</p>
-)}
+          {item?.duration ? (
+            <p className="text-xs text-gray-500 italic mt-1">
+              Duration: {item.duration} min
+            </p>
+          ) : (
+            <p className="text-xs text-gray-400 italic mt-1">No duration</p>
+          )}
 
-<p className="text-xs text-gray-600 mt-2">
-  {item?.description ?? "No description available"}
-</p>
-
+          <p className="text-xs text-gray-600 mt-2">
+            {item?.description ?? "No description available"}
+          </p>
         </div>
 
         <div className="mt-2">
