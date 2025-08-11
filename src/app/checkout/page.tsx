@@ -75,7 +75,7 @@
 //       ...formData,
 //       [name]: type === "checkbox" ? checked : value,
 //     };
-    
+
 //     if (name === "city") {
 //       const cityLower = value.trim().toLowerCase();
 //       if (cityLower === "karachi") {
@@ -83,7 +83,7 @@
 //       } else if (cityLower) {
 //         setDeliveryCharge(300);
 //       } else {
-//         setDeliveryCharge(0); 
+//         setDeliveryCharge(0);
 //       }
 //     }
 
@@ -415,7 +415,7 @@
 //       // Redirect to Alfalah checkout page with session ID
 //       window.location.href = `/alfalah-checkout?sessionId=${data.sessionId}`;
 //       console.log('after redirection')
-      
+
 //     } catch (err: any) {
 //       console.error("Alfalah Payment Error:", err?.message || err);
 //       alert("❌ Failed to redirect to Alfalah Checkout. Please try again.");
@@ -772,7 +772,7 @@ export default function Checkout() {
       ...formData,
       [name]: type === "checkbox" ? checked : value,
     };
-    
+
     if (name === "city") {
       const cityLower = value.trim().toLowerCase();
       if (cityLower === "karachi") {
@@ -780,7 +780,7 @@ export default function Checkout() {
       } else if (cityLower) {
         setDeliveryCharge(300);
       } else {
-        setDeliveryCharge(0); 
+        setDeliveryCharge(0);
       }
     }
 
@@ -883,8 +883,7 @@ export default function Checkout() {
           },
           storeId: productItem.product.store,
           quantity: productItem.quantity,
-          total_price:
-            subtotal,
+          total_price: subtotal,
         })),
         total: subtotal,
         discountedTotal: cart.discountedTotal || cart.total,
@@ -1051,7 +1050,7 @@ export default function Checkout() {
   };
 
   const handleBankAlfalahPayment = async () => {
-    console.log('Initiating Bank Alfalah payment');
+    console.log("Initiating Bank Alfalah payment");
     try {
       setLoading(true);
       const orderData = {
@@ -1101,10 +1100,10 @@ export default function Checkout() {
 
       // Initiate payment by calling the backend
       const response = await fetch(`${BACKEND_URL}/alfalah/initiate-payment`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'text/html',
+          "Content-Type": "application/json",
+          Accept: "text/html",
         },
         body: JSON.stringify(orderData),
       });
@@ -1115,20 +1114,21 @@ export default function Checkout() {
 
       // Get the HTML response containing the form
       const html = await response.text();
-const parser = new DOMParser();
-const doc = parser.parseFromString(html, 'text/html');
-const form = doc.getElementById('ssoForm') as HTMLFormElement;
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, "text/html");
+      const form = doc.getElementById("ssoForm") as HTMLFormElement;
 
-if (!form) {
-  throw new Error('Form not found in response');
-}
+      if (!form) {
+        throw new Error("Form not found in response");
+      }
 
-document.body.appendChild(form);
-form.submit();
-
+      document.body.appendChild(form);
+      form.submit();
     } catch (err) {
-      console.error("Alfalah Payment Error:",  err);
-      toast.error("❌ Failed to initiate Bank Alfalah payment. Please try again.");
+      console.error("Alfalah Payment Error:", err);
+      toast.error(
+        "❌ Failed to initiate Bank Alfalah payment. Please try again."
+      );
     } finally {
       setLoading(false);
     }
@@ -1253,9 +1253,10 @@ form.submit();
                   <div className="flex gap-4 flex-wrap">
                     <label
                       className={`flex items-center justify-center gap-2 px-4 py-3 rounded-lg border cursor-pointer transition-all
-                        ${formData.paymentMethod === "Cash on Delivery"
-                          ? "border-blue-500 bg-blue-50"
-                          : "border-gray-300"
+                        ${
+                          formData.paymentMethod === "Cash on Delivery"
+                            ? "border-blue-500 bg-blue-50"
+                            : "border-gray-300"
                         }`}
                     >
                       <input
@@ -1269,7 +1270,7 @@ form.submit();
                       <span>💵</span>
                       <span className="font-medium">Cash on Delivery</span>
                     </label>
-                    <label
+                    {/* <label
                       className={`flex items-center justify-center gap-2 px-4 py-3 rounded-lg border cursor-pointer transition-all
                         ${formData.paymentMethod === "JazzCash"
                           ? "border-blue-500 bg-blue-50"
@@ -1289,17 +1290,18 @@ form.submit();
                       />
                       <span>💳</span>
                       <span className="font-medium">JazzCash</span>
-                    </label>
+                    </label> */}
                     <label
                       className={`flex items-center justify-center gap-2 px-4 py-3 rounded-lg border cursor-pointer transition-all
-                        ${formData.paymentMethod === "Bank Alfalah"
-                          ? "border-blue-500 bg-blue-50"
-                          : "border-gray-300"
+                        ${
+                          formData.paymentMethod === "Online Payment"
+                            ? "border-blue-500 bg-blue-50"
+                            : "border-gray-300"
                         }`}
                       onClick={() => {
                         setFormData({
                           ...formData,
-                          paymentMethod: "Bank Alfalah",
+                          paymentMethod: "Online Payment",
                         });
                       }}
                     >
@@ -1312,7 +1314,7 @@ form.submit();
                         className="hidden"
                       />
                       <span>🏦</span>
-                      <span className="font-medium">Bank Alfalah</span>
+                      <span className="font-medium">Online Payment</span>
                     </label>
                   </div>
                 </div>
