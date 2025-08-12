@@ -39,11 +39,11 @@ export default function Home() {
       </Suspense>
       <Assurity />
       <OfferPictures />
-       <AllProducts onLoaded={handleChildLoaded} />
+      <AllProducts onLoaded={handleChildLoaded} />
       <TrendingProducts onLoaded={handleChildLoaded} />
       <MustItems />
       <BestSellers />
-      <VideoTutorial />
+      {/* <VideoTutorial /> */}
       <DynamicBanner
         imageUrl=""
         title="Shop Now and Unleash Your Inner Glow!"
