@@ -13,7 +13,8 @@ const Cart = () => {
   const Cart = useSelector((state: RootState) => state.cart);
   console.log(Cart);
 
-  const deliveryCharge = Cart?.shippingInfo?.city?.toLowerCase() === "karachi" ? 200 : 300;
+  const deliveryCharge =
+    Cart?.shippingInfo?.city?.toLowerCase() === "karachi" ? 200 : 300;
   const subtotal = (Cart?.discountedTotal || 0) + deliveryCharge;
 
   const [bulkProducts, setBulkProducts] = useState<{ [key: string]: boolean }>(
@@ -58,7 +59,9 @@ const Cart = () => {
                 Your cart is empty. Please add items to your cart.
               </p>
               <Link href={"/selfcare-products"}>
-                <button className="btn btn-secondary">Continue Shopping </button>
+                <button className="btn btn-secondary">
+                  Continue Shopping{" "}
+                </button>
               </Link>
             </div>
           </div>
@@ -198,10 +201,10 @@ const Cart = () => {
               <span>Final Price after discount</span>
               <span>{Cart?.discountedTotal} PKR</span>
             </div>
-            <div className="flex justify-between">
+            {/* <div className="flex justify-between">
               <span>Delivery Charges</span>
               <span>{deliveryCharge} PKR</span>
-            </div>
+            </div> */}
             <div className="flex justify-between"></div>
             <hr className="my-2" />
             <div className="flex justify-between font-semibold">
