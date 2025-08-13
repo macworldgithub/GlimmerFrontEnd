@@ -1,33 +1,38 @@
-'use client';
+"use client";
 
-import React from 'react';
-import Image from 'next/image';
+import React from "react";
+import Image from "next/image";
+import BlogsBanner from "@/assets/images/BlogsBanner.png";
+import CatFragrance from "@/assets/images/cat-fragrance.png";
+import CatHairCare from "@/assets/images/cat-haircare.png";
+import CatSkinCare from "@/assets/images/cat-skincare.png";
+import CatMakeup from "@/assets/images/cat-makeup.png";
+import CatLenses from "@/assets/images/cat-lenses.png";
 
 const categories = [
-  { label: 'Fragrance', img: '/images/cat-fragrance.jpg' },
-  { label: 'Hair Care', img: '/images/cat-haircare.jpg' },
-  { label: 'Skin Care', img: '/images/cat-skincare.jpg' },
-  { label: 'Makeup', img: '/images/cat-makeup.jpg' },
-  { label: 'Lenses', img: '/images/cat-lenses.jpg' },
+  { label: "Fragrance", img: CatFragrance },
+  { label: "Hair Care", img: CatHairCare },
+  { label: "Skin Care", img: CatSkinCare },
+  { label: "Makeup", img: CatMakeup },
+  { label: "Lenses", img: CatLenses },
 ];
-
 
 const popularPosts = [
   {
-    title: 'How to Know If You Have Sensitive Skin and What to Do About It',
-    img: '/images/post-sensitive-skin.jpg',
+    title: "How to Know If You Have Sensitive Skin and What to Do About It",
+    img: "/images/post-sensitive-skin.jpg",
   },
   {
-    title: 'The Science Behind Anti-Aging Moisturizers: Do They Really Work?',
-    img: '/images/post-anti-aging.jpg',
+    title: "The Science Behind Anti-Aging Moisturizers: Do They Really Work?",
+    img: "/images/post-anti-aging.jpg",
   },
   {
-    title: '2024 Winter Coloring Sheets',
-    img: '/images/post-coloring.jpg',
+    title: "2024 Winter Coloring Sheets",
+    img: "/images/post-coloring.jpg",
   },
   {
-    title: 'How to Help Manage Swelling in Pregnancy: A Mama-To-Be’s Guide',
-    img: '/images/post-pregnancy.jpg',
+    title: "How to Help Manage Swelling in Pregnancy: A Mama-To-Be’s Guide",
+    img: "/images/post-pregnancy.jpg",
   },
 ];
 
@@ -35,30 +40,39 @@ const BlogsPage = () => {
   return (
     <div className="w-full">
       {/* Banner */}
-      <div className="w-full h-[400px] md:h-[500px] lg:h-[600px] relative mt-4">
+      <div className="w-full h-[300px] md:h-[400px] lg:h-[500px]">
         <Image
-          src="/images/blog-banner.jpg"
+          src={BlogsBanner}
           alt="Blog Banner"
-          layout="fill"
-          objectFit="cover"
+          fill
+          className="object-cover"
           priority
         />
       </div>
 
       {/* Categories */}
-      <section className="py-10">
-        <h2 className="text-center text-3xl font-bold mb-6">Explore by Category</h2>
-        <div className="flex flex-wrap justify-center gap-6">
+      <section className="pt-6 pb-8">
+        <h2 className="text-center text-4xl font-extrabold mb-8 ml-52">
+          Explore by Category
+        </h2>
+
+        <div className="flex justify-between gap-4 ml-48">
           {categories.map((cat, idx) => (
-            <div key={idx} className="flex flex-col items-center w-[90px]">
-              <Image
-                src={cat.img}
-                alt={cat.label}
-                width={80}
-                height={80}
-                className="rounded-full object-cover"
-              />
-              <p className="text-sm font-medium mt-2 text-center">{cat.label}</p>
+            <div
+              key={idx}
+              className="flex flex-col items-center w-full max-w-[150px]"
+            >
+              <div className="relative w-full aspect-square">
+                <Image
+                  src={cat.img}
+                  alt={cat.label}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              <p className="mt-2 text-sm font-bold uppercase tracking-wide text-center">
+                {cat.label}
+              </p>
             </div>
           ))}
         </div>
@@ -68,7 +82,7 @@ const BlogsPage = () => {
 
       {/* Most Popular */}
       <section className="pb-12">
-        <h2 className="text-center text-3xl font-bold mb-6">Most Popular</h2>
+        <h2 className="text-center text-3xl font-bold mb-6">Latest Blogs</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 px-4 md:px-12">
           {popularPosts.map((post, idx) => (
             <div key={idx}>
@@ -76,9 +90,8 @@ const BlogsPage = () => {
                 <Image
                   src={post.img}
                   alt={post.title}
-                  layout="fill"
-                  objectFit="cover"
-                  className="rounded"
+                  fill
+                  className="object-cover rounded"
                 />
               </div>
               <p className="mt-3 font-medium">{post.title}</p>
