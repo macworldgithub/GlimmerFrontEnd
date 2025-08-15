@@ -30,7 +30,7 @@
     "lodash.debounce": "^4.0.8",
     "lucide-react": "^0.485.0",
     "mongoose": "^8.8.0",
-    "next": "^15.4.5",
+    "next": "^15.4.6",
     "nodemailer": "^7.0.3",
     "react": "^18.2.0",
     "react-card-slider-component": "^1.0.9",

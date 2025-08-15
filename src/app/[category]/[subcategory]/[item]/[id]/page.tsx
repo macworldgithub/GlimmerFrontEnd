@@ -47,9 +47,20 @@ const ProductDisplay = () => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [isBulkModalOpen, setIsBulkModalOpen] = useState(false);
   const [fullImage, setFullImage] = useState<string | null>(null);
-  const handleBuyNow = () => {
-    router.push("/checkout");
+const handleBuyNow = () => {
+  const productWithSalonInfo = {
+    ...product,
+    ref_of_salon: ref,
+    rate_of_salon: parseFloat(rate),
   };
+
+  // Agar tumhe cart me product dalna hai:
+  dispatch(addItem({ product: productWithSalonInfo, quantity: quantity || 1 }));
+
+  // Checkout page open karo
+  router.push("/checkout");
+};
+
 
   const [bulkForm, setBulkForm] = useState({ name: "", phone: "", email: "" });
   const [ratings, setRatings] = useState<{
