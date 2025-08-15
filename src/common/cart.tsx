@@ -201,10 +201,10 @@ const Cart = () => {
               <span>Final Price after discount</span>
               <span>{Cart?.discountedTotal} PKR</span>
             </div>
-            {/* <div className="flex justify-between">
+            <div className="flex justify-between">
               <span>Delivery Charges</span>
-              <span>{deliveryCharge} PKR</span>
-            </div> */}
+              <span> 200 PKR</span>
+            </div>
             <div className="flex justify-between"></div>
             <hr className="my-2" />
             <div className="flex justify-between font-semibold">
