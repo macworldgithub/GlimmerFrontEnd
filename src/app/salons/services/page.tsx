@@ -65,6 +65,7 @@ const ServiceList = () => {
 
   const id = searchParams.get("salonId");
   const page = Number(searchParams.get("page")) || 1;
+  const [totalPages, setTotalPages] = useState(1);
 
   const fetchData = async () => {
     try {
@@ -76,6 +77,7 @@ const ServiceList = () => {
       } else {
         sort_by = undefined;
       }
+
       const result = await dispatch(
         getAllActiveServices({
           page_no: page,
@@ -85,10 +87,13 @@ const ServiceList = () => {
           subSubCategoryName: subSubCategoryNameFilter,
           sortBy: sort_by,
           order: sortOrder,
-        })
+          limit: pageSize, // backend already "limit" expect karta hai ✅
+        }as any)
       );
+
       if (result.payload) {
-        let services = result.payload.services;
+        let services = result.payload.services || [];
+
         if (activeSort === "Name") {
           services = [...services].sort((a, b) => {
             const nameA = a.name?.toLowerCase() || "";
@@ -98,8 +103,12 @@ const ServiceList = () => {
               : nameA.localeCompare(nameB);
           });
         }
+
         setData(services);
-        setTotal(result.payload.total);
+
+        // ✅ Backend ke exact fields use karo
+        setTotal(result.payload.total || 0);
+        setTotalPages(result.payload.totalPages || 1);
       }
     } catch (error) {
       console.error("Error fetching services", error);
@@ -431,22 +440,36 @@ const ServiceList = () => {
           </div>
 
           {/* Pagination */}
-          {total > 0 && (
-            <div className="w-full flex justify-center items-center space-x-2 py-4">
+          {/* Pagination */}
+          {totalPages > 0 && (
+            <div className="w-full flex flex-wrap justify-center items-center gap-2 py-4">
               <button
                 onClick={() => handlePageChange(page - 1)}
                 disabled={page === 1}
-                className="px-4 py-2 bg-gray-200 text-gray-500 rounded-md hover:bg-gray-300 disabled:opacity-50"
+                className="px-4 py-2 bg-gray-200 text-gray-600 rounded-md hover:bg-gray-300 disabled:opacity-50"
               >
                 Previous
               </button>
-              <span className="text-lg text-gray-600">
-                Page {page} of {Math.ceil(total / pageSize)}
-              </span>
+
+              {/* Page number buttons */}
+              {Array.from({ length: totalPages }, (_, i) => (
+                <button
+                  key={i + 1}
+                  onClick={() => handlePageChange(i + 1)}
+                  className={`px-4 py-2 rounded-md ${
+                    page === i + 1
+                      ? "bg-purple-600 text-white"
+                      : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                  }`}
+                >
+                  {i + 1}
+                </button>
+              ))}
+
               <button
                 onClick={() => handlePageChange(page + 1)}
-                disabled={page === Math.ceil(total / pageSize)}
-                className="px-4 py-2 bg-gray-200 text-gray-500 rounded-md hover:bg-gray-300 disabled:opacity-50"
+                disabled={page === totalPages}
+                className="px-4 py-2 bg-gray-200 text-gray-600 rounded-md hover:bg-gray-300 disabled:opacity-50"
               >
                 Next
               </button>
