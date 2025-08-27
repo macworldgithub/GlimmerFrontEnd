@@ -10,6 +10,7 @@ import ClientLayout from "@/common/client-layout";
 import FloatingWhatsApp from "@/common/FloatingWhatsApp";
 import ChatbotWidget from "@/common/ChatbotWidget";
 import CategoryNavMenu from "@/common/category-nav-menu";
+import FacebookPixel from "./common/FacebookPixel";
 // import FloatingChatbot from '@/common/FloatingChatbot';
 
 const prompt = Prompt({
@@ -32,8 +33,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" data-theme="light">
+      <head>
+        {/* ✅ Add your Facebook domain verification meta tag here */}
+        <meta name="facebook-domain-verification" 
+        content="wf5nqoeruiazcn3gw9d26j97gnwgcr" />
+      </head>
       <body className={`${prompt.variable} container bg-base-100 antialiased`}>
         <CartStoreProvider>
+          <FacebookPixel />
+
           <Navbar />
           <CategoryNavMenu />
           <ClientLayout>{children}</ClientLayout>
