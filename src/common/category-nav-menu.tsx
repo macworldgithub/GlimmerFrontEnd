@@ -605,12 +605,13 @@ const CategoryNavMenu = ({
     subCategorySlug?: string,
     itemSlug?: string
   ) {
-    let str = "/products?";
-    if (categorySlug) str += `category=${encodeURIComponent(categorySlug)}`;
-    if (subCategorySlug)
-      str += `&sub_category=${encodeURIComponent(subCategorySlug)}`;
-    if (itemSlug) str += `&item=${encodeURIComponent(itemSlug)}`;
-    router.push(str);
+    let path = "/products";
+
+    if (categorySlug) path += `/${encodeURIComponent(categorySlug)}`;
+    if (subCategorySlug) path += `/${encodeURIComponent(subCategorySlug)}`;
+    if (itemSlug) path += `/${encodeURIComponent(itemSlug)}`;
+
+    router.push(path);
     setSelectedSubCategory([]);
     setDropdownOpen(false);
   }
@@ -621,7 +622,7 @@ const CategoryNavMenu = ({
       setDropdownOpen(true);
     } else {
       setSelectedSubCategory([]);
-       setDropdownOpen(false);
+      setDropdownOpen(false);
     }
   };
 

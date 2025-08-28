@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
 type Item = {
@@ -29,6 +29,9 @@ type Category = {
 const Sidebar = ({
   selections,
   onFilterChange,
+  activeCategory,
+  activeSubCategory,
+  activeItem,
 }: {
   selections: Category[];
   onFilterChange: (filters: {
@@ -39,15 +42,26 @@ const Sidebar = ({
     minPrice: string;
     maxPrice: string;
   }) => void;
+  activeCategory?: string;
+  activeSubCategory?: string;
+  activeItem?: string;
 }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedSubCategory, setSelectedSubCategory] = useState<string>("");
   const [selectedItem, setSelectedItem] = useState<string>("");
+
   const [itemName, setItemName] = useState<string>("");
   const [minPrice, setMinPrice] = useState<string>("");
   const [maxPrice, setMaxPrice] = useState<string>("");
+
   const [showAllSubCategories, setShowAllSubCategories] = useState(false);
   const [showAllItems, setShowAllItems] = useState(false);
+
+  useEffect(() => {
+    if (activeCategory) setSelectedCategory(activeCategory);
+    if (activeSubCategory) setSelectedSubCategory(activeSubCategory);
+    if (activeItem) setSelectedItem(activeItem);
+  }, [activeCategory, activeSubCategory, activeItem]);
 
   const handleCategoryChange = (categorySlug: string) => {
     setSelectedCategory(categorySlug);
@@ -71,8 +85,8 @@ const Sidebar = ({
       sub_category: subCategorySlug,
       item: "",
       name: itemName,
-      minPrice: minPrice,
-      maxPrice: maxPrice,
+      minPrice,
+      maxPrice,
     });
   };
 
@@ -83,24 +97,19 @@ const Sidebar = ({
       sub_category: selectedSubCategory,
       item: itemSlug,
       name: itemName,
-      minPrice: minPrice,
-      maxPrice: maxPrice,
+      minPrice,
+      maxPrice,
     });
   };
 
   const handlePriceChange = () => {
-    const min = minPrice ? Number(minPrice) : undefined;
-    const max = maxPrice ? Number(maxPrice) : undefined;
-
-    console.log("Price filter applied:", { min, max }); // Debug log
-
     onFilterChange({
       category: selectedCategory,
       sub_category: selectedSubCategory,
       item: selectedItem,
       name: itemName,
-      minPrice: min?.toString() || "",
-      maxPrice: max?.toString() || "",
+      minPrice,
+      maxPrice,
     });
   };
 
@@ -135,7 +144,9 @@ const Sidebar = ({
           <label
             key={category._id}
             className={`flex items-center cursor-pointer p-2 rounded-lg transition ${
-              selectedCategory === category.product_category.slug ? "bg-blue-100" : "hover:bg-gray-100"
+              selectedCategory === category.product_category.slug
+                ? "bg-blue-100"
+                : "hover:bg-gray-100"
             }`}
           >
             <input
@@ -174,7 +185,9 @@ const Sidebar = ({
               <label
                 key={subCategory._id}
                 className={`flex items-center cursor-pointer p-2 rounded-lg transition ${
-                  selectedSubCategory === subCategory.slug ? "bg-blue-100" : "hover:bg-gray-100"
+                  selectedSubCategory === subCategory.slug
+                    ? "bg-blue-100"
+                    : "hover:bg-gray-100"
                 }`}
               >
                 <input
@@ -186,7 +199,9 @@ const Sidebar = ({
                 />
                 <span
                   className={`w-5 h-5 border-2 rounded-full flex items-center justify-center mr-3 ${
-                    selectedSubCategory === subCategory.slug ? "border-purple-700" : "border-gray-400"
+                    selectedSubCategory === subCategory.slug
+                      ? "border-purple-700"
+                      : "border-gray-400"
                   }`}
                 >
                   {selectedSubCategory === subCategory.slug && (
@@ -232,7 +247,9 @@ const Sidebar = ({
                 />
                 <span
                   className={`w-5 h-5 border-2 rounded-full flex items-center justify-center mr-3 ${
-                    selectedItem === item.slug ? "border-purple-700" : "border-gray-400"
+                    selectedItem === item.slug
+                      ? "border-purple-700"
+                      : "border-gray-400"
                   }`}
                 >
                   {selectedItem === item.slug && (
@@ -285,5 +302,6 @@ const Sidebar = ({
     </div>
   );
 };
+
 
 export default Sidebar;

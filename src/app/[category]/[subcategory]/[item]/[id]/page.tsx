@@ -137,19 +137,21 @@ const ProductDisplay = () => {
     }
   };
 
-  const fetchRatings = async (id: string) => {
+  const fetchRatings = async () => {
+    if (!productId) return;
     try {
-      const res = await getRating(id);
+      const res = await getRating(productId);
       setRatings(res);
     } catch (error) {
       console.error("Error Fetching Ratings", error);
     }
   };
 
-  const fetchUserRating = async (id: string) => {
-    if (!token) return;
+  const fetchUserRating = async () => {
+    
+    if (!token || !productId) return;
     try {
-      const rating = await getUserRating(id, token);
+      const rating = await getUserRating(productId, token);
       if (
         rating !== null &&
         typeof rating === "number" &&
@@ -173,6 +175,12 @@ const ProductDisplay = () => {
     if (isSubmitting || hasRated) {
       return;
     }
+
+    if (!productId) {
+      alert("No product ID found");
+      return;
+    }
+
     setIsSubmitting(true);
     setUserRating(rating);
     try {
@@ -181,10 +189,10 @@ const ProductDisplay = () => {
         setUserRating(null);
         return;
       }
-      const response = await submitRating(path.id as string, rating, token);
+      const response = await submitRating(productId, rating, token);
       alert("Rating submitted successfully");
       setHasRated(true);
-      await fetchRatings(path.id as string);
+      await fetchRatings();
     } catch (error: any) {
       console.error("API error:", error.response?.data || error.message);
       alert(error.response?.data?.message || "Failed to submit rating");

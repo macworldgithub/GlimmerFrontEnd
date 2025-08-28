@@ -437,6 +437,10 @@ type Category = {
   };
 };
 
+type ProductsListProps = {
+  slugs?: string[];
+};
+
 const priceOptions = ["Low to High", "High to Low"];
 
 const Loading = () => (
@@ -445,13 +449,13 @@ const Loading = () => (
   </div>
 );
 
-const ProductsList = () => {
+const ProductsList = ({ slugs = [] }: ProductsListProps) => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<RealCardItem[]>([]);
   console.log(data);
   const [total, setTotal] = useState(0);
   const [selections, setSelections] = useState<Category[]>([]);
-  console.log(selections)
+  console.log(selections);
   const [activeSort, setActiveSort] = useState("Date");
   const [showPriceDropdown, setShowPriceDropdown] = useState(false);
   const [showRatingDropdown, setShowRatingDropdown] = useState(false);
@@ -463,12 +467,16 @@ const ProductsList = () => {
   const pathname = usePathname();
   const router = useRouter();
 
-  const categoryFilter = searchParams.get("category") ?? "";
-  const subCategoryFilter = searchParams.get("sub_category") ?? "";
-  const itemFilter = searchParams.get("item") ?? "";
+  const categoryFilter = slugs[0] || "";
+  const subCategoryFilter = slugs[1] || "";
+  const itemFilter = slugs[2] || "";
   const nameFilter = searchParams.get("name") ?? "";
-  const minPriceFilter = searchParams.get("minPrice") ? Number(searchParams.get("minPrice")) : 0;
-  const maxPriceFilter = searchParams.get("maxPrice") ? Number(searchParams.get("maxPrice")) : 0;
+  const minPriceFilter = searchParams.get("minPrice")
+    ? Number(searchParams.get("minPrice"))
+    : 0;
+  const maxPriceFilter = searchParams.get("maxPrice")
+    ? Number(searchParams.get("maxPrice"))
+    : 0;
   const createdAtFilter = searchParams.get("created_at");
   const page = Number(searchParams.get("page")) || 1;
 
@@ -502,16 +510,20 @@ const ProductsList = () => {
         pageSize
       );
 
-
       // Calculate final price for each product
       const filteredProducts = res.products
         .map((product: any) => {
           // Handle different price structures
           let finalPrice = 0;
 
-          if (product.discounted_price && product.discounted_price > 0 && product.base_price) {
+          if (
+            product.discounted_price &&
+            product.discounted_price > 0 &&
+            product.base_price
+          ) {
             // Discount calculation - discounted_price is percentage
-            const discountAmount = (product.base_price * product.discounted_price) / 100;
+            const discountAmount =
+              (product.base_price * product.discounted_price) / 100;
             finalPrice = product.base_price - discountAmount;
           } else if (product.base_price) {
             finalPrice = product.base_price;
@@ -531,8 +543,14 @@ const ProductsList = () => {
           const productName = product.name?.toLowerCase() || "";
           const productPrice = Number(product.finalPrice) || 0;
           const productCreatedAt = new Date(product.created_at);
-          const min = minPriceFilter && minPriceFilter > 0 ? Number(minPriceFilter) : undefined;
-          const max = maxPriceFilter && maxPriceFilter > 0 ? Number(maxPriceFilter) : undefined;
+          const min =
+            minPriceFilter && minPriceFilter > 0
+              ? Number(minPriceFilter)
+              : undefined;
+          const max =
+            maxPriceFilter && maxPriceFilter > 0
+              ? Number(maxPriceFilter)
+              : undefined;
 
           const matchesPrice =
             (min !== undefined ? productPrice >= min : true) &&
@@ -554,8 +572,10 @@ const ProductsList = () => {
       if (activeSort === "Date") {
         filteredProducts.sort((a: any, b: any) => {
           return sortOrder === "desc"
-            ? new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-            : new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+            ? new Date(b.created_at).getTime() -
+                new Date(a.created_at).getTime()
+            : new Date(a.created_at).getTime() -
+                new Date(b.created_at).getTime();
         });
       }
 
@@ -596,55 +616,26 @@ const ProductsList = () => {
     minPrice: string;
     maxPrice: string;
   }) => {
-    const params = new URLSearchParams(searchParams);
+    let newPath = "/products";
+
+    if (newFilters.category) newPath += `/${newFilters.category}`;
+    if (newFilters.sub_category) newPath += `/${newFilters.sub_category}`;
+    if (newFilters.item) newPath += `/${newFilters.item}`;
+
+    const params = new URLSearchParams();
+
+    if (newFilters.name) params.set("name", newFilters.name);
+    if (newFilters.minPrice) params.set("minPrice", newFilters.minPrice);
+    if (newFilters.maxPrice) params.set("maxPrice", newFilters.maxPrice);
 
     params.set("page", "1");
 
-    if (newFilters.category) {
-      params.set("category", newFilters.category);
-      if (newFilters.category !== searchParams.get("category")) {
-        params.delete("sub_category");
-        params.delete("item");
+    router.push(
+      `${newPath}${params.toString() ? "?" + params.toString() : ""}`,
+      {
+        scroll: true,
       }
-    } else {
-      params.delete("category");
-      params.delete("sub_category");
-      params.delete("item");
-    }
-
-    if (newFilters.sub_category) {
-      params.set("sub_category", newFilters.sub_category);
-      params.delete("item");
-    } else if (newFilters.sub_category === "") {
-      params.delete("sub_category");
-      params.delete("item");
-    }
-
-    if (newFilters.item) {
-      params.set("item", newFilters.item);
-    } else if (newFilters.item === "") {
-      params.delete("item");
-    }
-
-    if (newFilters.name) {
-      params.set("name", newFilters.name);
-    } else {
-      params.delete("name");
-    }
-
-    if (newFilters.minPrice) {
-      params.set("minPrice", newFilters.minPrice);
-    } else {
-      params.delete("minPrice");
-    }
-
-    if (newFilters.maxPrice) {
-      params.set("maxPrice", newFilters.maxPrice);
-    } else {
-      params.delete("maxPrice");
-    }
-
-    router.push(`${pathname}?${params.toString()}`, { scroll: true });
+    );
   };
 
   return (
@@ -671,7 +662,10 @@ const ProductsList = () => {
               >
                 Selfcare Products
               </Link>
-              {(categoryFilter || subCategoryFilter || itemFilter || nameFilter) && (
+              {(categoryFilter ||
+                subCategoryFilter ||
+                itemFilter ||
+                nameFilter) && (
                 <>
                   <span className="mx-2 text-purple-200">/</span>
                   <span className="text-purple-200 font-medium">Products</span>
@@ -691,6 +685,9 @@ const ProductsList = () => {
           <Sidebar
             selections={selections}
             onFilterChange={handleFilterChange}
+            activeCategory={categoryFilter}
+            activeSubCategory={subCategoryFilter}
+            activeItem={itemFilter}
           />
         </motion.aside>
         <motion.main
@@ -815,10 +812,10 @@ const ProductsList = () => {
   );
 };
 
-const Temp = () => {
+const Temp = ({ slugs = [] }: ProductsListProps) => {
   return (
     <Suspense fallback={<Loading />}>
-      <ProductsList />
+      <ProductsList slugs={slugs} />
     </Suspense>
   );
 };
