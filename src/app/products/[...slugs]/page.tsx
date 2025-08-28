@@ -1,6 +1,5 @@
 import Temp from "../page";
 
-
-export default function ProductsSlugPage({ params }: { params: { slugs?: string[] } }) {
-  return <Temp slugs={params.slugs || []} />;
+export default function ProductsSlugPage({ params }: any) {
+  return <Temp slugs={params.slugs ?? []} />;
 }
