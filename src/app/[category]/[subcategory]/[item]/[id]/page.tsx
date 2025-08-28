@@ -79,6 +79,7 @@ const ProductDisplay = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [hasRated, setHasRated] = useState(false);
 
+  const productId = searchParams.get("id") ?? "";
   const ref = searchParams.get("ref") ?? "";
   const rate = searchParams.get("rate") ?? "";
   const storeId = searchParams.get("storeId") ?? "";
@@ -103,25 +104,29 @@ const ProductDisplay = () => {
   const pathname = usePathname();
 
   const pathSegments = pathname.split("/").filter(Boolean);
-  const [category, subCategory, item] = pathSegments; // e.g., /makeup/face/[foundation]/689521f3543643812d72b453
+  const [category, subCategory, item, productSlug] = pathSegments; // e.g., /makeup/face/[foundation]/689521f3543643812d72b453
 
   const productsUrl = `/products${category ? `?category=${category}` : ""}${
     subCategory ? `&sub_category=${subCategory}` : ""
   }${item ? `&item=${item}` : ""}`;
 
-  const fetchData = async (id: string) => {
+  const fetchData = async () => {
+    if (!productId) return;
     try {
-      const res = await getProductById(id);
+      const res = await getProductById(productId);
+      console.log(res);
       setProduct(res);
+      const correctSlug = res.name.toLowerCase().replace(/\s+/g, "-");
       if (
         res.category.slug !== category ||
         res.sub_category.slug !== subCategory ||
         (res.item && res.item.slug !== item) ||
-        (!res.item && item)
+        (!res.item && item) ||
+        productSlug !== correctSlug
       ) {
         const correctPath = res.item
-          ? `/${res.category.slug}/${res.sub_category.slug}/${res.item.slug}/${res._id}`
-          : `/${res.category.slug}/${res.sub_category.slug}/${res._id}`;
+          ? `/${res.category.slug}/${res.sub_category.slug}/${res.item.slug}/${correctSlug}`
+          : `/${res.category.slug}/${res.sub_category.slug}/${correctSlug}`;
         const query = searchParams.toString()
           ? `?${searchParams.toString()}`
           : "";

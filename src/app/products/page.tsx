@@ -411,6 +411,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { BiChevronDown } from "react-icons/bi";
 import { Puff } from "react-loader-spinner";
+import { RealCardItem } from "@/data";
 
 type Item = {
   _id: string;
@@ -446,9 +447,11 @@ const Loading = () => (
 
 const ProductsList = () => {
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState<any[]>([]);
+  const [data, setData] = useState<RealCardItem[]>([]);
+  console.log(data);
   const [total, setTotal] = useState(0);
   const [selections, setSelections] = useState<Category[]>([]);
+  console.log(selections)
   const [activeSort, setActiveSort] = useState("Date");
   const [showPriceDropdown, setShowPriceDropdown] = useState(false);
   const [showRatingDropdown, setShowRatingDropdown] = useState(false);
@@ -468,16 +471,6 @@ const ProductsList = () => {
   const maxPriceFilter = searchParams.get("maxPrice") ? Number(searchParams.get("maxPrice")) : 0;
   const createdAtFilter = searchParams.get("created_at");
   const page = Number(searchParams.get("page")) || 1;
-
-  console.log("URL Parameters:", {
-    categoryFilter,
-    subCategoryFilter,
-    itemFilter,
-    nameFilter,
-    minPriceFilter,
-    maxPriceFilter,
-    page,
-  });
 
   useEffect(() => {
     const fetchSelections = async () => {
@@ -509,22 +502,12 @@ const ProductsList = () => {
         pageSize
       );
 
-      console.log("API Response:", res); // Debug API response
-      console.log("Category Filter:", categoryFilter); // Debug category filter
-      console.log("Price Filters:", { minPriceFilter, maxPriceFilter }); // Debug price filters
 
       // Calculate final price for each product
       const filteredProducts = res.products
         .map((product: any) => {
           // Handle different price structures
           let finalPrice = 0;
-
-          console.log("Product price calculation:", {
-            name: product.name,
-            base_price: product.base_price,
-            discounted_price: product.discounted_price,
-            price: product.price,
-          });
 
           if (product.discounted_price && product.discounted_price > 0 && product.base_price) {
             // Discount calculation - discounted_price is percentage
@@ -551,21 +534,12 @@ const ProductsList = () => {
           const min = minPriceFilter && minPriceFilter > 0 ? Number(minPriceFilter) : undefined;
           const max = maxPriceFilter && maxPriceFilter > 0 ? Number(maxPriceFilter) : undefined;
 
-          console.log("Filtering product:", {
-            name: productName,
-            price: productPrice,
-            min,
-            max,
-            matchesPrice: (min !== undefined ? productPrice >= min : true) && (max !== undefined ? productPrice <= max : true),
-          });
-
           const matchesPrice =
             (min !== undefined ? productPrice >= min : true) &&
             (max !== undefined ? productPrice <= max : true);
 
           // Show all products if price is negative or 0 (temporary fix)
           if (productPrice <= 0) {
-            console.log("Skipping product with invalid price:", productName, productPrice);
             return true; // Show products with invalid prices for now
           }
           const matchesName = nameFilter
@@ -584,9 +558,6 @@ const ProductsList = () => {
             : new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
         });
       }
-      console.log("Final filtered products count:", filteredProducts.length);
-      console.log("Sample filtered product:", filteredProducts[0]);
-      console.log("All products from API:", res.products?.length || 0);
 
       setData(filteredProducts);
       setTotal(res.total || filteredProducts.length);
@@ -802,7 +773,7 @@ const ProductsList = () => {
             ) : data.length > 0 ? (
               data.map((item) => (
                 <motion.div
-                  key={item.id}
+                  key={item._id}
                   whileHover={{ scale: 1.03 }}
                   className="flex"
                 >

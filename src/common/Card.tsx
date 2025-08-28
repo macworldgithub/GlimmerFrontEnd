@@ -136,21 +136,24 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
   const [isFavorited, setIsFavorited] = useState(false);
 
   let queryParams = new URLSearchParams();
+  queryParams.append("id", item._id.toString());
   if (item.rate_of_salon)
     queryParams.append("rate", item.rate_of_salon.toString());
   if (item.ref_of_salon) queryParams.append("ref", item.ref_of_salon);
   //@ts-ignore
   if (item.store) queryParams.append("storeId", item.store);
+
+  const productSlug = item.name
+    ? item.name.toLowerCase().replace(/\s+/g, "-")
+    : item._id;
   //@ts-ignore
   const path = item.item
-    ? `/${item.category.slug}/${item.sub_category.slug}/${item.item.slug}/${item._id}`
-    : `/${item.category.slug}/${item.sub_category.slug}/${item._id}`;
-  const finalPath = queryParams.toString()
-    ? `${path}?${queryParams.toString()}`
-    : path;
+    ? `/${item.category.slug}/${item.sub_category.slug}/${item.item.slug}/${productSlug}`
+    : `/${item.category.slug}/${item.sub_category.slug}/${productSlug}`;
 
+  const finalPath = `${path}?${queryParams.toString()}`;
+  console.log(item);
   const basePrice = Number(item.base_price) || 0;
-  console.log(basePrice);
   const discountedPrice = Number(item.discounted_price) || 0;
 
   let finalPrice = "N/A";
