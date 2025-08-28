@@ -47,20 +47,21 @@ const ProductDisplay = () => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [isBulkModalOpen, setIsBulkModalOpen] = useState(false);
   const [fullImage, setFullImage] = useState<string | null>(null);
-const handleBuyNow = () => {
-  const productWithSalonInfo = {
-    ...product,
-    ref_of_salon: ref,
-    rate_of_salon: parseFloat(rate),
+  const handleBuyNow = () => {
+    const productWithSalonInfo = {
+      ...product,
+      ref_of_salon: ref,
+      rate_of_salon: parseFloat(rate),
+    };
+
+    // Agar tumhe cart me product dalna hai:
+    dispatch(
+      addItem({ product: productWithSalonInfo, quantity: quantity || 1 })
+    );
+
+    // Checkout page open karo
+    router.push("/checkout");
   };
-
-  // Agar tumhe cart me product dalna hai:
-  dispatch(addItem({ product: productWithSalonInfo, quantity: quantity || 1 }));
-
-  // Checkout page open karo
-  router.push("/checkout");
-};
-
 
   const [bulkForm, setBulkForm] = useState({ name: "", phone: "", email: "" });
   const [ratings, setRatings] = useState<{
@@ -102,7 +103,7 @@ const handleBuyNow = () => {
   const pathname = usePathname();
 
   const pathSegments = pathname.split("/").filter(Boolean);
-  const [category, subCategory, item] = pathSegments;
+  const [category, subCategory, item] = pathSegments; // e.g., /makeup/face/[foundation]/689521f3543643812d72b453
 
   const productsUrl = `/products${category ? `?category=${category}` : ""}${
     subCategory ? `&sub_category=${subCategory}` : ""
@@ -112,6 +113,20 @@ const handleBuyNow = () => {
     try {
       const res = await getProductById(id);
       setProduct(res);
+      if (
+        res.category.slug !== category ||
+        res.sub_category.slug !== subCategory ||
+        (res.item && res.item.slug !== item) ||
+        (!res.item && item)
+      ) {
+        const correctPath = res.item
+          ? `/${res.category.slug}/${res.sub_category.slug}/${res.item.slug}/${res._id}`
+          : `/${res.category.slug}/${res.sub_category.slug}/${res._id}`;
+        const query = searchParams.toString()
+          ? `?${searchParams.toString()}`
+          : "";
+        router.replace(`${correctPath}${query}`);
+      }
     } catch (error) {
       console.error("Error Fetching Product by Id", error);
     }

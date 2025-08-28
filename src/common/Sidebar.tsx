@@ -1,59 +1,99 @@
+"use client";
 import { useState } from "react";
 import { motion } from "framer-motion";
 
-interface CategorySelection {
-  category_id: string;
-  category_name: string;
-  sub_categories: {
-    sub_category_id: string;
+type Item = {
+  _id: string;
+  name: string;
+  slug: string;
+};
+
+type SubCategory = {
+  _id: string;
+  name: string;
+  slug: string;
+  product_category: string;
+  items: Item[];
+};
+
+type Category = {
+  _id: string;
+  sub_categories: SubCategory[];
+  product_category: {
+    _id: string;
     name: string;
-    items: {
-      item_id: string;
-      name: string;
-    }[];
-  }[];
-}
+    slug: string;
+  };
+};
 
 const Sidebar = ({
   selections,
   onFilterChange,
 }: {
-  selections: CategorySelection[];
-  onFilterChange: (filters: any) => void;
+  selections: Category[];
+  onFilterChange: (filters: {
+    category: string;
+    sub_category: string;
+    item: string;
+    name: string;
+    minPrice: string;
+    maxPrice: string;
+  }) => void;
 }) => {
-  const [selectedCategory, setSelectedCategory] = useState<string | undefined>("");
-  const [selectedSubCategory, setSelectedSubCategory] = useState<string | undefined>("");
-  const [selectedItem, setSelectedItem] = useState<string | undefined>("");
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [selectedSubCategory, setSelectedSubCategory] = useState<string>("");
+  const [selectedItem, setSelectedItem] = useState<string>("");
   const [itemName, setItemName] = useState<string>("");
   const [minPrice, setMinPrice] = useState<string>("");
   const [maxPrice, setMaxPrice] = useState<string>("");
   const [showAllSubCategories, setShowAllSubCategories] = useState(false);
   const [showAllItems, setShowAllItems] = useState(false);
 
-  const handleCategoryChange = (categoryId: string) => {
-    setSelectedCategory(categoryId);
+  const handleCategoryChange = (categorySlug: string) => {
+    setSelectedCategory(categorySlug);
     setSelectedSubCategory("");
     setSelectedItem("");
-    onFilterChange({ category: categoryId, sub_category: "", item: "", name: itemName, minPrice: "", maxPrice: "" });
+    onFilterChange({
+      category: categorySlug,
+      sub_category: "",
+      item: "",
+      name: itemName,
+      minPrice: "",
+      maxPrice: "",
+    });
   };
 
-  const handleSubCategoryChange = (subCategoryId: string) => {
-    setSelectedSubCategory(subCategoryId);
+  const handleSubCategoryChange = (subCategorySlug: string) => {
+    setSelectedSubCategory(subCategorySlug);
     setSelectedItem("");
-    onFilterChange({ category: selectedCategory, sub_category: subCategoryId, item: "", name: itemName, minPrice: minPrice, maxPrice: maxPrice });
+    onFilterChange({
+      category: selectedCategory,
+      sub_category: subCategorySlug,
+      item: "",
+      name: itemName,
+      minPrice: minPrice,
+      maxPrice: maxPrice,
+    });
   };
 
-  const handleItemChange = (itemId: string) => {
-    setSelectedItem(itemId);
-    onFilterChange({ category: selectedCategory, sub_category: selectedSubCategory, item: itemId, name: itemName, minPrice: minPrice, maxPrice: maxPrice });
+  const handleItemChange = (itemSlug: string) => {
+    setSelectedItem(itemSlug);
+    onFilterChange({
+      category: selectedCategory,
+      sub_category: selectedSubCategory,
+      item: itemSlug,
+      name: itemName,
+      minPrice: minPrice,
+      maxPrice: maxPrice,
+    });
   };
 
   const handlePriceChange = () => {
     const min = minPrice ? Number(minPrice) : undefined;
     const max = maxPrice ? Number(maxPrice) : undefined;
-    
+
     console.log("Price filter applied:", { min, max }); // Debug log
-    
+
     onFilterChange({
       category: selectedCategory,
       sub_category: selectedSubCategory,
@@ -64,15 +104,25 @@ const Sidebar = ({
     });
   };
 
-  const selectedCategoryData = selections.find(category => category.category_id === selectedCategory);
-  const filteredSubCategories = selectedCategoryData ? selectedCategoryData.sub_categories : [];
-  const displayedSubCategories = showAllSubCategories ? filteredSubCategories : filteredSubCategories.slice(0, 5);
+  const selectedCategoryData = selections.find(
+    (category) => category.product_category.slug === selectedCategory
+  );
+  const filteredSubCategories = selectedCategoryData
+    ? selectedCategoryData.sub_categories
+    : [];
+  const displayedSubCategories = showAllSubCategories
+    ? filteredSubCategories
+    : filteredSubCategories.slice(0, 5);
 
-  const selectedSubCategoryData = filteredSubCategories.find(subCategory => subCategory.sub_category_id === selectedSubCategory);
+  const selectedSubCategoryData = filteredSubCategories.find(
+    (subCategory) => subCategory.slug === selectedSubCategory
+  );
   const filteredItems = selectedSubCategoryData ? selectedSubCategoryData.items : [];
   const displayedItems = showAllItems ? filteredItems : filteredItems.slice(0, 5);
 
-  const sortedCategories = selections.sort((a, b) => a.category_name.localeCompare(b.category_name));
+  const sortedCategories = selections.sort((a, b) =>
+    a.product_category.name.localeCompare(b.product_category.name)
+  );
 
   return (
     <div className="p-6 border-r bg-[#FDF3D2] shadow-md hidden md:block">
@@ -83,26 +133,33 @@ const Sidebar = ({
         <h3 className="font-semibold text-lg text-gray-700">Categories</h3>
         {sortedCategories.map((category) => (
           <label
-            key={category.category_id}
-            className={`flex items-center cursor-pointer p-2 rounded-lg transition ${selectedCategory === category.category_id ? "bg-blue-100" : "hover:bg-gray-100"
-              }`}
+            key={category._id}
+            className={`flex items-center cursor-pointer p-2 rounded-lg transition ${
+              selectedCategory === category.product_category.slug ? "bg-blue-100" : "hover:bg-gray-100"
+            }`}
           >
             <input
               type="radio"
               name="category"
-              checked={selectedCategory === category.category_id}
-              onChange={() => handleCategoryChange(category.category_id)}
+              checked={selectedCategory === category.product_category.slug}
+              onChange={() => handleCategoryChange(category.product_category.slug)}
               className="hidden"
             />
             <span
-              className={`w-5 h-5 border-2 rounded-full flex items-center justify-center mr-3 ${selectedCategory === category.category_id ? "border-purple-700" : "border-gray-400"
-                }`}
+              className={`w-5 h-5 border-2 rounded-full flex items-center justify-center mr-3 ${
+                selectedCategory === category.product_category.slug
+                  ? "border-purple-700"
+                  : "border-gray-400"
+              }`}
             >
-              {selectedCategory === category.category_id && (
-                <motion.div className="w-3 h-3 bg-purple-500 rounded-full" layoutId="categorySelection" />
+              {selectedCategory === category.product_category.slug && (
+                <motion.div
+                  className="w-3 h-3 bg-purple-500 rounded-full"
+                  layoutId="categorySelection"
+                />
               )}
             </span>
-            {category.category_name}
+            {category.product_category.name}
           </label>
         ))}
       </div>
@@ -111,28 +168,37 @@ const Sidebar = ({
       {selectedCategory && (
         <div className="mt-6">
           <h3 className="font-semibold text-lg text-gray-700">Sub Categories</h3>
-          {displayedSubCategories.sort((a, b) => a.name.localeCompare(b.name)).map((subCategory) => (
-            <label
-              key={subCategory.sub_category_id}
-              className={`flex items-center cursor-pointer p-2 rounded-lg transition ${selectedSubCategory === subCategory.sub_category_id ? "bg-blue-100" : "hover:bg-gray-100"}`}
-            >
-              <input
-                type="radio"
-                name="subCategory"
-                checked={selectedSubCategory === subCategory.sub_category_id}
-                onChange={() => handleSubCategoryChange(subCategory.sub_category_id)}
-                className="hidden"
-              />
-              <span
-                className={`w-5 h-5 border-2 rounded-full flex items-center justify-center mr-3 ${selectedSubCategory === subCategory.sub_category_id ? "border-purple-700" : "border-gray-400"}`}
+          {displayedSubCategories
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .map((subCategory) => (
+              <label
+                key={subCategory._id}
+                className={`flex items-center cursor-pointer p-2 rounded-lg transition ${
+                  selectedSubCategory === subCategory.slug ? "bg-blue-100" : "hover:bg-gray-100"
+                }`}
               >
-                {selectedSubCategory === subCategory.sub_category_id && (
-                  <motion.div className="w-3 h-3 bg-purple-500 rounded-full" layoutId="subCategorySelection" />
-                )}
-              </span>
-              {subCategory.name}
-            </label>
-          ))}
+                <input
+                  type="radio"
+                  name="subCategory"
+                  checked={selectedSubCategory === subCategory.slug}
+                  onChange={() => handleSubCategoryChange(subCategory.slug)}
+                  className="hidden"
+                />
+                <span
+                  className={`w-5 h-5 border-2 rounded-full flex items-center justify-center mr-3 ${
+                    selectedSubCategory === subCategory.slug ? "border-purple-700" : "border-gray-400"
+                  }`}
+                >
+                  {selectedSubCategory === subCategory.slug && (
+                    <motion.div
+                      className="w-3 h-3 bg-purple-500 rounded-full"
+                      layoutId="subCategorySelection"
+                    />
+                  )}
+                </span>
+                {subCategory.name}
+              </label>
+            ))}
           {filteredSubCategories.length > 5 && (
             <button
               onClick={() => setShowAllSubCategories(!showAllSubCategories)}
@@ -148,28 +214,37 @@ const Sidebar = ({
       {selectedSubCategory && (
         <div className="mt-6">
           <h3 className="font-semibold text-lg text-gray-700">Items</h3>
-          {displayedItems.sort((a, b) => a.name.localeCompare(b.name)).map((item) => (
-            <label
-              key={item.item_id}
-              className={`flex items-center cursor-pointer p-2 rounded-lg transition ${selectedItem === item.item_id ? "bg-blue-100" : "hover:bg-gray-100"}`}
-            >
-              <input
-                type="radio"
-                name="item"
-                checked={selectedItem === item.item_id}
-                onChange={() => handleItemChange(item.item_id)}
-                className="hidden"
-              />
-              <span
-                className={`w-5 h-5 border-2 rounded-full flex items-center justify-center mr-3 ${selectedItem === item.item_id ? "border-purple-700" : "border-gray-400"}`}
+          {displayedItems
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .map((item) => (
+              <label
+                key={item._id}
+                className={`flex items-center cursor-pointer p-2 rounded-lg transition ${
+                  selectedItem === item.slug ? "bg-blue-100" : "hover:bg-gray-100"
+                }`}
               >
-                {selectedItem === item.item_id && (
-                  <motion.div className="w-3 h-3 bg-purple-500 rounded-full" layoutId="itemSelection" />
-                )}
-              </span>
-              {item.name}
-            </label>
-          ))}
+                <input
+                  type="radio"
+                  name="item"
+                  checked={selectedItem === item.slug}
+                  onChange={() => handleItemChange(item.slug)}
+                  className="hidden"
+                />
+                <span
+                  className={`w-5 h-5 border-2 rounded-full flex items-center justify-center mr-3 ${
+                    selectedItem === item.slug ? "border-purple-700" : "border-gray-400"
+                  }`}
+                >
+                  {selectedItem === item.slug && (
+                    <motion.div
+                      className="w-3 h-3 bg-purple-500 rounded-full"
+                      layoutId="itemSelection"
+                    />
+                  )}
+                </span>
+                {item.name}
+              </label>
+            ))}
           {filteredItems.length > 5 && (
             <button
               onClick={() => setShowAllItems(!showAllItems)}

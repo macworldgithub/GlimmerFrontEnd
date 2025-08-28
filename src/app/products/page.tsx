@@ -412,18 +412,29 @@ import Link from "next/link";
 import { BiChevronDown } from "react-icons/bi";
 import { Puff } from "react-loader-spinner";
 
-interface CategorySelection {
-  category_id: string;
-  category_name: string;
-  sub_categories: {
-    sub_category_id: string;
+type Item = {
+  _id: string;
+  name: string;
+  slug: string;
+};
+
+type SubCategory = {
+  _id: string;
+  name: string;
+  slug: string;
+  product_category: string;
+  items: Item[];
+};
+
+type Category = {
+  _id: string;
+  sub_categories: SubCategory[];
+  product_category: {
+    _id: string;
     name: string;
-    items: {
-      item_id: string;
-      name: string;
-    }[];
-  }[];
-}
+    slug: string;
+  };
+};
 
 const priceOptions = ["Low to High", "High to Low"];
 
@@ -437,7 +448,7 @@ const ProductsList = () => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<any[]>([]);
   const [total, setTotal] = useState(0);
-  const [selections, setSelections] = useState<CategorySelection[]>([]);
+  const [selections, setSelections] = useState<Category[]>([]);
   const [activeSort, setActiveSort] = useState("Date");
   const [showPriceDropdown, setShowPriceDropdown] = useState(false);
   const [showRatingDropdown, setShowRatingDropdown] = useState(false);
@@ -457,7 +468,7 @@ const ProductsList = () => {
   const maxPriceFilter = searchParams.get("maxPrice") ? Number(searchParams.get("maxPrice")) : 0;
   const createdAtFilter = searchParams.get("created_at");
   const page = Number(searchParams.get("page")) || 1;
-  
+
   console.log("URL Parameters:", {
     categoryFilter,
     subCategoryFilter,
@@ -465,37 +476,21 @@ const ProductsList = () => {
     nameFilter,
     minPriceFilter,
     maxPriceFilter,
-    page
+    page,
   });
 
   useEffect(() => {
     const fetchSelections = async () => {
       try {
         const productItemsRes = await getAllProductItem();
-        const transformedSelections = transformData(productItemsRes);
-        setSelections(transformedSelections);
+        setSelections(productItemsRes);
       } catch (error) {
         console.error("Error fetching selections:", error);
+        setSelections([]); // Optionally use fallbackCategories here
       }
     };
     fetchSelections();
   }, []);
-
-  function transformData(data: any[]): CategorySelection[] {
-    return data.map((category) => ({
-      category_id: category.product_category._id,
-      category_name: category.product_category.name,
-      sub_categories: category.sub_categories.map((subCategory: any) => ({
-        sub_category_id: subCategory._id,
-        name: subCategory.name,
-        items: subCategory.items.map((item: any) => ({
-          item_id: item._id,
-          name: item.name,
-        })),
-      })),
-      created_at: category.product_category.created_at,
-    }));
-  }
 
   const fetchData = async () => {
     setLoading(true);
@@ -517,20 +512,20 @@ const ProductsList = () => {
       console.log("API Response:", res); // Debug API response
       console.log("Category Filter:", categoryFilter); // Debug category filter
       console.log("Price Filters:", { minPriceFilter, maxPriceFilter }); // Debug price filters
-      
+
       // Calculate final price for each product
       const filteredProducts = res.products
         .map((product: any) => {
           // Handle different price structures
           let finalPrice = 0;
-          
+
           console.log("Product price calculation:", {
             name: product.name,
             base_price: product.base_price,
             discounted_price: product.discounted_price,
-            price: product.price
+            price: product.price,
           });
-          
+
           if (product.discounted_price && product.discounted_price > 0 && product.base_price) {
             // Discount calculation - discounted_price is percentage
             const discountAmount = (product.base_price * product.discounted_price) / 100;
@@ -540,10 +535,10 @@ const ProductsList = () => {
           } else if (product.price) {
             finalPrice = product.price;
           }
-          
+
           // Ensure price is never negative
           finalPrice = Math.max(0, finalPrice);
-          
+
           return {
             ...product,
             finalPrice: finalPrice.toFixed(2),
@@ -555,19 +550,19 @@ const ProductsList = () => {
           const productCreatedAt = new Date(product.created_at);
           const min = minPriceFilter && minPriceFilter > 0 ? Number(minPriceFilter) : undefined;
           const max = maxPriceFilter && maxPriceFilter > 0 ? Number(maxPriceFilter) : undefined;
-          
+
           console.log("Filtering product:", {
             name: productName,
             price: productPrice,
             min,
             max,
-            matchesPrice: (min !== undefined ? productPrice >= min : true) && (max !== undefined ? productPrice <= max : true)
+            matchesPrice: (min !== undefined ? productPrice >= min : true) && (max !== undefined ? productPrice <= max : true),
           });
-          
+
           const matchesPrice =
             (min !== undefined ? productPrice >= min : true) &&
             (max !== undefined ? productPrice <= max : true);
-          
+
           // Show all products if price is negative or 0 (temporary fix)
           if (productPrice <= 0) {
             console.log("Skipping product with invalid price:", productName, productPrice);
@@ -585,16 +580,14 @@ const ProductsList = () => {
       if (activeSort === "Date") {
         filteredProducts.sort((a: any, b: any) => {
           return sortOrder === "desc"
-            ? new Date(b.created_at).getTime() -
-                new Date(a.created_at).getTime()
-            : new Date(a.created_at).getTime() -
-                new Date(b.created_at).getTime();
+            ? new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+            : new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
         });
       }
       console.log("Final filtered products count:", filteredProducts.length);
       console.log("Sample filtered product:", filteredProducts[0]);
       console.log("All products from API:", res.products?.length || 0);
-      
+
       setData(filteredProducts);
       setTotal(res.total || filteredProducts.length);
     } catch (error) {
@@ -625,12 +618,12 @@ const ProductsList = () => {
   };
 
   const handleFilterChange = (newFilters: {
-    category?: string;
-    sub_category?: string;
-    item?: string;
-    name?: string;
-    minPrice?: string;
-    maxPrice?: string;
+    category: string;
+    sub_category: string;
+    item: string;
+    name: string;
+    minPrice: string;
+    maxPrice: string;
   }) => {
     const params = new URLSearchParams(searchParams);
 
@@ -642,45 +635,42 @@ const ProductsList = () => {
         params.delete("sub_category");
         params.delete("item");
       }
-    }
-
-    if (newFilters.sub_category !== undefined) {
-      if (newFilters.sub_category) {
-        params.set("sub_category", newFilters.sub_category);
-      } else {
-        params.delete("sub_category");
-      }
+    } else {
+      params.delete("category");
+      params.delete("sub_category");
       params.delete("item");
     }
 
-    if (newFilters.item !== undefined) {
-      if (newFilters.item) {
-        params.set("item", newFilters.item);
-      } else {
-        params.delete("item");
-      }
+    if (newFilters.sub_category) {
+      params.set("sub_category", newFilters.sub_category);
+      params.delete("item");
+    } else if (newFilters.sub_category === "") {
+      params.delete("sub_category");
+      params.delete("item");
     }
 
-    if (newFilters.name !== undefined) {
-      if (newFilters.name) {
-        params.set("name", newFilters.name);
-      } else {
-        params.delete("name");
-      }
+    if (newFilters.item) {
+      params.set("item", newFilters.item);
+    } else if (newFilters.item === "") {
+      params.delete("item");
     }
-    if (newFilters.minPrice !== undefined) {
-      if (newFilters.minPrice) {
-        params.set("minPrice", newFilters.minPrice);
-      } else {
-        params.delete("minPrice");
-      }
+
+    if (newFilters.name) {
+      params.set("name", newFilters.name);
+    } else {
+      params.delete("name");
     }
-    if (newFilters.maxPrice !== undefined) {
-      if (newFilters.maxPrice) {
-        params.set("maxPrice", newFilters.maxPrice);
-      } else {
-        params.delete("maxPrice");
-      }
+
+    if (newFilters.minPrice) {
+      params.set("minPrice", newFilters.minPrice);
+    } else {
+      params.delete("minPrice");
+    }
+
+    if (newFilters.maxPrice) {
+      params.set("maxPrice", newFilters.maxPrice);
+    } else {
+      params.delete("maxPrice");
     }
 
     router.push(`${pathname}?${params.toString()}`, { scroll: true });
@@ -697,7 +687,7 @@ const ProductsList = () => {
           />
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/30 group-hover:bg-black/20 transition-all duration-500 px-4 lg:p-[8rem]">
             <h1 className="text-white text-2xl sm:text-3xl md:text-4xl font-bold text-center">
-              Explore Our Best Collection 
+              Explore Our Best Collection
             </h1>
             <div className="breadcrumbs mt-4 text-white text-base sm:text-lg lg:text-xl text-center">
               <Link href="/" className="text-white font-medium">
@@ -710,11 +700,7 @@ const ProductsList = () => {
               >
                 Selfcare Products
               </Link>
-
-              {(categoryFilter ||
-                subCategoryFilter ||
-                itemFilter ||
-                nameFilter) && (
+              {(categoryFilter || subCategoryFilter || itemFilter || nameFilter) && (
                 <>
                   <span className="mx-2 text-purple-200">/</span>
                   <span className="text-purple-200 font-medium">Products</span>

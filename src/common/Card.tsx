@@ -142,13 +142,15 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
   //@ts-ignore
   if (item.store) queryParams.append("storeId", item.store);
   //@ts-ignore
-  const path = `/${item.category}/${item.sub_category}/${item.item}/${item._id}`;
+  const path = item.item
+    ? `/${item.category.slug}/${item.sub_category.slug}/${item.item.slug}/${item._id}`
+    : `/${item.category.slug}/${item.sub_category.slug}/${item._id}`;
   const finalPath = queryParams.toString()
     ? `${path}?${queryParams.toString()}`
     : path;
 
   const basePrice = Number(item.base_price) || 0;
-  console.log(basePrice)
+  console.log(basePrice);
   const discountedPrice = Number(item.discounted_price) || 0;
 
   let finalPrice = "N/A";
@@ -195,19 +197,16 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
           />
         </div>
       </div> */}
-{/* 🟣 Discount Percentage Badge - Top Right */}
-{basePrice > 0 && discountedPrice > 0 && discountedPrice < basePrice && (
-  <div className="absolute top-2 right-2 z-20">
-    <div className="bg-[#583FA8] text-white text-[10px] font-semibold px-2 py-1 rounded-md shadow-md">
-      {`${Math.round(
-        ((basePrice - discountedPrice) / basePrice) * 100
-      )}% OFF`}
-    </div>
-  </div>
-)}
-
-
-         
+      {/* 🟣 Discount Percentage Badge - Top Right */}
+      {basePrice > 0 && discountedPrice > 0 && discountedPrice < basePrice && (
+        <div className="absolute top-2 right-2 z-20">
+          <div className="bg-[#583FA8] text-white text-[10px] font-semibold px-2 py-1 rounded-md shadow-md">
+            {`${Math.round(
+              ((basePrice - discountedPrice) / basePrice) * 100
+            )}% OFF`}
+          </div>
+        </div>
+      )}
 
       {/* ✅ Success Message */}
       {showMessage && (

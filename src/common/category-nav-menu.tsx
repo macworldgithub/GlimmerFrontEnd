@@ -341,11 +341,13 @@ import Link from "next/link";
 type Item = {
   _id: string;
   name: string;
+  slug: string;
 };
 
 type SubCategory = {
   _id: string;
   name: string;
+  slug: string;
   product_category: string;
   items: Item[];
 };
@@ -356,6 +358,7 @@ type Category = {
   product_category: {
     _id: string;
     name: string;
+    slug: string;
   };
 };
 
@@ -393,152 +396,165 @@ const CategoryNavMenu = ({
   const fallbackCategories: Category[] = [
     {
       _id: "4",
-      product_category: { _id: "4", name: "Fragrance" },
+      product_category: { _id: "4", name: "Fragrance", slug: "fragrance" },
       sub_categories: [
         {
           _id: "41",
+          slug: "perfumes",
           name: "Perfumes",
           product_category: "4",
           items: [
-            { _id: "411", name: "Eau de Parfum" },
-            { _id: "412", name: "Eau de Toilette" },
-            { _id: "413", name: "Body Mists" },
+            { _id: "411", slug: "eau-de-parfum", name: "Eau de Parfum" },
+            { _id: "412", slug: "eau-de-toilette", name: "Eau de Toilette" },
+            { _id: "413", slug: "body-mists", name: "Body Mists" },
           ],
         },
         {
           _id: "42",
+          slug: "gift-sets",
           name: "Gift Sets",
           product_category: "4",
           items: [
-            { _id: "421", name: "Perfume Sets" },
-            { _id: "422", name: "Miniature Sets" },
+            { _id: "421", slug: "perfume-sets", name: "Perfume Sets" },
+            { _id: "422", slug: "miniature-sets", name: "Miniature Sets" },
           ],
         },
       ],
     },
     {
       _id: "1",
-      product_category: { _id: "1", name: "Hair Care" },
+      product_category: { _id: "1", name: "Hair Care", slug: "hair-care" },
       sub_categories: [
         {
           _id: "11",
+          slug: "hair-treatments",
           name: "Hair Treatments",
           product_category: "1",
           items: [
-            { _id: "111", name: "Beard Oil" },
-            { _id: "112", name: "Hair Cream" },
-            { _id: "113", name: "Hair Mask" },
+            { _id: "111", slug: "beard-oil", name: "Beard Oil" },
+            { _id: "112", slug: "hair-cream", name: "Hair Cream" },
+            { _id: "113", slug: "hair-mask", name: "Hair Mask" },
           ],
         },
         {
           _id: "12",
+          slug: "styling",
           name: "Styling",
           product_category: "1",
           items: [
-            { _id: "121", name: "Hair Spray" },
-            { _id: "122", name: "Hair Gel" },
+            { _id: "121", slug: "hair-spray", name: "Hair Spray" },
+            { _id: "122", slug: "hair-gel", name: "Hair Gel" },
           ],
         },
         {
           _id: "13",
+          slug: "shampoo-conditioner",
           name: "Shampoo & Conditioner",
           product_category: "1",
           items: [
-            { _id: "131", name: "Shampoo" },
-            { _id: "132", name: "Conditioner" },
+            { _id: "131", slug: "shampoo", name: "Shampoo" },
+            { _id: "132", slug: "conditioner", name: "Conditioner" },
           ],
         },
       ],
     },
     {
       _id: "2",
-      product_category: { _id: "2", name: "Lenses" },
+      product_category: { _id: "2", name: "Lenses", slug: "lenses" },
       sub_categories: [
         {
           _id: "21",
+          slug: "color-lenses",
           name: "Color Lenses",
           product_category: "2",
           items: [
-            { _id: "211", name: "Blue Lenses" },
-            { _id: "212", name: "Green Lenses" },
-            { _id: "213", name: "Brown Lenses" },
+            { _id: "211", slug: "blue-lenses", name: "Blue Lenses" },
+            { _id: "212", slug: "green-lenses", name: "Green Lenses" },
+            { _id: "213", slug: "brown-lenses", name: "Brown Lenses" },
           ],
         },
         {
           _id: "22",
+          slug: "daily-lenses",
           name: "Daily Lenses",
           product_category: "2",
           items: [
-            { _id: "221", name: "Single Day" },
-            { _id: "222", name: "Monthly Lenses" },
+            { _id: "221", slug: "single-day", name: "Single Day" },
+            { _id: "222", slug: "monthly-lenses", name: "Monthly Lenses" },
           ],
         },
       ],
     },
     {
       _id: "3",
-      product_category: { _id: "3", name: "Makeup" },
+      product_category: { _id: "3", name: "Makeup", slug: "makeup" },
       sub_categories: [
         {
           _id: "31",
+          slug: "face-makeup",
           name: "Face Makeup",
           product_category: "3",
           items: [
-            { _id: "311", name: "Foundation" },
-            { _id: "312", name: "Concealer" },
-            { _id: "313", name: "Compact Powder" },
+            { _id: "311", slug: "foundation", name: "Foundation" },
+            { _id: "312", slug: "concealer", name: "Concealer" },
+            { _id: "313", slug: "compact-powder", name: "Compact Powder" },
           ],
         },
         {
           _id: "32",
+          slug: "eye-makeup",
           name: "Eye Makeup",
           product_category: "3",
           items: [
-            { _id: "321", name: "Eyeliner" },
-            { _id: "322", name: "Mascara" },
-            { _id: "323", name: "Eyeshadow" },
+            { _id: "321", slug: "eyeliner", name: "Eyeliner" },
+            { _id: "322", slug: "mascara", name: "Mascara" },
+            { _id: "323", slug: "eyeshadow", name: "Eyeshadow" },
           ],
         },
         {
           _id: "33",
+          slug: "lip-makeup",
           name: "Lip Makeup",
           product_category: "3",
           items: [
-            { _id: "331", name: "Lipstick" },
-            { _id: "332", name: "Lip Gloss" },
+            { _id: "331", slug: "lipstick", name: "Lipstick" },
+            { _id: "332", slug: "lip-gloss", name: "Lip Gloss" },
           ],
         },
       ],
     },
     {
       _id: "5",
-      product_category: { _id: "5", name: "Skin Care" },
+      product_category: { _id: "5", name: "Skin Care", slug: "skin-care" },
       sub_categories: [
         {
           _id: "51",
+          slug: "moisturizers",
           name: "Moisturizers",
           product_category: "5",
           items: [
-            { _id: "511", name: "Day Cream" },
-            { _id: "512", name: "Night Cream" },
+            { _id: "511", slug: "day-cream", name: "Day Cream" },
+            { _id: "512", slug: "night-cream", name: "Night Cream" },
           ],
         },
         {
           _id: "52",
+          slug: "cleansers",
           name: "Cleansers",
           product_category: "5",
           items: [
-            { _id: "521", name: "Face Wash" },
-            { _id: "522", name: "Cleansing Milk" },
+            { _id: "521", slug: "face-wash", name: "Face Wash" },
+            { _id: "522", slug: "cleansing-milk", name: "Cleansing Milk" },
           ],
         },
         {
           _id: "53",
+          slug: "sun-protection",
           name: "Sun Protection",
           product_category: "5",
           items: [
-            { _id: "531", name: "Sunscreen SPF 30" },
-            { _id: "532", name: "Sunscreen SPF 50" },
+            { _id: "531", slug: "sunscreen-spf-30", name: "Sunscreen SPF 30" },
+            { _id: "532", slug: "sunscreen-spf-50", name: "Sunscreen SPF 50" },
           ],
         },
       ],
@@ -584,39 +600,28 @@ const CategoryNavMenu = ({
     get_all_categories();
   }, []);
 
-  function HandlePath(e: string) {
-    let path = e.split("-");
+  function HandlePath(
+    categorySlug: string,
+    subCategorySlug?: string,
+    itemSlug?: string
+  ) {
     let str = "/products?";
-    if (path[0]) str += `category=${path[0]}`;
-    if (path[1]) str += `&sub_category=${path[1]}`;
-    if (path[2]) str += `&item=${path[2]}`;
+    if (categorySlug) str += `category=${encodeURIComponent(categorySlug)}`;
+    if (subCategorySlug)
+      str += `&sub_category=${encodeURIComponent(subCategorySlug)}`;
+    if (itemSlug) str += `&item=${encodeURIComponent(itemSlug)}`;
     router.push(str);
     setSelectedSubCategory([]);
     setDropdownOpen(false);
   }
 
-  const HandleSelectCategory = (subCategories: SubCategory[]) => {
+  const handleCategoryClick = (subCategories: SubCategory[]) => {
     if (subCategories.length > 0) {
-      const sortedSubCategories = sortSubCategories(subCategories);
-      setSelectedSubCategory(sortedSubCategories);
+      setSelectedSubCategory(subCategories);
       setDropdownOpen(true);
     } else {
       setSelectedSubCategory([]);
-      setDropdownOpen(false);
-    }
-  };
-
-  const handleCategoryClick = (
-    subCategories: SubCategory[],
-    categoryId: string
-  ) => {
-    HandlePath(categoryId); // Go to /products?category=<id>
-
-    if (dropdownOpen && selectedSubCategory === subCategories) {
-      setDropdownOpen(false);
-      setSelectedSubCategory([]);
-    } else {
-      HandleSelectCategory(subCategories);
+       setDropdownOpen(false);
     }
   };
 
@@ -638,10 +643,11 @@ const CategoryNavMenu = ({
               <div
                 key={index}
                 className="cursor-pointer hover:text-purple-900 hover:font-medium transition-all duration-500 flex items-center gap-1 select-none"
-                onClick={() =>
-                  handleCategoryClick(item?.sub_categories, item?._id)
-                }
-                onMouseEnter={() => HandleSelectCategory(item?.sub_categories)}
+                onClick={() => {
+                  handleCategoryClick(item?.sub_categories);
+                  HandlePath(item.product_category.slug);
+                }}
+                onMouseEnter={() => handleCategoryClick(item?.sub_categories)}
               >
                 <span>{item?.product_category?.name}</span>
                 {item?.sub_categories && item.sub_categories.length > 0 && (
@@ -667,9 +673,14 @@ const CategoryNavMenu = ({
                   key={index}
                 >
                   <p
-                    onClick={() =>
-                      HandlePath(`${item?.product_category}-${item?._id}`)
-                    }
+                    onClick={() => {
+                      const category = categories.find((cat) =>
+                        cat.sub_categories.some((sub) => sub._id === item._id)
+                      );
+                      if (category) {
+                        HandlePath(category.product_category.slug, item.slug);
+                      }
+                    }}
                     className="font-semibold text-[16px] cursor-pointer mb-3 text-gray-800 hover:text-purple-600 transition-colors"
                   >
                     {item?.name}
@@ -677,11 +688,20 @@ const CategoryNavMenu = ({
                   <div className="flex flex-col gap-2">
                     {item?.items?.map((product, i) => (
                       <p
-                        onClick={() =>
-                          HandlePath(
-                            `${item?.product_category}-${item?._id}-${product?._id}`
-                          )
-                        }
+                        onClick={() => {
+                          const category = categories.find((cat) =>
+                            cat.sub_categories.some(
+                              (sub) => sub._id === item._id
+                            )
+                          );
+                          if (category) {
+                            HandlePath(
+                              category.product_category.slug,
+                              item.slug,
+                              product.slug
+                            );
+                          }
+                        }}
                         className="text-[13px] text-gray-600 hover:text-gray-900 transition-all duration-200 cursor-pointer hover:underline"
                         key={i}
                       >
@@ -755,7 +775,7 @@ const CategoryNavMenu = ({
                             className="cursor-pointer hover:underline"
                             onClick={() =>
                               HandlePath(
-                                `${sub.product_category}-${sub._id}-${item._id}`
+                                `${sub.product_category}-${sub.slug}-${item.slug}`
                               )
                             }
                           >
@@ -775,3 +795,4 @@ const CategoryNavMenu = ({
 };
 
 export default CategoryNavMenu;
+
