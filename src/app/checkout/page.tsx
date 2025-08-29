@@ -1294,14 +1294,14 @@ export default function Checkout() {
                     <label
                       className={`flex items-center justify-center gap-2 px-4 py-3 rounded-lg border cursor-pointer transition-all
                         ${
-                          formData.paymentMethod === "Online Payment"
+                          formData.paymentMethod === "Bank Alfalah"
                             ? "border-blue-500 bg-blue-50"
                             : "border-gray-300"
                         }`}
                       onClick={() => {
                         setFormData({
                           ...formData,
-                          paymentMethod: "Online Payment",
+                          paymentMethod: "Bank Alfalah",
                         });
                       }}
                     >
