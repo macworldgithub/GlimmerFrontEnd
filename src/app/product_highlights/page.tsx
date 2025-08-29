@@ -71,9 +71,6 @@ const ProductHighlights = () => {
 
   return (
     <div className="flex flex-col w-[99vw] pb-[8rem]">
-      <div className="w-full mb-4">
-        <CategoryNavMenu />
-      </div>
 
       <div className="hidden md:block pt-[3rem] px-[1rem] sm:px-[2rem] md:px-[4rem] lg:px-[6rem] xl:px-[12rem]">
         <div className="w-full h-[50vh] rounded-lg overflow-hidden relative group">

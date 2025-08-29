@@ -938,6 +938,7 @@ export default function Checkout() {
         );
 
         dispatch(clearCart());
+         router.push("/confirmation");
       }
     } catch (error) {
       toast.error("Failed to place order. Please try again.");
