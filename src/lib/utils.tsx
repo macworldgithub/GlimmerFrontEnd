@@ -121,3 +121,14 @@ export function mapReviews(review: ReviewType[]): CardType[] {
 		bgColor: "base-300",
 	}));
 }
+
+export const sanitizeSlug = (slug?: string, fallback?: string) => {
+  if (!slug && fallback) return fallback;
+  return (slug || "").replace(/\//g, "");
+};
+
+export const formatSlug = (text: string) =>
+  text
+    .toLowerCase()
+    .replace(/\s+/g, "-")
+    .replace(/\//g, ""); 

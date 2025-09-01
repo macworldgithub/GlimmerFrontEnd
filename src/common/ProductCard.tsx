@@ -108,13 +108,13 @@ const ProductCard: React.FC<{ products: RealCardItem }> = ({ products }) => {
       {/* Discount Badge */}
       {products?.base_price > products?.discounted_price &&
         products?.discounted_price > 0 && (
-          <div className="absolute top-0 -right-3 w-10 h-10 z-10">
+          <div className="absolute top-0 -right-3 w-14 h-10 z-10">
             <img
               src="/assets/addtoBag/discount.png"
               alt="Discount"
               className="w-full h-full"
             />
-            <span className="absolute inset-0 flex flex-col items-center justify-center text-white text-xs font-bold">
+            <span className="absolute inset-0 flex flex-col items-center justify-center mr-2 text-white text-xs font-bold">
               <span>
                 {`${Math.round(
                   ((products.base_price - products.discounted_price) /

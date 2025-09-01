@@ -31,6 +31,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { formatSlug } from "@/lib/utils";
 
 const ProductDisplay = () => {
   const Cart = useSelector((state: RootState) => state.cart);
@@ -116,7 +117,7 @@ const ProductDisplay = () => {
       const res = await getProductById(productId);
       console.log(res);
       setProduct(res);
-      const correctSlug = res.name.toLowerCase().replace(/\s+/g, "-");
+      const correctSlug = formatSlug(res.name);
       if (
         res.category.slug !== category ||
         res.sub_category.slug !== subCategory ||
@@ -125,8 +126,13 @@ const ProductDisplay = () => {
         productSlug !== correctSlug
       ) {
         const correctPath = res.item
-          ? `/${res.category.slug}/${res.sub_category.slug}/${res.item.slug}/${correctSlug}`
-          : `/${res.category.slug}/${res.sub_category.slug}/${correctSlug}`;
+          ? `/${formatSlug(res.category.slug)}/${formatSlug(
+              res.sub_category.slug
+            )}/${formatSlug(res.item.slug)}/${correctSlug}`
+          : `/${formatSlug(res.category.slug)}/${formatSlug(
+              res.sub_category.slug
+            )}/${correctSlug}`;
+
         const query = searchParams.toString()
           ? `?${searchParams.toString()}`
           : "";
@@ -148,7 +154,6 @@ const ProductDisplay = () => {
   };
 
   const fetchUserRating = async () => {
-    
     if (!token || !productId) return;
     try {
       const rating = await getUserRating(productId, token);

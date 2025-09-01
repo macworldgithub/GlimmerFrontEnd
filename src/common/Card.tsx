@@ -128,6 +128,7 @@ import { FaHeart } from "react-icons/fa";
 import { RiShoppingBag4Line } from "react-icons/ri";
 import { useDispatch } from "react-redux";
 import { addItem } from "@/reduxSlices/cartSlice";
+import { sanitizeSlug } from "@/lib/utils";
 
 const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
   const router = useRouter();
@@ -144,12 +145,18 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
   if (item.store) queryParams.append("storeId", item.store);
 
   const productSlug = item.name
-    ? item.name.toLowerCase().replace(/\s+/g, "-")
+    ? sanitizeSlug(item.name.toLowerCase().replace(/\s+/g, "-"))
     : item._id;
   //@ts-ignore
   const path = item.item
-    ? `/${item.category.slug}/${item.sub_category.slug}/${item.item.slug}/${productSlug}`
-    : `/${item.category.slug}/${item.sub_category.slug}/${productSlug}`;
+    ? `/${sanitizeSlug(item.category?.slug, item.category?._id)}/${sanitizeSlug(
+        item.sub_category?.slug,
+        item.sub_category?._id
+      )}/${sanitizeSlug(item.item?.slug, item.item?._id)}/${productSlug}`
+    : `/${sanitizeSlug(item.category?.slug, item.category?._id)}/${sanitizeSlug(
+        item.sub_category?.slug,
+        item.sub_category?._id
+      )}/${productSlug}`;
 
   const finalPath = `${path}?${queryParams.toString()}`;
   console.log(item);

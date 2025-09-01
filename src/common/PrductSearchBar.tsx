@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { cn } from "@/lib/utils";
+import { cn, sanitizeSlug } from "@/lib/utils";
 import { Search, X } from "lucide-react";
 import { getAllProducts } from "@/api/product";
 
@@ -10,11 +10,13 @@ interface Product {
   _id: string;
   name: string;
   image1?: string;
-  category?: string;
-  sub_category?: string;
-  item?: string;
+  category?: { _id: string; slug: string; name: string };
+  sub_category?: { _id: string; slug: string; name: string };
+  item?: { _id: string; slug: string; name: string };
+  store?: string;
+  rate_of_salon?: number;
+  ref_of_salon?: string;
 }
-
 interface ProductSearchBarProps {
   className?: string;
 }
@@ -117,9 +119,49 @@ export default function ProductSearchBar({ className }: ProductSearchBarProps) {
               key={product._id}
               className="flex items-center gap-2 p-2 hover:bg-gray-100 cursor-pointer"
               onClick={() => {
-                router.push(
-                  `/${product.category}/${product.sub_category}/${product.item}/${product._id}`
-                );
+                const productSlug = product.name
+                  ? sanitizeSlug(
+                      product.name.toLowerCase().replace(/\s+/g, "-"),
+                      product._id
+                    )
+                  : product._id;
+
+                const path = product.item
+                  ? `/${sanitizeSlug(
+                      product.category?.slug,
+                      product.category?._id
+                    )}/${sanitizeSlug(
+                      product.sub_category?.slug,
+                      product.sub_category?._id
+                    )}/${sanitizeSlug(
+                      product.item?.slug,
+                      product.item?._id
+                    )}/${productSlug}`
+                  : `/${sanitizeSlug(
+                      product.category?.slug,
+                      product.category?._id
+                    )}/${sanitizeSlug(
+                      product.sub_category?.slug,
+                      product.sub_category?._id
+                    )}/${productSlug}`;
+
+                // ✅ Build query params like in Card
+                const queryParams = new URLSearchParams();
+                queryParams.append("id", product._id);
+
+                // optional params (only append if they exist)
+                //@ts-ignore
+                if (product.store) queryParams.append("storeId", product.store);
+                //@ts-ignore
+                if (product.rate_of_salon)
+                  queryParams.append("rate", product.rate_of_salon.toString());
+                //@ts-ignore
+                if (product.ref_of_salon)
+                  queryParams.append("ref", product.ref_of_salon);
+
+                const finalPath = `${path}?${queryParams.toString()}`;
+
+                router.push(finalPath);
                 setShowDropdown(false);
                 setSearchTerm("");
               }}
