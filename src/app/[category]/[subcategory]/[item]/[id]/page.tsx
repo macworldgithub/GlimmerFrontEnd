@@ -347,20 +347,12 @@ const ProductDisplay = () => {
 
       <div className="w-full mb-4">{/* <CategoryNavMenu /> */}</div>
 
-      <div className="breadcrumbs mb-4 text-xl lg:text-xl px-10">
+      <div className="breadcrumbs mb-4 text-sm lg:text-sm px-10">
         <Link
           href="/"
-          className="text-gray-500 font-medium text-base lg:text-xl"
+          className="text-gray-500 font-medium text-base lg:text-sm"
         >
           Home
-        </Link>
-        <span className="mx-2 text-gray-500 font-medium">/</span>
-
-        <Link
-          href="/selfcare-products"
-          className="text-gray-500 font-medium text-base lg:text-xl"
-        >
-          Selfcare Products
         </Link>
 
         {/* Category */}
@@ -369,7 +361,7 @@ const ProductDisplay = () => {
             <span className="mx-2 text-gray-500 font-medium">/</span>
             <Link
               href={`/${category}`}
-              className="text-gray-500 font-medium text-base lg:text-xl hover:underline"
+              className="text-gray-500 font-medium text-base lg:text-sm hover:underline"
             >
               {category}
             </Link>
@@ -382,7 +374,7 @@ const ProductDisplay = () => {
             <span className="mx-2 text-gray-500 font-medium">/</span>
             <Link
               href={`/${category}/${subCategory}`}
-              className="text-gray-500 font-medium text-base lg:text-xl hover:underline"
+              className="text-gray-500 font-medium text-base lg:text-sm hover:underline"
             >
               {subCategory}
             </Link>
@@ -395,30 +387,21 @@ const ProductDisplay = () => {
             <span className="mx-2 text-gray-500 font-medium">/</span>
             <Link
               href={`/${category}/${subCategory}/${item}`}
-              className="text-gray-500 font-medium text-base lg:text-xl hover:underline"
+              className="text-gray-500 font-medium text-base lg:text-sm hover:underline"
             >
               {item}
             </Link>
           </>
         )}
 
-        {/* Current Product
+        {/* Current Product */}
         {product && (
           <>
-            <span className="mx-2 text-gray-500 font-medium text-base lg:text-xl">
+            <span className="mx-2 text-purple-800 font-medium text-base lg:text-xl">
               /
             </span>
-            <span className="text-gray-500 font-medium text-base lg:text-xl">
+            <span className="text-purple-800 font-medium text-base lg:text-sm">
               {product.name}
-            </span>
-          </>
-        )} */}
-
-        {product && (
-          <>
-            <span className="mx-2 text-purple-800 text-base lg:text-xl">/</span>
-            <span className="text-purple-800 font-medium text-base lg:text-xl">
-              Detail
             </span>
           </>
         )}
