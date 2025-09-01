@@ -148,7 +148,15 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
     ? sanitizeSlug(item.name.toLowerCase().replace(/\s+/g, "-"))
     : item._id;
   //@ts-ignore
-  const path = `/${productSlug}`;
+  const path = item.item
+    ? `/${sanitizeSlug(item.category?.slug, item.category?._id)}/${sanitizeSlug(
+        item.sub_category?.slug,
+        item.sub_category?._id
+      )}/${sanitizeSlug(item.item?.slug, item.item?._id)}/${productSlug}`
+    : `/${sanitizeSlug(item.category?.slug, item.category?._id)}/${sanitizeSlug(
+        item.sub_category?.slug,
+        item.sub_category?._id
+      )}/${productSlug}`;
 
   const finalPath = `${path}?${queryParams.toString()}`;
   console.log(item);

@@ -40,14 +40,6 @@ type ProductsListProps = {
   slugs?: string[];
 };
 
-const priceOptions = ["Low to High", "High to Low"];
-
-const Loading = () => (
-  <div className="justify-center flex min-h-[70vh] w-full items-center">
-    <div className="text-center font-bold text-3xl">Loading...</div>
-  </div>
-);
-
 const ProductsList = ({ slugs = [] }: ProductsListProps) => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<RealCardItem[]>([]);
@@ -221,8 +213,8 @@ const ProductsList = ({ slugs = [] }: ProductsListProps) => {
     if (newFilters.sub_category) pathParts.push(newFilters.sub_category);
     if (newFilters.item) pathParts.push(newFilters.item);
 
+    // root-based path like /hair-care/shampoo
     let newPath = "/";
-    
     if (pathParts.length > 0) {
       newPath += pathParts.join("/");
     }
@@ -415,12 +407,4 @@ const ProductsList = ({ slugs = [] }: ProductsListProps) => {
   );
 };
 
-const Temp = ({ slugs = [] }: ProductsListProps) => {
-  return (
-    <Suspense fallback={<Loading />}>
-      <ProductsList slugs={slugs} />
-    </Suspense>
-  );
-};
-
-export default Temp;
+export default ProductsList;
