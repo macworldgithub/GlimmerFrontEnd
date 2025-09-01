@@ -611,7 +611,7 @@ const CategoryNavMenu = ({
     if (subCategorySlug) path += `/${encodeURIComponent(subCategorySlug)}`;
     if (itemSlug) path += `/${encodeURIComponent(itemSlug)}`;
 
-    router.push(path || '/');
+    router.push(path || "/");
     setSelectedSubCategory([]);
     setDropdownOpen(false);
   }
@@ -729,18 +729,26 @@ const CategoryNavMenu = ({
         <div className="space-y-4 px-4">
           {categories.map((category) => (
             <div key={category._id}>
-              {/* Category row with arrow */}
-              <div
-                className="flex justify-between items-center font-bold text-lg cursor-pointer select-none"
-                onClick={() => {
-                  setExpandedCategories((prev) => ({
-                    ...prev,
-                    [category._id]: !prev[category._id],
-                  }));
-                }}
-              >
-                <span>{category.product_category.name}</span>
-                <span className="text-xl">
+              {/* Category row */}
+              <div className="flex justify-between items-center font-bold text-lg select-none">
+                {/* Category name (click = route) */}
+                <span
+                  className="cursor-pointer"
+                  onClick={() => HandlePath(category.product_category.slug)}
+                >
+                  {category.product_category.name}
+                </span>
+
+                {/* Expand/Collapse arrow */}
+                <span
+                  className="text-xl cursor-pointer"
+                  onClick={() => {
+                    setExpandedCategories((prev) => ({
+                      ...prev,
+                      [category._id]: !prev[category._id],
+                    }));
+                  }}
+                >
                   {expandedCategories[category._id] ? "▾" : "▸"}
                 </span>
               </div>
@@ -749,19 +757,29 @@ const CategoryNavMenu = ({
               {expandedCategories[category._id] &&
                 category.sub_categories.map((sub) => (
                   <div key={sub._id} className="ml-5 mt-2">
-                    {/* Subcategory row with arrow if items exist */}
-                    <div
-                      className="flex justify-between items-center font-semibold text-sm cursor-pointer select-none"
-                      onClick={() => {
-                        setExpandedSubCategories((prev) => ({
-                          ...prev,
-                          [sub._id]: !prev[sub._id],
-                        }));
-                      }}
-                    >
-                      <span>{sub.name}</span>
+                    {/* Subcategory row */}
+                    <div className="flex justify-between items-center font-semibold text-sm select-none">
+                      {/* Subcategory name (click = route) */}
+                      <span
+                        className="cursor-pointer"
+                        onClick={() =>
+                          HandlePath(category.product_category.slug, sub.slug)
+                        }
+                      >
+                        {sub.name}
+                      </span>
+
+                      {/* Expand/Collapse arrow if items exist */}
                       {sub.items.length > 0 && (
-                        <span className="text-lg">
+                        <span
+                          className="text-lg cursor-pointer"
+                          onClick={() => {
+                            setExpandedSubCategories((prev) => ({
+                              ...prev,
+                              [sub._id]: !prev[sub._id],
+                            }));
+                          }}
+                        >
                           {expandedSubCategories[sub._id] ? "▾" : "▸"}
                         </span>
                       )}
@@ -774,11 +792,13 @@ const CategoryNavMenu = ({
                           <li
                             key={item._id}
                             className="cursor-pointer hover:underline"
-                            onClick={() =>
+                            onClick={() => {
                               HandlePath(
-                                `${sub.product_category}-${sub.slug}-${item.slug}`
-                              )
-                            }
+                                category.product_category.slug, // category slug
+                                sub.slug, // subcategory slug
+                                item.slug // item slug
+                              );
+                            }}
                           >
                             {item.name}
                           </li>
@@ -796,4 +816,3 @@ const CategoryNavMenu = ({
 };
 
 export default CategoryNavMenu;
-

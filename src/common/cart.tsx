@@ -113,11 +113,19 @@ const Cart = () => {
                         {item.product.base_price * item.quantity} PKR
                       </td>
                       <td className="text-nowrap">
-                        {item.product.discounted_price === 0
-                          ? item.product.base_price * item.quantity
-                          : item.product.discounted_price * item.quantity}{" "}
+                        {(() => {
+                          const price =
+                            item.product.discounted_price === 0
+                              ? item.product.base_price * item.quantity
+                              : item.product.discounted_price * item.quantity;
+
+                          return Number.isInteger(price)
+                            ? price
+                            : price.toFixed(2);
+                        })()}{" "}
                         PKR
                       </td>
+
                       <td>
                         <div className="flex items-center">
                           <button
@@ -193,23 +201,33 @@ const Cart = () => {
           {/* Total Section */}
           <div className="rounded-lg bg-gray-100 p-4">
             <h3 className="mb-4 font-semibold text-lg">Total</h3>
+
             <div className="flex justify-between">
               <span>Price</span>
-              <span>{Cart?.total} PKR</span>
+              <span>
+                {Number.isInteger(Cart?.total)
+                  ? Cart?.total
+                  : Cart?.total?.toFixed(2)}{" "}
+                PKR
+              </span>
             </div>
+
             <div className="flex justify-between">
               <span>Final Price after discount</span>
-              <span>{Cart?.discountedTotal} PKR</span>
+              <span>{Cart?.discountedTotal?.toFixed(2)} PKR</span>
             </div>
+
             <div className="flex justify-between">
               <span>Delivery Charges</span>
-              <span> 200 PKR</span>
+              <span>{(200).toFixed(2)} PKR</span>
             </div>
+
             <div className="flex justify-between"></div>
             <hr className="my-2" />
+
             <div className="flex justify-between font-semibold">
               <span>Subtotal</span>
-              <span>{subtotal} PKR</span>
+              <span>{subtotal?.toFixed(2)} PKR</span>
             </div>
 
             <Link href={"/checkout"}>

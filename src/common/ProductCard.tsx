@@ -10,6 +10,7 @@ import { Rating } from "react-simple-star-rating";
 import { getAllProducts, getAllProductsHighlights } from "@/api/product";
 import { addItem } from "@/reduxSlices/cartSlice";
 import { Puff } from "react-loader-spinner";
+import { sanitizeSlug } from "@/lib/utils";
 
 interface RealCardItem {
   _id: number;
@@ -20,10 +21,11 @@ interface RealCardItem {
   image3: string;
   base_price: number;
   discounted_price: number;
-  category: string;
-  sub_category: string;
-  item: string;
+  category: { _id: string; name: string; slug: string };
+  sub_category: { _id: string; name: string; slug: string };
+  item?: { _id: string; name: string; slug: string };
   rate_of_salon: number;
+  quantity?: number;
   ref_of_salon: string;
 }
 
@@ -41,12 +43,23 @@ const ProductCard: React.FC<{ products: RealCardItem }> = ({ products }) => {
       : basePrice;
 
   let queryParams = new URLSearchParams();
+  queryParams.append("id", products._id.toString());
   if (products.rate_of_salon)
     queryParams.append("rate", products.rate_of_salon.toString());
   if (products.ref_of_salon) queryParams.append("ref", products.ref_of_salon);
   //@ts-ignore
   if (products.store) queryParams.append("storeId", products.store);
-  const path = `/${products.category}/${products.sub_category}/${products.item}/${products._id}`;
+
+  const categorySlug = sanitizeSlug(products.category.slug);
+  const subCategorySlug = sanitizeSlug(products.sub_category.slug);
+  const itemSlug = products.item ? sanitizeSlug(products.item.slug) : undefined;
+  const productSlug = products.name
+    ? sanitizeSlug(products.name.toLowerCase().replace(/\s+/g, "-"))
+    : products._id;
+
+  const path = itemSlug
+    ? `/${categorySlug}/${subCategorySlug}/${itemSlug}/${productSlug}`
+    : `/${categorySlug}/${subCategorySlug}/${productSlug}`;
   const finalPath = queryParams.toString()
     ? `${path}?${queryParams.toString()}`
     : path;
@@ -137,11 +150,13 @@ const ProductCard: React.FC<{ products: RealCardItem }> = ({ products }) => {
         {/* Price */}
         <div className="flex justify-center items-center gap-2">
           <span className="text-red-600 font-bold text-sm">
-            {finalPrice} PKR
+            {Number.isInteger(finalPrice) ? finalPrice : finalPrice.toFixed(2)}{" "}
+            PKR
           </span>
           {discountedPrice > 0 && discountedPrice < basePrice && (
             <span className="text-gray-400 text-xs line-through">
-              {basePrice} PKR
+              {Number.isInteger(basePrice) ? basePrice : basePrice.toFixed(2)}{" "}
+              PKR
             </span>
           )}
         </div>
