@@ -125,13 +125,7 @@ const ProductDisplay = () => {
         (!res.item && item) ||
         productSlug !== correctSlug
       ) {
-        const correctPath = res.item
-          ? `/${formatSlug(res.category.slug)}/${formatSlug(
-              res.sub_category.slug
-            )}/${formatSlug(res.item.slug)}/${correctSlug}`
-          : `/${formatSlug(res.category.slug)}/${formatSlug(
-              res.sub_category.slug
-            )}/${correctSlug}`;
+        const correctPath = `/${correctSlug}`;
 
         const query = searchParams.toString()
           ? `?${searchParams.toString()}`

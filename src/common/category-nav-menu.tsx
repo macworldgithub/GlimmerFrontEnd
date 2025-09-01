@@ -605,13 +605,13 @@ const CategoryNavMenu = ({
     subCategorySlug?: string,
     itemSlug?: string
   ) {
-    let path = "/products";
+    let path = "";
 
     if (categorySlug) path += `/${encodeURIComponent(categorySlug)}`;
     if (subCategorySlug) path += `/${encodeURIComponent(subCategorySlug)}`;
     if (itemSlug) path += `/${encodeURIComponent(itemSlug)}`;
 
-    router.push(path);
+    router.push(path || '/');
     setSelectedSubCategory([]);
     setDropdownOpen(false);
   }

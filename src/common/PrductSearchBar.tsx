@@ -126,24 +126,7 @@ export default function ProductSearchBar({ className }: ProductSearchBarProps) {
                     )
                   : product._id;
 
-                const path = product.item
-                  ? `/${sanitizeSlug(
-                      product.category?.slug,
-                      product.category?._id
-                    )}/${sanitizeSlug(
-                      product.sub_category?.slug,
-                      product.sub_category?._id
-                    )}/${sanitizeSlug(
-                      product.item?.slug,
-                      product.item?._id
-                    )}/${productSlug}`
-                  : `/${sanitizeSlug(
-                      product.category?.slug,
-                      product.category?._id
-                    )}/${sanitizeSlug(
-                      product.sub_category?.slug,
-                      product.sub_category?._id
-                    )}/${productSlug}`;
+                const path = product.item && `/${productSlug}`;
 
                 // ✅ Build query params like in Card
                 const queryParams = new URLSearchParams();
