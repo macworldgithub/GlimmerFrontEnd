@@ -354,24 +354,66 @@ const ProductDisplay = () => {
         >
           Home
         </Link>
-        <span className="mx-2 text-gray-500 font-medium text-base lg:text-xl">
-          /
-        </span>
+        <span className="mx-2 text-gray-500 font-medium">/</span>
+
         <Link
           href="/selfcare-products"
           className="text-gray-500 font-medium text-base lg:text-xl"
         >
           Selfcare Products
         </Link>
-        <span className="mx-2 text-gray-500 font-medium text-base lg:text-xl">
-          /
-        </span>
-        <Link
-          href={productsUrl}
-          className="text-gray-500 font-medium text-base lg:text-xl"
-        >
-          Products
-        </Link>
+
+        {/* Category */}
+        {category && (
+          <>
+            <span className="mx-2 text-gray-500 font-medium">/</span>
+            <Link
+              href={`/${category}`}
+              className="text-gray-500 font-medium text-base lg:text-xl hover:underline"
+            >
+              {category}
+            </Link>
+          </>
+        )}
+
+        {/* Subcategory */}
+        {subCategory && (
+          <>
+            <span className="mx-2 text-gray-500 font-medium">/</span>
+            <Link
+              href={`/${category}/${subCategory}`}
+              className="text-gray-500 font-medium text-base lg:text-xl hover:underline"
+            >
+              {subCategory}
+            </Link>
+          </>
+        )}
+
+        {/* Item */}
+        {item && (
+          <>
+            <span className="mx-2 text-gray-500 font-medium">/</span>
+            <Link
+              href={`/${category}/${subCategory}/${item}`}
+              className="text-gray-500 font-medium text-base lg:text-xl hover:underline"
+            >
+              {item}
+            </Link>
+          </>
+        )}
+
+        {/* Current Product
+        {product && (
+          <>
+            <span className="mx-2 text-gray-500 font-medium text-base lg:text-xl">
+              /
+            </span>
+            <span className="text-gray-500 font-medium text-base lg:text-xl">
+              {product.name}
+            </span>
+          </>
+        )} */}
+
         {product && (
           <>
             <span className="mx-2 text-purple-800 text-base lg:text-xl">/</span>
@@ -381,6 +423,7 @@ const ProductDisplay = () => {
           </>
         )}
       </div>
+
       <div className="mb-8 flex flex-col justify-center lg:w-[91vw] mx-auto gap-8 p-8 md:mb-5 lg:flex-row lg:gap-12 lg:mb-10">
         <div className="flex flex-col items-center lg:w-[65%] w-full">
           <div className="relative w-full max-w-[650px] max-sm:w-[300px] max-sm:h-[300px] sm:w-[400px] md:w-[500px] sm:h-[400px]">

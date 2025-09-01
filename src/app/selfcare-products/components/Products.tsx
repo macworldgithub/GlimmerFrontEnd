@@ -222,7 +222,7 @@ const ProductsList = ({ slugs = [] }: ProductsListProps) => {
     if (newFilters.item) pathParts.push(newFilters.item);
 
     let newPath = "/";
-    
+
     if (pathParts.length > 0) {
       newPath += pathParts.join("/");
     }
@@ -265,15 +265,66 @@ const ProductsList = ({ slugs = [] }: ProductsListProps) => {
               >
                 Selfcare Products
               </Link>
-              {(categoryFilter ||
-                subCategoryFilter ||
-                itemFilter ||
-                nameFilter) && (
-                <>
-                  <span className="mx-2 text-purple-200">/</span>
-                  <span className="text-purple-200 font-medium">Products</span>
-                </>
-              )}
+
+              {selections.length > 0 &&
+                (categoryFilter || subCategoryFilter || itemFilter) && (
+                  <>
+                    {/* Category */}
+                    {categoryFilter && (
+                      <>
+                        <span className="mx-2 text-white">/</span>
+                        <Link
+                          href={`/${categoryFilter}`}
+                          className="text-white font-medium"
+                        >
+                          {selections.find(
+                            (cat) =>
+                              cat.product_category.slug === categoryFilter
+                          )?.product_category.name || categoryFilter}
+                        </Link>
+                      </>
+                    )}
+
+                    {/* Subcategory */}
+                    {subCategoryFilter && (
+                      <>
+                        <span className="mx-2 text-white">/</span>
+                        <Link
+                          href={`/${categoryFilter}/${subCategoryFilter}`}
+                          className="text-white font-medium"
+                        >
+                          {selections
+                            .find(
+                              (cat) =>
+                                cat.product_category.slug === categoryFilter
+                            )
+                            ?.sub_categories.find(
+                              (sub) => sub.slug === subCategoryFilter
+                            )?.name || subCategoryFilter}
+                        </Link>
+                      </>
+                    )}
+
+                    {/* Item */}
+                    {itemFilter && (
+                      <>
+                        <span className="mx-2 text-white">/</span>
+                        <span className="text-white font-medium">
+                          {selections
+                            .find(
+                              (cat) =>
+                                cat.product_category.slug === categoryFilter
+                            )
+                            ?.sub_categories.find(
+                              (sub) => sub.slug === subCategoryFilter
+                            )
+                            ?.items.find((i) => i.slug === itemFilter)?.name ||
+                            itemFilter}
+                        </span>
+                      </>
+                    )}
+                  </>
+                )}
             </div>
           </div>
         </div>
