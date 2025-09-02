@@ -123,12 +123,14 @@ export function mapReviews(review: ReviewType[]): CardType[] {
 }
 
 export const sanitizeSlug = (slug?: string, fallback?: string) => {
-  if (!slug && fallback) return fallback;
-  return (slug || "").replace(/\//g, "");
+	if (!slug && fallback) return fallback;
+	return (slug || "").replace(/\//g, "");
 };
 
 export const formatSlug = (text: string) =>
-  text
-    .toLowerCase()
-    .replace(/\s+/g, "-")
-    .replace(/\//g, ""); 
+	text
+		.toLowerCase()
+		.trim()
+		.replace(/[^a-z0-9]+/g, "-") 
+		.replace(/-+/g, "-")       
+		.replace(/^-+|-+$/g, ""); 

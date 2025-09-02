@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { cn, sanitizeSlug } from "@/lib/utils";
+import { cn, formatSlug, sanitizeSlug } from "@/lib/utils";
 import { Search, X } from "lucide-react";
 import { getAllProducts } from "@/api/product";
 
@@ -120,30 +120,27 @@ export default function ProductSearchBar({ className }: ProductSearchBarProps) {
               className="flex items-center gap-2 p-2 hover:bg-gray-100 cursor-pointer"
               onClick={() => {
                 const productSlug = product.name
-                  ? sanitizeSlug(
-                      product.name.toLowerCase().replace(/\s+/g, "-"),
-                      product._id
-                    )
+                  ? formatSlug(product.name)
                   : product._id;
 
                 const path = product.item
                   ? `/${sanitizeSlug(
-                      product.category?.slug,
-                      product.category?._id
-                    )}/${sanitizeSlug(
-                      product.sub_category?.slug,
-                      product.sub_category?._id
-                    )}/${sanitizeSlug(
-                      product.item?.slug,
-                      product.item?._id
-                    )}/${productSlug}`
+                    product.category?.slug,
+                    product.category?._id
+                  )}/${sanitizeSlug(
+                    product.sub_category?.slug,
+                    product.sub_category?._id
+                  )}/${sanitizeSlug(
+                    product.item?.slug,
+                    product.item?._id
+                  )}/${productSlug}`
                   : `/${sanitizeSlug(
-                      product.category?.slug,
-                      product.category?._id
-                    )}/${sanitizeSlug(
-                      product.sub_category?.slug,
-                      product.sub_category?._id
-                    )}/${productSlug}`;
+                    product.category?.slug,
+                    product.category?._id
+                  )}/${sanitizeSlug(
+                    product.sub_category?.slug,
+                    product.sub_category?._id
+                  )}/${productSlug}`;
 
                 // ✅ Build query params like in Card
                 const queryParams = new URLSearchParams();

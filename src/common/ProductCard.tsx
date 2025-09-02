@@ -10,37 +10,15 @@ import { Rating } from "react-simple-star-rating";
 import { getAllProducts, getAllProductsHighlights } from "@/api/product";
 import { addItem } from "@/reduxSlices/cartSlice";
 import { Puff } from "react-loader-spinner";
-import { sanitizeSlug } from "@/lib/utils";
-
-interface RealCardItem {
-  _id: number;
-  name: string;
-  description: string;
-  image1: string;
-  image2: string;
-  image3: string;
-  base_price: number;
-  discounted_price: number;
-  category: { _id: string; name: string; slug: string };
-  sub_category: { _id: string; name: string; slug: string };
-  item?: { _id: string; name: string; slug: string };
-  rate_of_salon: number;
-  quantity?: number;
-  ref_of_salon: string;
-}
+import { formatSlug, sanitizeSlug } from "@/lib/utils";
+import { RealCardItem } from "@/data";
 
 const ProductCard: React.FC<{ products: RealCardItem }> = ({ products }) => {
+  console.log(products)
   const router = useRouter();
   const dispatch = useDispatch();
   const [showMessage, setShowMessage] = useState(false);
   const [isFavorited, setIsFavorited] = useState(false);
-
-  const basePrice = Number(products.base_price) || 0;
-  const discountedPrice = Number(products.discounted_price) || 0;
-  const finalPrice =
-    discountedPrice > 0 && discountedPrice < basePrice
-      ? discountedPrice
-      : basePrice;
 
   let queryParams = new URLSearchParams();
   queryParams.append("id", products._id.toString());
@@ -50,19 +28,30 @@ const ProductCard: React.FC<{ products: RealCardItem }> = ({ products }) => {
   //@ts-ignore
   if (products.store) queryParams.append("storeId", products.store);
 
-  const categorySlug = sanitizeSlug(products.category.slug);
-  const subCategorySlug = sanitizeSlug(products.sub_category.slug);
-  const itemSlug = products.item ? sanitizeSlug(products.item.slug) : undefined;
-  const productSlug = products.name
-    ? sanitizeSlug(products.name.toLowerCase().replace(/\s+/g, "-"))
-    : products._id;
+  const categorySlug = sanitizeSlug(products.category?.slug, products.category?._id);
+  const subCategorySlug = sanitizeSlug(products.sub_category?.slug, products.sub_category?._id);
+  const itemSlug = products.item
+    ? sanitizeSlug(products.item?.slug, products.item?._id)
+    : undefined;
+
+  const productSlug = products.name ? formatSlug(products.name) : products._id;
 
   const path = itemSlug
     ? `/${categorySlug}/${subCategorySlug}/${itemSlug}/${productSlug}`
     : `/${categorySlug}/${subCategorySlug}/${productSlug}`;
-  const finalPath = queryParams.toString()
-    ? `${path}?${queryParams.toString()}`
-    : path;
+
+  const finalPath = `${path}?${queryParams.toString()}`;
+  console.log(finalPath)
+  const basePrice = Number(products.base_price) || 0;
+  const discountedPrice = Number(products.discounted_price) || 0;
+
+  let finalPrice = "N/A";
+  if (basePrice > 0) {
+    finalPrice =
+      discountedPrice > 0 && discountedPrice < basePrice
+        ? discountedPrice.toFixed(0)
+        : basePrice.toFixed(0);
+  }
 
   return (
     <div
@@ -95,9 +84,8 @@ const ProductCard: React.FC<{ products: RealCardItem }> = ({ products }) => {
       >
         <div className="w-7 h-7 rounded-full bg-pink-100 flex items-center justify-center">
           <FaHeart
-            className={`text-xs transition-colors duration-200 ${
-              isFavorited ? "text-pink-600" : "text-gray-400"
-            }`}
+            className={`text-xs transition-colors duration-200 ${isFavorited ? "text-pink-600" : "text-gray-400"
+              }`}
           />
         </div>
       </div>
@@ -132,7 +120,7 @@ const ProductCard: React.FC<{ products: RealCardItem }> = ({ products }) => {
                 {`${Math.round(
                   ((products.base_price - products.discounted_price) /
                     products.base_price) *
-                    100
+                  100
                 )}%`}
               </span>
               <span className="text-[8px] font-normal">OFF</span>
@@ -150,7 +138,7 @@ const ProductCard: React.FC<{ products: RealCardItem }> = ({ products }) => {
         {/* Price */}
         <div className="flex justify-center items-center gap-2">
           <span className="text-red-600 font-bold text-sm">
-            {Number.isInteger(finalPrice) ? finalPrice : finalPrice.toFixed(2)}{" "}
+            {Number.isInteger(finalPrice) ? finalPrice : finalPrice}{" "}
             PKR
           </span>
           {discountedPrice > 0 && discountedPrice < basePrice && (
