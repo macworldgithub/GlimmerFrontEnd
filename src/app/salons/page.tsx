@@ -14,10 +14,10 @@ export default async function Page() {
   return (
     <>
       <Hero />
-      <Saloons />
       <RecommendedSaloons />
-      <NewSaloons />
       <TrendingSaloons />
+      <NewSaloons />
+      <Saloons />
       <QrCodeSection />
       {/* <GlimmerAchieves /> */}
       <GlimmerForBusiness />
