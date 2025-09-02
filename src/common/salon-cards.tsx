@@ -85,6 +85,8 @@ interface SalonCardsProps {
   showButton?: boolean;
   className?: string;
   salonsProp?: Salon[];
+  titleHref?: string;
+  viewMoreHref?: string;
 }
 
 const SalonCards: React.FC<SalonCardsProps> = ({
@@ -92,6 +94,8 @@ const SalonCards: React.FC<SalonCardsProps> = ({
   showButton = false,
   className = "",
   salonsProp,
+  titleHref = "/salons",
+  viewMoreHref = "/salons/all_salons"
 }) => {
   const dispatch = useDispatch<AppDispatch>();
   const [salons, setSalons] = useState<Salon[]>(salonsProp || []);
@@ -144,7 +148,7 @@ const SalonCards: React.FC<SalonCardsProps> = ({
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const handleViewMore = () => router.push("/salons/all_salons");
+  const handleViewMore = () => router.push(viewMoreHref);
   const handleSalonClick = (id: number) =>
     router.push(`/salons/details/?salonId=${id}`);
 
@@ -156,7 +160,7 @@ const SalonCards: React.FC<SalonCardsProps> = ({
     <div
       className={`w-full max-w-[82rem] px-4 md:px-1 mx-auto py-0 md:py-10 ${className}`}
     >
-      <Link href="/salons" className="block">
+      <Link href={titleHref} className="block">
         <h2 className="text-2xl sm:text-2xl md:text-3xl font-semibold mb-8">
           {title}
         </h2>

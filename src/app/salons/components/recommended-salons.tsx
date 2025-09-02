@@ -12,7 +12,7 @@ const RecommendedSaloons = () => {
   const fetchRecommendedSalons = async () => {
     try {
       const response = await axios.get(`${BACKEND_URL}/admin/salon-highlights?filter=recommended-salon`);
-      setSalons(response.data); 
+      setSalons(response.data);
     } catch (error) {
       console.error("Failed to fetch salons:", error);
     } finally {
@@ -25,14 +25,17 @@ const RecommendedSaloons = () => {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>; 
+    return <div>Loading...</div>;
   }
 
   return (
     <div className="px-2 w-[99vw]">
-      <SalonCards title="Recommended" salonsProp={salons} showButton={false} />
+      <SalonCards title="Recommended"
+        salonsProp={salons} showButton={false}
+        titleHref="/salons/all_salons?filter=recommended-salon" 
+      />
     </div>
-    
+
   );
 };
 

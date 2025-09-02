@@ -35,6 +35,7 @@ const NewSaloons = () => {
       <SalonCards
         title="New to Glimmer"
         salonsProp={salons}
+        titleHref="/salons/all_salons?filter=new-to-glimmer"
         showButton={false}
       />
     </div>

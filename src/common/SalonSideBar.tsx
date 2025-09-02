@@ -1,12 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 interface SalonSidebarProps {
   onFilterChange: (filterId: string) => void;
 }
 
 const SalonSidebar = ({ onFilterChange }: SalonSidebarProps) => {
-  const [selectedFilter, setSelectedFilter] = useState("all");
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+  const initialFilter = searchParams.get("filter") || "all";
+  const [selectedFilter, setSelectedFilter] = useState(initialFilter);
+
+  useEffect(() => {
+    setSelectedFilter(initialFilter);
+  }, [initialFilter]);
 
   const filters = [
     { id: "all", label: "All Salons" },
@@ -17,7 +26,13 @@ const SalonSidebar = ({ onFilterChange }: SalonSidebarProps) => {
 
   const handleFilterChange = (id: string) => {
     setSelectedFilter(id);
-    onFilterChange(id);
+
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("filter", id);
+    params.set("page_no", "1");
+    router.push(`${pathname}?${params.toString()}`, { scroll: false });
+
+    onFilterChange?.(id);
   };
 
   return (
@@ -26,10 +41,7 @@ const SalonSidebar = ({ onFilterChange }: SalonSidebarProps) => {
 
       <div className="space-y-4">
         {filters.map((filter) => (
-          <label
-            key={filter.id}
-            className="flex items-center cursor-pointer"
-          >
+          <label key={filter.id} className="flex items-center cursor-pointer">
             <input
               type="radio"
               name="filter"

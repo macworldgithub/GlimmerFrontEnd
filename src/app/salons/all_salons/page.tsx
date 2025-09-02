@@ -14,14 +14,16 @@ import type { AppDispatch } from "@/store/reduxStore";
 import SalonSidebar from "@/common/SalonSideBar";
 
 const SalonsList = () => {
-  const [data, setData] = useState<any[]>([]);
-  const [total, setTotal] = useState(0);
-  const [selectedFilter, setSelectedFilter] = useState<string>("all");
-
-  const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
+  const searchParams = useSearchParams();
+  
+  const [data, setData] = useState<any[]>([]);
+  const [total, setTotal] = useState(0);
+  const filter = searchParams.get("filter") || "all";
+  const [selectedFilter, setSelectedFilter] = useState<string>(filter);
+
 
   const page = Number(searchParams.get("page_no")) || 1;
   const pageSize = 8;
