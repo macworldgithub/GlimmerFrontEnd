@@ -38,7 +38,7 @@ export default function RootLayout({
         <meta name="facebook-domain-verification" 
         content="wf5nqoeruiazcn3gw9d26j97gnwgcr" />
       </head>
-      <body className={`${prompt.variable} container bg-base-100 antialiased`}>
+      <body className={`${prompt.variable} w-full bg-pink-100 antialiased`}>
         <CartStoreProvider>
           <FacebookPixel />
 
