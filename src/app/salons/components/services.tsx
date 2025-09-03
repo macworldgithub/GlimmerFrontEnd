@@ -30,7 +30,7 @@ const Services = () => {
   };
 
   const handleServices = () => {
-    router.push('/salons/services');
+    router.push('/salons');
   }
   return (
     <div className="px-4 md:px-16 lg:px-[10rem] w-[99vw] mt-10">

@@ -12,18 +12,18 @@ import { FaStar } from "react-icons/fa";
 import Image from "next/image";
 import type { AppDispatch } from "@/store/reduxStore";
 import SalonSidebar from "@/common/SalonSideBar";
+import { extractCityFromAddress, formatSlug, sanitizeSlug } from "@/lib/utils";
 
 const SalonsList = () => {
   const pathname = usePathname();
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const searchParams = useSearchParams();
-  
+
   const [data, setData] = useState<any[]>([]);
   const [total, setTotal] = useState(0);
   const filter = searchParams.get("filter") || "all";
   const [selectedFilter, setSelectedFilter] = useState<string>(filter);
-
 
   const page = Number(searchParams.get("page_no")) || 1;
   const pageSize = 8;
@@ -82,11 +82,25 @@ const SalonsList = () => {
 
   const handleSalonClick = (
     salonId: number,
+    salon_name: string,
     openingHour: string,
-    closingHour: string
+    closingHour: string,
+    address: string
   ) => {
+    let city = "unknown";
+    if (address) {
+      const parts = address.split(",");
+      city = parts[parts.length - 1].replace(/[.]/g, "").trim();
+    }
+
+    const rawCity = extractCityFromAddress(address);
+    const citySlug = formatSlug(sanitizeSlug(rawCity));
+    const salonSlug = formatSlug(sanitizeSlug(salon_name));
+    const openingSlug = formatSlug(sanitizeSlug(openingHour));
+    const closingSlug = formatSlug(sanitizeSlug(closingHour));
+
     router.push(
-      `/salons/details/?salonId=${salonId}&openingHour=${openingHour}&closingHour=${closingHour}`
+      `/salons/${citySlug}/${salonSlug}?salonId=${salonId}&openingHour=${openingSlug}&closingHour=${closingSlug}`
     );
   };
 
@@ -155,8 +169,10 @@ const SalonsList = () => {
                   onClick={() =>
                     handleSalonClick(
                       salon._id,
+                      salon.salon_name,
                       formatTime(salon.openingHour),
-                      formatTime(salon.closingHour)
+                      formatTime(salon.closingHour),
+                      salon.address
                     )
                   }
                 >

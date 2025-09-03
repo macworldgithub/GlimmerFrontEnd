@@ -6,18 +6,21 @@ import { FaHeart } from "react-icons/fa";
 import { RiShoppingBag4Line } from "react-icons/ri";
 import { Rating } from "react-simple-star-rating";
 import { useRouter } from "next/navigation";
+import { extractCityFromAddress, formatSlug, sanitizeSlug } from "@/lib/utils";
 
 interface ServiceCardProps {
   item: any;
   onAddToCart: (item: any) => void;
   salonId?: string;
   salonName?: string;
+  salonAddress?: string;
 }
 
 const ServiceCard: FC<ServiceCardProps> = ({
   item,
   salonId,
   salonName,
+  salonAddress,
   onAddToCart,
 }) => {
   const router = useRouter();
@@ -27,8 +30,14 @@ const ServiceCard: FC<ServiceCardProps> = ({
     : item.adminSetPrice;
 
   const handleClick = () => {
+    const rawCity = salonAddress
+      ? extractCityFromAddress(salonAddress)
+      : "unknown";
+    const citySlug = formatSlug(sanitizeSlug(rawCity));
+    const salonSlug = formatSlug(sanitizeSlug(salonName ?? "unknown"));
+    const serviceSlug = formatSlug(sanitizeSlug(item?.name ?? "service"));
     router.push(
-      `/salons/services/details?serviceId=${item._id}&salonId=${item.salonId}`
+      `/salons/${citySlug}/${salonSlug}/${serviceSlug}?serviceId=${item._id}&salonId=${item.salonId}`
     );
   };
 

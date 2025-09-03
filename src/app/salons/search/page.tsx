@@ -363,6 +363,7 @@ const SearchResultsPage = () => {
                   item={item}
                   onAddToCart={handleAddToCart}
                   salonId={item.salonId}
+                  salonAddress={item.address}
                   salonName="Salon Name"
                 />
               ))

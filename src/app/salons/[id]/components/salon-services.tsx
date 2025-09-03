@@ -12,8 +12,18 @@ import CheckoutModal from "./checkoutModal";
 import CartModal from "./cartModal";
 import { addService, clearServiceCart } from "@/reduxSlices/serviceCartSlice";
 import { BACKEND_URL } from "@/api/config";
+import { extractCityFromAddress, formatSlug, sanitizeSlug } from "@/lib/utils";
 
-const SalonServices = () => {
+interface Salon {
+  salon_name: string;
+  address: string;
+}
+interface SalonServicesProps {
+  salon?: Salon;
+}
+
+const SalonServices = ({ salon }: SalonServicesProps) => {
+  console.log("SAlon: ", salon);
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -21,7 +31,6 @@ const SalonServices = () => {
   const { services: selectedServices } = useSelector(
     (state: RootState) => state.serviceCart
   );
-
   const [services, setServices] = useState<any[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
@@ -41,6 +50,11 @@ const SalonServices = () => {
   const openingHour = searchParams.get("openingHour") ?? "";
   const closingHour = searchParams.get("closingHour") ?? "";
   const page = Number(searchParams.get("page")) || 1;
+
+  const { salon_name = "unknown", address = "unknown" } = salon || {};
+  const rawCity = extractCityFromAddress(address);
+  const citySlug = formatSlug(sanitizeSlug(rawCity));
+  const salonSlug = formatSlug(sanitizeSlug(salon_name));
 
   useEffect(() => {
     if (!salonId) return;
@@ -183,7 +197,6 @@ const SalonServices = () => {
         </div>
       )}
 
-
       <div className="p-5 bg-[#FBE8A5]">
         {services.length === 0 ? (
           <div className="text-center text-lg">
@@ -195,11 +208,12 @@ const SalonServices = () => {
               <div
                 key={item._id}
                 className="bg-white rounded-lg border border-gray-200 shadow-sm p-4 space-y-2 cursor-pointer transition-transform transform hover:scale-[1.02] hover:shadow-lg hover:border-gray-300"
-                onClick={() =>
+                onClick={() => {
+                  const serviceSlug = formatSlug(sanitizeSlug(item.name)); 
                   router.push(
-                    `/salons/services/details?serviceId=${item._id}&salonId=${item.salonId}&openingHour=${openingHour}&closingHour=${closingHour}`
-                  )
-                }
+                    `/salons/${citySlug}/${salonSlug}/${serviceSlug}?serviceId=${item._id}&salonId=${item.salonId}&openingHour=${openingHour}&closingHour=${closingHour}`
+                  );
+                }}
               >
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 mb-2">
                   <div className="font-semibold text-sm sm:text-base break-words">
@@ -230,7 +244,11 @@ const SalonServices = () => {
         )}
         <div className="flex justify-center mt-6">
           <Link
-            href={`/salons/services?page_no=${page}&salonId=${salonId}`}
+            href={
+              salon
+                ? `/salons/${citySlug}/${salonSlug}/services?page_no=${page}&salonId=${salonId}`
+                : `/salons/unknown/unknown/services?page_no=${page}&salonId=${salonId}`
+            }
             className="text-center py-2 px-4 border-2 border-black rounded-lg text-black font-medium hover:bg-black hover:text-white transition duration-200"
           >
             View All Services

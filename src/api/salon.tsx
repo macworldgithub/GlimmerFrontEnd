@@ -99,7 +99,7 @@ export const getAllActiveServices = createAsyncThunk(
     }
   };
 
-  interface Salon {
+  export interface Salon {
     _id: number;
     salon_name: string;
     rating: number;

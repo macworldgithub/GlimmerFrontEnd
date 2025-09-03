@@ -8,6 +8,7 @@ import { Tooltip } from "antd";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/store/reduxStore";
 import Link from "next/link";
+import { extractCityFromAddress, formatSlug, sanitizeSlug } from "@/lib/utils";
 
 interface Salon {
   _id: number;
@@ -95,7 +96,7 @@ const SalonCards: React.FC<SalonCardsProps> = ({
   className = "",
   salonsProp,
   titleHref = "/salons",
-  viewMoreHref = "/salons/all_salons"
+  viewMoreHref = "/salons/all_salons",
 }) => {
   const dispatch = useDispatch<AppDispatch>();
   const [salons, setSalons] = useState<Salon[]>(salonsProp || []);
@@ -148,9 +149,39 @@ const SalonCards: React.FC<SalonCardsProps> = ({
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  const formatTime = (timeStr: any) => {
+    const [hourStr, minute = "00"] = timeStr.split(":");
+    let hour = parseInt(hourStr, 10);
+    const isPM = hour >= 12;
+    const formattedHour = hour % 12 === 0 ? 12 : hour % 12;
+    const suffix = isPM ? "pm" : "am";
+    return `${formattedHour}:${minute} ${suffix}`;
+  };
+
   const handleViewMore = () => router.push(viewMoreHref);
-  const handleSalonClick = (id: number) =>
-    router.push(`/salons/details/?salonId=${id}`);
+  const handleSalonClick = (
+    salonId: number,
+    salon_name: string,
+    openingHour: string,
+    closingHour: string,
+    address: string
+  ) => {
+    let city = "unknown";
+    if (address) {
+      const parts = address.split(",");
+      city = parts[parts.length - 1].replace(/[.]/g, "").trim();
+    }
+
+    const rawCity = extractCityFromAddress(address);
+    const citySlug = formatSlug(sanitizeSlug(rawCity));
+    const salonSlug = formatSlug(sanitizeSlug(salon_name));
+    const openingSlug = formatSlug(sanitizeSlug(openingHour));
+    const closingSlug = formatSlug(sanitizeSlug(closingHour));
+
+    router.push(
+      `/salons/${citySlug}/${salonSlug}?salonId=${salonId}&openingHour=${openingSlug}&closingHour=${closingSlug}`
+    );
+  };
 
   if (loading)
     return <p className="text-center text-gray-500">Loading salons...</p>;
@@ -173,7 +204,15 @@ const SalonCards: React.FC<SalonCardsProps> = ({
             <SalonCard
               key={salon._id}
               salons={salon}
-              onClick={() => handleSalonClick(salon._id)}
+              onClick={() =>
+                handleSalonClick(
+                  salon._id,
+                  salon.salon_name,
+                  formatTime(salon.openingHour),
+                  formatTime(salon.closingHour),
+                  salon.address
+                )
+              }
             />
           ))}
       </div>

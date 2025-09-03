@@ -15,16 +15,17 @@ import {
   getAllActiveServices,
   getServiceById,
 } from "@/api/salon";
-import { useSearchParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { DatePicker, Modal, TimePicker } from "antd";
 import { AppDispatch, RootState } from "@/store/reduxStore";
 import dayjs from "dayjs";
 import { AnimatePresence, motion } from "framer-motion";
 import ServiceCard from "@/common/ServiceCard";
 import { addService, clearServiceCart } from "@/reduxSlices/serviceCartSlice";
-import CartModal from "../../[id]/components/cartModal";
-import CheckoutModal from "../../[id]/components/checkoutModal";
 import { BACKEND_URL } from "@/api/config";
+import CartModal from "@/app/salons/[id]/components/cartModal";
+import CheckoutModal from "@/app/salons/[id]/components/checkoutModal";
+import { formatSlug } from "@/lib/utils";
 
 const ServiceDetails = () => {
   const [activeTab, setActiveTab] = useState("Description");
@@ -59,7 +60,11 @@ const ServiceDetails = () => {
   const openingHour = searchParams.get("openingHour") ?? "";
   const closingHour = searchParams.get("closingHour") ?? "";
   const page = Number(searchParams.get("page")) || 1;
-
+  const params = useParams();
+  const { city, salon } = params as {
+    city: string;
+    salon: string;
+  };
   // Parse those into dayjs
   const opening = dayjs(openingHour, "h:mm a");
   const closing = dayjs(closingHour, "h:mm a");
@@ -309,23 +314,24 @@ const ServiceDetails = () => {
         >
           Salons
         </Link>
-        <span className="mx-2 text-gray-500 font-medium text-base lg:text-xl">
-          /
-        </span>
-        <Link
-          href="/salons/services"
-          className="text-gray-500 font-medium text-base lg:text-xl"
-        >
-          Services
-        </Link>
-        {service && (
-          <>
-            <span className="mx-2 text-purple-800 text-base lg:text-xl">/</span>
-            <span className="text-purple-800 font-medium text-base lg:text-xl">
-              Details
-            </span>
-          </>
-        )}
+        <>
+          <span className="mx-2 text-gray-500 font-medium text-base lg:text-xl">
+            /
+          </span>
+          <Link
+            href={`/salons/${city}/${salon}/services?salonId=${salonIdFilter}`}
+            className="text-gray-500 hover:text-purple-800 font-medium text-base lg:text-xl"
+          >
+            {salon.replace(/-/g, " ")}
+          </Link>
+
+          <span className="mx-2 text-gray-500 font-medium text-base lg:text-xl">
+            /
+          </span>
+          <span className="text-purple-800 font-medium text-base lg:text-xl">
+            {service?.name}
+          </span>
+        </>
       </div>
       <div className="mb-8 flex flex-col justify-center lg:w-[91vw] mx-auto gap-8 p-8 md:mb-5 lg:flex-row lg:gap-12 lg:mb-10">
         {/* Floating Cart Conflict Warning */}

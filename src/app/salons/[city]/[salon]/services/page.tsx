@@ -4,18 +4,18 @@ import React, { Suspense, useEffect, useState } from "react";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
-import Salonfilter from "../components/salonFIlter";
 import ServiceSidebar from "@/common/ServiceSidebar";
 import { createBooking, getAllActiveServices, getSalonById } from "@/api/salon";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/reduxStore";
 import ServiceCard from "@/common/ServiceCard";
 import { BiChevronDown } from "react-icons/bi";
-import CartModal from "../[id]/components/cartModal";
-import CheckoutModal from "../[id]/components/checkoutModal";
 import { addService, clearServiceCart } from "@/reduxSlices/serviceCartSlice";
 import { message } from "antd";
 import { BACKEND_URL } from "@/api/config";
+import Salonfilter from "@/app/salons/components/salonFIlter";
+import CartModal from "@/app/salons/[id]/components/cartModal";
+import CheckoutModal from "@/app/salons/[id]/components/checkoutModal";
 
 const Loading = () => (
   <div className="justify-center flex min-h-[70vh] w-full items-center">
@@ -29,7 +29,7 @@ const ServiceList = () => {
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
 
   const [salonData, setSalonData] = useState<any>(null);
-
+  console.log("SAlon DAta: ", salonData);
   const [data, setData] = useState<any[]>([]);
   const [total, setTotal] = useState(0);
 
@@ -88,7 +88,7 @@ const ServiceList = () => {
           sortBy: sort_by,
           order: sortOrder,
           limit: pageSize, // backend already "limit" expect karta hai ✅
-        }as any)
+        } as any)
       );
 
       if (result.payload) {
@@ -322,15 +322,24 @@ const ServiceList = () => {
               >
                 Salons
               </Link>
-              <span className="mx-2 text-gray-300 font-medium text-base lg:text-xl">
-                /
-              </span>
-              <Link
-                href="/salons/services"
-                className="text-purple-300 hover:text-white font-medium text-base lg:text-xl"
-              >
-                Services
-              </Link>
+
+              {salonData?.salon_name && (
+                <>
+                  <span className="mx-2 text-gray-300 font-medium text-base lg:text-xl">
+                    /
+                  </span>
+                  <Link
+                    href={`/salons/${salonData.address?.city
+                      ?.toLowerCase()
+                      ?.replace(/\s+/g, "-")}/${salonData.salon_name
+                      ?.toLowerCase()
+                      ?.replace(/\s+/g, "-")}`}
+                    className="text-purple-300 hover:text-white font-medium text-base lg:text-xl"
+                  >
+                    {salonData.salon_name}
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -425,6 +434,7 @@ const ServiceList = () => {
                   <ServiceCard
                     salonId={salonData._id}
                     salonName={salonData?.salon_name}
+                    salonAddress={salonData.address}
                     item={item}
                     onAddToCart={handleAddToCart}
                   />
