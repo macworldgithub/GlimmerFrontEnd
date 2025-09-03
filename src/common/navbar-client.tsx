@@ -125,7 +125,7 @@ const NavbarClient = ({
     <>
       <div
         className={cn(
-          "navbar bg-base-100 w-[99vw] sticky top-0 z-50 transition-transform duration-300 ease-in-out",
+          "navbar bg-pink-100 w-[99vw] sticky top-0 z-50 transition-transform duration-300 ease-in-out",
           {
             "-translate-y-full": !showNavbar,
           }
