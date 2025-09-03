@@ -45,7 +45,7 @@ const CartNavbar = () => {
             <div className="card-body">
               <span className="font-bold text-lg"> Items</span>
               <span className="text-info">
-                Subtotal: {data.discountedTotal} PKR
+                Subtotal: {Number(data.discountedTotal).toFixed(2)} PKR
               </span>
               <div className="card-actions">
                 <Link

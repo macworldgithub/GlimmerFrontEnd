@@ -938,7 +938,7 @@ export default function Checkout() {
         );
 
         dispatch(clearCart());
-         router.push("/confirmation");
+        router.push("/confirmation");
       }
     } catch (error) {
       toast.error("Failed to place order. Please try again.");
@@ -1351,9 +1351,10 @@ export default function Checkout() {
                     </div>
                     <span>
                       PKR{" "}
-                      {item.product.discounted_price
-                        ? item.product.discounted_price
-                        : item.product.base_price}
+                      {(item.product.discounted_price
+                        ? Number(item.product.discounted_price)
+                        : Number(item.product.base_price)
+                      ).toFixed(2)}
                     </span>
                   </div>
                 ))}
@@ -1376,19 +1377,23 @@ export default function Checkout() {
               <div className="border-t pt-4 space-y-2">
                 <div className="flex justify-between">
                   <span>Price</span>
-                  <span>{cart.total} PKR</span>
+                  <span>{Number(cart.total).toFixed(2)} PKR</span>
                 </div>
+
                 <div className="flex justify-between">
                   <span>Discount</span>
-                  <span>-{cart.total - cart.discountedTotal} PKR</span>
+                  <span>
+                    -{Number(cart.total - cart.discountedTotal).toFixed(2)} PKR
+                  </span>
                 </div>
+
                 <div className="flex justify-between">
                   <span>Delivery Charges</span>
                   <span>{deliveryCharge} PKR</span>
                 </div>
                 <div className="flex justify-between font-semibold">
                   <span>SubTotal</span>
-                  <span>{subtotal} PKR</span>
+                  <span>{Number(subtotal).toFixed(2)} PKR</span>
                 </div>
               </div>
               <button
