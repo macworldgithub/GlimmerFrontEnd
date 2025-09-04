@@ -16,6 +16,7 @@ import { BACKEND_URL } from "@/api/config";
 import Salonfilter from "@/app/salons/components/salonFIlter";
 import CartModal from "@/app/salons/[id]/components/cartModal";
 import CheckoutModal from "@/app/salons/[id]/components/checkoutModal";
+import toast from "react-hot-toast";
 
 const Loading = () => (
   <div className="justify-center flex min-h-[70vh] w-full items-center">
@@ -167,15 +168,16 @@ const ServiceList = () => {
           description: item.description,
           image1: item.image1,
           base_price: item.adminSetPrice,
-          discounted_price: item.hasDiscount
-            ? item.adminSetPrice -
-              (item.adminSetPrice * item.discountPercentage) / 100
-            : item.adminSetPrice,
+          discounted_price: item.discountedPrice,
           rate_of_salon: item.rate_of_salon,
           ref_of_salon: item.ref_of_salon,
           salonId: item.salonId,
           status: "Active",
           duration: item.duration,
+          categoryId: item.categoryId,
+          categoryName: item.categoryName,
+          hasDiscount: item.hasDiscount ?? false,
+          discountPercentage: item.discountPercentage ?? 0,
         },
         bookingInfo: {
           bookingDate: "",
@@ -211,16 +213,48 @@ const ServiceList = () => {
     if (!validateForm()) return;
 
     try {
+      if (bulkForm.paymentMethod === "Bank Alfalah") {
+        const payload = {
+          ...bulkForm, // customerName, customerEmail, customerPhone, bookingDate, bookingTime, paymentMethod
+          services: selectedServices.map(({ service }) => ({
+            serviceName: service.name,
+            serviceDuration: service.duration,
+            serviceDescription: service.description,
+            salonId: service.salonId,
+            categoryId: service.categoryId,
+            categoryName: service.categoryName,
+            subCategoryName: service.subCategoryName,
+            subSubCategoryName: service.subSubCategoryName,
+            actualPrice: service.base_price,
+            finalPrice: service.discounted_price,
+            isDiscounted: service.hasDiscount,
+            discountPercentage: service.discountPercentage,
+          })),
+        };
+
+        await handleBankAlfalahPayment(payload); // still bulk
+        return;
+      }
+
       for (const { service } of selectedServices) {
         try {
-          const response = await createBooking(
-            {
-              ...bulkForm,
-              serviceId: service._id,
-              finalPrice: service.discounted_price,
-            },
-            token
-          );
+          const bookingPayload = {
+            ...bulkForm,
+            serviceName: service.name,
+            serviceDuration: service.duration,
+            serviceDescription: service.description,
+            salonId: service.salonId,
+            categoryId: service.categoryId,
+            categoryName: service.categoryName,
+            subCategoryName: service.subCategoryName,
+            subSubCategoryName: service.subSubCategoryName,
+            actualPrice: service.base_price,
+            finalPrice: service.discounted_price,
+            isDiscounted: service.hasDiscount,
+            discountPercentage: service.discountPercentage,
+          };
+
+          const response = await createBooking(bookingPayload, token);
 
           const emailPayload = {
             to: response.customerEmail,
@@ -243,7 +277,7 @@ const ServiceList = () => {
         } catch (error) {
           console.error(
             "Booking or email failed for service:",
-            service._id,
+            service._id || service.name,
             error
           );
         }
@@ -257,6 +291,43 @@ const ServiceList = () => {
     } catch (error) {
       console.error("Booking process failed:", error);
       alert("Booking failed.");
+    }
+  };
+
+  const handleBankAlfalahPayment = async (bookingData: any) => {
+    console.log("Initiating Bank Alfalah payment:", bookingData);
+    try {
+      const response = await fetch(
+        `${BACKEND_URL}/alfalah/initiate-booking-payment`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "text/html",
+          },
+          body: JSON.stringify(bookingData),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      // Get the HTML response containing the form
+      const html = await response.text();
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, "text/html");
+      const form = doc.getElementById("ssoForm") as HTMLFormElement;
+
+      if (!form) {
+        throw new Error("Form not found in response");
+      }
+
+      document.body.appendChild(form);
+      form.submit();
+    } catch (err) {
+      console.error("Alfalah Payment Error:", err);
+      toast.error("❌ Failed to initiate Bank Alfalah payment. Please try again.");
     }
   };
   return (
@@ -332,8 +403,8 @@ const ServiceList = () => {
                     href={`/salons/${salonData.address?.city
                       ?.toLowerCase()
                       ?.replace(/\s+/g, "-")}/${salonData.salon_name
-                      ?.toLowerCase()
-                      ?.replace(/\s+/g, "-")}`}
+                        ?.toLowerCase()
+                        ?.replace(/\s+/g, "-")}`}
                     className="text-purple-300 hover:text-white font-medium text-base lg:text-xl"
                   >
                     {salonData.salon_name}
@@ -369,11 +440,10 @@ const ServiceList = () => {
                 setActiveSort("Date");
                 setSortOrder(sortOrder === "desc" ? "asc" : "desc");
               }}
-              className={`border px-4 py-1.5 text-lg md:px-6 md:py-2 md:text-lg rounded-md font-medium transition duration-300 ease-in-out ${
-                activeSort === "Date"
-                  ? "border-gray-400 text-gray-700 bg-white"
-                  : "border-gray-400 text-gray-700 hover:bg-[#FDF3D2]"
-              }`}
+              className={`border px-4 py-1.5 text-lg md:px-6 md:py-2 md:text-lg rounded-md font-medium transition duration-300 ease-in-out ${activeSort === "Date"
+                ? "border-gray-400 text-gray-700 bg-white"
+                : "border-gray-400 text-gray-700 hover:bg-[#FDF3D2]"
+                }`}
             >
               Date{" "}
               {activeSort === "Date" ? (sortOrder === "desc" ? "↓" : "↑") : ""}
@@ -381,11 +451,10 @@ const ServiceList = () => {
             <div className="relative">
               <button
                 onClick={() => setShowPriceDropdown(!showPriceDropdown)}
-                className={`flex items-center gap-2 border px-4 py-1.5 text-lg md:px-6 md:py-2 md:text-lg rounded-md font-medium transition duration-300 ease-in-out ${
-                  activeSort === "Price"
-                    ? "border-purple-800 text-purple-800 bg-purple-100"
-                    : "border-gray-400 text-gray-700 hover:bg-[#FDF3D2]"
-                }`}
+                className={`flex items-center gap-2 border px-4 py-1.5 text-lg md:px-6 md:py-2 md:text-lg rounded-md font-medium transition duration-300 ease-in-out ${activeSort === "Price"
+                  ? "border-purple-800 text-purple-800 bg-purple-100"
+                  : "border-gray-400 text-gray-700 hover:bg-[#FDF3D2]"
+                  }`}
               >
                 Price{" "}
                 {activeSort === "Price"
@@ -466,11 +535,10 @@ const ServiceList = () => {
                 <button
                   key={i + 1}
                   onClick={() => handlePageChange(i + 1)}
-                  className={`px-4 py-2 rounded-md ${
-                    page === i + 1
-                      ? "bg-purple-600 text-white"
-                      : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                  }`}
+                  className={`px-4 py-2 rounded-md ${page === i + 1
+                    ? "bg-purple-600 text-white"
+                    : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                    }`}
                 >
                   {i + 1}
                 </button>

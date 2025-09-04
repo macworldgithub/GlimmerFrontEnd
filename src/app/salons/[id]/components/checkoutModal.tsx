@@ -23,26 +23,26 @@ const CheckoutModal = ({
   const opening = dayjs(openingHour, "h:mm a");
   const closing = dayjs(closingHour, "h:mm a");
 
-const disabledHours = () => {
-  const start = opening.hour();
-  const end = closing.hour();
+  const disabledHours = () => {
+    const start = opening.hour();
+    const end = closing.hour();
 
-  if (isNaN(start) || isNaN(end)) return [];
+    if (isNaN(start) || isNaN(end)) return [];
 
-  const disabled = [];
+    const disabled = [];
 
-  for (let i = 0; i < 24; i++) {
-    // Disable hours outside of range
-    if (start < end) {
-      if (i < start || i >= end) disabled.push(i);
-    } else {
-      // If time range crosses midnight (e.g., 10 PM to 6 AM)
-      if (i < start && i >= end) disabled.push(i);
+    for (let i = 0; i < 24; i++) {
+      // Disable hours outside of range
+      if (start < end) {
+        if (i < start || i >= end) disabled.push(i);
+      } else {
+        // If time range crosses midnight (e.g., 10 PM to 6 AM)
+        if (i < start && i >= end) disabled.push(i);
+      }
     }
-  }
 
-  return disabled;
-};
+    return disabled;
+  };
 
   return (
     <motion.div
@@ -102,9 +102,8 @@ const disabledHours = () => {
                   name={name}
                   value={form[name]}
                   onChange={onChange}
-                  className={`w-full p-2 border ${
-                    errors[name] ? "border-red-500" : "border-gray-300"
-                  } rounded`}
+                  className={`w-full p-2 border ${errors[name] ? "border-red-500" : "border-gray-300"
+                    } rounded`}
                 />
               )}
               {errors[name] && (
@@ -114,22 +113,57 @@ const disabledHours = () => {
           ))}
 
           <label className="block font-semibold">Payment Method:</label>
-          <div className="flex gap-4">
-            {["Pay at Counter", "Prepaid (Card)"].map((method) => (
-              <label
-                key={method}
-                className="flex items-center gap-2 text-gray-700"
-              >
-                <input
-                  type="radio"
-                  name="paymentMethod"
-                  value={method}
-                  checked={form.paymentMethod === method}
-                  onChange={onChange}
-                />
-                {method}
-              </label>
-            ))}
+          <div className="flex flex-col gap-3">
+            {/* Counter Payment */}
+            <label className="flex items-center gap-2 text-gray-700">
+              <input
+                type="radio"
+                name="paymentMethod"
+                value="Pay at Counter"
+                checked={form.paymentMethod === "Pay at Counter"}
+                onChange={onChange}
+                className="cursor-pointer"
+              />
+              Counter Payment
+            </label>
+
+            {/* Prepaid (Card)
+            <label className="flex items-center gap-2 text-gray-700">
+              <input
+                type="radio"
+                name="paymentMethod"
+                value="Prepaid (Card)"
+                checked={form.paymentMethod === "Prepaid (Card)"}
+                onChange={onChange}
+                className="cursor-pointer"
+              />
+              Prepaid (Card)
+            </label> */}
+
+            {/* Bank Alfalah Online Payment */}
+            <label
+              className={`flex items-center justify-center gap-2 px-4 py-3 rounded-lg border cursor-pointer transition-all
+      ${form.paymentMethod === "Bank Alfalah"
+                  ? "border-blue-500 bg-blue-50"
+                  : "border-gray-300"
+                }`}
+              onClick={() =>
+                onChange({
+                  target: { name: "paymentMethod", value: "Bank Alfalah" },
+                })
+              }
+            >
+              <input
+                type="radio"
+                name="paymentMethod"
+                value="Bank Alfalah"
+                checked={form.paymentMethod === "Bank Alfalah"}
+                onChange={onChange}
+                className="hidden"
+              />
+              <span>🏦</span>
+              <span className="font-medium">Online Payment (Bank Alfalah)</span>
+            </label>
           </div>
 
           <button

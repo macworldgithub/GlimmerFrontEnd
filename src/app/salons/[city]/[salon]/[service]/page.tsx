@@ -26,6 +26,7 @@ import { BACKEND_URL } from "@/api/config";
 import CartModal from "@/app/salons/[id]/components/cartModal";
 import CheckoutModal from "@/app/salons/[id]/components/checkoutModal";
 import { formatSlug } from "@/lib/utils";
+import toast from "react-hot-toast";
 
 const ServiceDetails = () => {
   const [activeTab, setActiveTab] = useState("Description");
@@ -190,13 +191,27 @@ const ServiceDetails = () => {
 
     const bookingData = {
       ...bulkForm,
-      serviceId: serviceId,
+      serviceName: service?.name,
+      serviceDuration: service?.duration,
+      serviceDescription: service?.description,
+      salonId: service?.salonId,
+      categoryId: service?.categoryId,
+      categoryName: service?.categoryName,
+      subCategoryName: service?.subCategoryName,
+      subSubCategoryName: service?.subSubCategoryName,
+      actualPrice: service?.adminSetPrice,
       finalPrice: discountedPrice,
+      isDiscounted: !!service?.hasDiscount,
+      discountPercentage: service?.discountPercentage,
     };
-
     console.log("Submitting Booking Data:", bookingData);
 
     try {
+      const paymentMethodSelected = bulkForm.paymentMethod;
+      if (paymentMethodSelected === "Bank Alfalah") {
+        await handleBankAlfalahPayment(bookingData);
+        return; // stop here because redirect will happen
+      }
       const response = await createBooking(bookingData, token);
       const emailPayload = {
         to: response.customerEmail,
@@ -238,7 +253,7 @@ const ServiceDetails = () => {
     }
     const discountedPrice = item.hasDiscount
       ? item.adminSetPrice -
-        (item.adminSetPrice * (item.discountPercentage || 0)) / 100
+      (item.adminSetPrice * (item.discountPercentage || 0)) / 100
       : item.adminSetPrice;
     dispatch(
       addService({
@@ -254,6 +269,10 @@ const ServiceDetails = () => {
           salonId: item.salonId,
           status: "Active",
           duration: item.duration,
+          categoryId: item.categoryId,
+          categoryName: item.categoryName,
+          hasDiscount: item.hasDiscount ?? false,
+          discountPercentage: item.discountPercentage ?? 0,
         },
         bookingInfo: {
           bookingDate: "",
@@ -265,6 +284,7 @@ const ServiceDetails = () => {
         },
       })
     );
+
     setSelectedItem(item); // Set the selected item when added to cart
     setIsCartModalOpen(true); // Open the modal
   };
@@ -279,28 +299,122 @@ const ServiceDetails = () => {
     if (!validateForm()) return;
 
     try {
+      if (bulkForm.paymentMethod === "Bank Alfalah") {
+        const payload = {
+          ...bulkForm, // customerName, customerEmail, customerPhone, bookingDate, bookingTime, paymentMethod
+          services: selectedServices.map(({ service }) => ({
+            serviceName: service.name,
+            serviceDuration: service.duration,
+            serviceDescription: service.description,
+            salonId: service.salonId,
+            categoryId: service.categoryId,
+            categoryName: service.categoryName,
+            subCategoryName: service.subCategoryName,
+            subSubCategoryName: service.subSubCategoryName,
+            actualPrice: service.base_price,
+            finalPrice: service.discounted_price,
+            isDiscounted: service.hasDiscount,
+            discountPercentage: service.discountPercentage,
+          })),
+        };
+
+        await handleBankAlfalahPayment(payload); // still bulk
+        return;
+      }
+
       for (const { service } of selectedServices) {
         try {
-          await createBooking(
-            {
-              ...bulkForm,
-              serviceId: service._id,
-              finalPrice: service.discounted_price,
+          const bookingPayload = {
+            ...bulkForm,
+            serviceName: service.name,
+            serviceDuration: service.duration,
+            serviceDescription: service.description,
+            salonId: service.salonId,
+            categoryId: service.categoryId,
+            categoryName: service.categoryName,
+            subCategoryName: service.subCategoryName,
+            subSubCategoryName: service.subSubCategoryName,
+            actualPrice: service.base_price,
+            finalPrice: service.discounted_price,
+            isDiscounted: service.hasDiscount,
+            discountPercentage: service.discountPercentage,
+          };
+
+          const response = await createBooking(bookingPayload, token);
+
+          const emailPayload = {
+            to: response.customerEmail,
+            viewModel: {
+              customer: {
+                name: response.customerName,
+              },
+              booking: response,
             },
-            token
-          );
+          };
+
+          await fetch(`${BACKEND_URL}/admin/send-booking-confirmation-email`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(emailPayload),
+          });
         } catch (error) {
-          console.error("Booking failed for service:", service._id, error);
+          console.error(
+            "Booking or email failed for service:",
+            service._id || service.name,
+            error
+          );
         }
       }
+
       dispatch(clearServiceCart());
       localStorage.removeItem("serviceCart");
       alert("Booking confirmed!");
       setIsCheckoutModalOpen(false);
       window.location.reload();
     } catch (error) {
-      console.error("Booking failed:", error);
+      console.error("Booking process failed:", error);
       alert("Booking failed.");
+    }
+  };
+
+
+  const handleBankAlfalahPayment = async (bookingData: any) => {
+    console.log("Initiating Bank Alfalah payment:", bookingData);
+    try {
+      const response = await fetch(
+        `${BACKEND_URL}/alfalah/initiate-booking-payment`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "text/html",
+          },
+          body: JSON.stringify(bookingData),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      // Get the HTML response containing the form
+      const html = await response.text();
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, "text/html");
+      const form = doc.getElementById("ssoForm") as HTMLFormElement;
+
+      if (!form) {
+        throw new Error("Form not found in response");
+      }
+
+      document.body.appendChild(form);
+      form.submit();
+    } catch (err) {
+      console.error("Alfalah Payment Error:", err);
+      toast.error("❌ Failed to initiate Bank Alfalah payment. Please try again.");
     }
   };
 
@@ -376,40 +490,39 @@ const ServiceDetails = () => {
             <div className="flex gap-2 overflow-hidden">
               {isMobile
                 ? [images[index]].map((image, i) => (
-                    <div
-                      key={i}
-                      className="mx-4 w-[120px] h-[120px] sm:w-[140px] sm:h-[140px] flex items-center justify-center overflow-hidden rounded-md shadow bg-gray-100 border cursor-pointer border-purple-900"
-                    >
-                      <img
-                        src={image}
-                        alt={`Thumbnail ${i + 1}`}
-                        className="w-full h-full object-cover"
-                        onError={(e) =>
-                          (e.currentTarget.src =
-                            "/assets/images/default_image.jpg")
-                        }
-                      />
-                    </div>
-                  ))
+                  <div
+                    key={i}
+                    className="mx-4 w-[120px] h-[120px] sm:w-[140px] sm:h-[140px] flex items-center justify-center overflow-hidden rounded-md shadow bg-gray-100 border cursor-pointer border-purple-900"
+                  >
+                    <img
+                      src={image}
+                      alt={`Thumbnail ${i + 1}`}
+                      className="w-full h-full object-cover"
+                      onError={(e) =>
+                      (e.currentTarget.src =
+                        "/assets/images/default_image.jpg")
+                      }
+                    />
+                  </div>
+                ))
                 : images.map((image, i) => (
-                    <div
-                      key={i}
-                      className={`mx-4 md:w-[90px] md:h-[90px] flex items-center justify-center overflow-hidden rounded-md shadow bg-gray-100 border border-gray-300 cursor-pointer ${
-                        i === index ? "border-purple-900" : ""
+                  <div
+                    key={i}
+                    className={`mx-4 md:w-[90px] md:h-[90px] flex items-center justify-center overflow-hidden rounded-md shadow bg-gray-100 border border-gray-300 cursor-pointer ${i === index ? "border-purple-900" : ""
                       }`}
-                      onClick={() => setIndex(i)}
-                    >
-                      <img
-                        src={image}
-                        alt={`Thumbnail ${i + 1}`}
-                        className="w-full h-full object-cover"
-                        onError={(e) =>
-                          (e.currentTarget.src =
-                            "/assets/images/default_image.jpg")
-                        }
-                      />
-                    </div>
-                  ))}
+                    onClick={() => setIndex(i)}
+                  >
+                    <img
+                      src={image}
+                      alt={`Thumbnail ${i + 1}`}
+                      className="w-full h-full object-cover"
+                      onError={(e) =>
+                      (e.currentTarget.src =
+                        "/assets/images/default_image.jpg")
+                      }
+                    />
+                  </div>
+                ))}
             </div>
 
             {/* Right Arrow Button */}
@@ -428,11 +541,10 @@ const ServiceDetails = () => {
               {[...Array(5)].map((_, index) => (
                 <svg
                   key={index}
-                  className={`w-5 h-5 ms-1 ${
-                    service?.ratings && index < Math.round(service.ratings)
-                      ? "text-purple-800"
-                      : "text-gray-300"
-                  }`}
+                  className={`w-5 h-5 ms-1 ${service?.ratings && index < Math.round(service.ratings)
+                    ? "text-purple-800"
+                    : "text-gray-300"
+                    }`}
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
@@ -451,9 +563,8 @@ const ServiceDetails = () => {
               return (
                 <div
                   key={star}
-                  className={`flex items-center gap-3 ${
-                    index < 4 ? "mb-4" : ""
-                  }`}
+                  className={`flex items-center gap-3 ${index < 4 ? "mb-4" : ""
+                    }`}
                 >
                   <span className="text-purple-800">{star} ★</span>
                   <div className="w-full bg-gray-200 rounded-md h-3 flex-1">
@@ -695,9 +806,8 @@ const ServiceDetails = () => {
                       name={name}
                       value={(bulkForm as Record<string, string>)[name] || ""}
                       onChange={handleChange}
-                      className={`w-full p-3 border ${
-                        error ? "border-red-500" : "border-gray-300"
-                      } rounded-md focus:ring-2 focus:ring-purple-500 outline-none`}
+                      className={`w-full p-3 border ${error ? "border-red-500" : "border-gray-300"
+                        } rounded-md focus:ring-2 focus:ring-purple-500 outline-none`}
                       required
                     />
                   )}
@@ -724,15 +834,29 @@ const ServiceDetails = () => {
                   />
                   Counter Payment
                 </label>
-                <label className="flex items-center gap-2 text-gray-600">
+                <label
+                  className={`flex items-center justify-center gap-2 px-4 py-3 rounded-lg border cursor-pointer transition-all
+                        ${bulkForm.paymentMethod === "Bank Alfalah"
+                      ? "border-blue-500 bg-blue-50"
+                      : "border-gray-300"
+                    }`}
+                  onClick={() => {
+                    setBulkForm({
+                      ...bulkForm,
+                      paymentMethod: "Bank Alfalah",
+                    });
+                  }}
+                >
                   <input
                     type="radio"
                     name="paymentMethod"
-                    value="Prepaid (Card)"
+                    value="Bank Alfalah"
+                    checked={bulkForm.paymentMethod === "Bank Alfalah"}
                     onChange={handleChange}
-                    className="cursor-pointer"
+                    className="hidden"
                   />
-                  Card Payment
+                  <span>🏦</span>
+                  <span className="font-medium">Online Payment</span>
                 </label>
               </div>
 
@@ -753,11 +877,10 @@ const ServiceDetails = () => {
                 <button
                   key={tab.title}
                   onClick={() => setActiveTab(tab.title)}
-                  className={`flex-1 py-2 px-4 font-semibold ${
-                    activeTab === tab.title
-                      ? "text-purple-800 border-b-2 border-purple-800"
-                      : "text-gray-600"
-                  }`}
+                  className={`flex-1 py-2 px-4 font-semibold ${activeTab === tab.title
+                    ? "text-purple-800 border-b-2 border-purple-800"
+                    : "text-gray-600"
+                    }`}
                 >
                   {tab.title}
                 </button>
@@ -780,11 +903,10 @@ const ServiceDetails = () => {
               {[...Array(5)].map((_, index) => (
                 <svg
                   key={index}
-                  className={`w-5 h-5 ms-1 ${
-                    service?.ratings && index < Math.round(service.ratings)
-                      ? "text-purple-800"
-                      : "text-gray-300"
-                  }`}
+                  className={`w-5 h-5 ms-1 ${service?.ratings && index < Math.round(service.ratings)
+                    ? "text-purple-800"
+                    : "text-gray-300"
+                    }`}
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
@@ -803,9 +925,8 @@ const ServiceDetails = () => {
               return (
                 <div
                   key={star}
-                  className={`flex items-center gap-3 ${
-                    index < 4 ? "mb-4" : ""
-                  }`}
+                  className={`flex items-center gap-3 ${index < 4 ? "mb-4" : ""
+                    }`}
                 >
                   <span className="text-purple-800">{star} ★</span>
                   <div className="w-full bg-gray-200 rounded-md h-3 flex-1">
@@ -855,7 +976,7 @@ const ServiceDetails = () => {
               }}
             />
           )}
-          {isCheckoutModalOpen && selectedItem && (
+          {isCheckoutModalOpen && (
             <CheckoutModal
               form={bulkForm}
               errors={errors}

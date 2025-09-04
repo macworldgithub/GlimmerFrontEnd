@@ -12,17 +12,25 @@ interface Service {
   rate_of_salon: string;
   ref_of_salon: string;
   status: string;
+
+  categoryId?: string;
+  categoryName: string;
+  subCategoryName?: string;
+  subSubCategoryName?: string;
+  hasDiscount: boolean;
+  discountPercentage: number;
+
 }
 
 export interface BookingInfo {
-    customerName: string;
-    customerEmail: string;
-    customerPhone: string;
-    bookingDate: string;
-    bookingTime: string;
-    paymentMethod: string;
-  }
-  
+  customerName: string;
+  customerEmail: string;
+  customerPhone: string;
+  bookingDate: string;
+  bookingTime: string;
+  paymentMethod: string;
+}
+
 
 interface ServiceCartItem {
   service: Service;
@@ -67,14 +75,16 @@ const serviceCartSlice = createSlice({
       const exists = state.services.find((s) => s.service._id === service._id);
 
       if (!exists) {
-        state.services.push({ service, bookingInfo });
+        state.services.push({
+          service: {
+            ...service,
+            discounted_price: service.discounted_price || service.base_price,
+            hasDiscount: service.hasDiscount ?? false,
+            discountPercentage: service.discountPercentage ?? 0,
+          },
+          bookingInfo,
+        });
       }
-
-      state.services.forEach((item) => {
-        item.service.discounted_price =
-          item.service.discounted_price || item.service.base_price;
-      });
-
       const { sum, discountSum } = calculateTotals(state.services);
       state.total = sum;
       state.discountedTotal = discountSum;
@@ -104,7 +114,7 @@ const serviceCartSlice = createSlice({
     },
 
     clearServiceCart: (state) => {
-        console.log("22")
+      console.log("22")
       state.services = [];
       state.total = 0;
       state.discountedTotal = 0;
