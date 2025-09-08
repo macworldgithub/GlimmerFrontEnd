@@ -13,8 +13,8 @@ export const getAllProducts = async (
   maxPrice?: number,
   page?: number,
   sortBy?: string,
-  order?: 'asc' | 'desc',
-  limit?: number,
+  order?: "asc" | "desc",
+  limit?: number
 ) => {
   try {
     let url = `${BACKEND_URL}/product/get_all_products?page_no=${page || 1}`;
@@ -23,11 +23,20 @@ export const getAllProducts = async (
     if (subcategory) url += `&sub_category=${subcategory}`;
     if (item) url += `&item=${item}`;
     if (name) url += `&name=${encodeURIComponent(name)}`;
-    if (typeof minPrice === "number") url += `&minPrice=${minPrice}`;
-    if (typeof maxPrice === "number") url += `&maxPrice=${maxPrice}`;
+
+    // Only append if actually > 0
+    if (minPrice !== undefined && minPrice > 0) {
+      url += `&minPrice=${minPrice}`;
+    }
+    if (maxPrice !== undefined && maxPrice > 0) {
+      url += `&maxPrice=${maxPrice}`;
+    }
+
     if (sortBy) url += `&sortBy=${sortBy}`;
     if (order) url += `&order=${order}`;
-    if (typeof limit === "number") url += `&limit=${limit}`;
+    if (limit !== undefined && limit > 0) {
+      url += `&limit=${limit}`;
+    }
 
     console.log("API URL:", url);
 

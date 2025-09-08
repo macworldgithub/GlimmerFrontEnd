@@ -52,57 +52,16 @@ export default function ProductSearchBar({ className }: ProductSearchBarProps) {
   }, [searchTerm]);
 
   const handleSearch = () => {
-    const term = searchTerm.trim();
-    if (!term) return;
+  const params = new URLSearchParams();
+  params.set("page", "1");
+  if (searchTerm.trim()) {
+    params.set("name", searchTerm.trim());
+  }
 
-    // 🔹 Case 1: Exactly one suggestion → go directly to product details
-    if (suggestions.length === 1) {
-      const matchedProduct = suggestions[0];
+  router.push(`/products?${params.toString()}`);
 
-      const productSlug = matchedProduct.name
-        ? formatSlug(matchedProduct.name)
-        : matchedProduct._id;
-
-      const path = matchedProduct.item
-        ? `/${sanitizeSlug(
-          matchedProduct.category?.slug,
-          matchedProduct.category?._id
-        )}/${sanitizeSlug(
-          matchedProduct.sub_category?.slug,
-          matchedProduct.sub_category?._id
-        )}/${sanitizeSlug(
-          matchedProduct.item?.slug,
-          matchedProduct.item?._id
-        )}/${productSlug}`
-        : `/${sanitizeSlug(
-          matchedProduct.category?.slug,
-          matchedProduct.category?._id
-        )}/${sanitizeSlug(
-          matchedProduct.sub_category?.slug,
-          matchedProduct.sub_category?._id
-        )}/${productSlug}`;
-
-      const queryParams = new URLSearchParams();
-      queryParams.append("id", matchedProduct._id);
-      if (matchedProduct.store)
-        queryParams.append("storeId", matchedProduct.store);
-      if (matchedProduct.rate_of_salon)
-        queryParams.append("rate", matchedProduct.rate_of_salon.toString());
-      if (matchedProduct.ref_of_salon)
-        queryParams.append("ref", matchedProduct.ref_of_salon);
-
-      router.push(`${path}?${queryParams.toString()}`);
-    } else {
-      // 🔹 Case 2: Multiple or no suggestions → show search results page
-      const params = new URLSearchParams();
-      params.set("page", "1");
-      params.set("name", term);
-      router.push(`/products?${params.toString()}`);
-    }
-
-    setShowDropdown(false);
-    setSearchTerm("");
-  };
+  setShowDropdown(false);
+};
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") handleSearch();
