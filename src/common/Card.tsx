@@ -176,8 +176,9 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
       className="w-full max-w-[300px] h-[300px] bg-transparent rounded-xl transition duration-300 cursor-pointer relative flex flex-col items-center text-center"
       onClick={() => router.push(finalPath)}
     >
+      {/* Add to Cart Button (Responsive top position) */}
       <div
-        className="absolute top-2 left-2 z-10"
+        className="absolute top-5 sm:top-2 left-2 z-10"
         onClick={(e) => {
           e.stopPropagation();
           if (item.quantity === 0) return; // prevent adding if out of stock
@@ -189,7 +190,7 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
       >
         <div
           className={`w-8 h-8 rounded-full flex items-center justify-center 
-      ${item.quantity === 0 ? "bg-gray-300 cursor-not-allowed" : "bg-purple-100"}`}
+        ${item.quantity === 0 ? "bg-gray-300 cursor-not-allowed" : "bg-purple-100"}`}
         >
           <RiShoppingBag4Line
             className={`text-[14px] ${item.quantity === 0 ? "text-gray-400" : "text-[#583FA8]"
@@ -198,41 +199,7 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
         </div>
       </div>
 
-      {item.quantity === 0 && (
-        <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 bg-red-500 text-white text-xs px-2 py-1 rounded">
-          Out of Stock
-        </div>
-      )}
-
-
-      {/* ❤️ Heart Icon - Top Right */}
-      {/* <div
-        className="absolute top-2 right-2 z-10"
-        onClick={(e) => {
-          e.stopPropagation();
-          setIsFavorited((prev) => !prev);
-        }}
-      >
-        <div className="w-8 h-8 rounded-full bg-pink-100 flex items-center justify-center">
-          <FaHeart
-            className={`text-sm transition-colors duration-200 ${
-              isFavorited ? "text-pink-600" : "text-gray-400"
-            }`}
-          />
-        </div>
-      </div> */}
-      {/* 🟣 Discount Percentage Badge - Top Right */}
-      {basePrice > 0 && discountedPrice > 0 && discountedPrice < basePrice && (
-        <div className="absolute top-2 right-2 z-20">
-          <div className="bg-[#583FA8] text-white text-[10px] font-semibold px-2 py-1 rounded-md shadow-md">
-            {`${Math.round(
-              ((basePrice - discountedPrice) / basePrice) * 100
-            )}% OFF`}
-          </div>
-        </div>
-      )}
-
-      {/* ✅ Success Message */}
+      {/* Success Message */}
       {showMessage && (
         <div className="absolute top-12 left-1/2 transform -translate-x-1/2 bg-green-500 text-white text-xs px-3 py-1 rounded shadow-md z-50">
           Item has been added to cart
@@ -253,17 +220,41 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
         {item.name}
       </h2>
 
-      {/* Price */}
-      <div className="flex justify-center items-center gap-2 mb-1">
-        <span className="text-red-600 font-bold text-base">
-          {finalPrice} {finalPrice !== "N/A" && "PKR"}
-        </span>
-        {discountedPrice > 0 && discountedPrice < basePrice && (
-          <span className="text-gray-400 text-sm line-through">
-            {basePrice} PKR
+      {/* Price + Out of Stock below */}
+      <div className="flex flex-col items-center gap-1 mb-1">
+        <div className="flex justify-center items-center gap-2">
+          <span className="text-red-600 font-bold text-base">
+            {finalPrice} {finalPrice !== "N/A" && "PKR"}
+          </span>
+          {discountedPrice > 0 && discountedPrice < basePrice && (
+            <span className="text-gray-400 text-sm line-through">
+              {basePrice} PKR
+            </span>
+          )}
+        </div>
+
+        {/* Out of Stock Label (below price now) */}
+        {item.quantity === 0 && (
+          <span
+            className="bg-gradient-to-r from-red-600 to-red-500 
+               text-white text-[11px] font-bold 
+               px-3 py-1 rounded-full shadow-md mt-1 
+               border border-red-700 animate-pulse"
+          >
+            🔴 Out of Stock
           </span>
         )}
       </div>
+      {/* Discount Badge (Responsive top position) */}
+      {basePrice > 0 && discountedPrice > 0 && discountedPrice < basePrice && (
+        <div className="absolute top-5 sm:top-2 right-2 z-20">
+          <span className="bg-[#583FA8] text-white text-[10px] font-bold px-2 py-0.5 rounded shadow-sm">
+            {`${Math.round(
+              ((basePrice - discountedPrice) / basePrice) * 100
+            )}% OFF`}
+          </span>
+        </div>
+      )}
     </div>
   );
 };

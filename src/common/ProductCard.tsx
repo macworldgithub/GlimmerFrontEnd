@@ -58,28 +58,11 @@ const ProductCard: React.FC<{ products: RealCardItem }> = ({ products }) => {
       className="w-[48%] sm:w-[48%] md:w-[31%] lg:w-[23%] xl:w-[18%] h-[310px] sm:h-[320px] md:h-[340px] rounded-xl transition duration-300 cursor-pointer snap-start shrink-0 relative overflow-hidden flex flex-col items-center text-center m-1"
       onClick={() => router.push(finalPath)}
     >
-      {/* Add to Cart Button (Top Left) */}
+      {/* Add to Cart Button (Responsive top position) */}
       <div
-        className="absolute top-2 left-2 z-10"
+        className="absolute top-5 sm:top-2 left-2 z-10"
         onClick={(e) => {
           e.stopPropagation();
-          const productWithQuantity = { ...products, quantity: 1 };
-          dispatch(addItem({ product: productWithQuantity, quantity: 1 }));
-          setShowMessage(true);
-          setTimeout(() => setShowMessage(false), 2000);
-        }}
-      >
-        <div className="w-7 h-7 rounded-full bg-purple-100 flex items-center justify-center">
-          <RiShoppingBag4Line className="text-[#583FA8] text-[13px]" />
-        </div>
-      </div>
-
-      {/* Heart Icon (Top Right) */}
-      <div
-        className="absolute top-2 left-2 z-10"
-        onClick={(e) => {
-          e.stopPropagation();
-          if (products.quantity === 0) return;
           const productWithQuantity = { ...products, quantity: 1 };
           dispatch(addItem({ product: productWithQuantity, quantity: 1 }));
           setShowMessage(true);
@@ -88,7 +71,7 @@ const ProductCard: React.FC<{ products: RealCardItem }> = ({ products }) => {
       >
         <div
           className={`w-7 h-7 rounded-full flex items-center justify-center 
-      ${products.quantity === 0 ? "bg-gray-300 cursor-not-allowed" : "bg-purple-100"}`}
+        ${products.quantity === 0 ? "bg-gray-300 cursor-not-allowed" : "bg-purple-100"}`}
         >
           <RiShoppingBag4Line
             className={`text-[13px] ${products.quantity === 0 ? "text-gray-400" : "text-[#583FA8]"
@@ -96,13 +79,6 @@ const ProductCard: React.FC<{ products: RealCardItem }> = ({ products }) => {
           />
         </div>
       </div>
-
-      {/* Out of Stock Label */}
-      {products.quantity === 0 && (
-        <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 bg-red-500 text-white text-xs px-2 py-1 rounded">
-          Out of Stock
-        </div>
-      )}
 
       {/* Success Message */}
       {showMessage && (
@@ -120,24 +96,16 @@ const ProductCard: React.FC<{ products: RealCardItem }> = ({ products }) => {
         />
       </div>
 
-      {/* Discount Badge */}
+      {/* Discount Badge (Responsive top position) */}
       {products?.base_price > products?.discounted_price &&
         products?.discounted_price > 0 && (
-          <div className="absolute top-0 -right-3 w-14 h-10 z-10">
-            <img
-              src="/assets/addtoBag/discount.png"
-              alt="Discount"
-              className="w-full h-full"
-            />
-            <span className="absolute inset-0 flex flex-col items-center justify-center mr-2 text-white text-xs font-bold">
-              <span>
-                {`${Math.round(
-                  ((products.base_price - products.discounted_price) /
-                    products.base_price) *
-                  100
-                )}%`}
-              </span>
-              <span className="text-[8px] font-normal">OFF</span>
+          <div className="absolute top-5 sm:top-2 right-2 z-10">
+            <span className="bg-[#583FA8] text-white text-[10px] font-bold px-2 py-0.5 rounded shadow-sm">
+              {`${Math.round(
+                ((products.base_price - products.discounted_price) /
+                  products.base_price) *
+                100
+              )}% OFF`}
             </span>
           </div>
         )}
@@ -150,15 +118,30 @@ const ProductCard: React.FC<{ products: RealCardItem }> = ({ products }) => {
         </h3>
 
         {/* Price */}
-        <div className="flex justify-center items-center gap-2">
-          <span className="text-red-600 font-bold text-sm">
-            {Number.isInteger(finalPrice) ? finalPrice : finalPrice}{" "}
-            PKR
-          </span>
-          {discountedPrice > 0 && discountedPrice < basePrice && (
-            <span className="text-gray-400 text-xs line-through">
-              {Number.isInteger(basePrice) ? basePrice : basePrice.toFixed(2)}{" "}
-              PKR
+        <div className="flex flex-col items-center gap-1">
+          <div className="flex justify-center items-center gap-2">
+            <span className="text-red-600 font-bold text-sm">
+              {Number.isInteger(finalPrice) ? finalPrice : finalPrice} PKR
+            </span>
+            {discountedPrice > 0 && discountedPrice < basePrice && (
+              <span className="text-gray-400 text-xs line-through">
+                {Number.isInteger(basePrice)
+                  ? basePrice
+                  : basePrice.toFixed(2)}{" "}
+                PKR
+              </span>
+            )}
+          </div>
+
+          {/* Out of Stock Label (Now shown below price) */}
+          {products.quantity === 0 && (
+            <span
+              className="bg-gradient-to-r from-red-600 to-red-500 
+               text-white text-[11px] font-bold 
+               px-3 py-1 rounded-full shadow-md mt-1 
+               border border-red-700 animate-pulse"
+            >
+              🔴 Out of Stock
             </span>
           )}
         </div>
