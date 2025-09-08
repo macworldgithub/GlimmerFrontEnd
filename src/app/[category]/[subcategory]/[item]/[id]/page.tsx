@@ -49,6 +49,23 @@ const ProductDisplay = () => {
   const [isBulkModalOpen, setIsBulkModalOpen] = useState(false);
   const [fullImage, setFullImage] = useState<string | null>(null);
   const handleBuyNow = () => {
+    if (!product) return;
+
+    if (product.quantity === 0) {
+      alert("This product is out of stock.");
+      return;
+    }
+
+    if (quantity <= 0) {
+      alert("Please select quantity first.");
+      return;
+    }
+
+    if (quantity > product.quantity) {
+      alert(`Only ${product.quantity} items available in stock.`);
+      return;
+    }
+
     const productWithSalonInfo = {
       ...product,
       ref_of_salon: ref,
@@ -57,7 +74,7 @@ const ProductDisplay = () => {
 
     // Agar tumhe cart me product dalna hai:
     dispatch(
-      addItem({ product: productWithSalonInfo, quantity: quantity || 1 })
+      addItem({ product: productWithSalonInfo, quantity })
     );
 
     // Checkout page open karo
@@ -107,9 +124,8 @@ const ProductDisplay = () => {
   const pathSegments = pathname.split("/").filter(Boolean);
   const [category, subCategory, item, productSlug] = pathSegments; // e.g., /makeup/face/[foundation]/689521f3543643812d72b453
 
-  const productsUrl = `/products${category ? `?category=${category}` : ""}${
-    subCategory ? `&sub_category=${subCategory}` : ""
-  }${item ? `&item=${item}` : ""}`;
+  const productsUrl = `/products${category ? `?category=${category}` : ""}${subCategory ? `&sub_category=${subCategory}` : ""
+    }${item ? `&item=${item}` : ""}`;
 
   const fetchData = async () => {
     if (!productId) return;
@@ -231,8 +247,19 @@ const ProductDisplay = () => {
   }, [product?.id]);
 
   const handleAddToCart = () => {
-    if (quantity < 0) {
+    if (!product) return;
+
+    if (product.quantity === 0) {
+      alert("This product is out of stock.");
+      return;
+    }
+    if (quantity <= 0) {
       alert("Please select quantity first.");
+      return;
+    }
+
+    if (quantity > product.quantity) {
+      alert(`Only ${product.quantity} items available in stock.`);
       return;
     }
 
@@ -275,6 +302,12 @@ const ProductDisplay = () => {
   };
 
   const handleBulkBuy = () => {
+    if (!product) return;
+
+    if (product.quantity === 0) {
+      alert("This product is out of stock, bulk buy is not available.");
+      return;
+    }
     setIsBulkModalOpen(true);
   };
 
@@ -444,39 +477,38 @@ const ProductDisplay = () => {
             <div className="flex gap-2 overflow-hidden">
               {isMobile
                 ? images.length > 0 && (
-                    <div className="mx-4 w-[120px] h-[120px] sm:w-[140px] sm:h-[140px] flex items-center justify-center overflow-hidden rounded-md shadow bg-gray-100 border cursor-pointer border-purple-900">
-                      <img
-                        src={images[0]}
-                        alt={`Thumbnail 1`}
-                        className="w-full h-full object-contain"
-                        onError={(e) =>
-                          (e.currentTarget.src =
-                            "/assets/images/default_image.jpg")
-                        }
-                      />
-                    </div>
-                  )
+                  <div className="mx-4 w-[120px] h-[120px] sm:w-[140px] sm:h-[140px] flex items-center justify-center overflow-hidden rounded-md shadow bg-gray-100 border cursor-pointer border-purple-900">
+                    <img
+                      src={images[0]}
+                      alt={`Thumbnail 1`}
+                      className="w-full h-full object-contain"
+                      onError={(e) =>
+                      (e.currentTarget.src =
+                        "/assets/images/default_image.jpg")
+                      }
+                    />
+                  </div>
+                )
                 : images.slice(0, 3).map((image, i) => (
-                    <div
-                      key={i}
-                      className={`mx-4 md:w-[90px] md:h-[90px] flex items-center justify-center overflow-hidden rounded-md shadow bg-gray-100 border border-gray-300 cursor-pointer ${
-                        i === 0 ? "border-purple-900" : ""
+                  <div
+                    key={i}
+                    className={`mx-4 md:w-[90px] md:h-[90px] flex items-center justify-center overflow-hidden rounded-md shadow bg-gray-100 border border-gray-300 cursor-pointer ${i === 0 ? "border-purple-900" : ""
                       }`}
-                      onClick={() => {
-                        if (swiperRef.current) swiperRef.current.slideTo(i);
-                      }}
-                    >
-                      <img
-                        src={image}
-                        alt={`Thumbnail ${i + 1}`}
-                        className="w-full h-full object-contain"
-                        onError={(e) =>
-                          (e.currentTarget.src =
-                            "/assets/images/default_image.jpg")
-                        }
-                      />
-                    </div>
-                  ))}
+                    onClick={() => {
+                      if (swiperRef.current) swiperRef.current.slideTo(i);
+                    }}
+                  >
+                    <img
+                      src={image}
+                      alt={`Thumbnail ${i + 1}`}
+                      className="w-full h-full object-contain"
+                      onError={(e) =>
+                      (e.currentTarget.src =
+                        "/assets/images/default_image.jpg")
+                      }
+                    />
+                  </div>
+                ))}
             </div>
             <button className="custom-next p-2 text-gray-500">
               <MdKeyboardArrowRight size={50} />
@@ -493,12 +525,11 @@ const ProductDisplay = () => {
               {[...Array(5)].map((_, index) => (
                 <svg
                   key={index}
-                  className={`w-5 h-5 ms-1 ${
-                    ratings?.average_rating &&
+                  className={`w-5 h-5 ms-1 ${ratings?.average_rating &&
                     index < Math.round(ratings.average_rating)
-                      ? "text-yellow-500"
-                      : "text-gray-300"
-                  }`}
+                    ? "text-yellow-500"
+                    : "text-gray-300"
+                    }`}
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
@@ -519,15 +550,13 @@ const ProductDisplay = () => {
                 {[1, 2, 3, 4, 5].map((star) => (
                   <svg
                     key={star}
-                    className={`w-6 h-6 ${
-                      hasRated && userRating && star <= userRating
-                        ? "text-yellow-500"
-                        : "text-gray-300"
-                    } ${
-                      hasRated || isSubmitting
+                    className={`w-6 h-6 ${hasRated && userRating && star <= userRating
+                      ? "text-yellow-500"
+                      : "text-gray-300"
+                      } ${hasRated || isSubmitting
                         ? "opacity-50 cursor-not-allowed"
                         : "cursor-pointer"
-                    }`}
+                      }`}
                     onClick={() => !hasRated && handleSubmitRating(star)}
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
@@ -551,17 +580,15 @@ const ProductDisplay = () => {
               const total = ratings?.total_ratings || 0;
               const count =
                 ratings?.rating_distribution[
-                  `${
-                    ["", "one", "two", "three", "four", "five"][star]
-                  }` as keyof typeof ratings.rating_distribution
+                `${["", "one", "two", "three", "four", "five"][star]
+                }` as keyof typeof ratings.rating_distribution
                 ] || 0;
               const percentage = total > 0 ? (count / total) * 100 : 0;
               return (
                 <div
                   key={star}
-                  className={`flex items-center gap-3 ${
-                    star > 1 ? "mb-4" : ""
-                  }`}
+                  className={`flex items-center gap-3 ${star > 1 ? "mb-4" : ""
+                    }`}
                 >
                   <span className="text-yellow-500">{star} ★</span>
                   <div className="w-full bg-gray-200 rounded-md h-3 flex-1">
@@ -582,7 +609,7 @@ const ProductDisplay = () => {
           <h1 className="font-semibold text-2xl">{product?.name}</h1>
           <div className="font-semibold text-4xl relative">
             {product?.discounted_price > 0 &&
-            product?.discounted_price < product?.base_price ? (
+              product?.discounted_price < product?.base_price ? (
               <>
                 <span className="text-[#583FA8]">
                   {product?.discounted_price.toFixed(2)} PKR
@@ -597,7 +624,7 @@ const ProductDisplay = () => {
                     {`${Math.round(
                       ((product.base_price - product.discounted_price) /
                         product.base_price) *
-                        100
+                      100
                     )}% OFF`}
                   </span>
                 </div>
@@ -613,12 +640,11 @@ const ProductDisplay = () => {
             {[...Array(5)].map((_, index) => (
               <svg
                 key={index}
-                className={`w-4 h-4 ms-1 ${
-                  ratings?.average_rating &&
+                className={`w-4 h-4 ms-1 ${ratings?.average_rating &&
                   index < Math.round(ratings.average_rating)
-                    ? "text-yellow-500"
-                    : "text-gray-300"
-                }`}
+                  ? "text-yellow-500"
+                  : "text-gray-300"
+                  }`}
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="currentColor"
@@ -636,7 +662,7 @@ const ProductDisplay = () => {
           <hr className="my-2.5 border-t border-gray-400 dark:text-gray-500 w-full" />
 
           {Array.isArray(product?.size) &&
-          product.size.flat().filter((s: any) => s?.value)?.length > 0 ? (
+            product.size.flat().filter((s: any) => s?.value)?.length > 0 ? (
             <div className="grid grid-cols-2 gap-3 mt-3">
               <div className="flex items-center font-semibold text-gray-700 dark:text-gray-700">
                 <span>Size:</span>
@@ -654,7 +680,7 @@ const ProductDisplay = () => {
                         selectedSize?.id === s?.id
                           ? "bg-[#6B21A8] text-white"
                           : "bg-white"
-                      } px-2 py-1 border hover:bg-[#6B21A8] hover:text-white cursor-pointer border-gray-300 dark:border-gray-600 rounded-md text-sm `}
+                        } px-2 py-1 border hover:bg-[#6B21A8] hover:text-white cursor-pointer border-gray-300 dark:border-gray-600 rounded-md text-sm `}
                     >
                       {s?.value} {s?.unit}
                     </span>
@@ -667,14 +693,16 @@ const ProductDisplay = () => {
             <div className="flex items-center gap-4">
               <button
                 className={`flex-1 flex items-center justify-center text-xs font-semibold gap-2 py-3 xl:px-6 px-4 
-      rounded-md bg-purple-800 text-white hover:bg-purple-900`}
+    rounded-md ${product?.quantity === 0
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-purple-800 text-white hover:bg-purple-900"
+                  }`}
                 onClick={() => {
-                  // Only increase quantity if it's zero
-                  if (quantity === 0) {
-                    updateQuantity(1);
-                  }
+                  if (product?.quantity === 0) return;
+                  if (quantity === 0) updateQuantity(1);
                   handleAddToCart();
                 }}
+                disabled={product?.quantity === 0}
               >
                 <Image
                   alt="cart-icon"
@@ -682,40 +710,54 @@ const ProductDisplay = () => {
                   height={15}
                   src="/assets/addtoBag/cart-icon.png"
                 />
-                ADD TO BAG
+                {product?.quantity === 0 ? "Out of Stock" : "ADD TO BAG"}
               </button>
 
+
               {/* + - Quantity Controller */}
-              <div className="flex items-center border border-gray-300 rounded-md">
-                <button
-                  onClick={() =>
-                    updateQuantity(quantity > 0 ? quantity - 1 : 0)
-                  }
-                  className="px-3 py-1 text-xl font-bold text-gray-700 hover:text-purple-800"
-                >
-                  −
-                </button>
-                <div className="px-4 py-1 text-lg font-semibold text-gray-800">
-                  {quantity}
+              {product?.quantity > 0 && (
+                <div className="flex items-center border border-gray-300 rounded-md">
+                  {/* Decrease */}
+                  <button
+                    onClick={() => updateQuantity(quantity > 0 ? quantity - 1 : 0)}
+                    className="px-3 py-1 text-xl font-bold text-gray-700 hover:text-purple-800"
+                    disabled={quantity <= 0}
+                  >
+                    −
+                  </button>
+
+                  {/* Display */}
+                  <div className="px-4 py-1 text-lg font-semibold text-gray-800">
+                    {quantity}
+                  </div>
+
+                  {/* Increase */}
+                  <button
+                    onClick={() => {
+                      if (quantity < product.quantity) {
+                        updateQuantity(quantity + 1);
+                      }
+                    }}
+                    className={`px-3 py-1 text-xl font-bold ${quantity >= product.quantity
+                      ? "text-gray-400 cursor-not-allowed"
+                      : "text-gray-700 hover:text-purple-800"
+                      }`}
+                    disabled={quantity >= product.quantity}
+                  >
+                    +
+                  </button>
                 </div>
-                <button
-                  onClick={() => updateQuantity(quantity + 1)}
-                  className="px-3 py-1 text-xl font-bold text-gray-700 hover:text-purple-800"
-                >
-                  +
-                </button>
-              </div>
+              )}
             </div>
 
             <button
               className={`w-full flex items-center justify-center text-xs font-semibold gap-2 py-3 xl:px-6 px-4 
-        rounded-md border border-purple-800 text-purple-800 hover:bg-purple-50 
-        ${
-          isButtonDisabled &&
-          "border-gray-300 text-gray-500 cursor-not-allowed hover:bg-transparent"
-        }`}
+    rounded-md border ${product?.quantity === 0
+                  ? "border-gray-300 text-gray-500 cursor-not-allowed"
+                  : "border-purple-800 text-purple-800 hover:bg-purple-50"
+                }`}
               onClick={handleBuyNow}
-              disabled={isButtonDisabled}
+              disabled={product?.quantity === 0}
             >
               <Image
                 alt="cart-icon"
@@ -723,8 +765,9 @@ const ProductDisplay = () => {
                 height={15}
                 src="/assets/addtoBag/cart-icon.png"
               />
-              BUY NOW
+              {product?.quantity === 0 ? "Out of Stock" : "BUY NOW"}
             </button>
+
             <div className="flex items-center gap-4 w-full">
               <button
                 onClick={handleBulkBuy}
@@ -828,11 +871,10 @@ const ProductDisplay = () => {
                 <button
                   key={tab.title}
                   onClick={() => setActiveTab(tab.title)}
-                  className={`flex-1 py-2 px-4 font-semibold ${
-                    activeTab === tab.title
-                      ? "text-purple-800 border-b-2 border-purple-800"
-                      : "text-gray-600"
-                  }`}
+                  className={`flex-1 py-2 px-4 font-semibold ${activeTab === tab.title
+                    ? "text-purple-800 border-b-2 border-purple-800"
+                    : "text-gray-600"
+                    }`}
                 >
                   {tab.title}
                 </button>
@@ -853,12 +895,11 @@ const ProductDisplay = () => {
               {[...Array(5)].map((_, index) => (
                 <svg
                   key={index}
-                  className={`w-5 h-5 ms-1 ${
-                    ratings?.average_rating &&
+                  className={`w-5 h-5 ms-1 ${ratings?.average_rating &&
                     index < Math.round(ratings.average_rating)
-                      ? "text-yellow-500"
-                      : "text-gray-300"
-                  }`}
+                    ? "text-yellow-500"
+                    : "text-gray-300"
+                    }`}
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
@@ -879,15 +920,13 @@ const ProductDisplay = () => {
                 {[1, 2, 3, 4, 5].map((star) => (
                   <svg
                     key={star}
-                    className={`w-6 h-6 ${
-                      hasRated && userRating && star <= userRating
-                        ? "text-yellow-500"
-                        : "text-gray-300"
-                    } ${
-                      hasRated || isSubmitting
+                    className={`w-6 h-6 ${hasRated && userRating && star <= userRating
+                      ? "text-yellow-500"
+                      : "text-gray-300"
+                      } ${hasRated || isSubmitting
                         ? "opacity-50 cursor-not-allowed"
                         : "cursor-pointer"
-                    }`}
+                      }`}
                     onClick={() => !hasRated && handleSubmitRating(star)}
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
@@ -911,17 +950,15 @@ const ProductDisplay = () => {
               const total = ratings?.total_ratings || 0;
               const count =
                 ratings?.rating_distribution[
-                  `${
-                    ["", "one", "two", "three", "four", "five"][star]
-                  }` as keyof typeof ratings.rating_distribution
+                `${["", "one", "two", "three", "four", "five"][star]
+                }` as keyof typeof ratings.rating_distribution
                 ] || 0;
               const percentage = total > 0 ? (count / total) * 100 : 0;
               return (
                 <div
                   key={star}
-                  className={`flex items-center gap-3 ${
-                    star > 1 ? "mb-4" : ""
-                  }`}
+                  className={`flex items-center gap-3 ${star > 1 ? "mb-4" : ""
+                    }`}
                 >
                   <span className="text-yellow-500">{star} ★</span>
                   <div className="w-full bg-gray-200 rounded-md h-3 flex-1">

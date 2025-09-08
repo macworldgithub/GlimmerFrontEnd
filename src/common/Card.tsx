@@ -180,16 +180,30 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
         className="absolute top-2 left-2 z-10"
         onClick={(e) => {
           e.stopPropagation();
+          if (item.quantity === 0) return; // prevent adding if out of stock
           const productWithQuantity = { ...item, quantity: 1 };
           dispatch(addItem({ product: productWithQuantity, quantity: 1 }));
           setShowMessage(true);
           setTimeout(() => setShowMessage(false), 2000);
         }}
       >
-        <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center">
-          <RiShoppingBag4Line className="text-[#583FA8] text-[14px]" />
+        <div
+          className={`w-8 h-8 rounded-full flex items-center justify-center 
+      ${item.quantity === 0 ? "bg-gray-300 cursor-not-allowed" : "bg-purple-100"}`}
+        >
+          <RiShoppingBag4Line
+            className={`text-[14px] ${item.quantity === 0 ? "text-gray-400" : "text-[#583FA8]"
+              }`}
+          />
         </div>
       </div>
+
+      {item.quantity === 0 && (
+        <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 bg-red-500 text-white text-xs px-2 py-1 rounded">
+          Out of Stock
+        </div>
+      )}
+
 
       {/* ❤️ Heart Icon - Top Right */}
       {/* <div

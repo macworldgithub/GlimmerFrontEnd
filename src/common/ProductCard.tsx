@@ -76,19 +76,33 @@ const ProductCard: React.FC<{ products: RealCardItem }> = ({ products }) => {
 
       {/* Heart Icon (Top Right) */}
       <div
-        className="absolute top-2 right-2 z-10"
+        className="absolute top-2 left-2 z-10"
         onClick={(e) => {
           e.stopPropagation();
-          setIsFavorited((prev) => !prev);
+          if (products.quantity === 0) return;
+          const productWithQuantity = { ...products, quantity: 1 };
+          dispatch(addItem({ product: productWithQuantity, quantity: 1 }));
+          setShowMessage(true);
+          setTimeout(() => setShowMessage(false), 2000);
         }}
       >
-        <div className="w-7 h-7 rounded-full bg-pink-100 flex items-center justify-center">
-          <FaHeart
-            className={`text-xs transition-colors duration-200 ${isFavorited ? "text-pink-600" : "text-gray-400"
+        <div
+          className={`w-7 h-7 rounded-full flex items-center justify-center 
+      ${products.quantity === 0 ? "bg-gray-300 cursor-not-allowed" : "bg-purple-100"}`}
+        >
+          <RiShoppingBag4Line
+            className={`text-[13px] ${products.quantity === 0 ? "text-gray-400" : "text-[#583FA8]"
               }`}
           />
         </div>
       </div>
+
+      {/* Out of Stock Label */}
+      {products.quantity === 0 && (
+        <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 bg-red-500 text-white text-xs px-2 py-1 rounded">
+          Out of Stock
+        </div>
+      )}
 
       {/* Success Message */}
       {showMessage && (
