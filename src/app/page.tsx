@@ -1,31 +1,12 @@
-'use client';
+import { Metadata } from "next";
+import HomeContent from "./HomeContent";
 
-import BottomSlider from "./components/bottom-slider";
-import GymBanner from "./components/gym-banner";
-import Hero from "./components/hero";
-import SalonCardList from "./components/salon-card-list";
-import SeftcareCardList from "./components/selfcare-card-list";
-import FakeReviewList from "./components/fake-review-list";
-import BoxContainer from "@/common/box-container";
-import Footer from "@/common/footer";
-import ProductFilter from "@/common/ProductFilter";
-import HairBanner from "./components/hair-banner";
+export const metadata: Metadata = {
+  title: "Pakistan’s Online Beauty Salons Booking & Beauty Products Store",
+  description:
+    "Glimmer, Pakistan’s top platform for beauty salons & beauty products. Book salons, shop premium cosmetics, skincare, haircare & self‑care products.",
+};
 
 export default function Home() {
-  return (
-    <>
-      <div className="w-[99vw]">
-        <Hero />
-          <SeftcareCardList />
-        <SalonCardList />
-        <BottomSlider />
-        <GymBanner />
-        <ProductFilter />
-        <HairBanner />
-        {/* <FakeReviewList /> */}
-      
-      </div>
-
-    </>
-  );
+  return <HomeContent />;
 }

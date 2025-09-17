@@ -159,7 +159,6 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
     )}/${productSlug}`;
 
   const finalPath = `${path}?${queryParams.toString()}`;
-  console.log(item);
   const basePrice = Number(item.base_price) || 0;
   const discountedPrice = Number(item.discounted_price) || 0;
 

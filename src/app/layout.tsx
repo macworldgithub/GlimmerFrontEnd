@@ -1,5 +1,4 @@
 // app/layout.tsx
-import type { Metadata } from "next";
 import { Prompt } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/common/navbar";
@@ -20,12 +19,6 @@ const prompt = Prompt({
   variable: "--font-prompt",
 });
 
-export const metadata: Metadata = {
-  title: "Pakistan’s Online Beauty Salons Booking & Beauty Products Store",
-  description:
-    "Glimmer, Pakistan’s top platform for beauty salons & beauty products. Book salons, shop premium cosmetics, skincare, haircare & self‑care products.",
-};
-
 export default function RootLayout({
   children,
 }: {
@@ -34,7 +27,6 @@ export default function RootLayout({
   return (
     <html lang="en" data-theme="light">
       <head>
-        {/* ✅ Add your Facebook domain verification meta tag here */}
         <meta name="facebook-domain-verification" 
         content="wf5nqoeruiazcn3gw9d26j97gnwgcr" />
       </head>
