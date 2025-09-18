@@ -102,8 +102,9 @@ const CheckoutModal = ({
                   name={name}
                   value={form[name]}
                   onChange={onChange}
-                  className={`w-full p-2 border ${errors[name] ? "border-red-500" : "border-gray-300"
-                    } rounded`}
+                  className={`w-full p-2 border ${
+                    errors[name] ? "border-red-500" : "border-gray-300"
+                  } rounded`}
                 />
               )}
               {errors[name] && (
@@ -142,11 +143,7 @@ const CheckoutModal = ({
 
             {/* Bank Alfalah Online Payment */}
             <label
-              className={`flex items-center justify-center gap-2 px-4 py-3 rounded-lg border cursor-pointer transition-all
-      ${form.paymentMethod === "Bank Alfalah"
-                  ? "border-blue-500 bg-blue-50"
-                  : "border-gray-300"
-                }`}
+              className="flex items-center gap-2 text-gray-700"
               onClick={() =>
                 onChange({
                   target: { name: "paymentMethod", value: "Bank Alfalah" },
@@ -159,10 +156,9 @@ const CheckoutModal = ({
                 value="Bank Alfalah"
                 checked={form.paymentMethod === "Bank Alfalah"}
                 onChange={onChange}
-                className="hidden"
+                className="cursor-pointer"
               />
-              <span>🏦</span>
-              <span className="font-medium">Online Payment (Bank Alfalah)</span>
+              Online Payment
             </label>
           </div>
 
