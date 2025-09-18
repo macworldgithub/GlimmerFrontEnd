@@ -11,13 +11,17 @@ type PageProps = {
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
-  const { city } = params;
-  const location = city.replace(/-/g, " ");
+   const { city, salon } = params;
+
+  const cityName = city.replace(/-/g, " "); 
+  const salonName = salon.replace(/-/g, " "); 
+
   return {
-    title: `Book Beauty Salons & Services Online in ${location} | Glimmer`,
-    description: `Find the best beauty salons & services in ${location}. Book online with Glimmer for trusted salons, instant appointments, and the best salon experiences.`,
+    title: `Book ${salonName} Online - ${cityName} | Glimmer Salons`,
+    description: `Book ${salonName} in ${cityName}. Find expert Salon services near you, and book online with Glimmer. Convenient, reliable, and affordable.`,
   };
 }
+
 
 export default function Page({ params }: PageProps) {
   return <SalonDetailsPage />;

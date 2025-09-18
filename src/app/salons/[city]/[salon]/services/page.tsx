@@ -17,8 +17,8 @@ export async function generateMetadata({
   const salonName = salon.replace(/-/g, " "); 
 
   return {
-    title: `Book ${salonName} Online - ${cityName} | Glimmer Salons`,
-    description: `Book ${salonName} in ${cityName}. Find expert Salon services near you, and book online with Glimmer. Convenient, reliable, and affordable.`,
+    title: `Book the Best Beauty Salon Services at ${salonName}, ${cityName} | Glimmer`,
+    description: `Explore expert beauty salon services at ${salonName}, ${cityName}. Book online via Glimmer for professional care, relaxation, and glowing results.`,
   };
 }
 
