@@ -1,9 +1,10 @@
+// app/sitemap.xml/route.ts
 import { MetadataRoute } from "next";
-import { getAllProductItem, getAllProducts } from "@/api/product";
+import { FRONTEND_URL, BACKEND_URL } from "@/api/config";
 import { fetchAllSalons, fetchSalonServices } from "@/api/salon";
-import { FRONTEND_URL } from "@/api/config";
+import { getAllProductItem, getAllProducts } from "@/api/product";
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+export async function GET(): Promise<Response> {
   const urls: MetadataRoute.Sitemap = [];
 
   urls.push({
@@ -101,69 +102,88 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error("Error adding salons/services to sitemap:", err);
   }
 
-  let categories: any[] = [];
+  // Products & categories
   try {
-    categories = await getAllProductItem();
+    const categories = await getAllProductItem();
+
+    for (const cat of categories) {
+      urls.push({
+        url: `${FRONTEND_URL}/${cat.product_category.slug}`,
+        lastModified: new Date(),
+        changeFrequency: "weekly",
+        priority: 0.8,
+      });
+
+      for (const sub of cat.sub_categories) {
+        urls.push({
+          url: `${FRONTEND_URL}/${cat.product_category.slug}/${sub.slug}`,
+          lastModified: new Date(),
+          changeFrequency: "weekly",
+          priority: 0.7,
+        });
+
+        for (const item of sub.items) {
+          urls.push({
+            url: `${FRONTEND_URL}/${cat.product_category.slug}/${sub.slug}/${item.slug}`,
+            lastModified: new Date(),
+            changeFrequency: "weekly",
+            priority: 0.6,
+          });
+
+          try {
+            const res = await getAllProducts(
+              cat.product_category.slug,
+              sub.slug,
+              item.slug,
+              "",
+              0,
+              0,
+              1,
+              undefined,
+              "desc",
+              1000
+            );
+
+            if (res?.products?.length) {
+              for (const product of res.products) {
+                urls.push({
+                  url: `${FRONTEND_URL}/${cat.product_category.slug}/${sub.slug}/${item.slug}/${product._id}`,
+                  lastModified: new Date(
+                    product.updated_at || product.created_at || new Date()
+                  ),
+                  changeFrequency: "weekly",
+                  priority: 0.5,
+                });
+              }
+            }
+          } catch (err) {
+            console.error("Error fetching products for sitemap:", err);
+          }
+        }
+      }
+    }
   } catch (err) {
     console.error("Error fetching categories:", err);
   }
 
-  for (const cat of categories) {
-    urls.push({
-      url: `${FRONTEND_URL}/${cat.product_category.slug}`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.8,
-    });
+  // Return sitemap as XML
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls
+    .map(
+      (u) => `<url>
+  <loc>${u.url}</loc>
+  <lastmod>${(u.lastModified instanceof Date
+    ? u.lastModified
+    : new Date(u.lastModified ?? new Date())
+  ).toISOString()}</lastmod>
+  <changefreq>${u.changeFrequency}</changefreq>
+  <priority>${u.priority}</priority>
+</url>`
+    )
+    .join("\n")}\n</urlset>`;
 
-    for (const sub of cat.sub_categories) {
-      urls.push({
-        url: `${FRONTEND_URL}/${cat.product_category.slug}/${sub.slug}`,
-        lastModified: new Date(),
-        changeFrequency: "weekly",
-        priority: 0.7,
-      });
-
-      for (const item of sub.items) {
-        urls.push({
-          url: `${FRONTEND_URL}/${cat.product_category.slug}/${sub.slug}/${item.slug}`,
-          lastModified: new Date(),
-          changeFrequency: "weekly",
-          priority: 0.6,
-        });
-
-        try {
-          const res = await getAllProducts(
-            cat.product_category.slug,
-            sub.slug,
-            item.slug,
-            "",
-            0,
-            0,
-            1,
-            undefined,
-            "desc",
-            1000
-          );
-
-          if (res?.products?.length) {
-            for (const product of res.products) {
-              urls.push({
-                url: `${FRONTEND_URL}/${cat.product_category.slug}/${sub.slug}/${item.slug}/${product._id}`,
-                lastModified: new Date(
-                  product.updated_at || product.created_at || new Date()
-                ),
-                changeFrequency: "weekly",
-                priority: 0.5,
-              });
-            }
-          }
-        } catch (err) {
-          console.error("Error fetching products for sitemap:", err);
-        }
-      }
-    }
-  }
-
-  return urls;
+  return new Response(xml, {
+    headers: {
+      "Content-Type": "application/xml",
+    },
+  });
 }
