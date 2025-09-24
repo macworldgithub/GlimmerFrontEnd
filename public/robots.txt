@@ -1,0 +1,12 @@
+# For all robots
+User-agent: *
+
+# Block access to specific groups of pages
+Disallow: /*?*
+Disallow: /*?id=
+Disallow: /*?page_no=
+Disallow: /Payment_Methods*
+Disallow: /Track_My_Order*
+Disallow: /signup*
+Disallow: /cart*
+Disallow: /login*
