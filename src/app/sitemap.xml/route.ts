@@ -1,6 +1,6 @@
 // app/sitemap.xml/route.ts
 import { MetadataRoute } from "next";
-import { FRONTEND_URL, BACKEND_URL } from "@/api/config";
+import { BACKEND_URL } from "@/api/config";
 import { fetchAllSalons, fetchSalonServices } from "@/api/salon";
 import { getAllProductItem, getAllProducts } from "@/api/product";
 
@@ -8,35 +8,35 @@ export async function GET(): Promise<Response> {
   const urls: MetadataRoute.Sitemap = [];
 
   urls.push({
-    url: FRONTEND_URL,
+    url: BACKEND_URL,
     lastModified: new Date(),
     changeFrequency: "daily",
     priority: 1,
   });
 
   urls.push({
-    url: `${FRONTEND_URL}/selfcare-products`,
+    url: `${BACKEND_URL}/selfcare-products`,
     lastModified: new Date(),
     changeFrequency: "weekly",
     priority: 0.9,
   });
 
   urls.push({
-    url: `${FRONTEND_URL}/Blogs`,
+    url: `${BACKEND_URL}/Blogs`,
     lastModified: new Date(),
     changeFrequency: "weekly",
     priority: 0.7,
   });
 
   urls.push({
-    url: `${FRONTEND_URL}/product_highlights`,
+    url: `${BACKEND_URL}/product_highlights`,
     lastModified: new Date(),
     changeFrequency: "weekly",
     priority: 0.7,
   });
 
   urls.push({
-    url: `${FRONTEND_URL}/products`,
+    url: `${BACKEND_URL}/products`,
     lastModified: new Date(),
     changeFrequency: "weekly",
     priority: 0.8,
@@ -51,7 +51,7 @@ export async function GET(): Promise<Response> {
 
       for (const salon of salons) {
         if (salon.city_slug && salon.salon_slug) {
-          const baseSalonUrl = `${FRONTEND_URL}/${salon.city_slug}/${salon.salon_slug}`;
+          const baseSalonUrl = `${BACKEND_URL}/${salon.city_slug}/${salon.salon_slug}`;
 
           urls.push({
             url: baseSalonUrl,
@@ -108,7 +108,7 @@ export async function GET(): Promise<Response> {
 
     for (const cat of categories) {
       urls.push({
-        url: `${FRONTEND_URL}/${cat.product_category.slug}`,
+        url: `${BACKEND_URL}/${cat.product_category.slug}`,
         lastModified: new Date(),
         changeFrequency: "weekly",
         priority: 0.8,
@@ -116,7 +116,7 @@ export async function GET(): Promise<Response> {
 
       for (const sub of cat.sub_categories) {
         urls.push({
-          url: `${FRONTEND_URL}/${cat.product_category.slug}/${sub.slug}`,
+          url: `${BACKEND_URL}/${cat.product_category.slug}/${sub.slug}`,
           lastModified: new Date(),
           changeFrequency: "weekly",
           priority: 0.7,
@@ -124,7 +124,7 @@ export async function GET(): Promise<Response> {
 
         for (const item of sub.items) {
           urls.push({
-            url: `${FRONTEND_URL}/${cat.product_category.slug}/${sub.slug}/${item.slug}`,
+            url: `${BACKEND_URL}/${cat.product_category.slug}/${sub.slug}/${item.slug}`,
             lastModified: new Date(),
             changeFrequency: "weekly",
             priority: 0.6,
@@ -147,7 +147,7 @@ export async function GET(): Promise<Response> {
             if (res?.products?.length) {
               for (const product of res.products) {
                 urls.push({
-                  url: `${FRONTEND_URL}/${cat.product_category.slug}/${sub.slug}/${item.slug}/${product._id}`,
+                  url: `${BACKEND_URL}/${cat.product_category.slug}/${sub.slug}/${item.slug}/${product._id}`,
                   lastModified: new Date(
                     product.updated_at || product.created_at || new Date()
                   ),
