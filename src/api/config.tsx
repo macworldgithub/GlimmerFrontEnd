@@ -9,3 +9,5 @@ const curr_env: "Prod" | "DEV" = "DEV";
 curr_env === "DEV" ? development : production;
 export const BACKEND_URL = "https://www.api.glimmer.com.pk";
 // export const BACKEND_URL = "http://localhost:3000";
+
+export const FRONTEND_URL = curr_env === "DEV" ? "http://localhost:3001" : "https://glimmer.com.pk";
