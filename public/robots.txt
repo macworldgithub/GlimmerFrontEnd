@@ -10,3 +10,5 @@ Disallow: /Track_My_Order*
 Disallow: /signup*
 Disallow: /cart*
 Disallow: /login*
+
+Sitemap: https://glimmer.com.pk/sitemap.xml
