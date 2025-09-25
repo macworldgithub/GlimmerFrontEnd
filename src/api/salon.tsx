@@ -71,23 +71,6 @@ export const getAllActiveServices = createAsyncThunk(
   }
 );
 
-export async function fetchSalonServices(salonId: string, page_no = 1) {
-  try {
-    const params = new URLSearchParams();
-    params.append("page_no", page_no.toString());
-    params.append("salonId", salonId);
-
-    const response = await axios.get(
-      `${BACKEND_URL}/salon-services/getAllActiveServicesForWebiste?${params.toString()}`
-    );
-
-    return response.data?.services || []; // backend should return services array
-  } catch (err) {
-    console.error(`Error fetching services for salon ${salonId}:`, err);
-    return [];
-  }
-}
-
 export const getServiceById = async (serviceId: string) => {
   try {
     const res = await axios.get(
@@ -145,17 +128,6 @@ export const getAllSalons = createAsyncThunk<GetAllSalonsResponse, number>(
   }
 );
 
-export async function fetchAllSalons(page_no: number = 1) {
-  try {
-    const response = await axios.get(
-      `${BACKEND_URL}/salon/get-all-salon?page_no=${page_no}`
-    );
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching salons:", error);
-    return { salons: [], totalPages: 0 };
-  }
-}
 
 export const getSalonById = async (id: string) => {
   try {

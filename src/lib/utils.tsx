@@ -185,3 +185,12 @@ export function extractCityFromAddress(address?: string): string {
   // Fallback: last remaining part
   return parts[parts.length - 1];
 }
+
+export function escapeXml(str: string) {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
+}
