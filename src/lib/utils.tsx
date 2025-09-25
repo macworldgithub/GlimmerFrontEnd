@@ -11,6 +11,7 @@ import { FaRegStar, FaStar } from "react-icons/fa";
 import AddToCartBtn from "@/app/selfcare-products/components/add-to-cart-btn";
 import CardImage from "@/app/selfcare-products/components/card-image";
 import FakeReview from "@/app/components/reviews-fake";
+import { MetadataRoute } from "next";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -193,4 +194,27 @@ export function escapeXml(str: string) {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&apos;");
+}
+
+type ChangeFreq =
+  | "always"
+  | "hourly"
+  | "daily"
+  | "weekly"
+  | "monthly"
+  | "yearly"
+  | "never";
+
+export function makeSitemapEntry(
+  fullUrl: string,
+  lastModified: Date,
+  changeFrequency: ChangeFreq,
+  priority: number
+): MetadataRoute.Sitemap[number] {
+  return {
+    url: fullUrl.split("?")[0], // strip query params for sitemap
+    lastModified,
+    changeFrequency,
+    priority,
+  };
 }

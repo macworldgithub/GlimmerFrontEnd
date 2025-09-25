@@ -20,7 +20,7 @@ interface Salon {
   address: string;
 }
 interface SalonServicesProps {
-  salon?: Salon;
+  salon: Salon & { _id: string };  // make sure _id is included
 }
 
 const SalonServices = ({ salon }: SalonServicesProps) => {
@@ -47,7 +47,7 @@ const SalonServices = ({ salon }: SalonServicesProps) => {
   });
   const [errors, setErrors] = useState<any>({});
 
-  const salonId = searchParams.get("salonId") ?? "";
+  const salonId = salon?._id ?? "";
   const openingHour = searchParams.get("openingHour") ?? "";
   const closingHour = searchParams.get("closingHour") ?? "";
   const page = Number(searchParams.get("page")) || 1;

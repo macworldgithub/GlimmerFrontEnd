@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { MdOutlineIosShare } from "react-icons/md";
-import { getSalonById } from "@/api/salon";
+import { getSalonById, getSalonBySlug } from "@/api/salon";
 import AboutSalon from "../../[id]/components/about-salon";
 import GlimmerBanner from "../../[id]/components/glimmer-banner";
 import RecommendedProducts from "../../[id]/components/recommended-products";
@@ -11,8 +11,8 @@ import SalonServices from "../../[id]/components/salon-services";
 import SalonsNearby from "../../[id]/components/salons-nearby";
 
 const SalonDetailsPage = () => {
-  const searchParams = useSearchParams();
-  const id = searchParams.get("salonId");
+  const params = useParams();
+  const slug = params?.salon as string;
 
   const [salonData, setSalonData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -25,10 +25,10 @@ const SalonDetailsPage = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
 
   useEffect(() => {
-    if (id) {
+    if (slug) {
       const fetchSalonData = async () => {
         try {
-          const data = await getSalonById(id as string);
+          const data = await getSalonBySlug(slug); // ✅ fetch by slug
           setSalonData(data);
         } catch (error) {
           setError("Failed to load salon details");
@@ -38,7 +38,7 @@ const SalonDetailsPage = () => {
       };
       fetchSalonData();
     }
-  }, [id]);
+  }, [slug]);
 
   const formatTime = (timeStr: any) => {
     const [hourStr, minute = "00"] = timeStr.split(":");
@@ -227,7 +227,7 @@ const SalonDetailsPage = () => {
       {/* ✅ Other Sections */}
       <AboutSalon description={salonData?.about} />
       <SalonServices salon={salonData} />
-      <RecommendedProducts />
+      <RecommendedProducts salonId={salonData._id}/>
       <SalonsNearby />
       <GlimmerBanner />
     </>

@@ -6,15 +6,19 @@ import { useSearchParams } from "next/navigation";
 import { getRecommendedProductsOfSalon } from "@/api/salon";
 import Card from "@/common/Card";
 
-const RecommendedProducts = () => {
+interface RecommendedProductsProps {
+  salonId?: string;
+}
+
+const RecommendedProducts = ({ salonId }: RecommendedProductsProps) => {
   const searchParams = useSearchParams();
   const [products, setProducts] = useState<RealCardItem[]>([]);
   const [startIndex, setStartIndex] = useState(0);
   const [isSmallScreen, setIsSmallScreen] = useState(false);
   const cardsToShow = 4;
 
-  const salonId = searchParams.get("salonId") ?? "";
   useEffect(() => {
+    if (!salonId) return;
     const fetchProductsOfSalon = async () => {
       const response = await getRecommendedProductsOfSalon(salonId);
       console.log("Full API Response:", response);

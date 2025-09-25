@@ -36,8 +36,8 @@ export const getAllActiveServices = createAsyncThunk(
       salonId?: string;
       subCategoryName?: string;
       subSubCategoryName?: string;
-      sortBy?: string,
-      order?: 'asc' | 'desc'
+      sortBy?: string;
+      order?: "asc" | "desc";
     },
     { rejectWithValue, getState }
   ) => {
@@ -50,10 +50,12 @@ export const getAllActiveServices = createAsyncThunk(
       if (payload.page_no) params.append("page_no", payload.page_no.toString());
       if (payload.categoryId) params.append("categoryId", payload.categoryId);
       if (payload.salonId) params.append("salonId", payload.salonId);
-      if (payload.subCategoryName) params.append("subCategoryName", payload.subCategoryName);
-      if (payload.subSubCategoryName) params.append("subSubCategoryName", payload.subSubCategoryName);
-      if(payload.sortBy) params.append("sortBy", payload.sortBy);
-      if(payload.order) params.append("order", payload.order);
+      if (payload.subCategoryName)
+        params.append("subCategoryName", payload.subCategoryName);
+      if (payload.subSubCategoryName)
+        params.append("subSubCategoryName", payload.subSubCategoryName);
+      if (payload.sortBy) params.append("sortBy", payload.sortBy);
+      if (payload.order) params.append("order", payload.order);
 
       const response = await axios.get(
         `${BACKEND_URL}/salon-services/getAllActiveServicesForWebiste?${params.toString()}`,
@@ -87,11 +89,15 @@ export const getServiceById = async (serviceId: string) => {
 export const createBooking = async (data: any, token: string) => {
   try {
     data = { ...data };
-      const res = await axios.post(`${BACKEND_URL}/salon-service-bookings/create`, data, {
+    const res = await axios.post(
+      `${BACKEND_URL}/salon-service-bookings/create`,
+      data,
+      {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      });
+      }
+    );
     return res.data;
   } catch (error) {
     console.error("Error creating order:", error);
@@ -120,14 +126,15 @@ export const getAllSalons = createAsyncThunk<GetAllSalonsResponse, number>(
   "salons/getAllSalons",
   async (page_no: number, { rejectWithValue }) => {
     try {
-        const response = await axios.get(`${BACKEND_URL}/salon/get-all-salon?page_no=${page_no}`);
+      const response = await axios.get(
+        `${BACKEND_URL}/salon/get-all-salon?page_no=${page_no}`
+      );
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response?.data || "Failed to fetch salons");
     }
   }
 );
-
 
 export const getSalonById = async (id: string) => {
   try {
@@ -155,18 +162,20 @@ export const getRecommendedProductsOfSalon = async (salonId: string) => {
   }
 };
 
-  export const getAllSalonsHighlights = createAsyncThunk<any, { filter?: string }>(
-    "salons/getAllSalonsHighlights",
-    async ({ filter }, { rejectWithValue }) => {
+export const getAllSalonsHighlights = createAsyncThunk<
+  any,
+  { filter?: string }
+>("salons/getAllSalonsHighlights", async ({ filter }, { rejectWithValue }) => {
   try {
     const query = filter ? `?filter=${filter}` : "";
-        const response = await axios.get(`${BACKEND_URL}/admin/salon-highlights${query}`);
+    const response = await axios.get(
+      `${BACKEND_URL}/admin/salon-highlights${query}`
+    );
     return response.data;
   } catch (error: any) {
     return rejectWithValue(error.response?.data || "Failed to fetch salons");
   }
-    }
-  );
+});
 
 export const getServicesBySearch = createAsyncThunk(
   "getServicesBySearch",
@@ -186,11 +195,12 @@ export const getServicesBySearch = createAsyncThunk(
       if (payload.page_no) params.append("page_no", payload.page_no.toString());
       if (payload.nameTerm) params.append("nameTerm", payload.nameTerm);
       if (payload.gender) params.append("gender", payload.gender);
-        if (payload.serviceTerm) params.append("serviceTerm", payload.serviceTerm);
+      if (payload.serviceTerm)
+        params.append("serviceTerm", payload.serviceTerm);
       if (payload.price) params.append("price", payload.price.toString());
 
       const response = await axios.get(
-          `${BACKEND_URL}/salon-services/search?${params.toString()}`,
+        `${BACKEND_URL}/salon-services/search?${params.toString()}`
       );
 
       return response.data; // Return the response data if successful
@@ -199,3 +209,27 @@ export const getServicesBySearch = createAsyncThunk(
     }
   }
 );
+
+export const getSalonBySlug = async (slug: string) => {
+  try {
+    const res = await axios.get(
+      `${BACKEND_URL}/salon/get_salon_by_slug?slug=${slug}`
+    );
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching salon by slug", error);
+    throw error;
+  }
+};
+
+export const getSalonServiceBySlug = async (slug: string) => {
+  try {
+    const res = await axios.get(
+      `${BACKEND_URL}/salon-services/get_service_by_slug?slug=${slug}`
+    );
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching salon by slug", error);
+    throw error;
+  }
+};

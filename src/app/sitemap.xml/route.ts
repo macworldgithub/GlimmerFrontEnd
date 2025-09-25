@@ -2,7 +2,13 @@
 import { MetadataRoute } from "next";
 import { BACKEND_URL, FRONTEND_URL } from "@/api/config";
 import { getAllProductItem, getAllProducts } from "@/api/product";
-import { escapeXml, extractCityFromAddress, formatSlug, sanitizeSlug } from "@/lib/utils";
+import {
+  escapeXml,
+  extractCityFromAddress,
+  formatSlug,
+  makeSitemapEntry,
+  sanitizeSlug,
+} from "@/lib/utils";
 import axios from "axios";
 
 export const dynamic = "force-dynamic";
@@ -47,107 +53,113 @@ export async function GET(): Promise<Response> {
   });
 
   async function getAllSalonsDirect(page_no: number) {
-  const res = await axios.get(
-    `${BACKEND_URL}/salon/get-all-salon?page_no=${page_no}`
-  );
-  return res.data as { salons: any[]; total: number };
-}
+    const res = await axios.get(
+      `${BACKEND_URL}/salon/get-all-salon?page_no=${page_no}`
+    );
+    return res.data as { salons: any[]; total: number };
+  }
 
-async function getAllActiveServicesDirect(salonId: string, page_no = 1) {
-  const res = await axios.get(
-    `${BACKEND_URL}/salon-services/getAllActiveServicesForWebiste?page_no=${page_no}&salonId=${salonId}`
-  );
-  return res.data; // depends on your API response shape
-}
+  async function getAllActiveServicesDirect(salonId: string, page_no = 1) {
+    const res = await axios.get(
+      `${BACKEND_URL}/salon-services/getAllActiveServicesForWebiste?page_no=${page_no}&salonId=${salonId}`
+    );
+    return res.data; // depends on your API response shape
+  }
 
   try {
-  let page = 1;
-  let hasMore = true;
+    let page = 1;
+    let hasMore = true;
 
-  while (hasMore) {
-    const { salons, total } = await getAllSalonsDirect(page);
+    while (hasMore) {
+      const { salons, total } = await getAllSalonsDirect(page);
 
-    for (const salon of salons) {
-      // Generate city and salon slugs the same way frontend does
-      const rawCity = extractCityFromAddress(salon.address);
-      const citySlug = formatSlug(sanitizeSlug(rawCity));
-      const salonSlug = formatSlug(sanitizeSlug(salon.salon_name));
-      const openingSlug = formatSlug(sanitizeSlug(salon.openingHour));
-      const closingSlug = formatSlug(sanitizeSlug(salon.closingHour));
+      for (const salon of salons) {
+        const rawCity = extractCityFromAddress(salon.address);
+        const citySlug = formatSlug(sanitizeSlug(rawCity));
+        const salonSlug = formatSlug(sanitizeSlug(salon.salon_name));
+        const openingSlug = formatSlug(sanitizeSlug(salon.openingHour));
+        const closingSlug = formatSlug(sanitizeSlug(salon.closingHour));
 
-      // Salon URL (with query params)
-      const baseSalonUrl = `${FRONTEND_URL}/salons/${citySlug}/${salonSlug}?salonId=${salon._id}&openingHour=${openingSlug}&closingHour=${closingSlug}`;
+        const baseSalonUrl = `${FRONTEND_URL}/salons/${citySlug}/${salonSlug}?salonId=${salon._id}&openingHour=${openingSlug}&closingHour=${closingSlug}`;
 
-      urls.push({
-        url: baseSalonUrl,
-        lastModified: new Date(
-          salon.updated_at || salon.created_at || new Date()
-        ),
-        changeFrequency: "weekly",
-        priority: 0.6,
-      });
+        urls.push(
+          makeSitemapEntry(
+            baseSalonUrl,
+            new Date(salon.updated_at || salon.created_at || new Date()),
+            "weekly",
+            0.6
+          )
+        );
 
-      // Services for this salon
-      try {
-  const servicesRes = await getAllActiveServicesDirect(String(salon._id));
-  if (servicesRes?.services?.length) {
-    for (const service of servicesRes.services) {
-      if (service.name) {
-        const serviceSlug = formatSlug(sanitizeSlug(service.name));
+        try {
+          const servicesRes = await getAllActiveServicesDirect(
+            String(salon._id)
+          );
+          if (servicesRes?.services?.length) {
+            for (const service of servicesRes.services) {
+              if (service.name) {
+                const serviceSlug = formatSlug(sanitizeSlug(service.name));
 
-        const serviceUrl = `${FRONTEND_URL}/salons/${citySlug}/${salonSlug}/${serviceSlug}?serviceId=${service._id}&salonId=${salon._id}&openingHour=${openingSlug}&closingHour=${closingSlug}`;
+                const serviceUrl = `${FRONTEND_URL}/salons/${citySlug}/${salonSlug}/${serviceSlug}?serviceId=${service._id}&salonId=${salon._id}&openingHour=${openingSlug}&closingHour=${closingSlug}`;
 
-        urls.push({
-          url: serviceUrl,
-          lastModified: new Date(
-            service.updated_at || service.created_at || new Date()
-          ),
-          changeFrequency: "weekly",
-          priority: 0.5,
-        });
+                urls.push(
+                  makeSitemapEntry(
+                    serviceUrl,
+                    new Date(
+                      service.updated_at || service.created_at || new Date()
+                    ),
+                    "weekly",
+                    0.5
+                  )
+                );
+              }
+            }
+          }
+        } catch (err) {
+          console.error(`Error fetching services for salon ${salon._id}:`, err);
+        }
       }
-    }
-  }
-} catch (err) {
-  console.error(`Error fetching services for salon ${salon._id}:`, err);
-}
 
+      page++;
+      hasMore = page * salons.length < total;
     }
-
-    page++;
-    hasMore = page * salons.length < total;
+  } catch (err) {
+    console.error("Error adding salons/services to sitemap:", err);
   }
-} catch (err) {
-  console.error("Error adding salons/services to sitemap:", err);
-}
 
   // Products & categories
   try {
     const categories = await getAllProductItem();
 
     for (const cat of categories) {
-      urls.push({
-        url: `${FRONTEND_URL}/${cat.product_category.slug}`,
-        lastModified: new Date(),
-        changeFrequency: "weekly",
-        priority: 0.8,
-      });
+      urls.push(
+        makeSitemapEntry(
+          `${FRONTEND_URL}/${cat.product_category.slug}`,
+          new Date(),
+          "weekly",
+          0.8
+        )
+      );
 
       for (const sub of cat.sub_categories) {
-        urls.push({
-          url: `${FRONTEND_URL}/${cat.product_category.slug}/${sub.slug}`,
-          lastModified: new Date(),
-          changeFrequency: "weekly",
-          priority: 0.7,
-        });
+        urls.push(
+          makeSitemapEntry(
+            `${FRONTEND_URL}/${cat.product_category.slug}/${sub.slug}`,
+            new Date(),
+            "weekly",
+            0.7
+          )
+        );
 
         for (const item of sub.items) {
-          urls.push({
-            url: `${FRONTEND_URL}/${cat.product_category.slug}/${sub.slug}/${item.slug}`,
-            lastModified: new Date(),
-            changeFrequency: "weekly",
-            priority: 0.6,
-          });
+          urls.push(
+            makeSitemapEntry(
+              `${FRONTEND_URL}/${cat.product_category.slug}/${sub.slug}/${item.slug}`,
+              new Date(),
+              "weekly",
+              0.6
+            )
+          );
 
           try {
             const res = await getAllProducts(
@@ -176,7 +188,6 @@ async function getAllActiveServicesDirect(salonId: string, page_no = 1) {
                 const itemSlug = product.item
                   ? sanitizeSlug(product.item?.slug, product.item?._id)
                   : undefined;
-
                 const productSlug = product.name
                   ? formatSlug(product.name)
                   : product._id;
@@ -187,14 +198,16 @@ async function getAllActiveServicesDirect(salonId: string, page_no = 1) {
 
                 const fullUrl = `${FRONTEND_URL}${productPath}?id=${product._id}&storeId=${product.store}`;
 
-                urls.push({
-                  url: fullUrl,
-                  lastModified: new Date(
-                    product.updated_at || product.created_at || new Date()
-                  ),
-                  changeFrequency: "weekly",
-                  priority: 0.5,
-                });
+                urls.push(
+                  makeSitemapEntry(
+                    fullUrl,
+                    new Date(
+                      product.updated_at || product.created_at || new Date()
+                    ),
+                    "weekly",
+                    0.5
+                  )
+                );
               }
             }
           } catch (err) {
@@ -207,7 +220,7 @@ async function getAllActiveServicesDirect(salonId: string, page_no = 1) {
     console.error("Error fetching categories:", err);
   }
 
-  // Return sitemap as XML
+  // ---- XML OUTPUT ----
   const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls
     .map(
       (u) => `<url>

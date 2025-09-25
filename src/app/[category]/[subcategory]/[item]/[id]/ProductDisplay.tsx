@@ -5,6 +5,7 @@ import {
   submitRating,
   getRating,
   getUserRating,
+  getProductBySlug,
 } from "@/api/product";
 import Card from "@/common/Card";
 import CategoryNavMenu from "@/common/category-nav-menu";
@@ -34,10 +35,10 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { formatSlug } from "@/lib/utils";
 
 type ProductDisplayProps = {
-  productId: string;
+  productSlug: string; 
 };
 
-const ProductDisplay = ({ productId }: ProductDisplayProps) => {
+const ProductDisplay = ({ productSlug }: ProductDisplayProps) => {
   const Cart = useSelector((state: RootState) => state.cart);
   const router = useRouter();
   const token = useSelector((state: RootState) => state.login.token);
@@ -52,6 +53,7 @@ const ProductDisplay = ({ productId }: ProductDisplayProps) => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [isBulkModalOpen, setIsBulkModalOpen] = useState(false);
   const [fullImage, setFullImage] = useState<string | null>(null);
+
   const handleBuyNow = () => {
     if (!product) return;
 
@@ -76,10 +78,7 @@ const ProductDisplay = ({ productId }: ProductDisplayProps) => {
       rate_of_salon: parseFloat(rate),
     };
 
-    // Agar tumhe cart me product dalna hai:
     dispatch(addItem({ product: productWithSalonInfo, quantity }));
-
-    // Checkout page open karo
     router.push("/checkout");
   };
 
@@ -123,16 +122,16 @@ const ProductDisplay = ({ productId }: ProductDisplayProps) => {
   const pathname = usePathname();
 
   const pathSegments = pathname.split("/").filter(Boolean);
-  const [category, subCategory, item, productSlug] = pathSegments; // e.g., /makeup/face/[foundation]/689521f3543643812d72b453
+  const [category, subCategory, item, productSlugFromUrl] = pathSegments;
 
   const productsUrl = `/products${category ? `?category=${category}` : ""}${
     subCategory ? `&sub_category=${subCategory}` : ""
   }${item ? `&item=${item}` : ""}`;
 
   const fetchData = async () => {
-    if (!productId) return;
+    if (!productSlug) return; 
     try {
-      const res = await getProductById(productId);
+      const res = await getProductBySlug(productSlug); 
       console.log(res);
       setProduct(res);
       const correctSlug = formatSlug(res.name);
@@ -141,24 +140,23 @@ const ProductDisplay = ({ productId }: ProductDisplayProps) => {
         res.sub_category.slug !== subCategory ||
         (res.item && res.item.slug !== item) ||
         (!res.item && item) ||
-        productSlug !== correctSlug
+        productSlugFromUrl !== correctSlug
       ) {
         const correctPath = `/${correctSlug}`;
-
         const query = searchParams.toString()
           ? `?${searchParams.toString()}`
           : "";
         router.replace(`${correctPath}${query}`);
       }
     } catch (error) {
-      console.error("Error Fetching Product by Id", error);
+      console.error("Error Fetching Product by Slug", error);
     }
   };
 
   const fetchRatings = async () => {
-    if (!productId) return;
+    if (!productSlug) return; // ✅
     try {
-      const res = await getRating(productId);
+      const res = await getRating(productSlug);
       setRatings(res);
     } catch (error) {
       console.error("Error Fetching Ratings", error);
@@ -166,9 +164,9 @@ const ProductDisplay = ({ productId }: ProductDisplayProps) => {
   };
 
   const fetchUserRating = async () => {
-    if (!token || !productId) return;
+    if (!token || !productSlug) return; // ✅
     try {
-      const rating = await getUserRating(productId, token);
+      const rating = await getUserRating(productSlug, token);
       if (
         rating !== null &&
         typeof rating === "number" &&
@@ -193,8 +191,8 @@ const ProductDisplay = ({ productId }: ProductDisplayProps) => {
       return;
     }
 
-    if (!productId) {
-      alert("No product ID found");
+    if (!productSlug) {
+      alert("No product slug found");
       return;
     }
 
@@ -206,7 +204,7 @@ const ProductDisplay = ({ productId }: ProductDisplayProps) => {
         setUserRating(null);
         return;
       }
-      const response = await submitRating(productId, rating, token);
+      const response = await submitRating(productSlug, rating, token); // ✅
       alert("Rating submitted successfully");
       setHasRated(true);
       await fetchRatings();
@@ -221,16 +219,10 @@ const ProductDisplay = ({ productId }: ProductDisplayProps) => {
   };
 
   useEffect(() => {
-    let result = sampleProducts.find(
-      (item) => item?.id.toString() === path?.id
-    );
-    //@ts-ignore
-    fetchData(path?.id);
-    //@ts-ignore
-    fetchRatings(path?.id);
-    //@ts-ignore
-    fetchUserRating(path?.id);
-  }, [path?.id]);
+    fetchData();
+    fetchRatings();
+    fetchUserRating();
+  }, [productSlug]); // ✅ depend on slug
 
   useEffect(() => {
     //@ts-ignore
@@ -332,7 +324,6 @@ const ProductDisplay = ({ productId }: ProductDisplayProps) => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Initialize images array with all available images
   let images = [product?.image1, product?.image2, product?.image3].filter(
     Boolean
   );
