@@ -11,7 +11,7 @@ const GymBanner = () => {
 
   return (
     <div className="lg:px-[6rem] max-lg:px-[1rem] mb-6 md:mb-14 w-[99vw]">
-      <AutoSlider srcs={[GymBanner1.src]} delay={null} onBannerClick={handleOpen} />
+      <AutoSlider srcs={[GymBanner1]} delay={null} onBannerClick={handleOpen} />
       <RegisterGymModal visible={visible} onCancel={handleClose} onSubmit={() => {}} />
     </div>
   );

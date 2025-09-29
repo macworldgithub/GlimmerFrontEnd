@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/store/reduxStore";
 import { removeItem, updateQty } from "@/reduxSlices/cartSlice";
 import CategoryNavMenu from "./category-nav-menu";
+import Image from "next/image";
 
 const Cart = () => {
   const dispatch = useDispatch();
@@ -98,10 +99,16 @@ const Cart = () => {
                   return (
                     <tr key={item.product.id}>
                       <td className="flex items-center gap-4 flex-none max-lg:min-w-80">
-                        <img
-                          src={item.product.image1}
-                          alt={item.product.name}
+                        <Image
+                          src={
+                            item.product.image1 ||
+                            "/assets/images/default_image.jpg"
+                          }
+                          alt={item.product.name || "Product thumbnail"}
+                          width={64} 
+                          height={64} 
                           className="h-16 w-16 rounded-md object-cover"
+                          loading="lazy"
                         />
                         <div>
                           <p className="font-semibold flex-none">

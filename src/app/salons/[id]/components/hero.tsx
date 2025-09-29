@@ -9,6 +9,7 @@ import { MdOutlineIosShare } from "react-icons/md";
 import { BsFillCircleFill } from "react-icons/bs";
 import { FaStar } from "react-icons/fa";
 import Link from "next/link";
+import Image from "next/image";
 type Props = {
   srcs?: string[];
   SalonName?: string;
@@ -78,10 +79,14 @@ const SalonProfileHero = ({
         <Swiper spaceBetween={30} loop={true} cssMode={true}>
           {_srcs.map((src, index) => (
             <SwiperSlide key={index}>
-              <img
-                src={src}
-                className="w-full h-auto object-cover"
-                alt={`img${index + 1}`}
+              <Image
+                src={src || "/assets/images/default_image.jpg"}
+                alt={`Gallery image ${index + 1}`}
+                width={600}
+                height={400}
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="w-full h-auto object-cover rounded-md"
+                loading="lazy"
               />
             </SwiperSlide>
           ))}
@@ -92,11 +97,15 @@ const SalonProfileHero = ({
         {/* Left Column (2 Images) */}
         <div className="col-span-4 grid grid-rows-2 gap-2">
           {_srcs.slice(0, 2).map((src, index) => (
-            <img
+            <Image
               key={index}
-              src={src}
+              src={src || "/assets/images/default_image.jpg"}
+              alt={`Left image ${index + 1}`}
+              width={400}
+              height={175}
+              sizes="(max-width: 768px) 100vw, 400px"
               className="w-full h-[175px] md:h-full object-cover rounded-none"
-              alt={`left img ${index + 1}`}
+              loading="lazy"
             />
           ))}
         </div>
@@ -104,11 +113,15 @@ const SalonProfileHero = ({
         {/* Right Column (2 Images) */}
         <div className="col-span-4 grid grid-rows-2 gap-2">
           {_srcs.slice(2, 4).map((src, index) => (
-            <img
+            <Image
               key={index + 2}
-              src={src}
+              src={src || "/assets/images/default_image.jpg"}
+              alt={`Right image ${index + 3}`}
+              width={400} 
+              height={175} 
+              sizes="(max-width: 768px) 100vw, 400px"
               className="w-full h-[175px] md:h-full object-cover rounded-none"
-              alt={`right img ${index + 3}`}
+              loading="lazy" 
             />
           ))}
         </div>

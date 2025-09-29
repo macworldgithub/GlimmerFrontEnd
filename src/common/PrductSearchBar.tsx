@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { cn, formatSlug, sanitizeSlug } from "@/lib/utils";
 import { Search, X } from "lucide-react";
 import { getAllProducts } from "@/api/product";
+import Image from "next/image";
 
 interface Product {
   _id: string;
@@ -52,16 +53,16 @@ export default function ProductSearchBar({ className }: ProductSearchBarProps) {
   }, [searchTerm]);
 
   const handleSearch = () => {
-  const params = new URLSearchParams();
-  params.set("page", "1");
-  if (searchTerm.trim()) {
-    params.set("name", searchTerm.trim());
-  }
+    const params = new URLSearchParams();
+    params.set("page", "1");
+    if (searchTerm.trim()) {
+      params.set("name", searchTerm.trim());
+    }
 
-  router.push(`/products?${params.toString()}`);
+    router.push(`/products?${params.toString()}`);
 
-  setShowDropdown(false);
-};
+    setShowDropdown(false);
+  };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") handleSearch();
@@ -126,22 +127,22 @@ export default function ProductSearchBar({ className }: ProductSearchBarProps) {
 
                 const path = product.item
                   ? `/${sanitizeSlug(
-                    product.category?.slug,
-                    product.category?._id
-                  )}/${sanitizeSlug(
-                    product.sub_category?.slug,
-                    product.sub_category?._id
-                  )}/${sanitizeSlug(
-                    product.item?.slug,
-                    product.item?._id
-                  )}/${productSlug}`
+                      product.category?.slug,
+                      product.category?._id
+                    )}/${sanitizeSlug(
+                      product.sub_category?.slug,
+                      product.sub_category?._id
+                    )}/${sanitizeSlug(
+                      product.item?.slug,
+                      product.item?._id
+                    )}/${productSlug}`
                   : `/${sanitizeSlug(
-                    product.category?.slug,
-                    product.category?._id
-                  )}/${sanitizeSlug(
-                    product.sub_category?.slug,
-                    product.sub_category?._id
-                  )}/${productSlug}`;
+                      product.category?.slug,
+                      product.category?._id
+                    )}/${sanitizeSlug(
+                      product.sub_category?.slug,
+                      product.sub_category?._id
+                    )}/${productSlug}`;
 
                 // ✅ Build query params like in Card
                 const queryParams = new URLSearchParams();
@@ -165,10 +166,13 @@ export default function ProductSearchBar({ className }: ProductSearchBarProps) {
               }}
             >
               {product.image1 && (
-                <img
-                  src={product.image1}
-                  alt={product.name}
+                <Image
+                  src={product.image1 || "/assets/images/default_image.jpg"}
+                  alt={product.name || "Product thumbnail"}
+                  width={32} 
+                  height={32}
                   className="w-8 h-8 object-cover rounded"
+                  loading="lazy"
                 />
               )}
               <span className="text-sm">{product.name}</span>

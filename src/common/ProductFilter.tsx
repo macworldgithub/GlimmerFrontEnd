@@ -4,6 +4,7 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import RegisterGymModal from "@/common/RegisterGymModal";
 import { useState } from "react";
+import Image from "next/image";
 
 const ProductFilter = () => {
   const router = useRouter();
@@ -54,10 +55,14 @@ const ProductFilter = () => {
                 </p>
               </div>
               <div className="mt-4 w-full h-[200px] sm:h-[358px] overflow-hidden rounded-[10px]">
-                <img
-                  src={item.image}
-                  alt={item.title}
+                <Image
+                  src={item.image || "/assets/images/default_image.jpg"}
+                  alt={item.title || "Product image"}
+                  width={400}
+                  height={400}
+                  sizes="(max-width: 768px) 100vw, 400px"
                   className="w-full h-full object-cover"
+                  loading="lazy"
                 />
               </div>
             </div>
@@ -77,10 +82,14 @@ const ProductFilter = () => {
               </p>
             </div>
             <div className="mt-4 w-full h-[200px] sm:h-[342px] overflow-hidden rounded-[10px]">
-              <img
+              <Image
                 src="/assets/saloonPicture/gym.png"
                 alt="Gym"
+                width={600} 
+                height={400}
+                sizes="(max-width: 768px) 100vw, 600px"
                 className="w-full h-full object-cover"
+                loading="lazy" 
               />
             </div>
           </div>

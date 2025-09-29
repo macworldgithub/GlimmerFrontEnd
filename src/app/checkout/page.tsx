@@ -1340,11 +1340,15 @@ export default function Checkout() {
                 {cart.ProductList.map((item) => (
                   <div key={item.product.id} className="flex justify-between">
                     <div className="flex gap-2">
-                      <img
-                        src={item.product.image1}
-                        alt="self_care"
-                        width={50}
-                        height={22}
+                      <Image
+                        src={
+                          item.product.image1 ||
+                          "/assets/images/default_image.jpg"
+                        }
+                        alt={item.product.name || "Product image"}
+                        width={64} // h-16 / w-16 → 64px
+                        height={64}
+                        sizes="64px" // thumbnails should stay small
                         className="h-16 w-16 rounded-md object-cover"
                       />
                       <span>{item.product.name}</span>

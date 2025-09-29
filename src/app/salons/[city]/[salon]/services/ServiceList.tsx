@@ -17,6 +17,7 @@ import Salonfilter from "@/app/salons/components/salonFIlter";
 import CartModal from "@/app/salons/[id]/components/cartModal";
 import CheckoutModal from "@/app/salons/[id]/components/checkoutModal";
 import toast from "react-hot-toast";
+import Image from "next/image";
 
 const Loading = () => (
   <div className="justify-center flex min-h-[70vh] w-full items-center">
@@ -327,7 +328,9 @@ const ServiceList = () => {
       form.submit();
     } catch (err) {
       console.error("Alfalah Payment Error:", err);
-      toast.error("❌ Failed to initiate Bank Alfalah payment. Please try again.");
+      toast.error(
+        "❌ Failed to initiate Bank Alfalah payment. Please try again."
+      );
     }
   };
   return (
@@ -376,10 +379,13 @@ const ServiceList = () => {
           </div>
         )}
         <div className="w-full h-[50vh] rounded-lg overflow-hidden relative group">
-          <img
+          <Image
             src="/assets/images/banner.png"
             alt="Banner"
-            className="w-full h-full transition-transform duration-500"
+            fill
+            priority 
+            sizes="100vw" 
+            className="w-full h-full object-cover transition-transform duration-500"
           />
           <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-all duration-500 px-4 lg:p-[8rem] flex flex-col items-center justify-center space-y-4">
             <h1 className="text-white text-2xl sm:text-3xl md:text-4xl font-bold text-center">
@@ -403,8 +409,8 @@ const ServiceList = () => {
                     href={`/salons/${salonData.address?.city
                       ?.toLowerCase()
                       ?.replace(/\s+/g, "-")}/${salonData.salon_name
-                        ?.toLowerCase()
-                        ?.replace(/\s+/g, "-")}`}
+                      ?.toLowerCase()
+                      ?.replace(/\s+/g, "-")}`}
                     className="text-purple-300 hover:text-white font-medium text-base lg:text-xl"
                   >
                     {salonData.salon_name}
@@ -440,10 +446,11 @@ const ServiceList = () => {
                 setActiveSort("Date");
                 setSortOrder(sortOrder === "desc" ? "asc" : "desc");
               }}
-              className={`border px-4 py-1.5 text-lg md:px-6 md:py-2 md:text-lg rounded-md font-medium transition duration-300 ease-in-out ${activeSort === "Date"
-                ? "border-gray-400 text-gray-700 bg-white"
-                : "border-gray-400 text-gray-700 hover:bg-[#FDF3D2]"
-                }`}
+              className={`border px-4 py-1.5 text-lg md:px-6 md:py-2 md:text-lg rounded-md font-medium transition duration-300 ease-in-out ${
+                activeSort === "Date"
+                  ? "border-gray-400 text-gray-700 bg-white"
+                  : "border-gray-400 text-gray-700 hover:bg-[#FDF3D2]"
+              }`}
             >
               Date{" "}
               {activeSort === "Date" ? (sortOrder === "desc" ? "↓" : "↑") : ""}
@@ -451,10 +458,11 @@ const ServiceList = () => {
             <div className="relative">
               <button
                 onClick={() => setShowPriceDropdown(!showPriceDropdown)}
-                className={`flex items-center gap-2 border px-4 py-1.5 text-lg md:px-6 md:py-2 md:text-lg rounded-md font-medium transition duration-300 ease-in-out ${activeSort === "Price"
-                  ? "border-purple-800 text-purple-800 bg-purple-100"
-                  : "border-gray-400 text-gray-700 hover:bg-[#FDF3D2]"
-                  }`}
+                className={`flex items-center gap-2 border px-4 py-1.5 text-lg md:px-6 md:py-2 md:text-lg rounded-md font-medium transition duration-300 ease-in-out ${
+                  activeSort === "Price"
+                    ? "border-purple-800 text-purple-800 bg-purple-100"
+                    : "border-gray-400 text-gray-700 hover:bg-[#FDF3D2]"
+                }`}
               >
                 Price{" "}
                 {activeSort === "Price"
@@ -535,10 +543,11 @@ const ServiceList = () => {
                 <button
                   key={i + 1}
                   onClick={() => handlePageChange(i + 1)}
-                  className={`px-4 py-2 rounded-md ${page === i + 1
-                    ? "bg-purple-600 text-white"
-                    : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                    }`}
+                  className={`px-4 py-2 rounded-md ${
+                    page === i + 1
+                      ? "bg-purple-600 text-white"
+                      : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                  }`}
                 >
                   {i + 1}
                 </button>

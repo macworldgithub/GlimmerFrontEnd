@@ -12,9 +12,10 @@ import { addItem } from "@/reduxSlices/cartSlice";
 import { Puff } from "react-loader-spinner";
 import { formatSlug, sanitizeSlug } from "@/lib/utils";
 import { RealCardItem } from "@/data";
+import Image from "next/image";
 
 const ProductCard: React.FC<{ products: RealCardItem }> = ({ products }) => {
-  console.log(products)
+  console.log(products);
   const router = useRouter();
   const dispatch = useDispatch();
   const [showMessage, setShowMessage] = useState(false);
@@ -28,8 +29,14 @@ const ProductCard: React.FC<{ products: RealCardItem }> = ({ products }) => {
   //@ts-ignore
   if (products.store) queryParams.append("storeId", products.store);
 
-  const categorySlug = sanitizeSlug(products.category?.slug, products.category?._id);
-  const subCategorySlug = sanitizeSlug(products.sub_category?.slug, products.sub_category?._id);
+  const categorySlug = sanitizeSlug(
+    products.category?.slug,
+    products.category?._id
+  );
+  const subCategorySlug = sanitizeSlug(
+    products.sub_category?.slug,
+    products.sub_category?._id
+  );
   const itemSlug = products.item
     ? sanitizeSlug(products.item?.slug, products.item?._id)
     : undefined;
@@ -41,7 +48,7 @@ const ProductCard: React.FC<{ products: RealCardItem }> = ({ products }) => {
     : `/${categorySlug}/${subCategorySlug}/${productSlug}`;
 
   const finalPath = `${path}?${queryParams.toString()}`;
-  console.log(finalPath)
+  console.log(finalPath);
   const basePrice = Number(products.base_price) || 0;
   const discountedPrice = Number(products.discounted_price) || 0;
 
@@ -71,11 +78,16 @@ const ProductCard: React.FC<{ products: RealCardItem }> = ({ products }) => {
       >
         <div
           className={`w-7 h-7 rounded-full flex items-center justify-center 
-        ${products.quantity === 0 ? "bg-gray-300 cursor-not-allowed" : "bg-purple-100"}`}
+        ${
+          products.quantity === 0
+            ? "bg-gray-300 cursor-not-allowed"
+            : "bg-purple-100"
+        }`}
         >
           <RiShoppingBag4Line
-            className={`text-[13px] ${products.quantity === 0 ? "text-gray-400" : "text-[#583FA8]"
-              }`}
+            className={`text-[13px] ${
+              products.quantity === 0 ? "text-gray-400" : "text-[#583FA8]"
+            }`}
           />
         </div>
       </div>
@@ -89,10 +101,14 @@ const ProductCard: React.FC<{ products: RealCardItem }> = ({ products }) => {
 
       {/* Product Image */}
       <div className="h-1/2 w-full flex justify-center items-center">
-        <img
+        <Image
           src={products.image1 || "/assets/images/default_image.jpg"}
-          alt={products.name}
+          alt={products.name || "Product image"}
+          width={200}
+          height={200}
+          sizes="(max-width: 768px) 50vw, 200px"
           className="h-full object-contain"
+          loading="lazy"
         />
       </div>
 
@@ -104,7 +120,7 @@ const ProductCard: React.FC<{ products: RealCardItem }> = ({ products }) => {
               {`${Math.round(
                 ((products.base_price - products.discounted_price) /
                   products.base_price) *
-                100
+                  100
               )}% OFF`}
             </span>
           </div>
@@ -125,9 +141,7 @@ const ProductCard: React.FC<{ products: RealCardItem }> = ({ products }) => {
             </span>
             {discountedPrice > 0 && discountedPrice < basePrice && (
               <span className="text-gray-400 text-xs line-through">
-                {Number.isInteger(basePrice)
-                  ? basePrice
-                  : basePrice.toFixed(2)}{" "}
+                {Number.isInteger(basePrice) ? basePrice : basePrice.toFixed(2)}{" "}
                 PKR
               </span>
             )}

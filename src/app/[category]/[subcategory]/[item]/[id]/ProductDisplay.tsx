@@ -35,7 +35,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { formatSlug } from "@/lib/utils";
 
 type ProductDisplayProps = {
-  productSlug: string; 
+  productSlug: string;
 };
 
 const ProductDisplay = ({ productSlug }: ProductDisplayProps) => {
@@ -129,9 +129,9 @@ const ProductDisplay = ({ productSlug }: ProductDisplayProps) => {
   }${item ? `&item=${item}` : ""}`;
 
   const fetchData = async () => {
-    if (!productSlug) return; 
+    if (!productSlug) return;
     try {
-      const res = await getProductBySlug(productSlug); 
+      const res = await getProductBySlug(productSlug);
       console.log(res);
       setProduct(res);
       const correctSlug = formatSlug(res.name);
@@ -356,9 +356,12 @@ const ProductDisplay = ({ productSlug }: ProductDisplayProps) => {
           onClick={() => setFullImage(null)}
         >
           <div className="relative" onClick={(e) => e.stopPropagation()}>
-            <img
+            <Image
               src={fullImage}
               alt="Full View"
+              width={1200}
+              height={800}
+              sizes="(max-width: 768px) 100vw, 80vw"
               className="max-w-full max-h-[90vh] object-contain"
             />
             <button
@@ -450,15 +453,21 @@ const ProductDisplay = ({ productSlug }: ProductDisplayProps) => {
             >
               {images.map((image, i) => (
                 <SwiperSlide key={i}>
-                  <img
-                    src={image}
-                    alt={`${product?.name} ${i + 1}`}
-                    className="w-full h-full object-contain rounded-md cursor-pointer"
-                    onClick={() => setFullImage(image)}
-                    onError={(e) =>
-                      (e.currentTarget.src = "/assets/images/default_image.jpg")
-                    }
-                  />
+                  <div className="w-full h-full">
+                    <Image
+                      src={image}
+                      alt={`${product?.name} ${i + 1}`}
+                      width={600}
+                      height={600}
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                      className="w-full h-full object-contain rounded-md cursor-pointer"
+                      onClick={() => setFullImage(image)}
+                      onError={(e) => {
+                        e.currentTarget.src =
+                          "/assets/images/default_image.jpg";
+                      }}
+                    />
+                  </div>
                 </SwiperSlide>
               ))}
             </Swiper>
@@ -471,14 +480,13 @@ const ProductDisplay = ({ productSlug }: ProductDisplayProps) => {
               {isMobile
                 ? images.length > 0 && (
                     <div className="mx-4 w-[120px] h-[120px] sm:w-[140px] sm:h-[140px] flex items-center justify-center overflow-hidden rounded-md shadow bg-gray-100 border cursor-pointer border-purple-900">
-                      <img
-                        src={images[0]}
+                      <Image
+                        src={images[0] || "/assets/images/default_image.jpg"}
                         alt={`Thumbnail 1`}
+                        width={140}
+                        height={140}
+                        sizes="(max-width: 640px) 120px, 140px"
                         className="w-full h-full object-contain"
-                        onError={(e) =>
-                          (e.currentTarget.src =
-                            "/assets/images/default_image.jpg")
-                        }
                       />
                     </div>
                   )
@@ -492,18 +500,18 @@ const ProductDisplay = ({ productSlug }: ProductDisplayProps) => {
                         if (swiperRef.current) swiperRef.current.slideTo(i);
                       }}
                     >
-                      <img
-                        src={image}
+                      <Image
+                        src={image || "/assets/images/default_image.jpg"}
                         alt={`Thumbnail ${i + 1}`}
+                        width={90}
+                        height={90}
+                        sizes="90px"
                         className="w-full h-full object-contain"
-                        onError={(e) =>
-                          (e.currentTarget.src =
-                            "/assets/images/default_image.jpg")
-                        }
                       />
                     </div>
                   ))}
             </div>
+
             <button className="custom-next p-2 text-gray-500">
               <MdKeyboardArrowRight size={50} />
             </button>
@@ -618,7 +626,13 @@ const ProductDisplay = ({ productSlug }: ProductDisplayProps) => {
                 </span>
 
                 <div className="w-12 h-12 text-sm absolute right-0 flex justify-center items-center">
-                  <img src="/assets/addtoBag/discount.png" alt="Discount" />
+                  <Image
+                    src="/assets/addtoBag/discount.png"
+                    alt="Discount"
+                    width={48} 
+                    height={48} 
+                    priority 
+                  />
                   <span className="absolute text-center text-sm text-white font-bold">
                     {`${Math.round(
                       ((product.base_price - product.discounted_price) /

@@ -2,9 +2,10 @@
 import HeroImg1 from "@/assets/images/home-hero-img-1.webp";
 import HeroImg2 from "@/assets/images/home-hero-img-2.webp";
 import AutoSlider from "@/common/auto-slider";
+import type { StaticImageData } from "next/image";
 
 type SlideContent = {
-  src: string;
+  src: StaticImageData; // store static import object
   heading: string;
   buttonText: string;
 };
@@ -12,12 +13,12 @@ type SlideContent = {
 const Hero = () => {
   const slides: SlideContent[] = [
     {
-      src: HeroImg1.src,
+      src: HeroImg1,
       heading: "",
       buttonText: "",
     },
     {
-      src: HeroImg2.src,
+      src: HeroImg2,
       heading: "",
       buttonText: "",
     },

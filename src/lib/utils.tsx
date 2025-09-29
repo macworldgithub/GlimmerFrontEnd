@@ -128,13 +128,15 @@ export const sanitizeSlug = (slug?: string, fallback?: string) => {
   return (slug || "").replace(/\//g, "");
 };
 
-export const formatSlug = (text: string) =>
-  text
+export const formatSlug = (text: string) => {
+  return text
     .toLowerCase()
     .trim()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/-+/g, "-")
-    .replace(/^-+|-+$/g, "");
+    .replace(/&/g, "and") // Explicitly replace & with "and"
+    .replace(/[^a-z0-9]+/g, "-") // Replace other non-alphanumeric chars with hyphen
+    .replace(/-+/g, "-") // Replace multiple hyphens with single hyphen
+    .replace(/^-+|-+$/g, ""); // Remove leading/trailing hyphens
+};
 
 const COUNTRY_BLACKLIST = new Set([
   "pakistan",

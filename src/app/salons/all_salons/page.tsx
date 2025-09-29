@@ -114,9 +114,12 @@ const SalonsList = () => {
       {/* Banner Image */}
       <div className="hidden md:block pt-12 px-4 sm:px-6 md:px-10 xl:px-32">
         <div className="w-full h-[40vh] rounded-lg overflow-hidden relative group">
-          <img
+          <Image
             src="/assets/images/banner.png"
             alt="Banner"
+            fill
+            priority 
+            sizes="100vw"
             className="w-full h-full object-cover transition-transform duration-500"
           />
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/30 group-hover:bg-black/20 transition-all duration-500 px-4 md:px-12 lg:px-32">

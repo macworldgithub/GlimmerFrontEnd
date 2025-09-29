@@ -9,6 +9,7 @@ import GlimmerBanner from "../../[id]/components/glimmer-banner";
 import RecommendedProducts from "../../[id]/components/recommended-products";
 import SalonServices from "../../[id]/components/salon-services";
 import SalonsNearby from "../../[id]/components/salons-nearby";
+import Image from "next/image";
 
 const SalonDetailsPage = () => {
   const params = useParams();
@@ -124,9 +125,15 @@ const SalonDetailsPage = () => {
               className="w-full max-h-[55vh] sm:max-h-[500px] overflow-hidden rounded-lg bg-gray-100 flex items-center justify-center cursor-pointer"
               onClick={() => setSelectedImageIndex(currentImageIndex)}
             >
-              <img
-                src={images[currentImageIndex]}
+              <Image
+                src={
+                  images[currentImageIndex] ||
+                  "/assets/images/default_image.jpg"
+                }
                 alt="Selected Salon Image"
+                fill
+                priority
+                sizes="100vw"
                 className="w-full h-full object-cover rounded-lg"
               />
             </div>
@@ -159,10 +166,14 @@ const SalonDetailsPage = () => {
                       setCurrentImageIndex(index);
                     }}
                   >
-                    <img
-                      src={src}
-                      alt={`salon image ${index + 1}`}
-                      className="w-full h-full object-cover"
+                    <Image
+                      src={src || "/assets/images/default_image.jpg"}
+                      alt={`Salon image ${index + 1}`}
+                      width={300}
+                      height={200}
+                      sizes="(max-width: 768px) 50vw, 25vw"
+                      className="w-full h-full object-cover rounded-md"
+                      loading="lazy"
                     />
                   </div>
                 ))}
@@ -193,11 +204,16 @@ const SalonDetailsPage = () => {
               ‹
             </button>
 
-            <img
-              src={images[selectedImageIndex]}
-              alt="Fullscreen"
+            <Image
+              src={
+                images[selectedImageIndex] || "/assets/images/default_image.jpg"
+              }
+              alt="Fullscreen salon image"
+              fill
+              sizes="100vw"
               className="w-full h-full object-contain rounded-lg"
               onClick={(e) => e.stopPropagation()}
+              loading="lazy"
             />
 
             <button
@@ -227,7 +243,7 @@ const SalonDetailsPage = () => {
       {/* ✅ Other Sections */}
       <AboutSalon description={salonData?.about} />
       <SalonServices salon={salonData} />
-      <RecommendedProducts salonId={salonData._id}/>
+      <RecommendedProducts salonId={salonData._id} />
       <SalonsNearby />
       <GlimmerBanner />
     </>

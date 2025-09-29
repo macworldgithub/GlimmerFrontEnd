@@ -13,6 +13,7 @@ import GlimmerForBusiness from "../components/glimmer-for-business";
 import Services from "../components/services";
 import Faq from "@/app/selfcare-products/components/Faq";
 import { Button, Form, Input, Modal } from "antd";
+import Image from "next/image";
 
 const Page = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -90,10 +91,13 @@ const Page = () => {
           )}
         </div>
         <div>
-          <img
-            className="w-[99vw] pt-[6rem]"
+          <Image
             src="/assets/images/banner.png"
-            alt=""
+            alt="Banner"
+            fill
+            priority 
+            sizes="100vw" 
+            className="w-[99vw] pt-[6rem] object-cover"
           />
         </div>
         <div className="w-[99vw] flex flex-col items-center justify-center pt-[6rem] text-center px-4 sm:px-12 md:px-[10rem]">

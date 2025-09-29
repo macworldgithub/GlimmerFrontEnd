@@ -11,6 +11,7 @@ import CartNavbar from "./cart-navbar";
 import { useEffect, useState } from "react";
 import { getAllProductItem, getAllProducts } from "@/api/product";
 import { Calendar } from "lucide-react";
+import Image from "next/image";
 
 interface CategorySelection {
   category_id: string;
@@ -140,7 +141,14 @@ const NavbarClient = ({
             href="/"
             className="btn btn-ghost text-xl flex justify-center items-center h-16 w-full md:w-auto"
           >
-            <img src={Logo.src} alt="logo" className="h-12 md:h-16 mx-auto" />
+            <Image
+              src={Logo}
+              alt="Glimmer company logo"
+              width={128} 
+              height={48} 
+              className="h-12 md:h-16 mx-auto"
+              priority 
+            />
           </Link>
 
           {!isSalonPage && (

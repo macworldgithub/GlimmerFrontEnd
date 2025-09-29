@@ -7,6 +7,7 @@ import { RiShoppingBag4Line } from "react-icons/ri";
 import { Rating } from "react-simple-star-rating";
 import { useRouter } from "next/navigation";
 import { extractCityFromAddress, formatSlug, sanitizeSlug } from "@/lib/utils";
+import Image from "next/image";
 
 interface ServiceCardProps {
   item: any;
@@ -53,14 +54,18 @@ const ServiceCard: FC<ServiceCardProps> = ({
     >
       {/* Top half - Image */}
       <div className="relative w-full h-1/2">
-        <img
+        <Image
           src={
             item.image1?.startsWith("http")
               ? item.image1
               : "/assets/images/default_image.jpg"
           }
           alt={item?.name ?? "Service Image"}
+          width={300}
+          height={200}
+          sizes="(max-width: 768px) 50vw, 300px"
           className="w-full h-full object-cover rounded-t-2xl"
+          loading="lazy"
         />
 
         <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 flex gap-2 w-full justify-center px-2 max-md:justify-between">
@@ -81,11 +86,15 @@ const ServiceCard: FC<ServiceCardProps> = ({
 
         {item.hasDiscount && item.discountPercentage > 0 && (
           <div className="absolute -top-0 -right-3 w-10 h-10 z-10">
-            <img
+            <Image
               src="/assets/addtoBag/discount.png"
               alt="Discount"
+              width={50}
+              height={50}
               className="w-full h-full"
+              loading="lazy"
             />
+
             <span className="absolute inset-0 flex flex-col items-center justify-center text-white text-xs leading-tight font-bold">
               <span>{`${item.discountPercentage}%`}</span>
               <span className="text-[8px] font-normal">OFF</span>

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import React from "react";
 
 const SaloonPictures = () => {
@@ -14,7 +15,7 @@ const SaloonPictures = () => {
       image1: "/assets/saloonPicture/spa.png",
       discounted_price: 39.99,
     },
-  
+
     {
       id: 4,
       name: "Daily Moisturizer",
@@ -31,13 +32,16 @@ const SaloonPictures = () => {
             key={item.id}
             className="w-[44%] max-md:w-[100%] h-auto flex justify-center"
           >
-            <img
-              src={item.image1}
+            <Image
+              src={item.image1 || "/assets/images/default_image.jpg"}
+              alt={item.name || "Item image"}
+              width={300}
+              height={200}
+              sizes="(max-width: 768px) 50vw, 300px"
               className="w-full h-auto object-cover rounded-[10px]"
-              alt={item.name}
+              loading="lazy"
             />
           </div>
-          
         ))}
       </div>
     </div>

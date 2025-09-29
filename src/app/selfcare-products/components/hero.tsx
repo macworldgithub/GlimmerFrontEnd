@@ -5,16 +5,17 @@ import HeroImg1 from "@/assets/selfcare-slider/selfcare-slider-1.png";
 import HeroImg2 from "@/assets/selfcare-slider/selfcare-slider-2.png";
 // import HeroImg3 from "@/assets/selfcare-slider/selfcare-slider-3.png";
 import AutoSlider from "@/common/auto-slider";
+import { StaticImageData } from "next/image";
 
 type Props = {
-  srcs?: string[];
+  srcs?: StaticImageData[];
 };
 
 const Hero = ({ srcs = [] }: Props) => {
   const router = useRouter();
 
   const _srcs =
-    srcs.length > 0 ? srcs : [HeroImg1.src, HeroImg2.src];
+    srcs.length > 0 ? srcs : [HeroImg1, HeroImg2];
 
   // Custom function to be passed only for first banner
   const handleFirstBannerClick = () => {
@@ -27,7 +28,7 @@ const Hero = ({ srcs = [] }: Props) => {
       <AutoSlider
         srcs={_srcs}
         onBannerClick={
-          _srcs[0] === HeroImg1.src ? handleFirstBannerClick : undefined
+          _srcs[0] === HeroImg1 ? handleFirstBannerClick : undefined
         }
       />
     </div>

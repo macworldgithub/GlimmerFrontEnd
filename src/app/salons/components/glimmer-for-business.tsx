@@ -4,6 +4,7 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import Img from "@/assets/images/admin-pannel-img.webp";
 import { handleLogout } from "@/lib/session";
+import Image from "next/image";
 
 const GlimmerForBusiness = () => {
   const router = useRouter();
@@ -19,10 +20,14 @@ const GlimmerForBusiness = () => {
         onClick={handleRegisterClick}
       >
         {/* Image */}
-        <img
-          src={Img.src}
-          alt="Glimmer for Business"
+        <Image
+          src={Img}
+          alt="Glimmer for Business promotional graphic"
+          width={1200} 
+          height={600} 
+          sizes="(max-width: 768px) 100vw, 1200px"
           className="w-full h-auto object-cover"
+          loading="lazy" 
         />
 
         {/* Overlay Content inside image */}

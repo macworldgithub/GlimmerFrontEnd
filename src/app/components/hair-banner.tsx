@@ -2,12 +2,13 @@
 import * as React from "react";
 import GymBanner1 from "@/assets/images/bottom-slider-img-2.webp";
 import AutoSlider from "@/common/auto-slider";
+import { StaticImageData } from "next/image";
 type Props = {
-  srcs?: string[];
+  srcs?: StaticImageData[];
 };
 
 const HairBanner = ({ srcs = [] }: Props) => {
-  const _srcs = srcs.length > 0 ? srcs : [GymBanner1.src];
+  const _srcs = srcs.length > 0 ? srcs : [GymBanner1];
 
   return (
     <div className="lg:px-[6rem] max-lg:px-[1rem] mb-6 mx-auto md:mb-14 ">

@@ -14,6 +14,7 @@ import { RootState } from "@/store/reduxStore";
 import { usePathname } from "next/navigation";
 import RegisterGymModal from "./RegisterGymModal";
 import CategoryNavMenu from "./category-nav-menu";
+import Image from "next/image";
 
 const SideMenu = ({
   isLoggedIn,
@@ -51,13 +52,13 @@ const SideMenu = ({
 
         {/* Show Category Menu */}
         <CategoryNavMenu forceMobileStyle={true} />
-         <Link
-                href="/salons"
-                onClick={() => setIsOpen(false)}
-                className="mt-3 block w-full px-4 py-2 bg-[#583FA8] text-white rounded text-center hover:bg-primary/90 transition"
-              >
-                Book Salon & Spa Now
-              </Link>
+        <Link
+          href="/salons"
+          onClick={() => setIsOpen(false)}
+          className="mt-3 block w-full px-4 py-2 bg-[#583FA8] text-white rounded text-center hover:bg-primary/90 transition"
+        >
+          Book Salon & Spa Now
+        </Link>
 
         {/* Optional: Login / Logout */}
         <div className="pt-4 border-t">
@@ -68,10 +69,13 @@ const SideMenu = ({
               }}
               className="flex items-center gap-2 cursor-pointer hover:text-primary transition mt-3"
             >
-              <img
+              <Image
+                src={DefaultAvatar}
+                alt="User avatar"
+                width={28}
+                height={28}
                 className="w-7 h-7 rounded-full"
-                alt="avatar"
-                src={DefaultAvatar.src}
+                loading="lazy"
               />
               Logout
             </div>
@@ -90,10 +94,13 @@ const SideMenu = ({
                 href="/login"
                 onClick={() => setIsOpen(false)}
               >
-                <img
+                <Image
+                  src={DefaultAvatar}
+                  alt="User avatar"
+                  width={28} 
+                  height={28}
                   className="w-7 h-7 rounded-full"
-                  alt="avatar"
-                  src={DefaultAvatar.src}
+                  loading="lazy" 
                 />
                 Login
               </Link>

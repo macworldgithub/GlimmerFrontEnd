@@ -129,6 +129,7 @@ import { RiShoppingBag4Line } from "react-icons/ri";
 import { useDispatch } from "react-redux";
 import { addItem } from "@/reduxSlices/cartSlice";
 import { formatSlug, sanitizeSlug } from "@/lib/utils";
+import Image from "next/image";
 
 const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
   const router = useRouter();
@@ -144,19 +145,17 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
   //@ts-ignore
   if (item.store) queryParams.append("storeId", item.store);
 
-  const productSlug = item.name
-    ? formatSlug(item.name)
-    : item._id;
+  const productSlug = item.name ? formatSlug(item.name) : item._id;
   //@ts-ignore
   const path = item.item
     ? `/${sanitizeSlug(item.category?.slug, item.category?._id)}/${sanitizeSlug(
-      item.sub_category?.slug,
-      item.sub_category?._id
-    )}/${sanitizeSlug(item.item?.slug, item.item?._id)}/${productSlug}`
+        item.sub_category?.slug,
+        item.sub_category?._id
+      )}/${sanitizeSlug(item.item?.slug, item.item?._id)}/${productSlug}`
     : `/${sanitizeSlug(item.category?.slug, item.category?._id)}/${sanitizeSlug(
-      item.sub_category?.slug,
-      item.sub_category?._id
-    )}/${productSlug}`;
+        item.sub_category?.slug,
+        item.sub_category?._id
+      )}/${productSlug}`;
 
   const finalPath = `${path}?${queryParams.toString()}`;
   const basePrice = Number(item.base_price) || 0;
@@ -189,11 +188,16 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
       >
         <div
           className={`w-8 h-8 rounded-full flex items-center justify-center 
-        ${item.quantity === 0 ? "bg-gray-300 cursor-not-allowed" : "bg-purple-100"}`}
+        ${
+          item.quantity === 0
+            ? "bg-gray-300 cursor-not-allowed"
+            : "bg-purple-100"
+        }`}
         >
           <RiShoppingBag4Line
-            className={`text-[14px] ${item.quantity === 0 ? "text-gray-400" : "text-[#583FA8]"
-              }`}
+            className={`text-[14px] ${
+              item.quantity === 0 ? "text-gray-400" : "text-[#583FA8]"
+            }`}
           />
         </div>
       </div>
@@ -207,10 +211,14 @@ const Card: React.FC<{ item: RealCardItem }> = ({ item }) => {
 
       {/* Product Image */}
       <div className="h-40 w-full flex justify-center items-center mb-2">
-        <img
+        <Image
           src={item.image1 || "/assets/images/default_image.jpg"}
-          alt={item.name}
+          alt={item.name || "Product image"}
+          width={200}
+          height={200}
+          sizes="(max-width: 768px) 50vw, 200px"
           className="h-full object-contain"
+          loading="lazy"
         />
       </div>
 

@@ -11,6 +11,7 @@ import ProductSidebar from "@/common/ProductSideBar";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/store/reduxStore";
 import { message } from "antd";
+import Image from "next/image";
 
 const Loading = () => (
   <div className="justify-center flex min-h-[70vh] w-full items-center">
@@ -71,13 +72,15 @@ const ProductHighlights = () => {
 
   return (
     <div className="flex flex-col w-[99vw] pb-[8rem]">
-
       <div className="hidden md:block pt-[3rem] px-[1rem] sm:px-[2rem] md:px-[4rem] lg:px-[6rem] xl:px-[12rem]">
         <div className="w-full h-[50vh] rounded-lg overflow-hidden relative group">
-          <img
+          <Image
             src="/assets/images/banner.png"
             alt="Banner"
-            className="w-full h-full transition-transform duration-500"
+            fill
+            priority
+            sizes="100vw"
+            className="w-full h-full object-cover transition-transform duration-500"
           />
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/30 group-hover:bg-black/20 transition-all duration-500 px-4 lg:p-[8rem]">
             <h1 className="text-white text-2xl sm:text-3xl md:text-4xl font-bold text-center">

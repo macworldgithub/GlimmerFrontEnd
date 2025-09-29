@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import HotDeals from "./Hot-deals";
 import toast from "react-hot-toast";
 import { FaCopy } from "react-icons/fa";
+import Image from "next/image";
 
 interface ProductType {
   _id?: string;
@@ -73,10 +74,14 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product }) => {
       <div className="mb-8 flex flex-col justify-center gap-8 p-8 md:mb-5 md:flex-row md:gap-16 lg:mb-10">
         {/* Left Side: Product Image Gallery */}
         <div className="flex flex-col items-center">
-          <img
+          <Image
             src={product.image}
             alt={product.title}
+            width={320} 
+            height={320} 
+            sizes="(max-width: 768px) 100vw, 320px"
             className="h-80 w-80 rounded-md object-cover shadow"
+            priority 
           />
           <div className="mt-6 flex gap-4">
             {/* Thumbnail Images (dummy images for now) */}
@@ -107,12 +112,11 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product }) => {
               ))}
             </div>
             <span className="text-gray-600">{product.rating} Rating</span>
-           {product.quantity > 0 ? (
-  <span className="text-green-600">In Stock</span>
-) : (
-  <span className="text-red-600 font-semibold">Out of Stock</span>
-)}
-
+            {product.quantity > 0 ? (
+              <span className="text-green-600">In Stock</span>
+            ) : (
+              <span className="text-red-600 font-semibold">Out of Stock</span>
+            )}
           </div>
 
           {/* Quantity Selector */}
@@ -149,7 +153,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product }) => {
             className="btn btn-secondary btn-wide"
             onClick={handleAddToCart}
           >
-            Add to Cart 
+            Add to Cart
           </button>
 
           <p

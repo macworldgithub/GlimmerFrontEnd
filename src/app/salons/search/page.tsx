@@ -16,6 +16,7 @@ import { addService, clearServiceCart } from "@/reduxSlices/serviceCartSlice";
 import Link from "next/link";
 import { BACKEND_URL } from "@/api/config";
 import toast from "react-hot-toast";
+import Image from "next/image";
 
 interface SearchFilters {
   page_no: number;
@@ -266,7 +267,9 @@ const SearchResultsPage = () => {
       form.submit();
     } catch (err) {
       console.error("Alfalah Payment Error:", err);
-      toast.error("❌ Failed to initiate Bank Alfalah payment. Please try again.");
+      toast.error(
+        "❌ Failed to initiate Bank Alfalah payment. Please try again."
+      );
     }
   };
 
@@ -316,10 +319,12 @@ const SearchResultsPage = () => {
           </div>
         )}
         <div className="w-full h-[50vh] rounded-lg overflow-hidden relative group">
-          <img
+          <Image
             src="/assets/images/banner.png"
             alt="Banner"
-            className="w-full h-full transition-transform duration-500"
+            fill 
+            priority
+            className="w-full h-full object-cover transition-transform duration-500"
           />
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/30 group-hover:bg-black/20 transition-all duration-500 px-4 lg:p-[8rem]">
             <h1 className="text-white text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-4">
@@ -372,10 +377,11 @@ const SearchResultsPage = () => {
                 setActiveSort("Date");
                 setSortOrder(sortOrder === "desc" ? "asc" : "desc");
               }}
-              className={`border px-4 py-1.5 text-lg md:px-6 md:py-2 md:text-lg rounded-md font-medium transition duration-300 ease-in-out ${activeSort === "Date"
-                ? "border-purple-800 text-purple-800 bg-purple-100"
-                : "border-gray-400 text-gray-700 hover:bg-[#FDF3D2]"
-                }`}
+              className={`border px-4 py-1.5 text-lg md:px-6 md:py-2 md:text-lg rounded-md font-medium transition duration-300 ease-in-out ${
+                activeSort === "Date"
+                  ? "border-purple-800 text-purple-800 bg-purple-100"
+                  : "border-gray-400 text-gray-700 hover:bg-[#FDF3D2]"
+              }`}
             >
               Date{" "}
               {activeSort === "Date" ? (sortOrder === "desc" ? "↓" : "↑") : ""}
@@ -384,10 +390,11 @@ const SearchResultsPage = () => {
             <div className="relative">
               <button
                 onClick={() => setShowPriceDropdown(!showPriceDropdown)}
-                className={`flex items-center gap-2 border px-4 py-1.5 text-lg md:px-6 md:py-2 md:text-lg rounded-md font-medium transition duration-300 ease-in-out ${activeSort === "Price"
-                  ? "border-purple-800 text-purple-800 bg-purple-100"
-                  : "border-gray-400 text-gray-700 hover:bg-[#FDF3D2]"
-                  }`}
+                className={`flex items-center gap-2 border px-4 py-1.5 text-lg md:px-6 md:py-2 md:text-lg rounded-md font-medium transition duration-300 ease-in-out ${
+                  activeSort === "Price"
+                    ? "border-purple-800 text-purple-800 bg-purple-100"
+                    : "border-gray-400 text-gray-700 hover:bg-[#FDF3D2]"
+                }`}
               >
                 Price{" "}
                 {activeSort === "Price"

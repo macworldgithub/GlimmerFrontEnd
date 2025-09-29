@@ -18,7 +18,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { setLoginData } from "@/reduxSlices/loginSlice";
-
+import Image from "next/image";
 
 export default function SignUpForm() {
   const router = useRouter();
@@ -48,27 +48,27 @@ export default function SignUpForm() {
     }));
   };
 
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  try {
-    const res = await SignUpCustomer(formData);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const res = await SignUpCustomer(formData);
 
-    if (res?.token) {
-      toast.success("Account Created Successfully!");
+      if (res?.token) {
+        toast.success("Account Created Successfully!");
 
-      // ✅ Store token & user data in Redux and cookie
-      dispatch(setLoginData(res));
+        // ✅ Store token & user data in Redux and cookie
+        dispatch(setLoginData(res));
 
-      // ✅ Redirect
-      router.push("/");
-    } else {
-      toast.error(res?.message || "Signup Failed. Please Try Again.");
+        // ✅ Redirect
+        router.push("/");
+      } else {
+        toast.error(res?.message || "Signup Failed. Please Try Again.");
+      }
+    } catch (error: any) {
+      toast.error(error.message || "An error occurred. Please try again.");
+      console.error("Signup Error:", error);
     }
-  } catch (error: any) {
-    toast.error(error.message || "An error occurred. Please try again.");
-    console.error("Signup Error:", error);
-  }
-};
+  };
   return (
     <>
       <Toaster />
@@ -76,9 +76,16 @@ const handleSubmit = async (e: React.FormEvent) => {
         <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-2xl">
           <div className="flex justify-evenly">
             <h2 className="text-3xl font-bold text-center text-[#333] mb-6">
-              Sign up 
+              Sign up
             </h2>
-            <img src={Logo.src} alt="logo" className="h-10 hidden md:block " />
+            <Image
+              src={Logo}
+              alt="Glimmer company logo"
+              width={120} 
+              height={40}
+              className="h-10 hidden md:block"
+              priority
+            />
           </div>
 
           <form method="POST">

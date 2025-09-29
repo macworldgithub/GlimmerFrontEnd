@@ -21,6 +21,7 @@ import toast from "react-hot-toast";
 import Router from "next/router";
 
 import { LoginApi } from "@/api/auth";
+import Image from "next/image";
 
 export default function LoginForm() {
   const router = useRouter();
@@ -67,7 +68,14 @@ export default function LoginForm() {
             <h2 className="text-3xl font-bold text-center text-[#333] mb-6">
               Log In
             </h2>
-            <img src={Logo.src} alt="logo" className="h-10 hidden md:block " />
+            <Image
+              src={Logo}
+              alt="Company logo"
+              width={120} 
+              height={40}
+              priority
+              className="h-10 hidden md:block"
+            />
           </div>
 
           <form className="p-5" onSubmit={handleSubmit}>

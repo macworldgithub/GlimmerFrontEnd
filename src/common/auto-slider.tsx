@@ -8,19 +8,12 @@ import { Autoplay, EffectFade } from "swiper/modules";
 import Link from "next/link";
 import "swiper/css";
 import "swiper/css/effect-fade";
-import { Poppins } from "next/font/google";
 import { useRouter } from "next/navigation";
+import Image, { StaticImageData } from "next/image";
 
 type Props = {
-  srcs?: string[];
-  type?:
-    | "slide"
-    | "fade"
-    | "cube"
-    | "coverflow"
-    | "flip"
-    | "creative"
-    | "cards";
+  srcs?: StaticImageData[]; // static imports
+  type?: "slide" | "fade" | "cube" | "coverflow" | "flip" | "creative" | "cards";
   delay?: number | null;
   onBannerClick?: () => void;
 };
@@ -32,25 +25,16 @@ const AutoSlider = ({
   onBannerClick,
 }: Props) => {
   const router = useRouter();
-  const _srcs = srcs.length > 0 ? srcs : [HeroImg1.src, HeroImg2.src];
+  const _srcs = srcs.length > 0 ? srcs : [HeroImg1, HeroImg2];
+
   const modules = [];
   if (delay) modules.push(Autoplay);
   if (type === "fade") modules.push(EffectFade);
 
-  const overlays: Record<
-    string,
-    { heading: string[]; buttonText: string; link: string }
-  > = {
-    [HeroImg1.src]: {
-      heading: [""],
-      buttonText: "",
-      link: "/salons",
-    },
-    [HeroImg2.src]: {
-      heading: [""],
-      buttonText: "",
-      link: "/products",
-    },
+  // Example overlay content
+  const overlays: Record<string, { heading: string[]; buttonText: string; link: string }> = {
+    [HeroImg1.src]: { heading: [""], buttonText: "", link: "/salons" },
+    [HeroImg2.src]: { heading: [""], buttonText: "", link: "/products" },
   };
 
   return (
@@ -61,125 +45,60 @@ const AutoSlider = ({
         slidesPerView={1}
         effect={type}
         autoplay={delay ? { delay: delay as number } : undefined}
-        loop={true}
+        loop
         simulateTouch={false}
-        cssMode={false}
         className="w-full"
       >
-        {_srcs.map((s, index) => {
-          const overlay = overlays[s];
-
-          const isFirstImage = s === HeroImg1.src;
-          const isSecondImage = s === HeroImg2.src;
+        {_srcs.map((image, index) => {
+          const overlay = overlays[image.src];
+          const isFirstSlide = index === 0;
 
           return (
-            <SwiperSlide key={s} className="relative">
+            <SwiperSlide key={image.src} className="relative">
               {onBannerClick ? (
-                <>
-                  <div className="w-full h-full overflow-hidden">
-                    <img
-                      src={s}
-                      loading="eager"
-                      onClick={onBannerClick}
-                      className="w-full h-full cursor-pointer max-xl:object-cover rounded-lg transition-transform duration-500 hover:scale-105 hover:brightness-110"
-                      alt="Swiper Carousel component"
-                    />
-                  </div>
-                  {overlay && (
-                    <div className="absolute inset-0 px-4 md:px-16 flex justify-start items-start pt-28">
-                      <div className="flex flex-col items-start text-left space-y-4 max-w-[80%]">
-                        {overlay.heading.map((line, i) => {
-                          if (isSecondImage && i === 0) {
-                            return (
-                              <div
-                                key={i}
-                                className="font-bold break-words text-3xl md:text-5xl text-green-500"
-                              >
-                                {" "}
-                                <span className="text-white"></span>
-                              </div>
-                            );
-                          }
-
-                          return (
-                            <div
-                              key={i}
-                              className={`text-3xl md:text-5xl font-bold ${
-                                isFirstImage ? "text-black" : "text-green-500"
-                              }`}
-                            >
-                              {line}
-                            </div>
-                          );
-                        })}
-                        <button
-                          className={`px-6 py-2 rounded hover:brightness-90 transition ${
-                            isFirstImage
-                              ? "bg-purple-600 text-white"
-                              : "bg-green-600 text-white"
-                          }`}
-                          onClick={() => router.push(overlay.link)}
-                        >
-                          {overlay.buttonText}
-                        </button>
-                      </div>
-                    </div>
-                  )}
-                </>
+                <div className="w-full h-full overflow-hidden">
+                  <Image
+                    src={image}                        // static import
+                    alt="Promotional carousel banner"
+                    width={1920}
+                    height={600}
+                    priority={index === 0}
+                    sizes="100vw"
+                    placeholder="blur"                  // works with static import
+                    className="w-full h-full cursor-pointer max-xl:object-cover rounded-lg transition-transform duration-500 hover:scale-105 hover:brightness-110"
+                    onClick={onBannerClick}
+                  />
+                </div>
               ) : (
-                <>
-                  <Link
-                    href={
-                      overlay?.link || (index === 0 ? "/salons" : "/products")
-                    }
-                  >
-                    <img
-                      src={s}
-                      className="w-full h-full object-fill rounded-lg transition-transform duration-500 hover:scale-105 hover:brightness-110"
-                      alt="Swiper Carousel component"
-                    />
-                  </Link>
-                  {overlay && (
-                    <div className="absolute inset-0 px-2 sm:px-4 md:px-16 flex justify-start items-start pt-16 sm:pt-20 md:pt-28 lg:pt-40 pointer-events-none">
-                      <div className="flex flex-col items-start text-left space-y-2 sm:space-y-3 md:space-y-4 max-w-[90%] sm:max-w-[85%] md:max-w-[80%] pointer-events-auto">
-                        {overlay.heading.map((line, i) => {
-                          if (isSecondImage && i === 0) {
-                            return (
-                              <div
-                                key={i}
-                                className="font-bold break-words text-xl sm:text-2xl md:text-4xl lg:text-5xl text-green-500"
-                              >
-                                {" "}
-                                <span className="text-white"></span>
-                              </div>
-                            );
-                          }
+                <Link href={overlay?.link || (index === 0 ? "/salons" : "/products")}>
+                  <Image
+                    src={image}                        // static import
+                    alt="Promotional carousel banner"
+                    width={1920}
+                    height={600}
+                    priority={index === 0}
+                    sizes="100vw"
+                    className="w-full h-full object-cover rounded-lg transition-transform duration-500 hover:scale-105 hover:brightness-110"
+                 // works with static import
+                  />
+                </Link>
+              )}
 
-                          return (
-                            <div
-                              key={i}
-                              className={`font-bold break-words ${
-                                isFirstImage ? "text-black" : "text-green-500"
-                              } text-xl sm:text-2xl md:text-4xl lg:text-5xl`}
-                            >
-                              {line}
-                            </div>
-                          );
-                        })}
-                        {/* <button
-                          className={`px-5 py-2 rounded hover:brightness-90 transition cursor-pointer ${
-                            isFirstImage
-                              ? "bg-purple-600 text-white"
-                              : "bg-green-600 text-white"
-                          }`}
-                          onClick={() => router.push(overlay.link)}
-                        >
-                          {overlay.buttonText}
-                        </button> */}
+              {overlay && (
+                <div className="absolute inset-0 px-2 sm:px-4 md:px-16 flex justify-start items-start pt-16 sm:pt-20 md:pt-28 lg:pt-40 pointer-events-none">
+                  <div className="flex flex-col items-start text-left space-y-2 sm:space-y-3 md:space-y-4 max-w-[90%] sm:max-w-[85%] md:max-w-[80%] pointer-events-auto">
+                    {overlay.heading.map((line, i) => (
+                      <div
+                        key={i}
+                        className={`font-bold break-words ${
+                          isFirstSlide ? "text-black" : "text-green-500"
+                        } text-xl sm:text-2xl md:text-4xl lg:text-5xl`}
+                      >
+                        {line}
                       </div>
-                    </div>
-                  )}
-                </>
+                    ))}
+                  </div>
+                </div>
               )}
             </SwiperSlide>
           );
