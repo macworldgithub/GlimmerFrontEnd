@@ -5,11 +5,13 @@ import { useParams, useSearchParams } from "next/navigation";
 import { MdOutlineIosShare } from "react-icons/md";
 import { getSalonById, getSalonBySlug } from "@/api/salon";
 import AboutSalon from "../../[id]/components/about-salon";
-import GlimmerBanner from "../../[id]/components/glimmer-banner";
 import RecommendedProducts from "../../[id]/components/recommended-products";
 import SalonServices from "../../[id]/components/salon-services";
 import SalonsNearby from "../../[id]/components/salons-nearby";
 import Image from "next/image";
+import dynamic from "next/dynamic";
+
+const GlimmerBanner = dynamic(() => import("../../[id]/components/glimmer-banner"), { ssr: false });
 
 const SalonDetailsPage = () => {
   const params = useParams();

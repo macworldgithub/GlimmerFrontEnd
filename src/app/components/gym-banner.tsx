@@ -1,8 +1,11 @@
+// GymBanner.tsx
 "use client";
 import * as React from "react";
+import dynamic from "next/dynamic";
 import GymBanner1 from "@/assets/images/gym-banner.webp";
-import AutoSlider from "@/common/auto-slider";
 import RegisterGymModal from "@/common/RegisterGymModal";
+
+const AutoSlider = dynamic(() => import("@/common/auto-slider"), { ssr: false });
 
 const GymBanner = () => {
   const [visible, setVisible] = React.useState(false);
