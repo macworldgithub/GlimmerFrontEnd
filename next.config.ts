@@ -9,9 +9,6 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  experimental: {
-    optimizeCss: false,
-  },
   webpack: (config) => {
     // Suppress Webpack errors by disabling error overlays
     config.infrastructureLogging = {

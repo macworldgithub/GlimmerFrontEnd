@@ -1,40 +1,20 @@
 import type { Config } from "tailwindcss";
+
 import daisyui from "daisyui";
 
 const config: Config = {
-  content: [
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",  // ✅ include Next.js App Router
-    "./src/**/*.{js,ts,jsx,tsx,mdx}",  // ✅ include components
-  ],
+  content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
   theme: {
     extend: {
       fontFamily: {
         sans: ["Inter", "sans-serif"],
       },
-      keyframes: {
-        fadeInUp: {
-          "0%": { opacity: "0", transform: "translateY(50px)" },
-          "100%": { opacity: "1", transform: "translateY(0)" },
-        },
-        slideInLeft: {
-          "0%": { opacity: "0", transform: "translateX(-30px)" },
-          "100%": { opacity: "1", transform: "translateX(0)" },
-        },
-        popIn: {
-          "0%": { opacity: "0", transform: "scale(0.9)" },
-          "100%": { opacity: "1", transform: "scale(1)" },
-        },
-      },
-      animation: {
-        fadeInUp: "fadeInUp 0.8s ease-out forwards",
-        slideInLeft: "slideInLeft 0.8s ease-out forwards",
-        popIn: "popIn 0.6s ease-out forwards",
-      },
     },
   },
-  plugins: [daisyui, require("@tailwindcss/typography")],
+  plugins: [require("daisyui"), require("@tailwindcss/typography")],
   daisyui: {
     themes: [
+      // false: only light + dark | true: all themes | array: specific themes like this ["light", "dark", "cupcake"]
       {
         light: {
           primary: "#ffc759",
@@ -50,19 +30,33 @@ const config: Config = {
           "base-300": "#e7e7e7",
           "base-content": "#141316",
           info: "#00ccff",
+          "info-content": "#000f16",
           success: "#49c55e",
+          "success-content": "#020e03",
           warning: "#d37600",
+          "warning-content": "#100500",
           error: "#d8112c",
+          "error-content": "#fed7d4",
+
+          "--rounded-box": "1rem", // border radius rounded-box utility class, used in card and other large boxes
+          "--rounded-btn": "0.5rem", // border radius rounded-btn utility class, used in buttons and similar element
+          "--rounded-badge": "1.9rem", // border radius rounded-badge utility class, used in badges and similar
+          "--animation-btn": "0.25s", // duration of animation when you click on button
+          "--animation-input": "0.2s", // duration of animation for inputs like checkbox, toggle, radio, etc
+          "--btn-focus-scale": "0.95", // scale transform of button when you focus on it
+          "--border-btn": "1px", // border width of buttons
+          "--tab-border": "1px", // border width of tabs
+          "--tab-radius": "0.5rem", // border radius of tabs
         },
       },
     ],
-    darkTheme: "dark",
-    base: true,
-    styled: true,
-    utils: true,
-    logs: false,
-    themeRoot: ":root",
+    darkTheme: "dark", // name of one of the included themes for dark mode
+    base: true, // applies background color and foreground color for root element by default
+    styled: true, // include daisyUI colors and design decisions for all components
+    utils: true, // adds responsive and modifier utility classes
+    prefix: "", // prefix for daisyUI classnames (components, modifiers and responsive class names. Not colors)
+    logs: true, // Shows info about daisyUI version and used config in the console when building your CSS
+    themeRoot: ":root", // The element that receives theme color CSS variables
   },
 };
-
 export default config;

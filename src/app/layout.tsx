@@ -2,12 +2,15 @@
 import { Prompt } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/common/navbar";
+import "swiper/css/bundle";
 import { CartStoreProvider } from "@/store/cartStoreContext";
 import CookieBanner from "@/common/cookie-banner";
 import ClientLayout from "@/common/client-layout";
+import FloatingWhatsApp from "@/common/FloatingWhatsApp";
 import ChatbotWidget from "@/common/ChatbotWidget";
 import CategoryNavMenu from "@/common/category-nav-menu";
-import Script from "next/script"; 
+import FacebookPixel from "./common/FacebookPixel";
+// import FloatingChatbot from '@/common/FloatingChatbot';
 
 const prompt = Prompt({
   subsets: ["latin"],
@@ -24,38 +27,13 @@ export default function RootLayout({
   return (
     <html lang="en" data-theme="light">
       <head>
-        <meta
-          name="facebook-domain-verification"
-          content="wf5nqoeruiazcn3gw9d26j97gnwgcr"
-        />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
+        <meta name="facebook-domain-verification" 
+        content="wf5nqoeruiazcn3gw9d26j97gnwgcr" />
       </head>
       <body className={`${prompt.variable} w-full bg-pink-100 antialiased`}>
         <CartStoreProvider>
-          <Script
-            id="fb-pixel"
-            strategy="afterInteractive"
-            dangerouslySetInnerHTML={{
-              __html: `
-                !function(f,b,e,v,n,t,s){
-                  if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-                  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-                  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-                  n.queue=[];t=b.createElement(e);t.async=!0;
-                  t.src=v;s=b.getElementsByTagName(e)[0];
-                  s.parentNode.insertBefore(t,s)
-                }(window, document,'script',
-                'https://connect.facebook.net/en_US/fbevents.js');
-                fbq('init', 'YOUR_PIXEL_ID');
-                fbq('track', 'PageView');
-              `,
-            }}
-          />
+          <FacebookPixel />
+
           <Navbar />
           <CategoryNavMenu />
           <ClientLayout>{children}</ClientLayout>
