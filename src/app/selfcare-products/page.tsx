@@ -1,21 +1,28 @@
-// Home.tsx
 "use client";
-import { Suspense, useState } from "react";
-import dynamic from "next/dynamic";
 import CategoryNavMenu from "@/common/category-nav-menu";
+import BestSellers from "./components/best-sellers";
+import BrandProductImages from "./components/brand-product-images";
+import BudgetFriendly from "./components/budget-friendly";
+import ExclusiveOffer from "./components/exclusive-offer-image";
 import Hero from "./components/hero";
+import NewArrivals from "./components/new-arrivals";
+import AutoSliderShopBrand from "./components/shop-brand";
+import Assurity from "./components/Assurity";
+import OfferPictures from "./components/OfferPictures";
+import TrendingProducts from "./components/TrendingProducts";
+import VideoTutorial from "./components/VideoTutorial";
+import MustItems from "./components/MustItems";
+import SaloonPictures from "@/common/SaloonPictures";
+import { Suspense, useState } from "react";
 import Breadcrumbs from "@/common/breadcrumb";
-import FullScreenLoader from "@/common/loader";
+import Faq from "./components/Faq";
 
-// Dynamically import below-the-fold components
-const Assurity = dynamic(() => import("./components/Assurity"), { ssr: false });
-const OfferPictures = dynamic(() => import("./components/OfferPictures"), { ssr: false });
-const AllProducts = dynamic(() => import("./components/AllProducts"), { ssr: false });
-const TrendingProducts = dynamic(() => import("./components/TrendingProducts"), { ssr: false });
-const MustItems = dynamic(() => import("./components/MustItems"), { ssr: false });
-const BestSellers = dynamic(() => import("./components/best-sellers"), { ssr: false });
-const DynamicBanner = dynamic(() => import("./components/Banner"), { ssr: false });
-const Faq = dynamic(() => import("./components/Faq"), { ssr: false });
+import Banner from "./components/Banner";
+import DynamicBanner from "./components/Banner";
+import ProductFilter from "@/common/ProductFilter";
+import ProductCards from "@/common/ProductCard";
+import AllProducts from "./components/AllProducts";
+import FullScreenLoader from "@/common/loader";
 
 export default function Home() {
   const [isAppLoading, setIsAppLoading] = useState(true);
@@ -23,7 +30,6 @@ export default function Home() {
   const handleChildLoaded = () => {
     setIsAppLoading(false);
   };
-
   return (
     <>
       {isAppLoading && <FullScreenLoader />}
@@ -37,6 +43,7 @@ export default function Home() {
       <TrendingProducts onLoaded={handleChildLoaded} />
       <MustItems />
       <BestSellers />
+      {/* <VideoTutorial /> */}
       <DynamicBanner
         imageUrl=""
         title="Shop Now and Unleash Your Inner Glow!"
