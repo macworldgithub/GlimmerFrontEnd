@@ -10,6 +10,9 @@ import FloatingWhatsApp from "@/common/FloatingWhatsApp";
 import ChatbotWidget from "@/common/ChatbotWidget";
 import CategoryNavMenu from "@/common/category-nav-menu";
 import FacebookPixel from "./common/FacebookPixel";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
 // import FloatingChatbot from '@/common/FloatingChatbot';
 
 const prompt = Prompt({
