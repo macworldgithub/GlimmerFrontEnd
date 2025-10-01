@@ -1,10 +1,12 @@
 "use client";
 import * as React from "react";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import Slider from "react-slick";
 import HeroImg1 from "@/assets/selfcare-slider/selfcare-slider-1.png";
 import HeroImg2 from "@/assets/selfcare-slider/selfcare-slider-2.png";
 import Image, { StaticImageData } from "next/image";
+
+const Slider = dynamic(() => import("react-slick"), { ssr: false });
 
 type Props = {
   srcs?: StaticImageData[];
@@ -12,7 +14,6 @@ type Props = {
 
 const Hero = ({ srcs = [] }: Props) => {
   const router = useRouter();
-
   const banners = srcs.length > 0 ? srcs : [HeroImg1, HeroImg2];
 
   const handleFirstBannerClick = () => {
@@ -26,9 +27,10 @@ const Hero = ({ srcs = [] }: Props) => {
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 3000,
+    autoplaySpeed: 4000,
     arrows: false,
-    pauseOnHover: true,
+    pauseOnHover: false,
+    adaptiveHeight: true,
   };
 
   return (
@@ -37,16 +39,17 @@ const Hero = ({ srcs = [] }: Props) => {
         {banners.map((banner, index) => (
           <div
             key={index}
-            className="relative cursor-pointer"
+            className="relative cursor-pointer aspect-[16/5] w-full"
             onClick={index === 0 ? handleFirstBannerClick : undefined}
           >
             <Image
               src={banner}
               alt={`Hero Banner ${index + 1}`}
-              width={1920}
-              height={600}
-              className="w-full h-full object-cover transition-transform duration-500 hover:scale-105 hover:brightness-110"
+              fill
+              className="object-cover transition-transform duration-500 hover:scale-105 hover:brightness-110"
               priority={index === 0}
+              loading={index === 0 ? "eager" : "lazy"}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1920px"
               placeholder="blur"
             />
           </div>

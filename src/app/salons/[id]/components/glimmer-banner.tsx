@@ -1,8 +1,10 @@
 "use client";
 import * as React from "react";
-import Slider from "react-slick";
+import dynamic from "next/dynamic";
 import glimmerBannerImg from "@/assets/salon-profile/Glimmer-Banner-img.png";
 import Image, { StaticImageData } from "next/image";
+
+const Slider = dynamic(() => import("react-slick"), { ssr: false });
 
 type Props = {
   srcs?: StaticImageData[];
@@ -18,9 +20,10 @@ const GlimmerBanner = ({ srcs = [] }: Props) => {
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 3000,
+    autoplaySpeed: 4000,
     arrows: false,
-    pauseOnHover: true,
+    pauseOnHover: false,
+    adaptiveHeight: true,
   };
 
   return (
@@ -28,14 +31,15 @@ const GlimmerBanner = ({ srcs = [] }: Props) => {
       <div className="max-w-[1300px] w-full">
         <Slider {...settings}>
           {banners.map((banner, index) => (
-            <div key={index} className="relative">
+            <div key={index} className="relative aspect-[16/5] w-full">
               <Image
                 src={banner}
                 alt={`Glimmer Banner ${index + 1}`}
-                width={1920}
-                height={600}
-                className="w-full h-full object-cover rounded-lg transition-transform duration-500 hover:scale-105 hover:brightness-110"
+                fill
+                className="object-cover rounded-lg transition-transform duration-500 hover:scale-105 hover:brightness-110"
                 priority={index === 0}
+                loading={index === 0 ? "eager" : "lazy"}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1920px"
                 placeholder="blur"
               />
             </div>
