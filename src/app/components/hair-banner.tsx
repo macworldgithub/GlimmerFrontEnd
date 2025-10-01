@@ -30,12 +30,13 @@ const HairBanner = ({ srcs = [] }: Props) => {
     <div className="lg:px-[6rem] max-lg:px-[1rem] mb-6 mx-auto md:mb-14">
       <Slider {...settings}>
         {banners.map((banner, index) => (
-          <div key={index} className="relative aspect-[16/5] w-full">
+          <div key={index} className="relative">
             <Image
               src={banner}
               alt={`Banner ${index + 1}`}
-              fill
-              className="object-cover rounded-lg transition-transform duration-500 hover:scale-105 hover:brightness-110"
+              width={1920}
+              height={600}
+              className="w-full h-auto object-cover rounded-lg transition-transform duration-500 hover:scale-105 hover:brightness-110"
               priority={index === 0}
               loading={index === 0 ? "eager" : "lazy"}
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1920px"
