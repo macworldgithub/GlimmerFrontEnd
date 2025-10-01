@@ -32,6 +32,7 @@ export default function RootLayout({
       <head>
         <meta name="facebook-domain-verification" 
         content="wf5nqoeruiazcn3gw9d26j97gnwgcr" />
+         <link rel="icon" href="/assets/images/favIcon.png" type="image/png" />
       </head>
       <body className={`${prompt.variable} w-full bg-pink-100 antialiased`}>
         <CartStoreProvider>
