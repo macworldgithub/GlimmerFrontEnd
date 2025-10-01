@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
 import Slider from "react-slick";
-import GymBanner1 from "@/assets/images/gym-banner.webp";
+import GymBanner1 from "@/assets/images/gym-banner.jpg";
 import RegisterGymModal from "@/common/RegisterGymModal";
 import Image from "next/image";
 

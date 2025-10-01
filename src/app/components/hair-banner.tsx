@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
 import Slider from "react-slick";
-import GymBanner1 from "@/assets/images/bottom-slider-img-2.webp";
+import GymBanner1 from "@/assets/images/bottom-slider-img-2.jpg";
 import Image, { StaticImageData } from "next/image";
 
 type Props = {

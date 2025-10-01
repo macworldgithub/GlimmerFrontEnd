@@ -1,8 +1,8 @@
 "use client";
 import * as React from "react";
 import Slider from "react-slick";
-import HeroImg1 from "@/assets/images/home-hero-img-1.webp";
-import HeroImg2 from "@/assets/images/home-hero-img-2.webp";
+import HeroImg1 from "@/assets/images/home-hero-img-1.jpg";
+import HeroImg2 from "@/assets/images/home-hero-img-2.jpg";
 import Image, { StaticImageData } from "next/image";
 
 type SlideContent = {

@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
-import Img from "@/assets/images/admin-pannel-img.webp";
+import Img from "@/assets/images/admin-pannel-img.jpg";
 import { handleLogout } from "@/lib/session";
 import Image from "next/image";
 
