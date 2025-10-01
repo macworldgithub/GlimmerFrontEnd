@@ -1,11 +1,9 @@
 "use client";
 import * as React from "react";
-import dynamic from "next/dynamic";
+import Slider from "react-slick";
 import HeroImg1 from "@/assets/images/home-hero-img-1.jpg";
 import HeroImg2 from "@/assets/images/home-hero-img-2.jpg";
 import Image, { StaticImageData } from "next/image";
-
-const Slider = dynamic(() => import("react-slick"), { ssr: false });
 
 type SlideContent = {
   src: StaticImageData;
@@ -15,8 +13,8 @@ type SlideContent = {
 
 const Hero = () => {
   const slides: SlideContent[] = [
-    { src: HeroImg1 },
-    { src: HeroImg2 },
+    { src: HeroImg1, heading: "", buttonText: "" },
+    { src: HeroImg2, heading: "", buttonText: "" },
   ];
 
   const settings = {
@@ -26,10 +24,9 @@ const Hero = () => {
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 4000,
+    autoplaySpeed: 3000,
     arrows: false,
-    pauseOnHover: false,
-    adaptiveHeight: true,
+    pauseOnHover: true,
   };
 
   return (
@@ -42,12 +39,20 @@ const Hero = () => {
               alt={`Hero Slide ${index + 1}`}
               width={1920}
               height={600}
-              className="w-full h-auto object-cover transition-transform duration-500 hover:scale-105 hover:brightness-110"
+              className="w-full h-full object-cover transition-transform duration-500 hover:scale-105 hover:brightness-110"
               priority={index === 0}
-              loading={index === 0 ? "eager" : "lazy"}
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1920px"
               placeholder="blur"
             />
+            {slide.heading && (
+              <div className="absolute inset-0 flex flex-col justify-center items-start p-8 text-white pointer-events-none">
+                <h2 className="text-4xl font-bold">{slide.heading}</h2>
+                {slide.buttonText && (
+                  <button className="mt-4 px-6 py-2 bg-green-500 rounded-lg">
+                    {slide.buttonText}
+                  </button>
+                )}
+              </div>
+            )}
           </div>
         ))}
       </Slider>

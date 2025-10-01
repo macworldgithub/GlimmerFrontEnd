@@ -1,11 +1,9 @@
 "use client";
 import * as React from "react";
-import dynamic from "next/dynamic";
+import Slider from "react-slick";
 import GymBanner1 from "@/assets/images/gym-banner.jpg";
 import RegisterGymModal from "@/common/RegisterGymModal";
 import Image from "next/image";
-
-const Slider = dynamic(() => import("react-slick"), { ssr: false });
 
 const GymBanner = () => {
   const [visible, setVisible] = React.useState(false);
@@ -19,43 +17,32 @@ const GymBanner = () => {
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 4000,
+    autoplaySpeed: 3000,
     arrows: false,
-    pauseOnHover: false,
-    adaptiveHeight: true,
+    pauseOnHover: true,
   };
 
-  const banners = [GymBanner1];
+  const banners = [GymBanner1]; // You can add more images here
 
   return (
     <div className="lg:px-[6rem] max-lg:px-[1rem] mb-6 md:mb-14 w-[99vw]">
       <Slider {...settings}>
         {banners.map((banner, index) => (
-          <div
-            key={index}
-            onClick={handleOpen}
-            className="cursor-pointer relative"
-          >
+          <div key={index} onClick={handleOpen} className="cursor-pointer">
             <Image
               src={banner}
               alt={`Banner ${index + 1}`}
               width={1920}
               height={600}
-              className="w-full h-auto object-cover rounded-lg transition-transform duration-500 hover:scale-105 hover:brightness-110"
+              className="w-full h-full object-cover rounded-lg transition-transform duration-500 hover:scale-105 hover:brightness-110"
               priority={index === 0}
-              loading={index === 0 ? "eager" : "lazy"}
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1920px"
               placeholder="blur"
             />
           </div>
         ))}
       </Slider>
 
-      <RegisterGymModal
-        visible={visible}
-        onCancel={handleClose}
-        onSubmit={() => {}}
-      />
+      <RegisterGymModal visible={visible} onCancel={handleClose} onSubmit={() => {}} />
     </div>
   );
 };
