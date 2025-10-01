@@ -27,6 +27,18 @@ export const getAllServicesById = async (category_id: string) => {
   }
 };
 
+export async function fetchAllSalons(page_no: number) {
+  try {
+    const res = await axios.get(
+      `${BACKEND_URL}/salon/get-all-salon?page_no=${page_no}`
+    );
+    return res.data;
+  } catch (err) {
+    console.error("Failed to fetch salons (server-side)", err);
+    return { salons: [] };
+  }
+}
+
 export const getAllActiveServices = createAsyncThunk(
   "getAllActiveServices",
   async (

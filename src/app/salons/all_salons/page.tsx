@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
-import { BACKEND_URL, FRONTEND_URL } from "@/api/config";
-import { getAllSalons } from "@/api/salon";
+import { FRONTEND_URL } from "@/api/config";
+import { fetchAllSalons } from "@/api/salon"; 
 import SalonsList from "./SalonList";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/store/reduxStore";
 
 export const metadata: Metadata = {
   title: "Find Salons Near You | Glimmer Salons",
@@ -22,12 +20,9 @@ export const metadata: Metadata = {
 };
 
 export default async function Page() {
-  const dispatch = useDispatch<AppDispatch>()
-  // ✅ Fetch salons
- const salonsResponse = await dispatch(getAllSalons(1)).unwrap();
+  const salonsResponse = await fetchAllSalons(1);
   const salons = salonsResponse?.salons || [];
 
-  // ✅ Build ItemList schema
   const salonsSchema = {
     "@context": "https://schema.org",
     "@type": "ItemList",
@@ -84,7 +79,6 @@ export default async function Page() {
 
   return (
     <>
-      {/* ✅ Inject JSON-LD for salon list */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(salonsSchema) }}
